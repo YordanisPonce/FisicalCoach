@@ -1,0 +1,42 @@
+<p-dialog
+  class="dialog"
+  id="crear_competicion_dialog"
+  [modal]="true"
+  header="{{ 'physiotherapy.finishTab' | translate }}"
+  [(visible)]="visible"
+  styleClass=""
+  maskStyleClass="purple_mask"
+  (onHide)="closeDialog()"
+>
+  <div>
+    <p class="finish-file-text">
+      {{ "physiotherapy.doYouWantToFinish" | translate }}
+    </p>
+  </div>
+
+  <p-footer>
+    <div class="footer_btns">
+      <button type="button" class="btn back_btn">
+        {{ "competition.competition_dialog.back_button" | translate }}
+      </button>
+
+      <button
+        class="btn next_btn"
+        type="button"
+        *ngIf="!loading"
+        (click)="finishFile()"
+      >
+        {{ "BTN_CONFIRMAR" | translate }}
+      </button>
+
+      <button
+        class="btn next_btn"
+        type="button"
+        *ngIf="loading"
+        [disabled]="loading"
+      >
+        {{ "LBL_GUARDANDO" | translate }}
+      </button>
+    </div>
+  </p-footer>
+</p-dialog>

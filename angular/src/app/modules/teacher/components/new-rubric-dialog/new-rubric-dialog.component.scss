@@ -1,0 +1,109 @@
+:host ::ng-deep{
+    .p-dialog{
+        max-width: 600px;
+        .p-dialog-header{
+            background-color: white;
+            p{
+                max-width: 75%;
+            }
+        }
+        .p-dialog-content{
+            background-color: white;
+            #new_rubric_dialog_container{
+                input.form-control{
+                    border: 1px solid #050C4412;
+                }
+                input.form-control::placeholder{
+                    color: rgba($color: #000000, $alpha: .4);
+                    font-weight: 400;
+                }
+                .btn_add_indicator{
+                    border: 1px solid #0065E9;
+                    border-radius: 9px;
+                    height: 45px;
+                    color: #0065E9;
+                    font-weight: 400;
+                    font-size: .9rem;
+                    text-align: left;
+                    background-color: #0065E908;
+                }
+                .old_indicators{
+                    .indicator{
+                        border: 1px solid #050C44;
+                        border-radius: 9px;
+                        height: 50px;
+                        color: white;
+                        font-weight: 400;
+                        font-size: .9rem;
+                        background-color: #050C44;
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        text-align: left;
+                        margin-bottom: 2rem;
+                        &_name{
+                            text-overflow: ellipsis;
+                            overflow: hidden;
+                            white-space: nowrap;
+                            flex: 1;
+                        }
+                        button{
+                            margin-left: 1rem;
+                            flex: 0 4%;
+                        }
+                    }                    
+                }
+            }
+        }
+    }
+}
+
+// Small devices (landscape phones, 576px and up)
+@media (min-width: 576px) {
+    :host ::ng-deep{    
+        .p-dialog{
+            .p-dialog-content{
+            }
+        }
+    }
+}
+
+// Medium devices (tablets, 768px and up)
+@media (min-width: 1024px) {
+    :host ::ng-deep{    
+        .p-dialog{
+            .p-dialog-header{
+            }
+            .p-dialog-content{
+            }
+        }
+    }    
+}
+
+@media (min-width: 1200px) {
+    :host ::ng-deep{
+        .p-dialog{
+            .p-dialog-header{
+                padding: 3rem 3rem 1.5rem 3rem
+            }
+            .p-dialog-content{
+                padding: 0 3rem
+            }
+            .p-dialog-footer{
+                padding: 1.5rem 3rem;
+            }
+        }
+    }    
+}
+
+// Extra large devices (large desktops, 1200px and up)
+@media (min-width: 1200px) {
+    :host ::ng-deep{
+        .p-dialog{
+            .p-dialog-header{
+            }
+            .p-dialog-content{
+            }
+        }
+    }  
+}

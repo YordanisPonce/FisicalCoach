@@ -1,0 +1,15 @@
+<p-dialog
+  id="new_workout_dialog"
+  [(visible)]="visible"
+  styleClass="tool_dialog"
+  [blockScroll]="true"
+  [closable]="false"
+>
+  <iframe
+    [src]="urlSafe"
+    width="100%"
+    *ngIf="urlSafe"
+    title="workout-frame"
+    id="iframe"
+  ></iframe>
+</p-dialog>

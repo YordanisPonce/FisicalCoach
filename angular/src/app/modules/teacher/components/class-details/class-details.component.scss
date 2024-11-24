@@ -1,0 +1,156 @@
+.descripcion_equipo {
+  // max-width: 503.16px;
+  button {
+    background-color: rgba($color: #050c44, $alpha: 0.03);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    border: 0;
+    img {
+      opacity: 0.65;
+    }
+    &:focus {
+      outline: none;
+    }
+  }
+}
+.portada_equipo {
+  min-height: 125px;
+  background-size: cover;
+  background-position: center;
+  flex: 1 1 auto;
+  background-repeat: no-repeat;
+  background-position-y: top;
+  text-align: end;
+
+  button {
+    background: rgba(255, 255, 255, 0.18);
+    backdrop-filter: blur(0);
+    padding: 0 15px;
+    color: #050c44;
+    font-size: 0.9rem;
+    border: unset;
+    height: 45px;
+    border-radius: 10px;
+    margin-right: 15px;
+    margin-top: 15px;
+    &:focus {
+      outline: none;
+    }
+    &:hover {
+      background: rgba(255, 255, 255, 0.33);
+    }
+  }
+}
+
+.ranking_goleadores {
+  ul {
+    padding: 0;
+  }
+  li {
+    &.ranking_header {
+      font-weight: 600;
+    }
+    list-style-type: none;
+    display: flex;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid #050c4429;
+
+    .goleador_info {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+
+  .ranking-list {
+    max-height: 400px;
+    overflow-y: auto;
+    margin-bottom: 0;
+    li:last-child {
+      border-bottom: 0;
+    }
+  }
+}
+
+.team-image,
+.color {
+  width: 113px;
+  height: 113px;
+  border-radius: 100%;
+}
+
+.info_tables {
+  .nav {
+    .nav-item {
+      // margin-bottom: 1px !important;
+      flex: 1 1 100%;
+      .nav-link {
+        padding: 1.5rem 1rem;
+        font-weight: 600;
+        color: #050c44;
+        opacity: 0.35;
+        &.active {
+          border: 0;
+          opacity: 1;
+          border-bottom: 2px solid #024cac;
+        }
+      }
+    }
+  }
+  .info_table_btns {
+    border-bottom: 1px solid #dee2e6;
+
+    .assing-teacher-btn {
+      &:hover {
+        background: #0d89ec !important;
+        color: #ffffff;
+        border-color: #0d89ec !important;
+      }
+      &:hover i {
+        color: #01e9c5 !important;
+      }
+    }
+    button {
+      background-color: #0065e9;
+      color: white;
+      border-radius: 24px;
+      padding: 0.5rem 2rem;
+      font-weight: 500;
+    }
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .info_tables {
+    .nav {
+      .nav-item {
+        // margin-bottom: 1px !important;
+        flex: 1;
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .info_tables {
+    .nav {
+      flex-wrap: nowrap;
+    }
+    .info_table_btns {
+      button {
+        // padding: 0;
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 1366px) {
+  .info_tables {
+    .info_table_btns {
+      button {
+        padding: 0.5rem 2rem;
+      }
+    }
+  }
+}

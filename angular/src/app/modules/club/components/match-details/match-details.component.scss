@@ -1,0 +1,321 @@
+table {
+  width: 100%;
+  margin-top: 20px;
+
+  tbody {
+    tr {
+      td {
+        padding: 1rem 0.25rem;
+        text-align: center;
+        font-family: "Montserrat", sans-serif;
+        font-size: 1rem;
+
+        .avatar {
+          width: 32px;
+          height: 32px;
+          background-position: center;
+          background-size: cover;
+          border-radius: 50%;
+        }
+      }
+    }
+  }
+}
+
+h6 {
+  color: #ababab;
+}
+
+.truncate {
+  width: 150px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.test-content {
+  span,
+  h6 {
+    color: #ababab;
+  }
+}
+
+.player-name {
+  font-size: 0.9rem;
+  color: rgba(5, 12, 68, 0.4588235294);
+  font-weight: 600;
+}
+
+.rpe-icon-button {
+  cursor: pointer;
+}
+.match_live {
+  .header {
+    padding: 0.75rem 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #050c4405;
+    .days_ago {
+      color: #050c44;
+      opacity: 0.28;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+  }
+
+  .pointer {
+    cursor: pointer;
+  }
+  .team {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    .team_image {
+      border: 1px solid #050c4415;
+      padding: 1rem;
+      height: 110px;
+      width: 110px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 2rem;
+
+      img {
+        border-radius: 50%;
+      }
+    }
+    .team_name {
+      font-weight: 600;
+      text-align: center;
+      color: #050c44;
+    }
+  }
+  .match_score {
+    font-size: 0.9rem;
+    color: #ababab;
+    // display: flex;
+    // flex-direction: column;
+    // justify-content: space-around;
+    // height: 100%;
+    .minutes {
+      color: #ffaa00;
+      font-weight: 600;
+    }
+    .score {
+      span {
+        font-size: 3rem;
+        &:nth-child(1) {
+          color: #024cac;
+        }
+        &:nth-child(2) {
+          margin-left: 0.75rem;
+          color: #c3c4c8;
+          margin-right: 0.75rem;
+        }
+        &:nth-child(3) {
+          color: #050c44 !important;
+        }
+      }
+    }
+  }
+}
+.volley {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
+
+  span {
+    color: #024cac;
+    font-size: 1.2rem;
+  }
+}
+.match_stat {
+  font-size: 0.875rem;
+  border: 1px solid #050c4422;
+  border-radius: 13px;
+  padding: 0.75rem;
+  .stat {
+    display: flex;
+    margin: 0.5rem 0;
+    .stat_number {
+      margin: 0 auto;
+      font-size: 2.75rem;
+      font-weight: 600;
+    }
+  }
+  .info {
+    font-weight: 500;
+    span {
+      color: #11bf46;
+    }
+  }
+}
+
+.match_actions {
+  display: flex;
+  justify-content: space-around;
+  button {
+    flex: 0 47%;
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+    color: #050c4461;
+  }
+}
+
+.lineup {
+  padding: 1.5rem;
+  .alineacion {
+    text-align: center;
+    border: 1px solid #050c4430;
+    border-radius: 11px;
+    padding: 1rem 0;
+    font-size: 0.9rem;
+    color: #050c4445;
+    font-weight: 600;
+  }
+  .timeline {
+    .team {
+      display: flex;
+      align-items: center;
+      .team_name {
+        color: #050c44;
+        font-weight: 600;
+        font-size: 0.9rem;
+      }
+    }
+    .team:nth-child(1) {
+      margin-bottom: 3rem;
+    }
+    .team:nth-child(3) {
+      margin-top: 2rem;
+    }
+    .timeline_bar {
+      .match_progress {
+        position: relative;
+        .bar {
+          height: 8px;
+          background-color: #024cac;
+          border-radius: 4px;
+        }
+        .minutes {
+          background-color: #024cac;
+          width: 30px;
+          height: 30px;
+          border-radius: 50%;
+          color: white;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          top: -15px;
+          font-weight: 500;
+          font-size: 0.75rem;
+          position: absolute;
+          right: -2px;
+          border: 2px solid white;
+        }
+      }
+      .actions {
+        // width: 90%;
+        // padding: 0 5%;
+        width: calc(100% - 28px);
+        display: flex;
+        justify-content: space-around;
+        position: relative;
+        z-index: 5;
+        .match_action {
+          background-color: white;
+          margin-top: -27.5px;
+          height: 55px;
+          width: 40px;
+          box-shadow: 0px 3px 13px #00000014;
+          border-radius: 11px;
+          padding: 0.3rem;
+          .match_action_content {
+            border: 1px solid #050c4424;
+            border-radius: 11px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            .match_action_minute {
+              font-size: 0.8rem;
+              font-weight: 500;
+            }
+            .match_action_minute.yellow_card {
+              color: #ffaa00;
+            }
+            .match_action_minute.red_card {
+              color: #ff4600;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+:host ::ng-deep .p-datatable {
+  // border: 1px solid #050C4429;
+  .p-datatable-thead > tr > th {
+    color: #050c4446;
+    // border-width: 1px 0 1px 0;
+    padding: 0.75rem 1rem;
+    text-align: center;
+    font-size: 0.85rem;
+    font-weight: 600;
+    background-color: #050c4401 !important;
+  }
+  .p-datatable .p-datatable-tbody > tr {
+    border-bottom: 1px solid;
+  }
+  .p-datatable-tbody > tr > td {
+    // border: 1px solid;
+    padding: 1rem;
+    font-size: 0.9rem;
+    color: #050c4475;
+    font-weight: 600;
+    .minutes {
+      border: 1px solid #050c440d;
+      border-radius: 7px;
+      background: #fcfcfc;
+      padding: 0.25rem 1rem;
+    }
+  }
+  // .p-datatable-footer{
+  //     background: transparent;
+  //     border-width: 1px 0 0 0;
+  // }
+}
+
+:host ::ng-deep .p-tabview {
+  .p-tabview-nav {
+    li {
+      flex: 1;
+      .p-tabview-nav-link {
+        text-decoration: none;
+        font-size: 0.9rem;
+        padding: 1.75rem 1rem;
+        color: #050c4422;
+        border-color: transparent transparent #dee2e635 transparent;
+        .p-tabview-title {
+          margin: auto;
+        }
+      }
+    }
+    li.p-highlight {
+      .p-tabview-nav-link {
+        background: #ffffff;
+        border-color: #024cac;
+        color: #050c44;
+      }
+    }
+  }
+  .p-tabview-panels {
+    padding: 0;
+  }
+}

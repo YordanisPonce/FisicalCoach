@@ -1,0 +1,260 @@
+<p-dialog
+  (onHide)="closeModal()"
+  [(visible)]="visible"
+  [modal]="true"
+  [style]="{ width: '600px', overflow: 'visible' }"
+  header="{{
+    club?.id
+      ? ('academySidebar.edit_club' | translate)
+      : ('academySidebar.create_new_club' | translate)
+  }}"
+  id="add_space_dialog_club"
+  maskStyleClass="purple_mask"
+  styleClass=""
+>
+  <div class="" id="add_space_dialog_container">
+    <div *ngIf="step == 0" class="text-center">
+      <img
+        alt="equipo"
+        class="py-5"
+        src="../../../../assets/img/nuevoclub.svg"
+        width="250px"
+      />
+      <h4 *ngIf="!club || !club.id" class="mb-4">
+        {{ "CLUB.LBL_NEW" | translate }}
+      </h4>
+      <h6 *ngIf="club && club.id" class="mb-4">
+        {{ "CLUB.LBL_UPDATE" | translate }}
+      </h6>
+      <p>{{ "CLUB.P1" | translate }}</p>
+    </div>
+    <div *ngIf="step == 1" class="text-center step_content">
+      <div style="width: 70%; margin-left: auto; margin-right: auto">
+        <p>{{ "CLUB.P4" | translate }}</p>
+      </div>
+
+      <img
+        (click)="openCropperDialog = true"
+        *ngIf="imagenPreview && imagenPreview.full_url"
+        [src]="imagenPreview.full_url"
+        alt="preview"
+        style="height: 200px; width: 200px; cursor: pointer"
+        class="rounded-circle"
+      />
+      <img
+        *ngIf="club && club.image && !imageEdit"
+        alt="club"
+        src="{{ club.image.full_url }}"
+        style="height: 200px; width: 200px; cursor: pointer"
+      /><br />
+      <button
+        (click)="openCropperDialog = true"
+        class="btn upload_btn mt-4"
+        pTooltip="{{ 'CLUB.BTN_UPLOADIMAGE' | translate }}"
+        tooltipPosition="top"
+      >
+        {{ "CLUB.BTN_UPLOADIMAGE" | translate }}
+      </button>
+      <p class="fototypes">{{ "PLAYERS.FOTOTYPES" | translate }}</p>
+    </div>
+    <div *ngIf="step == 2" class="step_content">
+      <form
+        *ngIf="formClub"
+        [formGroup]="formClub"
+        id="idFormRP"
+        name="nomForm"
+      >
+        <div [ngClass]="{ 'px-1': getScreenWidth() >= 768 }" class="row">
+          <div class="mb-3 col-12 col-md-6">
+            <label for="name">{{ "CLUB.LBL_NAME" | translate }} *</label>
+            <input
+              [ngClass]="{ 'ng-invalid ng-dirty': submitted && f.name.invalid }"
+              [placeholder]="'CLUB.LBL_DESCRIPTIONNAME' | translate"
+              aria-describedby="inputGroup-sizing-default"
+              aria-label="Default"
+              autocomplete="off"
+              class="form-control"
+              formControlName="name"
+              id="name"
+            />
+            <div
+              *ngIf="submitted && f.name.invalid"
+              class="form-text text-danger"
+            >
+              {{ "LBL_FIELD_REQUIRED" | translate }}
+            </div>
+          </div>
+          <div class="mb-3 col-12 col-md-6">
+            <label for="country">{{ "CLUB.LBL_COUNTRY" | translate }} *</label>
+            <p-dropdown
+              (onChange)="getProvince($event.value)"
+              [filter]="true"
+              [options]="listCountries"
+              [showClear]="true"
+              [style]="{
+                width: '100%',
+                height: '45px',
+                'border-radius': '9px',
+                'padding-top': '4px',
+                overflow: 'visible'
+              }"
+              aria-describedby="inputGroup-sizing-default"
+              class="control-custom"
+              formControlName="country_id"
+              id="country"
+              placeholder="{{ 'LBL_SELECCIONAR' | translate }}"
+            >
+            </p-dropdown>
+            <div
+              *ngIf="submitted && f.country_id.invalid"
+              class="form-text text-danger"
+            >
+              {{ "LBL_FIELD_REQUIRED" | translate }}
+            </div>
+          </div>
+          <div class="mb-3 col-12 col-md-6">
+            <label for="province_id">{{ "CLUB.LBL_STATE" | translate }}</label>
+            <p-dropdown
+              [filter]="true"
+              [options]="listProvincies"
+              [showClear]="true"
+              [style]="{
+                width: '100%',
+                height: '45px',
+                'border-radius': '9px',
+                'padding-top': '4px',
+                overflow: 'visible'
+              }"
+              aria-describedby="inputGroup-sizing-default"
+              class="control-custom"
+              formControlName="province_id"
+              id="province_id"
+              placeholder="{{ 'LBL_SELECCIONAR' | translate }}"
+            ></p-dropdown>
+          </div>
+          <div class="mb-3 col-12 col-md-6">
+            <label for="city">{{ "CLUB.LBL_CITY" | translate }}</label>
+            <input
+              [placeholder]="'CLUB.LBL_DESCRIPTIONCITY' | translate"
+              aria-describedby="inputGroup-sizing-default"
+              aria-label="Default"
+              autocomplete="off"
+              class="form-control"
+              formControlName="city"
+              id="city"
+            />
+          </div>
+
+          <div class="mb-3 col-12 col-md-6">
+            <label for="postal_code">{{
+              "CLUB.LBL_POSTALCODE" | translate
+            }}</label>
+            <input
+              [maxlength]="10"
+              [placeholder]="'CLUB.LBL_DESCRIPTIONPOSTALCODE' | translate"
+              aria-describedby="inputGroup-sizing-default"
+              aria-label="Default"
+              autocomplete="off"
+              class="form-control"
+              formControlName="postal_code"
+              id="postal_code"
+              pKeyFilter="alphanum"
+            />
+          </div>
+
+          <div class="mb-3 col-12 col-md-6">
+            <label for="street">{{ "CLUB.LBL_ADDRESS" | translate }}</label>
+            <input
+              [placeholder]="'CLUB.LBL_DESCRPTIONSTREET' | translate"
+              aria-describedby="inputGroup-sizing-default"
+              aria-label="Default"
+              autocomplete="off"
+              class="form-control"
+              formControlName="street"
+              id="street"
+            />
+          </div>
+          <div
+            class="mb-3 col-12 col-md-6"
+            style="display: flex; flex-direction: column"
+          >
+            <label for="mobile_phone">{{ "CLUB.phone" | translate }}</label>
+            <p-chips
+              [addOnBlur]="true"
+              formControlName="mobile_phone"
+              id="mobile_phone"
+              pKeyFilter="num"
+              placeholder="+12345678"
+              separator=","
+            ></p-chips>
+          </div>
+          <div
+            class="mb-3 col-12 col-md-6"
+            style="display: flex; flex-direction: column"
+          >
+            <label>{{ "CLUB.mobile_phone" | translate }}</label>
+            <p-chips
+              [addOnBlur]="true"
+              formControlName="phone"
+              id="phone"
+              pKeyFilter="num"
+              placeholder="+12345678"
+              separator=","
+            ></p-chips>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div *ngIf="step != 0">
+      <ul class="step_markers">
+        <li>
+          <span [ngClass]="{ active: step == 1 }" class="step_marker"></span>
+        </li>
+        <li>
+          <span [ngClass]="{ active: step == 2 }" class="step_marker"></span>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <ng-template pTemplate="footer">
+    <div class="footer_btns">
+      <button
+        (click)="step > 0 ? (step = step - 1) : closeModal()"
+        [ngClass]="{ shrink_btn: step == 2 }"
+        class="btn back_btn"
+        pTooltip="{{ 'LBL_ATRAS' | translate }} "
+        tooltipPosition="top"
+      >
+        {{ "LBL_ATRAS" | translate }}
+      </button>
+      <button
+        (click)="step < 2 ? (step = step + 1) : validateForm()"
+        [disabled]="loadingSubmit"
+        [ngClass]="{ shrink_btn: step == 2 }"
+        class="btn btn-primary justify-content-center next_btn_flex"
+        pTooltip="{{ tooltip() | translate }}"
+        tooltipPosition="top"
+        pButton
+      >
+        <span *ngIf="step == 2 && club && club.id && !loadingSubmit">
+          {{ "academySidebar.update_club" | translate }}</span
+        >
+        <span *ngIf="step == 2 && (!club || !club.id) && !loadingSubmit">
+          {{ "academySidebar.create_club" | translate }}</span
+        >
+        <span *ngIf="step != 2 && !loadingSubmit">{{
+          "LBL_SIGUIENTE" | translate
+        }}</span>
+        <span *ngIf="loadingSubmit">{{ "LBL_GUARDANDO" | translate }}</span>
+      </button>
+    </div>
+  </ng-template>
+</p-dialog>
+
+<app-image-cropper
+  *ngIf="openCropperDialog"
+  [coverDialog]="openCropperDialog"
+  (sendImage)="preview($event)"
+  (close)="openCropperDialog = false"
+>
+</app-image-cropper>

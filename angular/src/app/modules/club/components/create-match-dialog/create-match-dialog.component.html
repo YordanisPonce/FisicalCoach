@@ -1,0 +1,374 @@
+<p-dialog
+  (onHide)="closeDialog()"
+  [(visible)]="visible"
+  [modal]="true"
+  header="{{ 'competition_details.new_match' | translate }} +"
+  id="create_match_dialog"
+  maskStyleClass="purple_mask"
+  styleClass=""
+  *ngIf="!oneStepSports.includes(team.sport.code)"
+>
+  <div class="" id="create_match_dialog_container">
+    <div class="step_content">
+      <form [formGroup]="matchForm" *ngIf="step == 1">
+        <div [ngClass]="{ 'px-3': getScreenWidth() >= 768 }" class="row">
+          <div class="mb-4 col-12 col-md-6">
+            <label for="">
+              {{ "competition_details.match_dialog.match_date" | translate }}
+              *</label
+            >
+            <div>
+              <p-calendar
+                formControlName="start_at"
+                [styleClass]="'w-100 border-0 p-0'"
+                [selectionMode]="'single'"
+                [placeholder]="'DD/MM/AAAA HH:mm'"
+                [showTime]="true"
+                [dateFormat]="'dd/mm/yy'"
+                [dataType]="'string'"
+                [(ngModel)]="matchDate ? matchDate : date"
+                [firstDayOfWeek]="1"
+                (onSelect)="verifyMatchDate($event)"
+                [readonlyInput]="true"
+                [minDate]="minDate"
+              ></p-calendar>
+
+              <p *ngIf="!isAvailableMatch" class="text-danger mt-1">
+                {{
+                  "competition_details.match_dialog.matchDateNotAvailable"
+                    | translate
+                }}
+              </p>
+            </div>
+          </div>
+          <div class="mb-4 col-12 col-md-6">
+            <label for="">{{
+              "competition_details.match_dialog.match_location.title"
+                | translate
+            }}</label>
+            <input
+              aria-describedby="inputGroup-sizing-default"
+              aria-label="Default"
+              class="form-control"
+              placeholder="{{
+                'competition_details.match_dialog.match_location.placeholder'
+                  | translate
+              }}"
+              formControlName="location"
+            />
+          </div>
+
+          <div class="mb-4 col-12 col-md-6">
+            <div class="mb-3">
+              <label
+                >{{
+                  "competition_details.match_dialog.match_situation" | translate
+                }}
+                *
+              </label>
+            </div>
+            <div>
+              <div class="d-flex align-items-center">
+                <p-radioButton
+                  class="mr-3"
+                  label="{{
+                    'competition_details.match_dialog.competition_type.local'
+                      | translate
+                  }}"
+                  name="match_situation"
+                  value="L"
+                  formControlName="match_situation"
+                ></p-radioButton>
+                <p-radioButton
+                  class=""
+                  label="{{
+                    'competition_details.match_dialog.competition_type.visitor'
+                      | translate
+                  }}"
+                  name="match_situation"
+                  value="V"
+                  formControlName="match_situation"
+                ></p-radioButton>
+              </div>
+            </div>
+          </div>
+
+          <div class="mb-4 col-12 col-md-6">
+            <label for=""
+              >{{
+                "competition_details.match_dialog.rival_team.title" | translate
+              }}
+              *</label
+            >
+            <div>
+              <p-dropdown
+                placeholder="{{
+                  'competition_details.match_dialog.rival_team.placeholder'
+                    | translate
+                }}"
+                [options]="rivalTeams"
+                [styleClass]="'w-100 form-control'"
+                formControlName="competition_rival_team_id"
+              >
+              </p-dropdown>
+            </div>
+          </div>
+
+          <div class="mb-4 col-12 col-md-6">
+            <div class="d-flex justify-content-between">
+              <label for="">{{
+                "competition_details.match_dialog.referee.title" | translate
+              }}</label>
+              <label
+                class="label-link ml-2 label-referee"
+                (click)="handleReferee()"
+              >
+                {{
+                  "competition_details.match_dialog.add_referee" | translate
+                }}</label
+              >
+            </div>
+            <div></div>
+
+            <p-dropdown
+              [filter]="true"
+              [options]="refereeList"
+              [showClear]="true"
+              *ngIf="!refereeInput"
+              [styleClass]="'form-control'"
+              aria-describedby="inputGroup-sizing-default"
+              class="control-custom"
+              formControlName="referee_id"
+              id="referee_id"
+              placeholder="{{ 'LBL_SELECCIONE' | translate }}"
+            ></p-dropdown>
+
+            <input
+              formControlName="referee_name"
+              type="text"
+              class="form-control input-rounded"
+              placeholder="{{ 'LBL_ESCRIBEAQI' | translate }}"
+              aria-label="Default"
+              aria-describedby="inputGroup-sizing-default"
+              *ngIf="refereeInput"
+            />
+          </div>
+          <div class="mb-4 col-12 col-md-6">
+            <label for="">{{
+              "competition_details.match_dialog.weather.title" | translate
+            }}</label>
+            <div>
+              <p-dropdown
+                placeholder="{{
+                  'competition_details.match_dialog.weather.placeholder'
+                    | translate
+                }}"
+                [options]="weatherList"
+                [styleClass]="'w-100 form-control'"
+                formControlName="weather_id"
+              >
+              </p-dropdown>
+            </div>
+          </div>
+
+          <div class="mb-4 col-12 col-md-6" *ngIf="modalities.length > 0">
+            <label for=""
+              >{{ "competition_details.modality" | translate }}
+            </label>
+
+            <div>
+              <p-dropdown
+                [options]="modalities"
+                name="modality"
+                [optionValue]="'id'"
+                [optionLabel]="'name'"
+                formControlName="modality_id"
+                [styleClass]="'w-100 form-control'"
+              ></p-dropdown>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div *ngIf="step == 2" class="step_content">
+      <div [ngClass]="{ 'px-3': getScreenWidth() >= 768 }" class="row px-n2">
+        <div class="mb-4 col-12 col-md-6 px-2">
+          <label
+            *ngIf="team.sport.code !== 'baseball' && LineUpTypeList.length > 0"
+            >{{
+              "competition_details.match_dialog.game_system" | translate
+            }}</label
+          >
+          <div class="game_system">
+            <p-dropdown
+              [(ngModel)]="selectedTypeLineup"
+              [options]="LineUpTypeList"
+              [styleClass]="'w-100 form-control'"
+              optionLabel="lineup"
+              *ngIf="
+                team.sport.code !== 'baseball' && LineUpTypeList.length > 0
+              "
+            >
+              <ng-template let-lineup pTemplate="item">
+                {{ lineup.lineup }}
+              </ng-template>
+            </p-dropdown>
+
+            <button
+              class="btn btn-primary last-button"
+              (click)="getLastMatchLineupAndPlayers()"
+              *ngIf="!loadingLastMatch"
+            >
+              {{
+                "competition_details.match_dialog.load_last_match" | translate
+              }}
+            </button>
+            <button class="btn btn-primary" *ngIf="loadingLastMatch">
+              <div style="text-align: center; width: 100%">
+                <i class="pi pi-spin pi-spinner" style="font-size: 1.5rem"></i>
+              </div>
+            </button>
+          </div>
+        </div>
+        <div
+          class="col-12 col-md-6 px-2 team-type player_margin_bottom"
+          *ngIf="typePlayers.length <= 3"
+        >
+          <div
+            class="team-type"
+            style="cursor: pointer"
+            *ngFor="let type of typePlayers"
+            (click)="selectTeamType(type.code)"
+          >
+            <span
+              [ngClass]="selectedTeamType[type.code] ? 'type-selected' : ''"
+            >
+              {{ type.name }}</span
+            >
+            <div
+              class="dot-green"
+              [style]="{ backgroundColor: type.color }"
+            ></div>
+          </div>
+        </div>
+
+        <div
+          class="col-12 col-md-6 px-2 team-type"
+          *ngIf="typePlayers.length > 3"
+        >
+          <div class="dropdown">
+            <p-dropdown
+              [options]="typePlayers"
+              [(ngModel)]="selectedCode"
+              (ngModelChange)="selectTeamType(selectedCode)"
+              placeholder="Seleccione tipo de jugador"
+              class="type-dropdown"
+            >
+              <ng-template pTemplate="filter" let-type>
+                <span>{{ type?.label }}</span>
+
+                <div
+                  class="dot"
+                  [style]="{ backgroundColor: type.color }"
+                ></div> </ng-template
+            ></p-dropdown>
+          </div>
+        </div>
+
+        <div class="col-12">
+          <div class="row px-n2">
+            <div
+              *ngFor="let i of players"
+              class="col-12 col-sm-6 col-md-3 px-2"
+            >
+              <p-chip
+                [styleClass]="'custom_chip'"
+                [style]="{ backgroundColor: i.type_player_color }"
+                (click)="selectPlayers(i)"
+              >
+                <span class="chip_image">
+                  <img src="{{ i | avatarPipe }}" width="50px" />
+                </span>
+                <span>{{ i.full_name }} ({{ i?.shirt_number }})</span>
+              </p-chip>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="step != 0 && !oneStepSports.includes(team.sport.code)">
+      <ul class="step_markers full_markers">
+        <li>
+          <span [ngClass]="{ active: step == 1 }" class="step_marker"></span>
+        </li>
+        <li>
+          <span [ngClass]="{ active: step == 2 }" class="step_marker"></span>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <p-footer>
+    <div class="footer_btns">
+      <button
+        (click)="step > 1 ? (step = step - 1) : closeDialog()"
+        [ngClass]="{ shrink_btn: step == 2 }"
+        class="btn back_btn"
+        type="button"
+      >
+        {{ "competition_details.back_button" | translate }}
+      </button>
+
+      <button
+        (click)="step == 1 ? (step = step + 1) : ''"
+        class="btn next_btn shrink_btn"
+        type="button"
+        *ngIf="step === 1"
+        [disabled]="!matchForm.valid || !isAvailableMatch"
+      >
+        {{ "competition_details.next_button" | translate }}
+      </button>
+
+      <button
+        [ngClass]="{ shrink_btn: step == 2 }"
+        class="btn next_btn"
+        type="submit"
+        *ngIf="step === 2 && !loading"
+        (click)="onSubmit()"
+        [disabled]="selectedPlayerList.length === 0 || !matchForm?.valid"
+      >
+        {{
+          (match
+            ? "competition_details.edit_match"
+            : "competition_details.create_match"
+          ) | translate
+        }}
+      </button>
+      <button
+        [ngClass]="{ shrink_btn: step == 2 }"
+        class="btn next_btn"
+        type="submit"
+        *ngIf="step === 2 && loading"
+        [disabled]="loading"
+      >
+        <span
+          class="spinner-grow spinner-grow-sm"
+          role="status"
+          aria-hidden="true"
+        ></span>
+        {{ "LBL_GUARDANDO" | translate }}
+      </button>
+    </div>
+  </p-footer>
+</p-dialog>
+
+<app-one-step-dialog
+  *ngIf="oneStepSports.includes(team.sport.code)"
+  [visible]="visible"
+  [match]="match"
+  [matchDate]="matchDate"
+  (refreshMatchList)="refreshMatchList.emit(true)"
+  (close)="closeDialog()"
+>
+</app-one-step-dialog>

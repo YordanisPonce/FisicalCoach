@@ -1,0 +1,32 @@
+<p-table [value]="players" selectionMode="single">
+  <ng-template pTemplate="header">
+    <tr>
+      <th>{{ "LBL_NAME" | translate }}</th>
+      <th class="text-center">{{ "PLAYERS.LBL_POSITION" | translate }}</th>
+      <th class="text-center">{{ "LBL_ACTIONS" | translate }}</th>
+    </tr>
+  </ng-template>
+  <ng-template let-player pTemplate="body">
+    <tr>
+      <td>
+        <img
+          class="rounded-circle principalImg"
+          src="{{ player | avatarPipe }}"
+          width="25px"
+          height="25px"
+        />
+        <strong class="ml-4">{{ player.full_name }}</strong>
+      </td>
+      <td class="text-center">{{ player.position?.name }}</td>
+      <td class="text-center">
+        <button
+          (click)="detalle(player)"
+          class="btn"
+          routerLink="/club/players/perfil"
+        >
+          <img alt="" src="/assets/img/icons/ver.svg" />
+        </button>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>

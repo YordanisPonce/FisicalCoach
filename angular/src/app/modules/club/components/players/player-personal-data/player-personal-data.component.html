@@ -1,0 +1,325 @@
+<div
+  *ngIf="player.id"
+  class="d-flex align-items-center player_profile"
+  style="margin: 2px"
+>
+  <div
+    (click)="openCropperDialog = true"
+    class="player_image"
+    style="cursor: pointer"
+  >
+    <img
+      *ngIf="!player.image && !imagenPreview"
+      [src]="
+        player.image && player.image !== null
+          ? urlBase + player.image
+          : getAvatar(player)
+      "
+      width="100px"
+      height="100px"
+    />
+    <div
+      *ngIf="player.image && player.image.id && !imagenPreview"
+      [style.backgroundImage]="'url(' + player.image.full_url + ')'"
+      class="avatar_image avatar_100"
+    ></div>
+    <img
+      *ngIf="imagenPreview"
+      [src]="imagenPreview.url"
+      style="height: 100px !important; width: 100px !important"
+    />
+  </div>
+  <div class="ml-3">
+    <h5>{{ player.full_name }}</h5>
+
+    <a (click)="openCropperDialog = true" class="pointer">{{
+      "PLAYERS.LBL_CAMBIARAVATAR" | translate
+    }}</a>
+
+    <div *ngIf="imageSizeError" class="text-danger">
+      <span>{{ "fileRejectedBySize" | translate }}</span>
+    </div>
+  </div>
+</div>
+<hr />
+<div class="player_personal_data_form_container" style="margin: 2px">
+  <form
+    (ngSubmit)="onSubmit()"
+    [formGroup]="formDataPersonal"
+    id="player_personal_data_form"
+    name="nomFormDataPersonal"
+  >
+    <div class="row pb-2">
+      <!-- nombre -->
+      <div class="col-12 col-md-6 my-3">
+        <label class="" for="names"
+          >{{ "PLAYERS.LBL_NOMBRECOMPLETO" | translate }} *</label
+        >
+        <input
+          [ngClass]="{
+            'ng-invalid ng-dirty is-invalid':
+              (f.full_name.invalid &&
+                (f.full_name.dirty || f.full_name.touched)) ||
+              (f.full_name.invalid && submitted)
+          }"
+          aria-describedby="inputGroup-sizing-default"
+          aria-label="Default"
+          class="form-control"
+          formControlName="full_name"
+          id="names"
+          placeholder="{{ 'LBL_ESCRIBEAQI' | translate }}"
+          type="text"
+        />
+        <div *ngIf="f.full_name?.errors" class="invalid-feedback">
+          {{ "PLAYERS.LBL_NOMBRECOMPLETO" | translate }}
+          {{ "requerido" | translate }}
+        </div>
+      </div>
+      <!-- sexo -->
+      <div class="col-12 col-md-6 my-3">
+        <label class="d-block">{{ "PLAYERS.LBL_SEXO" | translate }} *</label>
+        <p-radioButton
+          (onClick)="calculateMaximumHeartRate()"
+          *ngFor="let item of listGenders"
+          [label]="item.code"
+          [ngClass]="{
+            'ng-invalid ng-dirty is-invalid':
+              (f.gender_id.invalid &&
+                (f.gender_id.dirty || f.gender_id.touched)) ||
+              (f.gender_id.invalid && submitted)
+          }"
+          [value]="item.id"
+          class="mr-3"
+          formControlName="gender_id"
+          name="gender_id"
+        ></p-radioButton>
+        <div *ngIf="f.gender_id?.errors" class="invalid-feedback">
+          {{ "PLAYERS.LBL_SEXO" | translate }} {{ "requerido" | translate }}
+        </div>
+      </div>
+      <!-- identidad genero -->
+      <div class="col-12 col-md-6 my-3">
+        <label for="gender">{{ "LBL_GENDER_IDENTITY" | translate }}</label>
+        <p-dropdown
+          [filter]="false"
+          [options]="listGenderIdentity"
+          [styleClass]="'w-100 form-control'"
+          aria-describedby="inputGroup-sizing-default"
+          formControlName="gender_identity_id"
+          id="gender"
+          optionLabel="code"
+          optionValue="id"
+          placeholder="{{ 'LBL_SELECCIONE' | translate }}"
+        ></p-dropdown>
+        <div *ngIf="f.gender_id?.errors" class="invalid-feedback">
+          {{ "MEMBERS.LBL_SEXO" | translate }} {{ "requerido" | translate }}
+        </div>
+      </div>
+      <!-- fecha de nacimiento -->
+      <div class="col-12 col-md-6 my-3">
+        <label class="" for="date_birth"
+          >{{ "PLAYERS.LBL_FECHANACIMIENTO" | translate }}
+        </label>
+        <p-calendar
+          (onSelect)="calculateMaximumHeartRate()"
+          (onSelect)="setBirthdateTimestamp()"
+          [(ngModel)]="birthdate"
+          [firstDayOfWeek]="1"
+          [maxDate]="maxDate"
+          [monthNavigator]="true"
+          [ngClass]="{
+            'ng-invalid ng-dirty is-invalid':
+              (f.date_birth.invalid &&
+                (f.date_birth.dirty || f.date_birth.touched)) ||
+              (f.date_birth.invalid && submitted)
+          }"
+          [ngModelOptions]="{ standalone: true }"
+          [readonlyInput]="true"
+          [style]="{ overflow: 'visible', 'border-radius': '30px' }"
+          [yearNavigator]="true"
+          [yearRange]="yearRange"
+          class="p-calendar form-control"
+          dateFormat="dd/mm/yy"
+          id="date_birth"
+          inputId="range"
+          placeholder="{{ 'MEMBERS.LBL_FECHANAC' | translate }}"
+        ></p-calendar>
+        <div *ngIf="f.date_birth?.errors" class="invalid-feedback">
+          {{ "PLAYERS.LBL_FECHANACIMIENTO" | translate }}
+          {{ "requerido" | translate }}
+        </div>
+      </div>
+      <!-- nacionalidad -->
+      <div class="col-12 col-md-6 my-3">
+        <label class="" for="country_id"
+          >{{ "PLAYERS.LBL_NACIONALIDAD" | translate }}
+        </label>
+        <p-dropdown
+          [filter]="true"
+          [ngClass]="{
+            'ng-invalid ng-dirty is-invalid':
+              (f.country_id.invalid &&
+                (f.country_id.dirty || f.country_id.touched)) ||
+              (f.country_id.invalid && submitted)
+          }"
+          [options]="listCountries"
+          [styleClass]="'w-100 form-control'"
+          aria-describedby="inputGroup-sizing-default"
+          formControlName="country_id"
+          id="country_id"
+          placeholder="{{ 'LBL_SELECCIONE' | translate }}"
+        ></p-dropdown>
+        <div *ngIf="f.country_id?.errors" class="invalid-feedback">
+          {{ "PLAYERS.LBL_NACIONALIDAD" | translate }}
+          {{ "requerido" | translate }}
+        </div>
+      </div>
+      <!-- altura -->
+      <div class="col-12 col-md-6 my-3">
+        <label class="" for="height">{{
+          "PLAYERS.LBL_ALTURA" | translate
+        }}</label>
+        (<label> cm</label>)
+        <p-inputNumber
+          (onBlur)="calculateImc()"
+          [inputStyleClass]="'form-control'"
+          class="w-100"
+          [maxFractionDigits]="2"
+          [minFractionDigits]="1"
+          [styleClass]="'d-block'"
+          formControlName="height"
+          id="height"
+          inputId="height"
+          mode="decimal"
+          placeholder="{{ 'LBL_ESCRIBEAQI' | translate }}"
+        >
+        </p-inputNumber>
+        <div
+          *ngIf="submitted && f.height.invalid"
+          class="form-text text-danger"
+        >
+          {{ "PLAYERS.LBL_ALTURA" | translate }}
+          {{ "requerido" | translate }}
+        </div>
+      </div>
+      <!-- peso -->
+      <div class="col-12 col-md-6 my-3">
+        <label class="" for="weight">{{
+          "PLAYERS.LBL_PESO" | translate
+        }}</label>
+        (<label> kg</label>)
+        <p-inputNumber
+          (onBlur)="calculateImc()"
+          [inputStyleClass]="'w-100 form-control'"
+          class="w-100"
+          [maxlength]="4"
+          [min]="0"
+          [styleClass]="'d-block'"
+          formControlName="weight"
+          id="weight"
+          inputId="weight"
+          placeholder="{{ 'LBL_ESCRIBEAQI' | translate }}"
+        >
+        </p-inputNumber>
+        <div
+          *ngIf="submitted && f.weight.invalid"
+          class="form-text text-danger"
+        >
+          {{ "PLAYERS.LBL_PESO" | translate }} {{ "requerido" | translate }}
+        </div>
+      </div>
+      <!-- imc -->
+      <div class="col-12 col-md-6 my-3">
+        <label class="" for="imc">{{ "PLAYERS.LBL_IMC" | translate }}</label>
+        <p-inputNumber
+          [inputStyleClass]="' form-control'"
+          class="w-100"
+          [min]="0"
+          [styleClass]="'d-block'"
+          formControlName="imc"
+          id="imc"
+          inputId="imc"
+          placeholder="{{ 'LBL_ESCRIBEAQI' | translate }}"
+        >
+        </p-inputNumber>
+        <div *ngIf="submitted && f.imc.invalid" class="form-text text-danger">
+          {{ "PLAYERS.LBL_IMC" | translate }} {{ "requerido" | translate }}
+        </div>
+      </div>
+      <!-- frecuencia cardiaca -->
+      <div class="col-12 col-md-6 my-3">
+        <label class="" for="resting_heart_rate">{{
+          "PLAYERS.LBL_FRECUENCIACARDIACA" | translate
+        }}</label>
+        (<label> {{ "LBL_PPM" | translate }}</label
+        >)
+        <p-inputNumber
+          [inputStyleClass]="'form-control'"
+          class="w-100"
+          [min]="0"
+          [styleClass]="'d-block'"
+          formControlName="heart_rate"
+          id="resting_heart_rate"
+          inputId="resting_heart_rate"
+          placeholder="{{ 'LBL_ESCRIBEAQI' | translate }}"
+        >
+        </p-inputNumber>
+        <div
+          *ngIf="submitted && f.heart_rate.invalid"
+          class="form-text text-danger"
+        >
+          {{ "PLAYERS.LBL_FRECUENCIACARDIACA" | translate }}
+          {{ "requerido" | translate }}
+        </div>
+      </div>
+
+      <!-- frecuencia cardiaca maxima -->
+      <div class="col-12 col-md-6 my-3">
+        <label class="" for="max_heart_rate">{{
+          "PLAYERS.LBL_FRECUENCIACARDIACAR" | translate
+        }}</label>
+        (<label> ppm</label>)
+        <p-inputNumber
+          [inputStyleClass]="'form-control'"
+          class="w-100"
+          [min]="0"
+          [styleClass]="'d-block'"
+          formControlName="max_heart_rate"
+          id="max_heart_rate"
+          inputId="max_heart_rate"
+          placeholder="{{ 'LBL_ESCRIBEAQI' | translate }}"
+        >
+        </p-inputNumber>
+        <div
+          *ngIf="submitted && f.max_heart_rate.invalid"
+          class="form-text text-danger"
+        >
+          {{ "PLAYERS.LBL_FRECUENCIACARDIACAR" | translate }}
+          {{ "requerido" | translate }}
+        </div>
+      </div>
+    </div>
+    <div *ngIf="player.id" class="row my-5">
+      <div class="col-12">
+        <button
+          [loading]="saving"
+          class="btn btn-primary btn-block py-2 save_btn"
+          label="{{ 'PLAYERS.BTN_GUARDAR' | translate }}"
+          pButton
+          pTooltip="{{ 'PLAYERS.BTN_GUARDAR' | translate }}"
+          tooltipPosition="top"
+          type="submit"
+          [disabled]="imageSizeError"
+        ></button>
+      </div>
+    </div>
+  </form>
+</div>
+
+<app-image-cropper
+  *ngIf="openCropperDialog"
+  [coverDialog]="openCropperDialog"
+  (sendImage)="fileUpload($event)"
+  (close)="openCropperDialog = false"
+>
+</app-image-cropper>

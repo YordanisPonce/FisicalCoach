@@ -1,0 +1,317 @@
+<div class="card box-shadow">
+    <div class="card-body p-0">
+      <div class="row">
+        <div class="col-12">
+          <div class="effort_recovery_header view_header">
+            <span class="icon_left" routerLink="/club/effort-recovery"
+              ><i class="fas fa-chevron-left"></i>
+            </span>
+            <h6 class="font-weight-600 mb-0 mr-4 text-main view_header_title">
+              {{ "effort_recovery_details.title" | translate }}
+            </h6>
+          </div>
+        </div>
+  
+        <div class="col-12">
+            <div class="row effort_recovery_container">
+                <div class="col-12 my-3">
+                    <div class="player_profile">
+                        <!-- imagen -->
+                        <div class="player_profile_image">
+                            <p-skeleton
+                                shape="circle"
+                                size="100px"
+                                styleClass="mb-2"
+                                *ngIf="!playerProgramDetails"
+                            ></p-skeleton>
+            
+                            <img
+                                *ngIf="playerProgramDetails"
+                                src="/assets/img/{{playerProgramDetails.player.image || playerProgramDetails.player.gender.id===1 ? 'chico.png' : playerProgramDetails.player.gender.id===2 ? 'chica.png' :'chica.png'}}"
+                                alt="player"
+                                class="player_profile_image"
+                            />
+                        </div>
+        
+                        <div *ngIf="playerProgramDetails" class="row mr-lg-3 mb-2 mb-lg-0">
+                            <div class="col-12 w-100">
+                                <div class="player_profile_title">
+                                    <span>{{ playerProgramDetails?.player?.full_name }}</span>
+                                </div>
+                                <div class="player_profile_subtitle">
+                                    <span>
+                                        {{playerProgramDetails.player.alias}}
+                                    </span>
+                                </div>
+                                <div class="d-flex text-center justify-content-between">
+                                    <div class="">
+                                      <div class="player_profile_info_title">
+                                        <span>{{'PLAYERS.LBL_ALTURA' |translate}}</span>
+                                      </div>
+                                      <div class="player_profile_info_desc">
+                                        <span>{{playerProgramDetails.player.height ? (playerProgramDetails.player.height | number: '1.0-0') : '-'}} cm</span>
+                                      </div>
+                                    </div>
+                                    <div class="mx-2">
+                                      <div class="player_profile_info_title">
+                                        <span>{{'PLAYERS.LBL_PESO' | translate}}</span>
+                                      </div>
+                                      <div class="player_profile_info_desc">
+                                        <span>{{playerProgramDetails.player.weight ? (playerProgramDetails.player.weight | number: '1.0-1'): '-'}} kg</span>
+                                      </div>
+                                    </div>
+                                    <div class="">
+                                      <div class="player_profile_info_title">
+                                        <span>{{'PSYCHOLOGY.LBL_AGE' | translate}}</span>
+                                      </div>
+                                      <div class="player_profile_info_desc">
+                                        <span>{{playerProgramDetails.player.age}} {{'LBL_YEARS' | translate}}</span>
+                                      </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+        
+                        <div *ngIf="!playerProgramDetails" class="row">
+                            <div class="col-12">
+                                <p-skeleton
+                                shape="rectangle"
+                                height="15px"
+                                width="150px"
+                                styleClass="mb-2"
+                                ></p-skeleton>
+                            </div>
+                            <div class="col-12">
+                                <p-skeleton
+                                shape="rectangle"
+                                height="15px"
+                                width="100px"
+                                styleClass="mb-2"
+                                ></p-skeleton>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-12">
+            <div class="row effort_recovery_container">
+                <div class="col-12 my-3">
+                    <div class="row">
+                        <!-- fecha -->
+                        <div class="col-sm-6 col-xl-4 mb-5">
+                            <div class="player_info_title">
+                                <span>
+                                    {{("effort_recovery_record.start_date" | translate)}}
+                                </span
+                            >
+                            </div>
+                            <span
+                            class="player_info_text"
+                            *ngIf="playerProgramDetails"
+                            >
+                            {{playerProgramDetails.created_at | transformTimestamp}}
+                            </span>
+
+                            <p-skeleton
+                            shape="rectangle"
+                            height="15px"
+                            width="50%"
+                            styleClass="mb-2"
+                            *ngIf="!playerProgramDetails"
+                            ></p-skeleton>
+                        </div>
+
+                        <!-- sue#o -->
+                        <div class="col-sm-6 col-xl-4 mb-5">
+                            <div class="player_info_title">
+                                <span>
+                                    {{'effort_recovery.sleepiness' | translate}}
+                                </span
+                            >
+                            </div>
+                            <span
+                            class="player_info_text"
+                            *ngIf="playerProgramDetails"
+                            >
+                            {{playerProgramDetails.latest_questionnaire_history != null ? playerProgramDetails?.latest_questionnaire_history.answers[0].name: 'N/A'}}
+                            </span>
+
+                            <p-skeleton
+                            shape="rectangle"
+                            height="15px"
+                            width="50%"
+                            styleClass="mb-2"
+                            *ngIf="!playerProgramDetails"
+                            ></p-skeleton>
+                        </div>
+
+                        <!-- stress -->
+                        <div class="col-sm-6 col-xl-4 mb-5">
+                            <div class="player_info_title">
+                            <span>
+                                {{'effort_recovery.stress' | translate}}</span
+                            >
+                            </div>
+                            <span
+                            class="player_info_text"
+                            *ngIf="playerProgramDetails"
+                            >
+                            {{playerProgramDetails.latest_questionnaire_history != null ? playerProgramDetails?.latest_questionnaire_history.answers[1].name: 'N/A'}}
+                            </span>
+
+                            <p-skeleton
+                            shape="rectangle"
+                            height="15px"
+                            width="50%"
+                            styleClass="mb-2"
+                            *ngIf="!playerProgramDetails"
+                            ></p-skeleton>
+                        </div>
+
+                        <!-- fatiga -->
+                        <div class="col-sm-6 col-xl-4 mb-5">
+                            <div class="player_info_title">
+                                <span>
+                                    {{'effort_recovery.fatigue' | translate}}
+                                </span>
+                            </div>
+                            <span
+                            class="player_info_text"
+                            *ngIf="playerProgramDetails"
+                            >
+                            {{playerProgramDetails.latest_questionnaire_history != null ? playerProgramDetails?.latest_questionnaire_history.answers[2].name: 'N/A'}}
+                            </span>
+
+                            <p-skeleton
+                            shape="rectangle"
+                            height="15px"
+                            width="50%"
+                            styleClass="mb-2"
+                            *ngIf="!playerProgramDetails"
+                            ></p-skeleton>
+                        </div>
+
+                        <!-- doms -->
+                        <div class="col-sm-6 col-xl-4 mb-5">
+                            <div class="player_info_title">
+                                <span>
+                                    {{'effort_recovery.doms' | translate}}
+                                </span>
+                            </div>
+                            <span
+                            class="player_info_text"
+                            *ngIf="playerProgramDetails"
+                            >
+                            {{playerProgramDetails.latest_questionnaire_history != null ? playerProgramDetails?.latest_questionnaire_history.answers[3].name: 'N/A'}}
+                            </span>
+
+                            <p-skeleton
+                            shape="rectangle"
+                            height="15px"
+                            width="50%"
+                            styleClass="mb-2"
+                            *ngIf="!playerProgramDetails"
+                            ></p-skeleton>
+                        </div>
+
+                        <!-- animo -->
+                        <div class="col-sm-6 col-xl-4 mb-5">
+                            <div class="player_info_title">
+                                <span>{{'effort_recovery.courage' | translate}}</span>
+                            </div>
+                            <span
+                            class="player_info_text"
+                            *ngIf="playerProgramDetails"
+                            >
+                            {{playerProgramDetails.latest_questionnaire_history != null ? playerProgramDetails?.latest_questionnaire_history.answers[4].name: 'N/A'}}
+                            </span>
+
+                            <p-skeleton
+                            shape="rectangle"
+                            height="15px"
+                            width="50%"
+                            styleClass="mb-2"
+                            *ngIf="!playerProgramDetails"
+                            ></p-skeleton>
+                        </div>
+
+                        <!-- use strategies -->
+                        <div class="col-sm-6 col-xl-4 mb-5">
+                            <div class="player_info_title">
+                                <span>{{'effort_recovery_record.use_strategies' | translate}}</span>
+                            </div>
+                            <span
+                            class="player_info_text"
+                            *ngIf="playerProgramDetails"
+                            >
+                            {{playerProgramDetails.has_strategy ? ('LBL_YES' | translate) : ('LBL_NO' | translate) }}
+                            </span>
+
+                            <p-skeleton
+                            shape="rectangle"
+                            height="15px"
+                            width="50%"
+                            styleClass="mb-2"
+                            *ngIf="!playerProgramDetails"
+                            ></p-skeleton>
+                        </div>
+
+                        <!-- strategy types -->
+                        <div *ngIf="playerProgramDetails" class="col-sm-6 col-xl-4 mb-5">
+                            <div class="player_info_title">
+                                <span>{{'effort_recovery_details.strategies_type' |translate}}</span>
+                            </div>
+
+                            <div *ngIf="playerProgramDetails.strategies.length>0; else elseBlock">
+                                <span class="strategy" *ngFor="let strategy of playerProgramDetails.strategies;index as i">{{strategy.name}}<i *ngIf="i<playerProgramDetails.strategies.length-1">, </i></span>
+                            </div>
+                            <ng-template #elseBlock>N/A</ng-template>
+                            
+                            <p-skeleton
+                            shape="rectangle"
+                            height="15px"
+                            width="50%"
+                            styleClass="mb-2"
+                            *ngIf="!playerProgramDetails"
+                            ></p-skeleton>
+                        </div>
+
+                        <!-- status-->
+                        <div class="col-sm-6 col-xl-4 mb-5">
+                            <div class="player_info_title">
+                                <span>{{'effort_recovery.status' | translate}}</span>
+                            </div>
+
+                            <span
+                            class="player_info_text"
+                            *ngIf="playerProgramDetails && playerProgramDetails?.latest_questionnaire_history.calculated_status =='N/A'"
+                            >
+                            {{'N/A'}}
+                            </span>
+
+                            <img 
+                            *ngIf="playerProgramDetails && playerProgramDetails.latest_questionnaire_history != null && playerProgramDetails?.latest_questionnaire_history.calculated_status!='N/A'" 
+                            src="{{urlImages+'images/batteries/'+playerProgramDetails.latest_questionnaire_history.calculated_status+'.svg'}}" 
+                            alt=""
+                            width="35px"
+                            pTooltip="{{getBatteryToolTip(playerProgramDetails.latest_questionnaire_history.calculated_status)}}"
+                            >
+
+                            <p-skeleton
+                            shape="rectangle"
+                            height="15px"
+                            width="50%"
+                            styleClass="mb-2"
+                            *ngIf="!playerProgramDetails"
+                            ></p-skeleton>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

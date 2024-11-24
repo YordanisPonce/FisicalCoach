@@ -1,0 +1,117 @@
+<input
+  class="form-control bottom-color"
+  [id]="id"
+  placeholder="{{ 'LBL_ESCRIBIR' | translate }}"
+  aria-label="Default"
+  aria-describedby="inputGroup-sizing-default"
+  [(ngModel)]="inputValue"
+  (ngModelChange)="handleInput('text', inputValue)"
+  [ngModelOptions]="{ standalone: true }"
+  [required]="required"
+  type="number"
+  *ngIf="type === 'number' || type === 'numeric'"
+  oninput="javascript: if (this.value.length > this.maxLength) {
+    this.value = this.value.slice(0, this.maxLength);
+  };"
+  maxlength="5"
+  [pTooltip]="question?.tooltip"
+/>
+
+<input
+  class="form-control"
+  [id]="id"
+  placeholder="{{ 'LBL_ESCRIBIR' | translate }}"
+  aria-label="Default"
+  aria-describedby="inputGroup-sizing-default"
+  [(ngModel)]="inputValue"
+  (ngModelChange)="handleInput('text', inputValue)"
+  [ngModelOptions]="{ standalone: true }"
+  [required]="required"
+  *ngIf="type === 'alphanumber'"
+  [maxlength]="200"
+  [pTooltip]="question?.tooltip"
+/>
+
+<textarea
+  [id]="id"
+  cols="18"
+  rows="5"
+  class="form-control"
+  [(ngModel)]="inputValue"
+  (ngModelChange)="handleInput('textarea', inputValue)"
+  placeholder="{{ 'LBL_ESCRIBIR' | translate }}"
+  *ngIf="type === 'textarea'"
+  [maxlength]="300"
+></textarea>
+
+<p-dropdown
+  [options]="responseList"
+  [styleClass]="'form-control dropdown-input'"
+  [style]="{
+    'max-width': isConfig ? '100%' : '270px',
+    'min-width': isConfig ? '100%' : '270px'
+  }"
+  [(ngModel)]="inputValue"
+  (onChange)="handleInput('select', inputValue, name, $event)"
+  [ngModelOptions]="{ standalone: true }"
+  placeholder="{{ 'LBL_SELECCIONE' | translate }}"
+  *ngIf="type === 'radio' || type === 'checkbox' || type === 'select'"
+  [name]="name"
+  [ngClass]="{ 'ng-invalid': inputValue < 0 }"
+>
+  <ng-template pTemplate="item" let-option>
+    <div class="d-flex justify-content-between align-items-center">
+      <span
+        [style]="{
+          'padding-top': '3px',
+          color: option?.value?.color,
+          filter: 'brightness(0.85)'
+        }"
+      >
+        {{ option.label }}</span
+      >
+      <img
+        *ngIf="option.value.image"
+        src="{{ option?.value.image.full_url }}"
+        alt="{{ option.value.id }}"
+        width="40px"
+        height="40px"
+        style="margin-left: 5px; padding-bottom: 2px"
+      />
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="selectedItem">
+    <div
+      class="d-flex justify-content-between align-items-center"
+      *ngIf="inputValue"
+    >
+      <span [style]="{ color: inputValue.color, filter: 'brightness(0.85)' }">{{
+        inputValue.label
+      }}</span>
+      <img
+        src="{{ inputValue.image.full_url }}"
+        width="30px"
+        height="30px"
+        style="margin-left: 5px"
+        *ngIf="inputValue.image"
+      />
+    </div>
+  </ng-template>
+</p-dropdown>
+
+<p-calendar
+  [readonlyInput]="true"
+  [monthNavigator]="true"
+  [yearNavigator]="true"
+  [showTime]="true"
+  [firstDayOfWeek]="1"
+  [(ngModel)]="inputValue"
+  (ngModelChange)="handleInput('date', inputValue)"
+  [ngModelOptions]="{ standalone: true }"
+  [style]="{ overflow: 'visible' }"
+  class="p-calendar form-control"
+  dateFormat="dd/mm/yy"
+  placeholder="{{ 'LBL_SELECCIONE' | translate }}"
+  *ngIf="type === 'date'"
+></p-calendar>

@@ -1,0 +1,65 @@
+:host ::ng-deep #new_rfd_dialog {
+  .m_top {
+    margin-top: 1rem;
+  }
+  .p-dialog {
+    width: 550px;
+
+    .p-dialog-content {
+      overflow-y: hidden;
+      padding: 0 3rem 2rem 3rem !important;
+    }
+  }
+
+  form {
+    min-height: 340px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  label {
+    font-size: 0.9rem;
+  }
+  .tooltip_info {
+    padding: 0.1rem 0.55rem;
+    background: black;
+    border-radius: 50%;
+    color: white;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-left: 0.5rem;
+  }
+}
+.label-evaluator {
+  flex-direction: row-reverse;
+  display: flex;
+  width: 80%;
+  color: #1c90b4;
+  text-underline: #054358;
+}
+
+@media (min-width: 1200px) {
+  :host ::ng-deep {
+    #new_rfd_dialog {
+      .p-dialog {
+        .p-dialog-header {
+          padding: 2.5rem 4.5rem;
+        }
+        .p-dialog-content {
+          padding: 0 4.5rem 2rem 4.5rem;
+        }
+        .p-dialog-footer {
+          padding: 1.5rem 4.5rem;
+        }
+      }
+    }
+  }
+}
+@media (min-width: 1200px) {
+  :host ::ng-deep {
+    #new_rfd_dialog {
+      .p-dialog {
+      }
+    }
+  }
+}

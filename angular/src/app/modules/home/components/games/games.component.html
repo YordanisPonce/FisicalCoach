@@ -1,0 +1,98 @@
+<p-table [value]="[1, 2]" *ngIf="loadingMatches">
+  <ng-template pTemplate="header">
+    <tr>
+      <th style="width: 150px !important">Fecha</th>
+      <th class="text-center">Partido</th>
+      <th class="text-center">Torneo</th>
+      <th style="width: 75px"></th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-product>
+    <tr *ngFor="let i of [1, 2, 3]">
+      <td><p-skeleton></p-skeleton></td>
+      <td><p-skeleton></p-skeleton></td>
+      <td><p-skeleton></p-skeleton></td>
+      <td><p-skeleton></p-skeleton></td>
+    </tr>
+  </ng-template>
+</p-table>
+
+<p-table
+  [value]="matches"
+  *ngIf="!loadingMatches && matches.length > 0"
+  selectionMode="single"
+  [tableStyle]="{ 'min-width': '1200px' }"
+>
+  <ng-template pTemplate="header">
+    <tr>
+      <th style="width: 170px !important">{{ "home.date" | translate }}</th>
+      <th class="text-center">{{ "home.match" | translate }}</th>
+      <th class="text-center">{{ "home.tournament" | translate }}</th>
+      <th style="width: 75px"></th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-game>
+    <tr>
+      <td style="width: 170px !important">
+        {{ game?.start_at | date : "dd/MM/YYYY" }}
+      </td>
+      <td class="d-flex justify-content-center" style="height: 85px">
+        <div class="d-flex justify-content-center">
+          <div class="team-text">
+            <strong>{{ game?.competition?.team.name }}</strong>
+          </div>
+          <div class="d-flex align-items-center mx-2">
+            <img
+              width="25px"
+              height="25px"
+              src="{{ game?.competition?.team.image?.full_url }}"
+              class="rounded-circle principalImg"
+              *ngIf="game?.competition?.team.image?.full_url"
+            />
+
+            <div
+              *ngIf="!game?.competition?.team.image"
+              [ngStyle]="{ 'background-color': game?.competition?.team.color }"
+              class="rounded-circle"
+              style="width: 25px; height: 25px"
+            ></div>
+
+            <span
+              class="mx-2 font-weight-500"
+              style="width: 150px; text-align: center"
+            >
+              {{ game?.score?.own || 0 }} : {{ game?.score?.rival || 0 }}</span
+            >
+
+            <img
+              width="25px"
+              height="25px"
+              class="rounded-circle principalImg"
+              src="{{ urlBase + game?.competition_rival_team?.url_image }}"
+              *ngIf="game?.competition_rival_team?.url_image"
+            />
+            <img
+              width="25px"
+              height="25px"
+              src="{{ '' | rivalAvatarPipe }}"
+              class="rounded-circle principalImg"
+              *ngIf="!game?.competition_rival_team?.url_image"
+            />
+          </div>
+          <div class="team-text">
+            <strong>{{ game?.competition_rival_team?.rival_team }}</strong>
+            <strong *ngIf="!game?.competition_rival_team?.rival_team"
+              >Rival</strong
+            >
+          </div>
+        </div>
+      </td>
+      <td class="text-center">{{ game?.competition_name }}</td>
+      <td class="actions_column">
+        <button class="btn outline" (click)="goToCompetitions(game)">
+          <img src="assets/img/icons/bar_chart.svg" alt="" width="12px" />
+        </button>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>

@@ -1,0 +1,10 @@
+:host ::ng-deep {
+  .p-paginator {
+    justify-content: flex-end !important;
+  }
+}
+
+.finish-file-text {
+  text-align: center;
+  font-size: 18px;
+}

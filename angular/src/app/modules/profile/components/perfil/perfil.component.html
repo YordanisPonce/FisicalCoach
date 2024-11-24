@@ -1,0 +1,185 @@
+<ul class="list-group profile_list">
+  <div *ngIf="loading" class="p-4" style="text-align: center">
+    <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+  </div>
+
+  <li *ngFor="let clave of claves" class="list-group-item profile_element">
+    <!-- Icono del elemento -->
+    <div class="icon">
+      <img [src]="urlImages + iconos[clave]" height="30" width="30" />
+      <i class="{{ iconos[clave] }}"></i>
+    </div>
+
+    <div *ngIf="!edit[clave]" class="info">
+      <p class="mb-2 name">
+        {{ texto(clave) | translate }}
+        <i
+          *ngIf="clave === 'company_vat' && data.vat_valid"
+          class="fa fa-check icon-float"
+        ></i>
+        <i
+          *ngIf="clave === 'company_vat' && !data.vat_valid"
+          class="fa fa-times icon-float-error"
+        ></i>
+      </p>
+      <p *ngIf="clave === 'is_company'">
+        {{ data[clave] ? ("LBL_YES" | translate) : ("LBL_NO" | translate) }}
+      </p>
+      <p *ngIf="clave === 'country_id'">{{ checkcountries(data[clave]) }}</p>
+      <p *ngIf="clave === 'province_id'">{{ checkprovince(data[clave]) }}</p>
+      <p *ngIf="clave === 'gender'">{{ checkgender(data[clave]) }}</p>
+      <p *ngIf="clave === 'tax'">{{ data[clave].value }}</p>
+      <p *ngIf="clave === 'gender_identity_id'">
+        {{ checkgenderindetity(data[clave]) }}
+      </p>
+      <p
+        *ngIf="
+          !isDropdownField(clave) && clave !== 'is_company' && clave !== 'tax'
+        "
+      >
+        {{ data[clave] }}
+      </p>
+      <ng-container *ngIf="showFieldsCompany(clave) && data.is_company">
+        <p>
+          {{ data[clave] }}
+        </p>
+      </ng-container>
+    </div>
+    <div *ngIf="edit[clave]" class="edit_info" style="width: 300px">
+      <p class="name">{{ texto(clave) | translate }}</p>
+      <div *ngIf="clave === 'country_id'">
+        <p-dropdown
+          (onChange)="cambioSelect($event, clave)"
+          [(ngModel)]="selectedCountry"
+          [filter]="true"
+          [options]="country"
+          [resetFilterOnHide]="true"
+          [showClear]="false"
+          optionLabel="name"
+          optionValue="id"
+          placeholder="{{ 'register.selectCountry' | translate }}"
+        >
+          <ng-template let-country pTemplate="item">
+            <div class="country-item">
+              <div>
+                <label class="county_selector">{{ country.emoji }}</label>
+                {{ country.name }}
+              </div>
+            </div>
+          </ng-template>
+        </p-dropdown>
+      </div>
+      <div *ngIf="clave === 'province_id'">
+        <p-dropdown
+          (onChange)="cambioSelect($event, clave)"
+          [(ngModel)]="selectedProvince"
+          [filter]="true"
+          [options]="provinces"
+          [resetFilterOnHide]="true"
+          [showClear]="false"
+          optionLabel="name"
+          optionValue="id"
+          placeholder="{{ 'register.selectCity' | translate }}"
+        ></p-dropdown>
+      </div>
+
+      <div *ngIf="clave === 'gender'">
+        <p-dropdown
+          (onChange)="cambioSelect($event, clave)"
+          [(ngModel)]="selectedGender"
+          [filter]="true"
+          [options]="gender"
+          [resetFilterOnHide]="true"
+          [showClear]="false"
+          optionLabel="code"
+          optionValue="id"
+          placeholder="{{ 'register.selectSex' | translate }}"
+        ></p-dropdown>
+      </div>
+      <div *ngIf="clave === 'gender_identity_id'">
+        <p-dropdown
+          (onChange)="cambioSelect($event, clave)"
+          [(ngModel)]="selectedGenderIdentity"
+          [filter]="true"
+          [options]="genderIdentity"
+          [resetFilterOnHide]="true"
+          [showClear]="false"
+          optionLabel="code"
+          optionValue="id"
+          placeholder="{{ 'register.selectGenero' | translate }}"
+        ></p-dropdown>
+      </div>
+      <div
+        *ngIf="
+          clave !== 'is_company' &&
+          clave !== 'country_id' &&
+          clave !== 'gender' &&
+          clave !== 'gender_identity_id' &&
+          clave !== 'province_id'
+        "
+      >
+        <input
+          (keyup)="cambioInput($event, clave)"
+          [value]="data[clave]"
+          class="form-control"
+          name="{{ clave }}"
+        />
+      </div>
+      <div *ngIf="clave === 'is_company'">
+        <p-checkbox
+          [(ngModel)]="data[clave]"
+          [binary]="true"
+          label="{{ 'register.is_company' | translate }}"
+        ></p-checkbox>
+      </div>
+    </div>
+    <!-- Boton de editar -->
+    <div
+      *ngIf="!edit[clave] && clave !== 'email' && clave !== 'tax'"
+      class="ml-auto"
+    >
+      <button
+        (click)="edit[clave] = !edit[clave]"
+        class="btn action_btn"
+        pTooltip="{{ 'LBL_EDIT' | translate }}"
+      >
+        <i class="fa fa-edit fa-x"></i>
+      </button>
+    </div>
+    <!--comentario para el push-->
+    <!-- Botones de aceptar y cancelar -->
+    <div *ngIf="edit[clave]" class="ml-auto">
+      <button
+        *ngIf="loading"
+        class="btn login-btn mb-3 mb-sm-0"
+        disabled
+        type="button"
+      >
+        <span
+          aria-hidden="true"
+          class="spinner-grow spinner-grow-sm"
+          role="status"
+        ></span>
+        Loading...
+      </button>
+      <button
+        (click)="send(clave)"
+        *ngIf="!loading"
+        class="btn"
+        pTooltip="{{ 'LBL_GUARDAR' | translate }}"
+        tooltipPosition="top"
+      >
+        <i class="fas fa-check check"></i>
+      </button>
+      <button
+        (click)="cancelEdit(clave)"
+        *ngIf="!loading"
+        class="btn"
+        pTooltip="{{ 'BTN_CANCELAR' | translate }}"
+        tooltipPosition="top"
+      >
+        <i class="fa fa-times-circle-o fa-x text-danger"></i>
+      </button>
+    </div>
+  </li>
+</ul>

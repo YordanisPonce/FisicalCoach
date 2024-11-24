@@ -1,0 +1,207 @@
+<div class="card box-shadow">
+  <div class="card-body p-0">
+    <div class="row mx-0">
+      <div *ngIf="!disabledElement" class="col-12">
+        <div class="rubrics_by_alumn_header view_header">
+          <span class="icon_left" routerLink="/teacher/evaluation"
+            ><i class="fas fa-chevron-left"></i>
+          </span>
+          <h6 class="font-weight-600 mb-0 mr-5">
+            {{ "evaluation.rubrics_by_alumns" | translate }}
+          </h6>
+        </div>
+      </div>
+
+      <div class="col-12">
+        <div class="row injury_prevention_container">
+          <div class="col-12 my-3">
+            <div class="player_profile">
+              <!-- imagen -->
+              <div class="player_profile_image">
+                <p-skeleton
+                  *ngIf="!alumn"
+                  shape="circle"
+                  size="100px"
+                  styleClass="mb-2"
+                ></p-skeleton>
+                <img
+                  *ngIf="alumn"
+                  alt="player"
+                  class="player_profile_image"
+                  src="{{
+                    alumn.image !== null
+                      ? alumn.image.full_url
+                      : alumn.gender.code === 'female'
+                      ? girlAlumnImage
+                      : boyAlumnImage
+                  }}"
+                />
+              </div>
+              <div *ngIf="alumn" class="row mb-3 mb-lg-0">
+                <div class="col-12 w-100">
+                  <div class="player_profile_title">
+                    <span>{{ alumn?.full_name }}</span>
+                  </div>
+                  <div class="player_profile_academy">
+                    <span>{{ alumn?.alias }}</span>
+                  </div>
+                  <div class="d-flex text-center">
+                    <div class="mr-4">
+                      <div class="player_profile_info_title">
+                        <span>{{ "PLAYERS.LBL_ALTURA" | translate }}</span>
+                      </div>
+                      <div class="player_profile_info_desc">
+                        <span
+                          >{{
+                            alumn.height
+                              ? (alumn.height | number : "1.0-0")
+                              : "-"
+                          }}
+                          cm</span
+                        >
+                      </div>
+                    </div>
+                    <div>
+                      <div class="player_profile_info_title">
+                        <span>{{ "PLAYERS.LBL_PESO" | translate }}</span>
+                      </div>
+                      <div class="player_profile_info_desc">
+                        <span
+                          >{{
+                            alumn.weight
+                              ? (alumn.weight | number : "1.0-1")
+                              : "-"
+                          }}
+                          kg</span
+                        >
+                      </div>
+                    </div>
+                    <div class="ml-4">
+                      <div class="player_profile_info_title text-center">
+                        <span>{{ "PSYCHOLOGY.LBL_AGE" | translate }}</span>
+                      </div>
+                      <div class="player_profile_info_desc text-right">
+                        <span
+                          >{{ alumn.age }} {{ "LBL_YEARS" | translate }}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12">
+        <div class="row injury_prevention_container">
+          <div class="col-12 my-3">
+            <p-table
+              [alwaysShowPaginator]="false"
+              [loading]="loading"
+              [paginator]="true"
+              [rows]="10"
+              [showLoader]="false"
+              [value]="evaluations"
+              class="p-datatable-responsive"
+            >
+              <ng-template let-evaluation pTemplate="body">
+                <tr>
+                  <td class="">
+                    <h6 class="title">
+                      <span class="mr-2">
+                        <img class="" src="assets/img/icons/evaluation.svg" />
+                      </span>
+                      {{ evaluation.rubric.name }}
+                    </h6>
+                    <p class="description">
+                      {{ evaluation.rubric.description }}
+                    </p>
+                  </td>
+                  <td class="">
+                    <div class="description" style="font-size: 18px">
+                      <div
+                        [style]="{
+                          display: 'flex',
+                          color: handleCalifications(evaluation.result).color
+                        }"
+                      >
+                        <span class="mr-3">{{ evaluation.result }}</span>
+                        <img
+                          alt="icon"
+                          src="{{
+                            handleCalifications(evaluation.result).icon
+                          }}"
+                          width="25px"
+                       
+                        />
+                        <div *ngIf="evaluation.result !== 'N/A'" class="ml-2">
+                          {{
+                            "qualification." +
+                              handleCalifications(evaluation.result).label
+                              | translate
+                          }}
+                          {{ handleCalifications(evaluation.result).value }}
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="text-lg-right">
+                    <span class="p-column-title">{{
+                      "LBL_ACTIONS" | translate
+                    }}</span>
+                    <button (click)="evaluate(evaluation.rubric)" class="btn">
+                      <img
+                        alt=""
+                        src="/assets/img/icons/approval.svg"
+                        width="20px"
+                      />
+                    </button>
+                    <button
+                      (click)="download(evaluation.rubric.id)"
+                      [disabled]="evaluation.result === 'N/A'"
+                      class="btn"
+                    >
+                      <i class="pi pi-print"></i>
+                    </button>
+                  </td>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="emptymessage">
+                <tr>
+                  <td colspan="6" style="text-align: center">
+                    {{ "alumns.no_evaluations" | translate }}
+                  </td>
+                </tr>
+              </ng-template>
+              <ng-template let-columns pTemplate="loadingbody">
+                <tr *ngFor="let i of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]">
+                  <td>
+                    <p-skeleton height="1rem" width="100%"></p-skeleton>
+                  </td>
+                  <td class="d-flex justify-content-around">
+                    <p-skeleton height="1rem" width="20px"></p-skeleton>
+                    <p-skeleton height="1rem" width="20px"></p-skeleton>
+                    <p-skeleton height="1rem" width="20px"></p-skeleton>
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<evaluation-dialog
+  (close)="evaluationDialog = $event"
+  [classroomAcademicYear]="classroomAcademicYear"
+  [classroomId]="getClassroomId()"
+  [classroomName]="getClassroomName()"
+  [rubric]="rubric"
+  [studentId]="alumnId"
+  [visible]="evaluationDialog"
+>
+</evaluation-dialog>

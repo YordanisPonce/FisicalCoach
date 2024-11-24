@@ -1,0 +1,19 @@
+<p-dialog
+  (onHide)="close()"
+  [(visible)]="display"
+  [modal]="true"
+  class="custom_dialog"
+  header="{{ 'profile.detallesubscripcion' | translate }}"
+  id="subscriptiondetail"
+  maskStyleClass="purple_mask"
+  styleClass=""
+>
+  <app-checkout-package
+    *ngIf="displayCheckOut"
+    [(display)]="displayCheckOut"
+    [intervalType]="intervalType"
+    [subpackage]="newSubscription"
+    [currentSubscription]="currentSubscription"
+    (displayChange)="close()"
+  ></app-checkout-package>
+</p-dialog>

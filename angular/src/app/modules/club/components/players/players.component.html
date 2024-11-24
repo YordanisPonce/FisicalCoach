@@ -1,0 +1,710 @@
+<div
+  class="row"
+  appUserPermission
+  [method]="[
+    'team_players_store',
+    'team_players_delete',
+    'team_players_update',
+    'team_players_read'
+  ]"
+  (showItem)="handlePermission($event)"
+>
+  <router-outlet></router-outlet>
+  <div class="col-12">
+    <div class="card box-shadow">
+      <div class="card-body p-0">
+        <div class="players_header view_header">
+          <h6 class="font-weight-600 mb-0 mr-2 text-main view_header_title">
+            {{ "PLAYERS.LBL_JUGADORES" | translate }}
+          </h6>
+          <div #sorting class="position-relative" id="sorting">
+            <button
+              (click)="sortPanel.toggle($event, sorting)"
+              class="mr-3"
+              id="sorting_btn"
+              label=" "
+              pButton
+              type="text"
+            >
+              <div class="mr-2 filter_label">
+                {{ "PLAYERS.LBL_FILTRAR" | translate }}:
+              </div>
+              <div>{{ "PLAYERS.LBL_ORDENALFABETICO" | translate }}</div>
+            </button>
+            <p-overlayPanel #sortPanel>
+              <ng-template pTemplate>
+                <div class="sorting_content">
+                  <p>{{ "PLAYERS.LBL_FILTROACTIVO" | translate }}</p>
+                  {{ "PLAYERS." | translate }}
+                  <div *ngFor="let i of [1, 2, 3, 4, 5]" class="option">
+                    <span>
+                      {{ "PLAYERS.LBL_ORDENALFABETICO" | translate }}</span
+                    >
+                    <span></span>
+                  </div>
+                </div>
+              </ng-template>
+            </p-overlayPanel>
+          </div>
+          <div
+            class="p-input-icon-left d-md-inline buscador"
+            pTooltip="{{ 'PLAYERS.LBL_BUSCAR' | translate }}"
+          >
+            <i class="pi pi-search"></i>
+            <input
+              (keyup)="searchPlayer($event)"
+              pInputText
+              placeholder="{{ 'PLAYERS.LBL_BUSCAR' | translate }}"
+              type="text"
+            />
+          </div>
+          <div class="header_buttons">
+            <button
+              *ngIf="showPermission.store"
+              (click)="newPlayer()"
+              [disabled]="loadingList"
+              class="btn add_player_btn action"
+              pButton
+            >
+              <span class="d-sm-inline mr-2">{{
+                "PLAYERS.LBL_ANIADIRJUGADOR" | translate
+              }}</span>
+              <i class="fa fa-plus text-white"></i>
+            </button>
+          </div>
+        </div>
+        <div class="p-3">
+          <ng-container *ngIf="!loadingPlayers">
+            <p-carousel
+              [numVisible]="3"
+              [responsiveOptions]="responsiveOptions"
+              [value]="players"
+              styleClass="custom_carousel"
+            >
+              <ng-template let-player pTemplate="item">
+                <div class="card player">
+                  <div class="card-body p-0 m-1">
+                    <div class="player_content">
+                      <div class="player_info">
+                        <div class="player_info_content">
+                          <h5 class="font-weight-600" style="height: 45px">
+                            {{ player.full_name }}
+                          </h5>
+
+                          <h6 class="font-weight-600 mb-3 text-gray">
+                            {{ player.alias }}
+                          </h6>
+                          <div class="d-flex align-items-center">
+                            <div
+                              class="player_number"
+                              pTooltip="{{ 'PLAYERS.LBL_DORSAL' | translate }}"
+                              tooltipPosition="top"
+                            >
+                              <div class="player_shirt_icon">
+                                <img
+                                  alt="sports"
+                                  [src]="
+                                    urlImages + 'images/icons/t_shirt_grey.svg'
+                                  "
+                                  width="25"
+                                  height="25"
+                                />
+                              </div>
+                              <span class="number ml-2 font-weight-600">{{
+                                player.shirt_number
+                              }}</span>
+                            </div>
+                            <div class="player_position">
+                              <div class="player_position_icon">
+                                <img
+                                  alt="position"
+                                  [src]="
+                                    urlImages +
+                                    'images/icons/individual-grey.svg'
+                                  "
+                                  width="20"
+                                />
+                              </div>
+                              <div
+                                *ngIf="player?.position?.name"
+                                class="position ml-2"
+                                pTooltip="{{
+                                  'PLAYERS.LBL_DEMARCACION' | translate
+                                }}"
+                                tooltipPosition="top"
+                              >
+                                <span
+                                  class="font-weight-600 d-flex align-items-center"
+                                  style="height: 45px"
+                                  >{{ player.position.name }}</span
+                                >
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="player_avatar">
+                          <img
+                            alt="image-player"
+                            src="{{ player | avatarPipe }}"
+                            width="115px"
+                            height="115px"
+                          />
+                        </div>
+                      </div>
+                      <div class="player_resume">
+                        <div class="stat">
+                          <span class="stat_value" *ngIf="!player?.weight"
+                            >N/A</span
+                          >
+                          <span class="stat_value" *ngIf="player?.weight"
+                            >{{ player?.weight | number : "1.0-0" }} kg</span
+                          >
+                          <span class="stat_name">{{
+                            "PLAYERS.LBL_PESO" | translate
+                          }}</span>
+                        </div>
+                        <div class="stat">
+                          <span class="stat_value" *ngIf="!player?.height"
+                            >N/A</span
+                          >
+                          <span class="stat_value" *ngIf="player?.height"
+                            >{{ player?.height | number : "1.0-0" }} cm</span
+                          >
+                          <span class="stat_name">{{
+                            "PLAYERS.LBL_ALTURA" | translate
+                          }}</span>
+                        </div>
+                        <div class="stat">
+                          <span class="stat_value" *ngIf="player.age"
+                            >{{ player.age }} {{ "ANIOS" | translate }}</span
+                          >
+                          <span class="stat_value" *ngIf="!player.age"
+                            >{{ "N/A" }}
+                          </span>
+                          <span class="stat_name">{{
+                            "PSYCHOLOGY.LBL_AGE" | translate
+                          }}</span>
+                        </div>
+                        <div class="stat">
+                          <span
+                            class="stat_value"
+                            *ngIf="player.laterality?.code"
+                            >{{ player.laterality?.code | translate }}</span
+                          >
+                          <span
+                            class="stat_value"
+                            *ngIf="!player.laterality?.code"
+                            >N/A</span
+                          >
+                          <span class="stat_name">{{
+                            "PLAYERS.LBL_LATERALIDAD" | translate
+                          }}</span>
+                        </div>
+                      </div>
+                      <div class="player_actions">
+                        <button
+                          (click)="goToTest(player)"
+                          class="btn test_btn"
+                          label="{{ 'PLAYERS.LBL_HACERTEST' | translate }}"
+                          pButton
+                        ></button>
+                        <button
+                          (click)="detalle(player)"
+                          class="btn btn-primary"
+                          label="{{ 'PLAYERS.LBL_VERPERFIL' | translate }}"
+                          pButton
+                          routerLink="perfil"
+                          *ngIf="showPermission.read"
+                        ></button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
+            </p-carousel>
+            <p-table
+              [paginator]="true"
+              [rows]="10"
+              [value]="players"
+              class="p-datatable-responsive"
+              selectionMode="single"
+            >
+              <ng-template let-player pTemplate="header">
+                <tr class="text-left">
+                  <th class="text-left" pSortableColumn="full_name">
+                    {{ "PLAYERS.LBL_NOMBRE" | translate }}
+                    <p-sortIcon field="full_name"></p-sortIcon>
+                  </th>
+                  <th class="text-center" pSortableColumn="position.name">
+                    {{ "PLAYERS.LBL_DEMARCACION" | translate }}
+                    <p-sortIcon field="position.name"></p-sortIcon>
+                  </th>
+                  <th class="text-center" pSortableColumn="matches">
+                    <ng-container *ngIf="team.sport.code === 'swimming'">
+                      {{ "PLAYERS.PRUEBAS" | translate }}
+                      <p-sortIcon field="matches"></p-sortIcon>
+                    </ng-container>
+                    <ng-container *ngIf="team.sport.code !== 'swimming'">
+                      {{ "PLAYERS.LBL_PARTIDOS" | translate }}
+                      <p-sortIcon field="matches"></p-sortIcon>
+                    </ng-container>
+                  </th>
+                  <th
+                    class="text-center"
+                    pTooltip="{{ 'PLAYERS.RPEPARTIDOSTOOTIP' | translate }}"
+                    pSortableColumn="rpe_last_match?.number"
+                  >
+                    {{ "PLAYERS.RPEPARTIDOS" | translate }}
+                    <p-sortIcon field="rpe_last_match?.number"></p-sortIcon>
+                  </th>
+                  <th
+                    class="text-center"
+                    pTooltip="{{
+                      'PLAYERS.CARGAENTRENAMIENTOTOOLTIP' | translate
+                    }}"
+                    pSortableColumn="training_load"
+                  >
+                    {{ "PLAYERS.CARGAENTRENAMIENTO" | translate }}
+                    <p-sortIcon field="training_load"></p-sortIcon>
+                  </th>
+                  <th
+                    class="text-center"
+                    pTooltip="{{ 'PLAYERS.RIESGOLESIONALTOOLTIP' | translate }}"
+                    pSortableColumn="injury_risk?.rank.name"
+                  >
+                    {{ "PLAYERS.RIESGOLESIONAL" | translate }}
+                    <p-sortIcon field="injury_risk?.rank.name"></p-sortIcon>
+                  </th>
+                  <th
+                    class="text-center"
+                    pTooltip="{{ 'PLAYERS.ESTADOTOOLTIP' | translate }}"
+                    pSortableColumn="effort_recovery.calculated_status"
+                  >
+                    {{ "PLAYERS.ESTADO" | translate }}
+                    <p-sortIcon
+                      field="effort_recovery.calculated_status"
+                    ></p-sortIcon>
+                  </th>
+                  <th class="text-center" style="width: 210px">
+                    {{ "PLAYERS.LBL_ACCIONES" | translate }}
+                  </th>
+                </tr>
+              </ng-template>
+              <ng-template let-player pTemplate="body">
+                <tr class="colum-responsive">
+                  <td>
+                    <div class="d-flex align-items-center">
+                      <img
+                        class="rounded-circle principalImg"
+                        src="{{ player | avatarPipe }}"
+                        width="25px"
+                        height="25px"
+                      />
+
+                      <div class="d-flex flex-column ml-2">
+                        <strong class="ml-0 ml-md-2">
+                          <span class="p-column-title"
+                            >{{ "alumns.name" | translate }}
+                          </span>
+                        </strong>
+                        {{ player.full_name }}
+                      </div>
+                    </div>
+                  </td>
+                  <td class="text-center">
+                    <span class="p-column-title">{{
+                      "PLAYERS.LBL_DEMARCACION" | translate
+                    }}</span>
+                    <div>
+                      {{ player?.position?.name }}
+                    </div>
+                  </td>
+                  <td class="text-center">
+                    <span class="p-column-title"
+                      ><ng-container *ngIf="team.sport.code === 'swimming'">
+                        {{ "PLAYERS.PRUEBAS" | translate }}
+                      </ng-container>
+                      <ng-container *ngIf="team.sport.code !== 'swimming'">
+                        {{ "PLAYERS.LBL_PARTIDOS" | translate }}
+                      </ng-container></span
+                    >
+
+                    <div>
+                      {{ player.matches }}
+                    </div>
+                  </td>
+                  <td class="text-center">
+                    <span class="p-column-title">{{
+                      "PLAYERS.RPEPARTIDOS" | translate
+                    }}</span>
+
+                    <div>
+                      <label *ngIf="!player?.rpe_last_match?.name">N/A</label>
+                      <img
+                        [src]="getImage(player)"
+                        pTooltip="{{ player?.rpe_last_match?.number }} - {{
+                          player?.rpe_last_match?.name
+                        }}"
+                        width="30"
+                      />
+                    </div>
+                  </td>
+                  <td class="text-center">
+                    <span class="p-column-title">{{
+                      "PLAYERS.CARGAENTRENAMIENTO" | translate
+                    }}</span>
+
+                    <div>
+                      {{ player.training_load }}
+                    </div>
+                  </td>
+                  <td class="text-center">
+                    <span class="p-column-title">{{
+                      "PLAYERS.RIESGOLESIONAL" | translate
+                    }}</span>
+
+                    <div>
+                      <label *ngIf="!player.injury_risk"> N/A</label>
+                      <label
+                        *ngIf="player.injury_risk"
+                        [style]="{ color: player?.injury_risk?.rank?.color }"
+                        >{{ player?.injury_risk?.rank.name }}</label
+                      >
+                    </div>
+                  </td>
+                  <td class="text-center">
+                    <span class="p-column-title">{{
+                      "PLAYERS.ESTADO" | translate
+                    }}</span>
+
+                    <div>
+                      <label *ngIf="!player.effort_recovery"> N/A</label>
+                      <img
+                        *ngIf="player.effort_recovery"
+                        alt=""
+                        pTooltip="{{
+                          player.effort_recovery.calculated_status
+                        }}"
+                        src="{{
+                          urlImages +
+                            'images/batteries/' +
+                            player.effort_recovery.calculated_code +
+                            '.svg'
+                        }}"
+                        width="35px"
+                      />
+                    </div>
+                  </td>
+                  <td
+                    class="text-center actions d-flex w-column-full justify-content-center"
+                  >
+                    <button
+                      (click)="detalle(player)"
+                      class="btn"
+                      pTooltip="{{ 'PLAYERS.LBL_VERPERFIL' | translate }}"
+                      routerLink="perfil"
+                      tooltipPosition="top"
+                      *ngIf="showPermission.read"
+                    >
+                      <img class="" src="assets/img/icons/ver.svg" />
+                    </button>
+                    <button
+                      (click)="edit(player)"
+                      class="btn"
+                      pTooltip="{{ 'PLAYERS.EDITAR' | translate }}"
+                      routerLink="perfil/informacion"
+                      tooltipPosition="top"
+                      *ngIf="showPermission.update"
+                    >
+                      <img class="" src="assets/img/icons/lapiz.svg" />
+                    </button>
+                    <button
+                      (click)="goToTest(player)"
+                      class="btn"
+                      pTooltip="{{ 'PLAYERS.LBL_HACERTEST' | translate }}"
+                      tooltipPosition="top"
+                    >
+                      <img class="" src="assets/img/icons/cronografo.svg" />
+                    </button>
+                    <button
+                      (click)="delete(player)"
+                      class="btn"
+                      pTooltip="{{ 'PLAYERS.ELIMINAR' | translate }}"
+                      *ngIf="showPermission.delete"
+                    >
+                      <img class="" src="assets/img/icons/eliminar.svg" />
+                    </button>
+                  </td>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="emptymessage">
+                <tr>
+                  <td colspan="10" style="text-align: center">
+                    {{ "nodata.sinjugadores" | translate }}
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </ng-container>
+
+          <ng-container>
+            <div *ngIf="loadingPlayers" class="">
+              <p-carousel
+                [numVisible]="3"
+                [responsiveOptions]="responsiveOptions"
+                [value]="[1, 2, 3, 4, 5, 6]"
+                class="w-100"
+                styleClass="custom_carousel"
+              >
+                <ng-template let-player pTemplate="item">
+                  <div class="card player">
+                    <div class="card-body p-0 m-1">
+                      <div class="player_content">
+                        <div class="player_info">
+                          <div class="player_info_content d-block flex-grow-1">
+                            <p-skeleton
+                              height="1rem"
+                              styleClass="m-auto"
+                              width="50%"
+                            ></p-skeleton>
+                            <div class="d-flex align-items-center"></div>
+                          </div>
+                          <div class="player_avatar">
+                            <p-skeleton
+                              shape="circle"
+                              size="6rem"
+                              styleClass="mb-2 mr-4"
+                            ></p-skeleton>
+                          </div>
+                        </div>
+                        <div class="player_resume">
+                          <div class="stat">
+                            <p-skeleton
+                              height="1rem"
+                              styleClass="m-auto"
+                              width="50%"
+                            ></p-skeleton>
+                            <span class="stat_name">{{
+                              "PLAYERS.LBL_PESO" | translate
+                            }}</span>
+                          </div>
+                          <div class="stat">
+                            <p-skeleton
+                              height="1rem"
+                              styleClass="m-auto"
+                              width="50%"
+                            ></p-skeleton>
+                            <span class="stat_name">{{
+                              "PLAYERS.LBL_ALTURA" | translate
+                            }}</span>
+                          </div>
+                          <div class="stat">
+                            <p-skeleton
+                              height="1rem"
+                              styleClass="m-auto"
+                              width="50%"
+                            ></p-skeleton>
+                            <span class="stat_name">{{
+                              "PSYCHOLOGY.LBL_AGE" | translate
+                            }}</span>
+                          </div>
+                          <div class="stat">
+                            <p-skeleton
+                              height="1rem"
+                              styleClass="m-auto"
+                              width="50%"
+                            ></p-skeleton>
+                            <span class="stat_name">{{
+                              "PLAYERS.LBL_LATERALIDAD" | translate
+                            }}</span>
+                          </div>
+                        </div>
+                        <div class="player_actions">
+                          <div class="skeleton_btn">
+                            <p-skeleton
+                              height="45px"
+                              styleClass="mb-3"
+                              width="100%"
+                            ></p-skeleton>
+                          </div>
+                          <div class="skeleton_btn">
+                            <p-skeleton
+                              height="45px"
+                              styleClass="m-auto"
+                              width="100%"
+                            ></p-skeleton>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </ng-template>
+              </p-carousel>
+              <!-- table loader -->
+              <p-table
+                [value]="[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]"
+                class="p-datatable-responsive"
+              >
+                <ng-template pTemplate="header">
+                  <tr class="text-center">
+                    <th></th>
+                    <th>{{ "PLAYERS.LBL_NOMBRE" | translate }}</th>
+                    <th class="text-center">
+                      {{ "PLAYERS.LBL_POSICION" | translate }}
+                    </th>
+                    <th class="text-center">
+                      {{ "PLAYERS.LBL_PARTIDOS" | translate }}
+                    </th>
+                    <th class="text-center">
+                      {{ "PLAYERS.RPEPARTIDOS" | translate }}
+                    </th>
+                    <th class="text-center">
+                      {{ "PLAYERS.CARGAENTRENAMIENTO" | translate }}
+                    </th>
+                    <th class="text-center">
+                      {{ "PLAYERS.RIESGOLESIONAL" | translate }}
+                    </th>
+                    <th class="text-center">
+                      {{ "PLAYERS.ESTADO" | translate }}
+                    </th>
+                    <th class="text-center">
+                      {{ "PLAYERS.LBL_ACCIONES" | translate }}
+                    </th>
+                  </tr>
+                </ng-template>
+                <ng-template let-player pTemplate="body">
+                  <tr>
+                    <td>
+                      <span class="p-column-title">{{
+                        "PLAYERS.LBL_NOMBRE" | translate
+                      }}</span>
+                      <div class="">
+                        <p-skeleton height="1rem" width="100%"></p-skeleton>
+                      </div>
+                    </td>
+                    <td>
+                      <span class="p-column-title">{{
+                        "PLAYERS.LBL_NOMBRE" | translate
+                      }}</span>
+                      <div class="">
+                        <p-skeleton height="1rem" width="100%"></p-skeleton>
+                      </div>
+                    </td>
+                    <td class="text-center">
+                      <span class="p-column-title">{{
+                        "PLAYERS.LBL_POSICION" | translate
+                      }}</span>
+                      <p-skeleton
+                        height="1rem"
+                        styleClass=""
+                        width="100%"
+                      ></p-skeleton>
+                    </td>
+                    <td class="text-center">
+                      <span class="p-column-title">{{
+                        "PLAYERS.PRUEBAS" | translate
+                      }}</span>
+                      <p-skeleton
+                        height="1rem"
+                        styleClass=""
+                        width="100%"
+                      ></p-skeleton>
+                    </td>
+                    <td class="text-center">
+                      <span class="p-column-title">{{
+                        "PLAYERS.RPEPARTIDOS" | translate
+                      }}</span>
+                      <p-skeleton
+                        height="1rem"
+                        styleClass=""
+                        width="100%"
+                      ></p-skeleton>
+                    </td>
+                    <td class="text-center">
+                      <span class="p-column-title">{{
+                        "PLAYERS.CARGAENTRENAMIENTO" | translate
+                      }}</span>
+                      <p-skeleton
+                        height="1rem"
+                        styleClass=""
+                        width="100%"
+                      ></p-skeleton>
+                    </td>
+                    <td class="text-center actions">
+                      <span class="p-column-title">{{
+                        "PLAYERS.RIESGOLESIONAL" | translate
+                      }}</span>
+                      <p-skeleton
+                        height="1rem"
+                        styleClass=""
+                        width="100%"
+                      ></p-skeleton>
+                    </td>
+                    <td class="text-center actions">
+                      <span class="p-column-title">{{
+                        "PLAYERS.ESTADO" | translate
+                      }}</span>
+                      <p-skeleton
+                        height="1rem"
+                        styleClass=""
+                        width="100%"
+                      ></p-skeleton>
+                    </td>
+                    <td class="text-center actions">
+                      <span class="p-column-title">{{
+                        "PLAYERS.LBL_ACCIONES" | translate
+                      }}</span>
+                      <p-skeleton
+                        height="1rem"
+                        styleClass=""
+                        width="100%"
+                      ></p-skeleton>
+                    </td>
+                  </tr>
+                </ng-template>
+              </p-table>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<app-create-player-dialog
+  (close)="hanledClosed($event)"
+  *ngIf="!loadingList && createPlayerDialog"
+  [listCountriesAll]="listCountries"
+  [listGenderIdentity]="listGendersIdentity"
+  [listGenders]="listGenders"
+  [listKinships]="listKinships"
+  [listLaterality]="listLaterality"
+  [listPositions]="listPositions"
+  [visible]="createPlayerDialog"
+></app-create-player-dialog>
+<p-confirmDialog
+  #cd
+  [style]="{ width: '50vw' }"
+  class="custom_dialog"
+  maskStyleClass="purple_mask"
+>
+  <ng-template pTemplate="footer">
+    <div class="footer_btns">
+      <button
+        (click)="cd.reject()"
+        class="back_btn"
+        icon="pi pi-times"
+        label="{{ 'LBL_NO' | translate }}"
+        pButton
+        type="button"
+      ></button>
+      <button
+        (click)="cd.accept()"
+        class="next_btn"
+        icon="pi pi-check"
+        label="{{ 'LBL_YES' | translate }}"
+        pButton
+        type="button"
+      ></button>
+    </div>
+  </ng-template>
+</p-confirmDialog>

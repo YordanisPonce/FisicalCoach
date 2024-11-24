@@ -1,0 +1,53 @@
+:host ::ng-deep {
+  .p-dialog {
+    width: 100%;
+    max-width: 660px !important;
+    .p-dialog-header {
+      border-bottom: 1px solid #050c4433;
+
+      display: flex;
+      justify-content: space-between;
+
+      .assist-button {
+        padding: 0.7rem 0.75rem;
+      }
+    }
+    .p-dialog-content {
+      padding: 2rem 2rem 1rem 2rem !important;
+    }
+    .p-dialog-footer {
+      button {
+        flex: 0 175px !important;
+        padding: 1rem;
+      }
+      .add_btn {
+        background-color: #024cac;
+        color: white;
+        font-size: 0.9rem;
+      }
+    }
+
+    .rpe-icon-button {
+      cursor: pointer;
+    }
+
+    .register_btns {
+      flex: 0 175px !important;
+      padding: 0.6rem;
+      background-color: #024cac;
+      color: white;
+      font-size: 0.9rem;
+    }
+
+    .check {
+      color: #00e9c5;
+      font-size: 24px;
+      cursor: pointer;
+    }
+    .circle {
+      color: #ff4a4a;
+      font-size: 24px;
+      cursor: pointer;
+    }
+  }
+}

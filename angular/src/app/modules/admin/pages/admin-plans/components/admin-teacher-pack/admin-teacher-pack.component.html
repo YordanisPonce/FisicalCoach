@@ -1,0 +1,35 @@
+<div class="container">
+    <!-- <ng-container *ngFor="let package of packages | paginate: { itemsPerPage: itemsPerPage, currentPage: p }"> -->
+    <ng-container *ngFor="let package of packages">
+      <div *ngIf="package.code === 'teacher'">
+        <div class="rectangle-container">
+          <ng-container *ngFor="let subpackage of package.subpackages">
+            <div class="rectangle">
+              <div class="icon-container">
+                <img *ngIf="subpackage.name === 'P.E. Profesor Bronce'" [src]="icons.teacher_bronze" alt="Icono" class="icono">
+                <img *ngIf="subpackage.name === 'P.E. Profesor Plata'" [src]="icons.teacher_silver" alt="Icono" class="icono">
+                <img *ngIf="subpackage.name === 'P.E. Profesor Oro'" [src]="icons.teacher_gold" alt="Icono" class="icono">
+              </div>
+  
+              <div class="info-container">
+                <h2 class="small-text">{{ subpackage.name }}</h2>
+              </div>
+              <hr class="linea-horizontal">
+              <div class="button-container">
+                <!-- <button class="button" (click)="openEditModal(subpackage)" style="font-family: 'Montserrat', sans-serif; border: 1px solid #050c44; background: white; color: #014cac; font-size: 12px;">{{ 'PLAYERS.LBL_CANCELAR_PLAN' | translate }}</button> -->
+                <button class="button" (click)="showDialog(subpackage)">{{ 'adminPlans.edit_plan_button' | translate }}</button>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </ng-container>
+
+    <app-edit-plan-modal
+      (close)="hideDialog($event)"
+      *ngIf="dialogVisible"
+      [(visible)]="dialogVisible"
+      [subpackageData]="subpackageData"
+    ></app-edit-plan-modal>
+</div>
+

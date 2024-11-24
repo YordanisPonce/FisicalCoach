@@ -1,0 +1,138 @@
+/* Contenedor de la tabla y el buscador en fila */
+.d-flex {
+  display: flex;
+  gap: 20px; /* Espacio entre el buscador y la tabla */
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+/* Contenedor del buscador */
+.search-container {
+  flex: 0 0 auto; /* No se estira ni se reduce */
+  width: 300px; /* Ajusta el tamaño del buscador */
+  margin-top: 20px; /* Añadimos un margen superior para dar espacio */
+}
+
+/* Tabla con los permisos */
+.table-container {
+  flex-grow: 1; /* La tabla ocupa el espacio restante */
+  width: 100%;
+  max-width: 1000px;
+  padding: 20px;
+  margin: 0 auto;
+}
+
+/* Tabla con estilo */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-top: 20px; /* Espacio superior */
+}
+
+/* Celdas de la tabla */
+.table th, .table td {
+  padding: 20px 30px;
+  text-align: left;
+  border: 1px solid #ddd;
+  background-color: white;
+  color: #193e65;
+  font-weight: bold;
+}
+
+.table th {
+  background-color: #f8f9fa;
+  color: #193e65;
+  font-size: 18px;
+}
+
+.table tbody td {
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.table tbody tr {
+  height: 50px;
+}
+
+.table tbody tr:nth-child(odd) {
+  background-color: #f2f2f2;
+}
+
+.table tbody tr:nth-child(even) {
+  background-color: #ffffff;
+}
+
+/* Toggle container */
+.toggle-container {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.toggle-arrow {
+  cursor: pointer;
+  font-size: 0.8rem;
+  margin-left: 5px;
+  transition: transform 0.3s ease;
+}
+
+.toggle-arrow.open {
+  transform: rotate(180deg);
+}
+
+/* Estilo para los checkboxes */
+input[type="checkbox"] {
+  margin-right: 5px;
+  transform: scale(1.5);
+  cursor: pointer;
+}
+
+input[type="checkbox"]:checked {
+  background-color: #193e65; /* Color de fondo para checkboxes seleccionadas */
+}
+
+/* Añadimos margen a las columnas */
+.ml-3 {
+  margin-left: 10px;
+}
+
+/* Espacio entre elementos dentro de la tabla */
+.w-25 {
+  width: 25%;
+}
+
+.custom-select {
+  width: 200px;
+}
+
+/* Botón de "Guardar e Invitar" */
+.table-container .btn {
+  padding: 10px 15px;
+  
+  
+}
+p{
+  color: #193e65;
+  font-weight: bold;
+}
+.confirmation-message {
+  position: absolute;
+  bottom: 170%; 
+  right: 0; 
+  background-color: #193e65; 
+  color: white;
+  padding: 7px;
+  border-radius: 8px;
+  z-index: 1000;
+  text-align: center;
+  font-size: 12px;
+  opacity: 1;
+  transition: opacity 0.5s ease-in-out;
+  margin-bottom: 10px; 
+  margin-top: 10px; 
+}

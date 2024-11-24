@@ -1,0 +1,25 @@
+<form (ngSubmit)="onSubmit()" [formGroup]="formMember" id="idFormMember" name="nomForm">
+  <div [ngClass]="{'': getScreenWidth()>=768}" class="row">
+    <div class="col-12">
+      <label>{{'MEMBERS.LBL_INFOADICIONAL'|translate}}</label>
+      <textarea 
+      [cols]="30" 
+      [rows]="7" 
+      class="form-control" 
+      formControlName="additional_information" 
+      maxlength="400"
+      pInputTextarea 
+      placeholder="{{'MEMBERS.LBL_INFOADICIONAPLACE'|translate}}" 
+      [readOnly]="view"
+      ></textarea>
+    </div>
+  </div>
+  <div class="row mt-4">
+    <div class="col-6 col-md-3 offset-md-6">
+      <button (click)="back()" class="btn back_btn btn-block" type="button">{{'LBL_ATRAS'| translate}}</button>
+    </div>
+    <div class="col-6 col-md-3">
+      <button class="btn next_btn btn-block" type="submit" [disabled]="view || saving" >{{'LBL_GUARDAR'|translate}}</button>
+    </div>
+  </div>
+</form>

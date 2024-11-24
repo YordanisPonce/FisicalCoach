@@ -1,0 +1,61 @@
+
+:host ::ng-deep {
+    .view_header{
+        .calendar_btn{
+            padding: .75rem 1.5rem;
+        }
+    }
+    .fc {
+        .fc-toolbar.fc-header-toolbar {
+            margin-bottom: 0;
+            padding: 1.5rem 2rem !important;
+            .fc-toolbar-title{
+                font-size: 1rem !important;
+                color: #050C44;
+                font-weight: 600;
+            }
+            .fc-prev-button,.fc-next-button{
+                background-color: transparent;
+                border: transparent;
+                color: #050C44;
+                .fc-icon{
+                    font-size: .75rem !important;
+                }
+            }
+        }
+    
+        .fc-col-header-cell.fc-day{
+            // background-color: turquoise
+            border: 0;
+            border-bottom: 1px solid #ddd;
+            padding-top: .75rem;
+            padding-bottom: .75rem;
+        }
+    
+        .fc-col-header-cell-cushion {
+            text-decoration: none;
+            color: #050C44;
+            opacity: 0.49;
+            font-weight: 600;
+        }
+
+        .fc-daygrid-day.fc-day-today{
+            background-color: #f8f9fa !important;
+        }
+    
+        .fc-daygrid-day-top {
+            // display: flex;
+            flex-direction: row;
+            .fc-daygrid-day-number {
+                // padding: 4px;
+                // position: relative;
+                // z-index: 4;
+                color: #050C44;
+                // opacity: 0.74;
+                font-weight: 500;
+                padding: 1.5rem;
+                text-decoration: none;
+            }
+        }
+    }
+}

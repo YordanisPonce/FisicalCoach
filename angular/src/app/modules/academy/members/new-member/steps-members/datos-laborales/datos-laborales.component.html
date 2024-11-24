@@ -1,0 +1,245 @@
+<form
+  *ngIf="formMember"
+  (ngSubmit)="onSubmit()"
+  [formGroup]="formMember"
+  id="idFormMember"
+  name="nomForm"
+>
+  <div class="row" [ngClass]="{ '': getScreenWidth() >= 768 }">
+    <div class="mb-3 col-12 col-md-6">
+      <label for="study_level_id">{{
+        "MEMBERS.LBL_NIVELESTUDIOS" | translate
+      }}</label>
+      <p-dropdown
+        [filter]="true"
+        [options]="listLevel"
+        [styleClass]="'w-100 form-control'"
+        aria-describedby="inputGroup-sizing-default"
+        class="control-custom"
+        [disabled]="view"
+        [ngClass]="{
+          'ng-invalid ng-dirty': submitted && f.study_level_id.invalid
+        }"
+        formControlName="study_level_id"
+        id="study_level_id"
+        placeholder="{{ 'LBL_SELECCIONE' | translate }}"
+      ></p-dropdown>
+      <div
+        *ngIf="submitted && f.study_level_id.invalid"
+        class="form-text text-danger"
+      >
+        {{ "MEMBERS.LBL_NIVELESTUDIOS" | translate }}
+        {{ "LBL_REQUERIDO" | translate }}
+      </div>
+    </div>
+    <div class="mb-3 col-12 col-md-6">
+      <label>{{ "MEMBERS.LBL_ADDEXPERIENCIA" | translate }}</label>
+      <button
+        (click)="showModalAdd = true"
+        type="button"
+        style="height: 45px"
+        [disabled]="f.study_level_id.invalid || view"
+        class="btn btn-primary btn-block"
+      >
+        <i class="fa fa-plus text-white"></i>
+        {{ "MEMBERS.LBL_ADDEXPERIENCIA" | translate }}
+      </button>
+    </div>
+  </div>
+
+  <div class="row mt-3">
+    <div class="col-12">
+      <div class="experiences_table">
+        <p-table [value]="listExperience" selectionMode="single">
+          <ng-template pTemplate="header">
+            <tr class="text-center">
+              <th class="text-center">{{ "MEMBERS.LBL_CENTROESCOLAR" | translate }}</th>
+              <th class="text-center">{{ "MEMBERS.LBL_CARGO" | translate }}</th>
+              <th class="text-center">{{ "MEMBERS.LBL_PERIODO" | translate }}</th>
+              <th class="text-center" style="width: 9%"></th>
+            </tr>
+          </ng-template>
+          <ng-template let-item pTemplate="body">
+            <tr>
+              <td class="text-center">{{ item.club }}</td>
+              <td class="text-center">{{ item.occupation }}</td>
+              <td class="text-center">
+                {{(item.start_date|date:'d/M/y') }} - {{ (item.finish_date|date:'d/M/y') }}
+              </td>
+              <td class="text-center">
+                <a (click)="delete(item)"> <i class="fa fa-close"></i></a>
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage" let-columns>
+            <tr>
+              <td colspan="4" style="text-align: center;">
+                {{'LBL_SINREGISTROS' | translate}}
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-4">
+    <div class="col-6 col-md-3 offset-md-6">
+      <button class="btn back_btn btn-block" (click)="back()">
+        {{ "LBL_ATRAS" | translate }}
+      </button>
+    </div>
+    <div class="col-6 col-md-3">
+      <button class="btn next_btn btn-block" type="submit">
+        {{ "LBL_SIGUIENTE" | translate }}
+      </button>
+    </div>
+  </div>
+</form>
+
+<p-dialog
+  id="dialog_config_member"
+  header="{{ 'MEMBERS.LBL_ADDEXPERIENCIA' | translate }}"
+  [(visible)]="showModalAdd"
+  [modal]="true"
+  class="custom_dialog"
+  maskStyleClass="purple_mask"
+>
+  <form
+    (ngSubmit)="onSubmitExperience()"
+    [formGroup]="formAddExperience"
+    id="idForm"
+    name="nomForm"
+  >
+    <div class="dialog_container">
+      <div class="row" [ngClass]="{ '': getScreenWidth() >= 768 }">
+        <div class="mb-3 col-12">
+          <label for="club">{{ "MEMBERS.LBL_CENTROESCOLAR" | translate }} *</label>
+          <input
+            class="form-control"
+            id="club"
+            [placeholder]="
+              ('LBL_ESCRIBIR' | translate) +
+              ' ' +
+              ('MEMBERS.LBL_CLUB' | translate).toLowerCase() +
+              '...'
+            "
+            formControlName="club"
+            sin-numeros-reactive
+            aria-label="Default"
+            aria-describedby="inputGroup-sizing-default"
+            [ngClass]="{'ng-invalid ng-dirty is-invalid':((fa.club.invalid && (fa.club.dirty || fa.club.touched)) || (fa.club.invalid && submitted))}"
+          />
+          <div
+          *ngIf="fa.club?.errors"
+          class="invalid-feedback"
+          >
+            {{ "MEMBERS.LBL_CENTROESCOLAR" | translate }} {{ "LBL_REQUERIDO" | translate }}
+          </div>
+        </div>
+        <div class="mb-3 col-12">
+          <label for="cargo">{{ "MEMBERS.LBL_CARGO" | translate }} *</label>
+          <input
+            class="form-control"
+            id="cargo"
+            [placeholder]="
+              ('LBL_ESCRIBIR' | translate) +
+              ' ' +
+              ('MEMBERS.LBL_CARGO' | translate).toLowerCase() +
+              '...'
+            "
+            formControlName="occupation"
+            sin-numeros-reactive
+            aria-label="Default"
+            aria-describedby="inputGroup-sizing-default"
+            [ngClass]="{'ng-invalid ng-dirty is-invalid':((fa.occupation.invalid && (fa.occupation.dirty || fa.occupation.touched)) || (fa.occupation.invalid && submitted))}"
+          />
+          <div
+          *ngIf="fa.occupation?.errors"
+          class="invalid-feedback"
+          >
+            {{ "MEMBERS.LBL_CARGO" | translate }}
+            {{ "LBL_REQUERIDO" | translate }}
+          </div>
+        </div>
+        <div class="mb-3 col-12 col-md-6">
+          <label>{{ "MEMBERS.LBL_FECHAINICIO" | translate }} *</label>
+          <p-calendar
+            [touchUI]="true"
+            [readonlyInput]="true"
+            [monthNavigator]="true"
+            [yearNavigator]="true"
+            [firstDayOfWeek]="1"
+            [yearRange]="yearRange"
+            [ngClass]="{'ng-invalid ng-dirty is-invalid':((fa.start_date.invalid && (fa.start_date.dirty || fa.start_date.touched)) || (fa.start_date.invalid && submitted))}"
+            class="form-control"
+            dateFormat="dd/mm/yy"
+            formControlName="start_date"
+            inputId="range"
+            [maxDate]="maxDate"
+            placeholder="{{ 'MEMBERS.LBL_FECHANAC' | translate }}"
+            (onSelect)="validateDate()"
+          ></p-calendar>
+          <div
+          *ngIf="fa.start_date?.errors"
+          class="invalid-feedback"
+          >
+            {{ "MEMBERS.LBL_FECHAINICIO" | translate }}
+            {{ "LBL_REQUERIDO" | translate }}
+          </div>
+        </div>
+        <div class="mb-3 col-12 col-md-6">
+          <label>{{ "MEMBERS.LBL_FECHAFIN" | translate }} *</label>
+          <p-calendar
+            [touchUI]="true"
+            [readonlyInput]="true"
+            [minDate]="startDate"
+            [monthNavigator]="true"
+            [yearNavigator]="true"
+            [yearRange]="yearRange"
+            [ngClass]="{'ng-invalid ng-dirty is-invalid':((fa.finish_date.invalid && (fa.finish_date.dirty || fa.finish_date.touched)) || (fa.finish_date.invalid && submitted))}"
+            class="form-control"
+            dateFormat="dd/mm/yy"
+            formControlName="finish_date"
+            [disabled]="startDate==undefined"
+            inputId="range"
+            [maxDate]="maxDate"
+            placeholder="{{ 'MEMBERS.LBL_FECHAFIN' | translate }}"
+            [firstDayOfWeek]="1"
+          ></p-calendar>
+          <div
+          *ngIf="fa.finish_date?.errors"
+          class="invalid-feedback"
+          >
+            {{ "MEMBERS.LBL_FECHAFIN" | translate }}
+            {{ "LBL_REQUERIDO" | translate }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- <div class="row mt-4">
+      <div class="col-6">
+        <button class="btn btn-outline-dark btn-block">
+          {{ "LBL_ATRAS" | translate }}
+        </button>
+      </div>
+      <div class="col-6">
+        <button class="btn btn-outline-dark btn-block" type="submit">
+          {{ "LBL_GUARDAR" | translate }}
+        </button>
+      </div>
+    </div> -->
+  </form>
+  <ng-template pTemplate="footer">
+    <div class="footer_btns">
+      <button class="back_btn btn">{{ "LBL_ATRAS" | translate }}</button>
+      <button 
+      class="next_btn btn" 
+      (click)="onSubmitExperience()"
+      >
+      {{ "LBL_GUARDAR" | translate }}
+      </button>
+    </div>
+  </ng-template>
+</p-dialog>

@@ -1,0 +1,44 @@
+<p-dialog (onHide)="onHide()" [(visible)]="view" [modal]="true"
+          class="custom_dialog" header="{{'profile.detallesubscripcion'|translate}}"
+          id="subscriptiondetail" maskStyleClass="purple_mask" styleClass="">
+  <div *ngIf="selectedPackage" class="row" style="margin: 10px">
+    <div class="table_labels">
+      <div *ngFor="let item of selectedPackage.attributes " style="display: flex; flex-direction: row; ">
+        <div class="labels">{{item.name}}</div>
+      </div>
+    </div>
+    <div class="row mx-lg-n2">
+      <div class="suscription_pack">
+        <table class="table">
+          <thead style="height: 80px">
+          <th class="text-center">
+            <div class="suscription_pack_header">
+                  <span class="suscription_pack_caption">{{
+                    "registerPlank.packagename" | translate
+                    }}</span>
+              <span class="suscription_pack_name">{{ selectedPackage.name }}</span>
+            </div>
+          </th>
+          </thead>
+          <tbody>
+          <tr *ngFor="let dato of selectedPackage.attributes">
+            <td *ngIf="dato.pivot.quantity">{{ dato.pivot.quantity }}</td>
+            <td *ngIf="!dato.pivot.quantity && dato.pivot.available">
+              <i class="fa fa-check" style="font-size: 20px; color:#04e9c5"></i>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+        <div class="text-center suscription_pack_footer">
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <ng-template pTemplate="footer">
+    <div style="width: 100%; display: flex; justify-content: center">
+      <button (click)="close()" class="p-button" label="{{ 'LBL_CERRAR' | translate }}" pButton
+              pTooltip="{{ 'LBL_CERRAR' | translate }}" tooltipPosition="top"></button>
+    </div>
+  </ng-template>
+</p-dialog>

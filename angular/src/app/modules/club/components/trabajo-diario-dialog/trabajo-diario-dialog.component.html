@@ -1,0 +1,95 @@
+<form action="" [formGroup]="newDailyWorkoutForm" (ngSubmit)="onSubmit()">
+  <p-dialog (onHide)="closeDialog()" [(visible)]="visible" header="{{'fisioterapia.trabajodiario'|translate}} +" [modal]="true"
+            class="custom_dialog" id="trabajo_diario_dialog" maskStyleClass="purple_mask" styleClass="">
+    <div id="trabajo_diario_dialog_container" class="dialog_container">
+      <div>
+        <div class="step_content" *ngIf="step == 1">
+          <div class="row">
+            <div class="col-12 col-lg-6">
+              <div class="row">
+                <div class="col-12 mb-4">
+                  <label>{{'fisioterapia.duracionsesion'|translate}} *</label>
+                  <input aria-describedby="inputGroup-sizing-default" aria-label="Default"
+                         class="form-control input-rounded"
+                         formControlName="minutes_duration" placeholder="{{'fisioterapia.escribeaqui'|translate}}" type="number"/>
+                  <div class="invalid-feedback" *ngIf="f.minutes_duration?.errors">
+                    {{ "fisioterapia.duracionsesion" | translate }} {{ "LBL_REQUERIDO" | translate }}
+                  </div>
+                </div>
+                <div class="col-12 mb-4">
+                  <label>{{'fisioterapia.tratamientos'|translate}} *</label>
+                  <div class="">
+                    <p-multiSelect [filter]="true" [options]="treatmentsList" [styleClass]="'w-100 form-control'"
+                                   formControlName="treatments"
+                                   placeholder="{{ 'LBL_SELECCIONE' | translate }}"></p-multiSelect>
+                    <div class="invalid-feedback" *ngIf="f.treatments?.errors">
+                      {{ "fisioterapia.tratamientos" | translate }} {{ "LBL_REQUERIDO" | translate }}
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 mb-4">
+                  <label>{{'fisioterapia.sensacionejugador'|translate}}</label>
+                  <textarea class="form-control" cols="20" formControlName="sensations" placeholder="{{'fisioterapia.escribeaqui'|translate}}"
+                            rows="5"></textarea>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-lg-6">
+              <div class="row">
+                <div class="col-12 mb-4">
+                  <label>{{'fisioterapia.exploracion'|translate}}</label>
+                  <textarea class="form-control" cols="20" formControlName="exploration" placeholder="{{'fisioterapia.escribeaqui'|translate}}"
+                            rows="10"></textarea>
+                </div>
+                <div class="col-12 mb-4">
+                  <label>{{'fisioterapia.testpruebas'|translate}}</label>
+                  <textarea class="form-control" cols="20" formControlName="tests" placeholder="{{'fisioterapia.escribeaqui'|translate}}"
+                            rows="5"></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="step_content" *ngIf="step == 2">
+          <div class="row">
+            <div class="col-12 mb-4">
+              <label>{{'fisioterapia.observaciones'|translate}}</label>
+              <textarea class="form-control" cols="20" formControlName="observations" id="" name="" placeholder="{{'fisioterapia.escribeaqui'|translate}}"
+                        rows="5"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <ul class="step_markers full_markers">
+          <li>
+            <span (click)="step = 1" [ngClass]="{ active: step == 1 }" class="step_marker"></span>
+          </li>
+          <li>
+            <span class="step_marker" [ngClass]="{ active: step == 2 }"></span>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <p-footer>
+      <div class="footer_btns">
+        <button (click)="step > 1 ? (step = step - 1) : closeDialog()" [ngClass]="{ shrink_btn: step == 1 }" class="btn back_btn"
+                type="button">
+          {{ "LBL_ATRAS" | translate }}
+        </button>
+        <button (click)="step > 0 ? (step = step + 1) : ''" *ngIf="step < 2" [ngClass]="{ shrink_btn: step == 1 }"
+                class="btn next_btn" type="button" [disabled]="!newDailyWorkoutForm.valid">
+          {{ "LBL_SIGUIENTE" | translate }}
+        </button>
+        <button *ngIf="!loading && step > 1 && !dailyWorkData" [disabled]="!newDailyWorkoutForm.valid" [ngClass]="{ shrink_btn: step == 2 }"
+                class="btn next_btn" type="submit">
+          {{ "BTN_FINALIZAR" | translate }}
+        </button>
+        <button *ngIf="loading && step > 1" [disabled]="loading" [ngClass]="{ shrink_btn: step == 2 }" class="btn next_btn"
+                type="button">
+          {{ "LBL_GUARDANDO" | translate }}
+        </button>
+      </div>
+    </p-footer>
+  </p-dialog>
+</form>

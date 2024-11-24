@@ -1,0 +1,340 @@
+<div
+  class="row"
+  appUserPermission
+  [method]="[
+    'team_fisiotherapy_store',
+    'team_fisiotherapy_delete',
+    'team_fisiotherapy_read'
+  ]"
+  (showItem)="handlePermission($event)"
+>
+  <div class="col-12">
+    <div class="card box-shadow">
+      <div class="card-body p-0">
+        <div class="physiotherapy_header view_header">
+          <h6 class="font-weight-600 mb-0 mr-4 text-main view_header_title">
+            {{ "physiotherapy.players" | translate }}
+          </h6>
+          <div class="p-input-icon-left d-md-inline buscador">
+            <i class="pi pi-search"></i>
+            <input
+              pInputText
+              placeholder="{{ 'LBL_SEARCH' | translate }}"
+              type="text"
+              [(ngModel)]="searchPlayer"
+              (keyup)="setValue($event)"
+            />
+          </div>
+
+          <p-treeSelect
+            [(ngModel)]="selectedFilter"
+            (ngModelChange)="handleSelectFilter()"
+            [options]="filterOptions"
+            placeholder="{{ 'LBL_FILTRAR' | translate }}"
+          ></p-treeSelect>
+
+          <div *ngIf="this.selectedFilter?.code">
+            <button
+              class="btn see_all_btn"
+              (click)="players = allPlayers; selectedFilter = null"
+              pTooltip="{{ 'seeAll' | translate }}"
+            >
+              <i class="pi pi-times"></i>
+            </button>
+          </div>
+
+          <div class="header_buttons">
+            <button
+              class="btn action"
+              (click)="newTab = true"
+              [disabled]="!selectedPlayer.length || loadingPlayerFile"
+              *ngIf="showPermission.store"
+              pButton
+            >
+              <span class="d-sm-inline mr-2">{{
+                selectedPlayer !== null &&
+                selectedPlayer[0]?.latest_file_fisiotherapy?.title &&
+                selectedPlayer[0]?.latest_file_fisiotherapy?.id &&
+                !selectedPlayer[0]?.latest_file_fisiotherapy?.discharge_date
+                  ? ("physiotherapy.edit_tab" | translate)
+                  : ("physiotherapy.new_tab" | translate)
+              }}</span>
+              <i class="fa fa-plus text-white"></i>
+            </button>
+          </div>
+        </div>
+        <p-table
+          [value]="players"
+          class="p-datatable-responsive"
+          [paginator]="true"
+          [rows]="10"
+          [(selection)]="selectedPlayer"
+          [showLoader]="false"
+          selectionMode="single"
+          *ngIf="!loading"
+        >
+          <ng-template pTemplate="header">
+            <tr class="text-center">
+              <!-- <th style="width: 10%"></th> -->
+              <th style="width: 3rem; min-width: 3rem !important;">
+                <!-- <p-tableHeaderCheckbox></p-tableHeaderCheckbox> -->
+              </th>
+              <th class="text-left" pSortableColumn="full_name">
+                {{ "LBL_NAME" | translate }}
+                <p-sortIcon field="full_name"></p-sortIcon>
+              </th>
+              <th class="text-center">
+                {{ "physiotherapy.active_tab" | translate }}
+              </th>
+              <th class="text-center" pSortableColumn="file_title">
+                {{ "physiotherapy.title" | translate }}
+                <p-sortIcon field="file_title"></p-sortIcon>
+              </th>
+
+              <!-- <th class="text-center">Zona de lesión</th> -->
+              <th class="text-center" pSortableColumn="file_discharge_date">
+                {{ "LBL_DATE" | translate }}
+                <p-sortIcon field="file_discharge_date"></p-sortIcon>
+              </th>
+              <th class="text-center">{{ "LBL_ACTIONS" | translate }}</th>
+            </tr>
+          </ng-template>
+          <ng-template let-player pTemplate="body" let-i="rowIndex">
+            <tr class="colum-responsive">
+              <td class="checbox-w">
+                <p-tableCheckbox
+                  [value]="player"
+                  (click)="handlePhysiotherapyPlayer(player, i)"
+                ></p-tableCheckbox>
+              </td>
+              <td>
+                <div>
+                  <img
+                    class="rounded-circle principalImg"
+                    src="{{
+                      player.url != null
+                        ? urlBase + player.url
+                        : 'assets/img/chico.png'
+                    }}"
+                    width="30px"
+                    height="30px"
+                  />
+                  <strong class="m-2">{{ player.full_name }}</strong>
+                </div>
+              </td>
+              <td class="text-center">
+                <div>
+                  <span class="p-column-title">{{
+                    "physiotherapy.active_tab" | translate
+                  }}</span>
+                </div>
+
+                <div>
+                  <i
+                    *ngIf="
+                      player.latest_file_fisiotherapy &&
+                      !player.latest_file_fisiotherapy?.file_start_date &&
+                      !player.latest_file_fisiotherapy?.discharge_date
+                    "
+                    class="fas fa-check check check_icon"
+                    pTooltip="{{ 'physiotherapy.tab_active' | translate }}"
+                  ></i>
+                  <i
+                    *ngIf="player.latest_file_fisiotherapy?.discharge_date"
+                    class="fas fa-check check closed"
+                    pTooltip="{{ 'physiotherapy.tab_finished' | translate }}"
+                  ></i>
+
+                  <i
+                    *ngIf="
+                      !player.latest_file_fisiotherapy?.file_start_date &&
+                      !player.latest_file_fisiotherapy
+                    "
+                    class="far fa-times-circle circle"
+                    pTooltip="{{ 'physiotherapy.tab_inactive' | translate }}"
+                  ></i>
+                </div>
+              </td>
+              <td class="checbox-w d-sm-none"></td>
+              <td class="text-center">
+                <div>
+                  <span class="p-column-title">{{
+                    "physiotherapy.title" | translate
+                  }}</span>
+                </div>
+                <div>
+                  {{ player.file_title ? player.file_title : "N/A" }}
+                </div>
+              </td>
+
+              <td class="text-center">
+                <div>
+                  <span class="p-column-title">{{
+                    "LBL_DATE" | translate
+                  }}</span>
+                </div>
+
+                <div>
+                  {{
+                    player.latest_file_fisiotherapy
+                      ? (player.latest_file_fisiotherapy?.discharge_date
+                        | date : "dd/MM/YYYY ")
+                      : "N/A"
+                  }}
+                </div>
+              </td>
+              <td class="actions_column w-column-full">
+                <div class="text-center">
+                  <button
+                    class="btn"
+                    routerLink="{{
+                      '/club/physiotherapy/detalles/' + player?.id
+                    }}"
+                    [state]="{ file_id: player.latest_file_fisiotherapy?.id }"
+                    (click)="
+                      goToPlayerDetails(player.latest_file_fisiotherapy?.id)
+                    "
+                    pTooltip="{{ 'physiotherapy.seePlayer' | translate }}"
+                    tooltipPosition="top"
+                    [disabled]="
+                      !player.latest_file_fisiotherapy?.id ||
+                      player.latest_file_fisiotherapy?.discharge_date
+                    "
+                    *ngIf="showPermission.read"
+                  >
+                    <img src="assets/img/icons/ver.svg" class="" />
+                  </button>
+                  <button
+                    pTooltip="{{ 'physiotherapy.finishTab' | translate }}"
+                    tooltipPosition="top"
+                    class="btn"
+                    (click)="selectPlayerWithFile(player)"
+                    [disabled]="
+                      !player.latest_file_fisiotherapy?.id ||
+                      player.latest_file_fisiotherapy?.discharge_date
+                    "
+                  >
+                    <img src="assets/img/icons/done_all_icon.svg" class="" />
+                  </button>
+                  <!-- <button class="btn" [disabled]="!player.latest_file_fisiotherapy?.id">
+                    <img src="assets/img/icons/download_icon.svg" class="" />
+                  </button> -->
+                  <button
+                    class="btn"
+                    pTooltip="{{ 'physiotherapy.addDailyWork' | translate }}"
+                    tooltipPosition="top"
+                    (click)="selectPlayerDailyWork(player)"
+                    [disabled]="!player.latest_file_fisiotherapy?.id"
+                    *ngIf="showPermission.store"
+                  >
+                    <i class="pi pi-plus"></i>
+                  </button>
+                  <button
+                    class="btn"
+                    (click)="deletePlayer(player)"
+                    pTooltip="{{ 'physiotherapy.deleteTab' | translate }}"
+                    tooltipPosition="top"
+                    [disabled]="!player.latest_file_fisiotherapy?.id"
+                    *ngIf="showPermission.delete"
+                  >
+                    <img src="assets/img/icons/eliminar.svg" class="" />
+                  </button>
+                </div>
+              </td>
+              <!-- <td class="text-center">8</td> -->
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="6" style="text-align: center">
+                {{ "nodata.sinficha" | translate }}
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+
+        <p-table
+          [value]="[1, 2]"
+          *ngIf="loading"
+          class="p-datatable-responsive"
+        >
+          <ng-template pTemplate="header">
+            <tr class="text-center">
+              <!-- <th style="width: 10%"></th> -->
+              <th style="width: 3rem; min-width: 3rem !important;">
+                <!-- <p-tableHeaderCheckbox></p-tableHeaderCheckbox> -->
+              </th>
+              <th class="text-left">{{ "LBL_NAME" | translate }}</th>
+              <th class="text-center">
+                {{ "physiotherapy.active_tab" | translate }}
+              </th>
+              <th class="text-center">
+                {{ "physiotherapy.title" | translate }}
+              </th>
+
+              <!-- <th class="text-center">Zona de lesión</th> -->
+              <th class="text-center">{{ "LBL_DATE" | translate }}</th>
+              <th class="text-center">{{ "LBL_ACTIONS" | translate }}</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-product>
+            <tr *ngFor="let i of [1, 2, 3]">
+              <td>
+                <p-skeleton width="7rem"></p-skeleton>
+              </td>
+              <td>
+                <p-skeleton
+                  class="d-flex justify-content-center"
+                  width="100%"
+                ></p-skeleton>
+              </td>
+              <td>
+                <p-skeleton
+                  class="d-flex justify-content-center"
+                  width="100%"
+                ></p-skeleton>
+              </td>
+              <td>
+                <p-skeleton
+                  class="d-flex justify-content-center"
+                  width="100%"
+                ></p-skeleton>
+              </td>
+              <td>
+                <p-skeleton
+                  class="d-flex justify-content-center"
+                  width="100%"
+                ></p-skeleton>
+              </td>
+              <td class="d-flex justify-content-center">
+                <p-skeleton width="100%"></p-skeleton>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
+  </div>
+</div>
+<app-new-tab-dialog
+  [visible]="newTab"
+  (close)="closeDialog()"
+  (refresPlayerList)="refresPlayerList()"
+  [player_id]="selectedPlayer"
+  [playerInjuries]="playerInjuries"
+  [playerFileDetails]="playerFileDetails"
+  *ngIf="newTab"
+></app-new-tab-dialog>
+
+<app-end-file-dialog
+  [visible]="showEndFileDialog"
+  [player]="selectedPlayerFile"
+  (closeFileDialog)="closePlayerDialog()"
+  (refreshPlayerList)="refresPlayerList()"
+></app-end-file-dialog>
+
+<trabajo-diario-dialog
+  [visible]="dailyWorkDialog"
+  [player_file]="selectedPlayerDailyWork"
+  (close)="closePlayerDialog()"
+></trabajo-diario-dialog>

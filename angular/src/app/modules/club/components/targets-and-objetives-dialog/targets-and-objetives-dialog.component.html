@@ -1,0 +1,81 @@
+<p-dialog
+  id="targets_objetives_dialog"
+  [modal]="true"
+  header="{{
+    'training_session.' +
+      (workoutContentList.length > 0
+        ? dialogTitle('content')
+        : dialogTitle('block')) | translate
+  }} +"
+  [(visible)]="visible"
+  styleClass=""
+  [ngClass]="{ small_dialog: getScreenWidth() >= 768 }"
+  (onHide)="close.emit(true)"
+>
+  <ng-container *ngIf="workoutContentList.length > 0">
+    <div
+      class="step_content"
+      *ngFor="let content of workoutContentList; index as i"
+    >
+      <div class="row">
+        <div class="col-12 mt-3">
+          <div class="d-flex align-items-center mb-3 mt-3">
+            <img src="{{ content.image.full_url }}" width="25px" class="mr-2" />
+            <h6 class="content-title m-0">{{ content.name }}</h6>
+          </div>
+          <p-accordion
+            *ngIf="content.sub_contents && content.sub_contents.length > 0"
+          >
+            <p-accordionTab
+              header="{{ subContent.name }}"
+              *ngFor="let subContent of content.sub_contents"
+              [selected]="true"
+            >
+              <p-selectButton
+                [options]="subContent.targets"
+                [ngModelOptions]="{ standalone: true }"
+                optionLabel="name"
+                [disabled]="true"
+              ></p-selectButton>
+            </p-accordionTab>
+          </p-accordion>
+
+          <div
+            class="mt-2"
+            *ngIf="content.targets && content.targets.length > 0"
+          >
+            <p-selectButton
+              [options]="content.targets"
+              [ngModelOptions]="{ standalone: true }"
+              optionLabel="name"
+              [disabled]="true"
+            ></p-selectButton>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="workoutContentList.length === 0">
+    <div class="step_content">
+      <div class="text-center mt-4">
+        <span class="nodatatext">{{ "nodata.sinejercicio" | translate }}</span>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="contentBlockList && contentBlockList.length > 0">
+    <div class="step_content">
+      <div class="row">
+        <div class="col-12 mt-3">
+          <p-selectButton
+            [options]="contentBlockList"
+            [ngModelOptions]="{ standalone: true }"
+            optionLabel="name"
+            [disabled]="true"
+          ></p-selectButton>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</p-dialog>

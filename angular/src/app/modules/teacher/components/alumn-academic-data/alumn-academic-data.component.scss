@@ -1,0 +1,10 @@
+:host ::ng-deep {
+  .courses_table {
+    border: 1px solid #ced4da;
+    border-radius: 10px;
+  }
+
+  label {
+    margin-bottom: 0;
+  }
+}

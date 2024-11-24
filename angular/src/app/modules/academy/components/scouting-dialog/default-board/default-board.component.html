@@ -1,0 +1,275 @@
+<div class="ball_possession">
+  <div class="score_table mt-4">
+    <div class="team">
+      <div *ngIf="voleyballBoard.includes(sportCode) && handleSet('local')">
+        <div class="start-match-dot"></div>
+      </div>
+
+      <div
+        *ngIf="
+          ((matchInfo.match_situation === 'V' &&
+            scoutingStatus.start_match === 'V') ||
+            (matchInfo.match_situation === 'L' &&
+              scoutingStatus.start_match === 'L')) &&
+          sportCode === 'cricket'
+        "
+      >
+        <div class="start-match-dot"></div>
+      </div>
+
+      <div class="text-center mb-3">
+        <span class="location">{{ "scouting.local" | translate }}</span>
+      </div>
+
+      <app-team-avatar [matchInfo]="matchInfo" [situation]="'local'">
+      </app-team-avatar>
+
+      <div class="truncate-text mt-2">
+        <span
+          *ngIf="matchInfo.match_situation"
+          [pTooltip]="
+            matchInfo.match_situation === 'L'
+              ? matchInfo.team.name
+              : matchInfo.competition_rival_team.rival_team
+          "
+          >{{
+            matchInfo.match_situation === "L"
+              ? matchInfo.team.name
+              : matchInfo.competition_rival_team.rival_team
+          }}</span
+        >
+      </div>
+    </div>
+
+    <div class="score mt-4">
+      <div>
+        <div class="current-set" *ngIf="voleyballBoard.includes(sportCode)">
+          <div>
+            <h4>
+              {{
+                matchSets(
+                  matchInfo.match_situation,
+                  matchResults.score,
+                  "local"
+                )
+              }}
+              :
+              {{
+                matchSets(
+                  matchInfo.match_situation,
+                  matchResults.score,
+                  "visitor"
+                )
+              }}
+            </h4>
+          </div>
+
+          <div class="text-center">
+            Set
+            {{
+              matchResults.score.current_set === 5
+                ? matchResults.score.current_set
+                : matchResults.score.current_set + 1
+            }}
+          </div>
+        </div>
+      </div>
+      <div class="goals">
+        <app-lateral-actions
+          [matchInfo]="matchInfo"
+          [sportCode]="sportCode"
+          [position]="'local'"
+          (sendAction)="selectActionFromBoard($event.slug)"
+          [isDisabled]="!!matchResults.score?.winner || isDisabled"
+        ></app-lateral-actions>
+
+        <span
+          class="winner"
+          *ngIf="matchResults && !voleyballBoard.includes(sportCode)"
+          >{{
+            matchSituation(
+              matchInfo.match_situation,
+              matchResults.score,
+              "local"
+            )
+          }}</span
+        >
+        <span
+          class="winner"
+          *ngIf="matchResults && voleyballBoard.includes(sportCode)"
+          >{{
+            matchVolleyballSituation(
+              matchInfo.match_situation,
+              matchResults.score,
+              "local"
+            )
+          }}</span
+        >
+
+        <small class="mx-3 text-white">:</small>
+
+        <span
+          class="winner"
+          *ngIf="matchResults && !voleyballBoard.includes(sportCode)"
+          >{{
+            matchSituation(
+              matchInfo.match_situation,
+              matchResults.score,
+              "visitor"
+            )
+          }}</span
+        >
+        <span
+          class="winner"
+          *ngIf="matchResults && voleyballBoard.includes(sportCode)"
+          >{{
+            matchVolleyballSituation(
+              matchInfo.match_situation,
+              matchResults.score,
+              "visitor"
+            )
+          }}</span
+        >
+
+        <app-lateral-actions
+          [matchInfo]="matchInfo"
+          [sportCode]="sportCode"
+          [position]="'visitor'"
+          (sendAction)="selectActionFromBoard($event.slug)"
+          [isDisabled]="!!matchResults.score?.winner || isDisabled"
+        >
+        </app-lateral-actions>
+      </div>
+    </div>
+
+    <div class="team">
+      <div *ngIf="voleyballBoard.includes(sportCode) && handleSet('visitor')">
+        <div class="start-match-dot"></div>
+      </div>
+
+      <div
+        *ngIf="
+          ((matchInfo.match_situation === 'L' &&
+            scoutingStatus.start_match === 'V') ||
+            (matchInfo.match_situation === 'V' &&
+              scoutingStatus.start_match === 'L')) &&
+          sportCode === 'cricket'
+        "
+      >
+        <div class="start-match-dot"></div>
+      </div>
+
+      <div class="text-center mb-3">
+        <span class="location">{{ "scouting.guess" | translate }}</span>
+      </div>
+
+      <app-team-avatar [matchInfo]="matchInfo" [situation]="'guess'">
+      </app-team-avatar>
+
+      <div class="truncate-text mt-2">
+        <span
+          *ngIf="matchInfo.match_situation"
+          [pTooltip]="
+            matchInfo.match_situation === 'V'
+              ? matchInfo.team.name
+              : matchInfo.competition_rival_team.rival_team
+          "
+          >{{
+            matchInfo.match_situation === "V"
+              ? matchInfo.team.name
+              : matchInfo.competition_rival_team.rival_team
+          }}</span
+        >
+      </div>
+    </div>
+  </div>
+
+  <!-- Volleyball -->
+
+  <div
+    class="set-wrapper"
+    *ngIf="sportCode === 'volleyball' || sportCode === 'beach_volleyball'"
+  >
+    <div class="d-flex align-items-center mt-3">
+      <div
+        *ngFor="
+          let set of matchSetList(
+            matchResults.score.own,
+            matchResults.score.rival,
+            matchInfo.match_situation
+          );
+          index as i
+        "
+        class="mx-3"
+      >
+        <div class="text-center">
+          <span> Set {{ i + 1 }} </span>
+        </div>
+        <div class="text-center">
+          <span> {{ set.own }}:{{ set.rival }} </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-5 mb-1 text-center" *ngIf="!!matchResults.score?.winner">
+      <h6>{{ "scouting.winner" | translate }}</h6>
+
+      <h5>
+        {{
+          getWinner(
+            matchResults.score.winner,
+            matchInfo.team.name,
+            matchInfo.competition_rival_team.rival_team
+          )
+        }}
+      </h5>
+    </div>
+  </div>
+
+  <div
+    class="clock-wrapper d-flex flex-column align-items-center mt-3"
+    *ngIf="showTime.includes(sportCode)"
+  >
+    <span>
+      <span>{{
+        "scouting." + matchResults?.statistics?.actual_period?.value | translate
+      }}</span>
+    </span>
+
+    <div class="mt-3 d-flex align-items-center">
+      <small
+        class="clock"
+        *ngIf="!isScoutingPaused && getElapsedTime(time) as elapsed"
+        >{{ elapsed.hours < 10 ? "0" + elapsed.hours : elapsed.hours }}:{{
+          elapsed.minutes < 10 ? "0" + elapsed.minutes : elapsed.minutes
+        }}:{{
+          elapsed.seconds < 10 ? "0" + elapsed.seconds : elapsed.seconds
+        }}</small
+      >
+
+      <small class="clock" *ngIf="isScoutingPaused"
+        >{{
+          pausedTime.hours < 10 ? "0" + pausedTime.hours : pausedTime.hours
+        }}:{{
+          pausedTime.minutes < 10
+            ? "0" + pausedTime.minutes
+            : pausedTime.minutes
+        }}:{{
+          pausedTime.seconds < 10
+            ? "0" + pausedTime.seconds
+            : pausedTime.seconds
+        }}</small
+      >
+    </div>
+  </div>
+
+  <app-lateral-actions
+    [matchInfo]="matchInfo"
+    [sportCode]="sportCode"
+    [results]="matchResults?.statistics"
+    [position]="'visitor'"
+    [isFooterAction]="true"
+    (sendAction)="selectActionFromBoard($event.slug)"
+  >
+  </app-lateral-actions>
+</div>

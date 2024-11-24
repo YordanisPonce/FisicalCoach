@@ -1,0 +1,163 @@
+:host ::ng-deep{
+    .p-dialog{
+        .fototypes{
+            font-size: 15px;
+            color: #05e9c6;
+            font-weight: 500;
+            text-align: center;
+        }
+        .subtitle{
+            color: #050C44;
+            opacity: .66;
+            font-weight: 600;
+        }
+        .p-dialog-header{
+            .header_content{
+                flex: 1;
+            }
+        }
+        .p-dialog-content{
+            padding-top: 2rem;
+            #new_team_dialog_container{
+                max-width: 450px;
+                margin: 0 auto;
+                p-radiobutton{
+                    margin-right: 1rem;
+                }
+                .shrink_btn{
+                    button{
+                        min-width: 250px !important;
+                        max-width: 300px !important;
+                        margin: 0 .75rem;
+                    }
+                }
+                .back_btn{
+                    font-weight: 600;
+                    font-size: 0.9rem;
+                    padding: 0.65rem;
+                    position: absolute;
+                    left: -50px;
+                }
+                .next_btn{
+                    background-color: #0065E9;
+                    border-radius: 32px;
+                    color: white;
+                    font-weight: 600;
+                    font-size: .9rem;
+                    padding: .65rem;
+                    min-width: 330px;
+                    max-width: 400px;
+                }
+                .p-carousel-content{
+                    .p-carousel-indicators{
+                        display: none;
+                    }
+                    .p-carousel-prev,
+                    .p-carousel-next{
+                        background-color: rgba($color: #000000, $alpha: .04);
+                        .pi-chevron-left:before,
+                        .pi-chevron-right:before {
+                            color: #024CAC;
+                            font-size: 12px;
+                        }
+                    }
+                }
+                .p-carousel-item{
+                    padding: 1rem;
+                    .sport{
+                        border: 1px solid;
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;
+                        align-items: center;
+                        margin-bottom: 0;
+                        padding: 1rem;
+                        .sport_name{
+                            text-align: center;
+                        }
+                        .sport_icon{
+                            margin-bottom: .5rem;
+                            max-width: 75px;
+                        }
+                        &.selected{
+                            background-color: #050C44;
+                            .sport_name{
+                                color: white;
+                            }
+                            .sport_icon{
+                                filter: brightness(255);
+                            }
+                        }
+                    }
+                }
+                .caption{
+                    color: rgba($color: #050C44, $alpha: .66);
+                    text-align: center;
+                    margin-bottom: 1rem;
+                    font-family: "Montserrat", sans-serif;
+                    
+                }
+                .team_image{
+                    .file-input{
+                        display: none;
+                    }
+                    .image{
+                        border: 3px solid #050C4463;
+                        width: 150px;
+                        border-radius: 50%;
+                        height: 150px;
+                        margin: 2rem auto;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        cursor: pointer;
+                        i{
+                            color: #050C4463;
+                            font-size: 3rem;
+                        }
+                        img{
+                            width: 125px;
+                            height: 125px;
+                            border-radius: 50%;
+                        }
+                    }
+
+                }
+                .team_color{
+                    .colors{
+                        width: 50%;
+                        margin: auto;
+                        display: flex;
+                        justify-content: space-between;
+                        .color{
+                            width: 25px;
+                            height: 25px;
+                            border-radius: 50%;
+                        }
+                    }
+                    .selected_color{
+                        font-size: .8rem;
+                        font-weight: 600;
+                        text-align: center;
+                    }
+                }
+                .success_content{
+                    .success_sphere{
+                        width: 200px;
+                        height: 200px;
+                        border: 1px solid #050C44;
+                        border-radius: 50%;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        margin: 0 auto 3rem;
+                        i{
+                            font-size: 4rem;
+                            color: #00e9c5;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

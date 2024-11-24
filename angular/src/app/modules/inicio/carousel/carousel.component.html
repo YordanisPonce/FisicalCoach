@@ -1,0 +1,41 @@
+<div id="slider_packages" class="card mb-4 main-bg">
+  <div class="p-4 p-md-5 car_pad">
+    <p-carousel [value]="bannerData" *ngIf="!loading">
+      <ng-template let-item pTemplate="item">
+        <div class="d-flex">
+          <img src="{{ item.image.full_url }}" alt="{{ item.name }}" />
+          <div class="title mt-4 font-weight-600 mb-3">
+            <div>
+              <span>
+                {{ item.name }}
+              </span>
+            </div>
+            <div class="mt-4">
+              <span class="text">
+                <p class="text">{{ item.description }}</p>
+              </span>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+    </p-carousel>
+
+    <div class="d-flex" *ngIf="loading">
+      <p-skeleton width="150px" height="150px"></p-skeleton>
+      <div class="title ml-4 font-weight-600 mb-3">
+        <div>
+          <span>
+            <p-skeleton width="70px"></p-skeleton>
+          </span>
+        </div>
+        <div class="mt-4">
+          <span class="text">
+            <p-skeleton styleClass="mb-3" width="700ox"></p-skeleton>
+            <p-skeleton styleClass="mb-3" width="680px"></p-skeleton>
+            <p-skeleton width="500px"></p-skeleton>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

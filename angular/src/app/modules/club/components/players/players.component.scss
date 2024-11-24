@@ -1,0 +1,213 @@
+@import "../../../../../assets/colors";
+
+.header_buttons {
+  .add_player_btn:hover {
+    i {
+      color: #01e9c5 !important;
+    }
+  }
+}
+
+.player {
+  border: 0;
+  .player_content {
+    border: 1px solid #050c4429;
+  }
+  .player_info {
+    // text-align: center;
+    border-bottom: 1px solid #050c4429;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    .player_info_content {
+      order: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      .text-gray {
+        color: $gray;
+      }
+    }
+    .player_avatar {
+      background-color: #ebecf0;
+      max-width: 115px;
+
+      width: 100%;
+      border-radius: 50%;
+      margin-bottom: 1rem;
+      margin-left: auto;
+      margin-right: auto;
+      overflow: hidden;
+    }
+    .player_shirt_icon,
+    .player_position_icon {
+      padding: 7px;
+      background-color: #050c4408;
+      border-radius: 7px;
+    }
+    .player_number {
+      display: flex;
+      align-items: center;
+    }
+    .player_position {
+      display: flex;
+      align-items: center;
+      margin-left: 18px;
+      .position {
+        display: flex;
+        flex-direction: column;
+      }
+    }
+  }
+  .player_resume {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 15px;
+    background: #050c4401;
+    .stat {
+      flex: 0 0 50%;
+      text-align: center;
+      margin-bottom: 15px;
+      .stat_value {
+        font-size: 1.15rem;
+        color: #050c44;
+        opacity: 0.81;
+        font-weight: 700;
+      }
+      .stat_name {
+        color: #050c44;
+        opacity: 0.57;
+        font-size: 0.9rem;
+        font-weight: 600;
+        display: block;
+      }
+    }
+  }
+  .player_actions {
+    padding: 15px;
+    text-align: center;
+    .skeleton_btn {
+      flex: 0 0 48%;
+    }
+    .btn {
+      padding: 0.75rem 1.5rem;
+      display: block;
+      width: 100%;
+      border-radius: 7px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      margin-bottom: 10px;
+    }
+    .test_btn {
+      // margin-right: .5rem;
+      border: 1px solid #050c44;
+      background: white;
+      color: #014cac;
+    }
+    .profile_btn {
+      background-color: #024cac;
+      color: white;
+      // margin-left: .5rem;
+    }
+  }
+}
+
+:host ::ng-deep .p-carousel {
+  .p-carousel-next,
+  .p-carousel-prev {
+    display: none;
+  }
+}
+
+:host ::ng-deep .p-datatable {
+  border: 1px solid #050c4429;
+  .p-datatable-thead > tr > th {
+    color: #050c44;
+    border-width: 1px 0 1px 0;
+    padding: 2rem 1rem;
+    text-align: center;
+    font-weight: 600;
+  }
+  .p-datatable .p-datatable-tbody > tr {
+    border-bottom: 1px solid;
+  }
+  .p-datatable-tbody > tr > td {
+    // border: 1px solid;
+    padding: 1rem 1rem;
+    font-size: 0.9rem;
+    color: #050c4475;
+    font-weight: 600;
+    background: #050c4401;
+  }
+  .actions {
+    button {
+      padding: 0;
+      img {
+        width: 16px;
+      }
+    }
+  }
+  // .p-datatable-footer{
+  //     background: transparent;
+  //     border-width: 1px 0 0 0;
+  // }
+}
+
+@media (min-width: 576px) {
+}
+@media (min-width: 1024px) {
+}
+@media (min-width: 1200px) {
+  .players_header {
+    .add_player_btn {
+      padding: 0.5rem 2rem;
+      height: 45px;
+      // flex: 1 1 100%;
+    }
+    input {
+      // margin:0;
+    }
+  }
+}
+@media (min-width: 1200px) {
+  .player {
+    border: 0;
+    .player_content {
+      border: 1px solid #050c4429;
+    }
+    .player_info {
+      text-align: left;
+      border-bottom: 1px solid #050c4429;
+      padding: 15px;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      .player_info_content {
+        order: 0;
+        align-items: flex-start;
+      }
+      .player_avatar {
+        margin: 0;
+      }
+    }
+    .player_resume {
+      .stat {
+        flex: 0 0 50%;
+      }
+    }
+    .player_position {
+    }
+    .player_actions {
+      display: flex;
+      justify-content: space-between;
+
+      .btn {
+        padding: 0.75rem 2rem;
+        display: inline;
+        width: auto;
+        flex: 0 48%;
+      }
+    }
+  }
+}

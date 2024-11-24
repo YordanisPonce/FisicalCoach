@@ -1,0 +1,346 @@
+:host ::ng-deep {
+  .p-button:enabled:hover {
+    background: #0d89ec !important;
+    color: #ffffff;
+    border-color: #0d89ec !important;
+  }
+}
+
+.competicion {
+  border: 1px solid #050c441a;
+  border-radius: 18px;
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+
+  // opacity: 0.1;
+  .competicion_info {
+    display: flex;
+    justify-content: space-between;
+    padding: 2rem 2rem 1rem;
+
+    .league_name {
+      color: #050c44;
+      font-weight: 600;
+    }
+
+    .championship {
+      color: #050c44;
+      opacity: 0.56;
+    }
+  }
+
+  .score {
+    padding-top: 1rem;
+
+    .result {
+      margin-bottom: 1rem;
+    }
+  }
+  .p-avatar {
+    .p-avatar-lg {
+      width: 6rem;
+      height: 6rem;
+    }
+  }
+}
+
+.competicion_footer {
+  border-top: 1px solid #050c441a;
+  text-align: center;
+  padding: 1rem 0.5rem;
+
+  a {
+    color: #024cac;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-decoration: none;
+  }
+}
+
+.competition_empty {
+  text-align: center;
+  width: 100%;
+  padding: 15px 0;
+}
+
+.sorting_content {
+  & .option {
+    span {
+      cursor: pointer;
+    }
+  }
+}
+
+.filters {
+  display: flex;
+  align-items: center;
+  justify-content: left;
+
+  .search-filter {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+
+    @media (max-width: 600px) {
+      flex-direction: column;
+    }
+  }
+
+  .sort-input {
+    width: 100%;
+    display: flex;
+  }
+
+  @media (max-width: 1900px) {
+    flex-direction: column;
+    align-items: start;
+
+    .sort-input {
+      margin-top: 2rem;
+    }
+  }
+}
+
+@media (min-width: 1024px) {
+  .competicion_header {
+    justify-content: space-between;
+
+    .crear_competicion_btn {
+      background-color: #024cac;
+      color: white;
+      font-weight: 500;
+      height: 45px;
+      // margin-left: auto;
+      flex: 1 1 100%;
+      max-width: 225px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+
+      &:hover i {
+        color: #01e9c5 !important;
+      }
+    }
+
+    input {
+      // margin:0;
+      width: 200px;
+      height: 45px;
+      border: 1px solid #050c4421;
+      border-radius: 9px;
+    }
+  }
+}
+
+:host ::ng-deep {
+  .p-treeselect {
+    width: 200px;
+  }
+}
+
+:host ::ng-deep .p-tabview {
+  .p-tabview-nav {
+    li {
+      flex: 1;
+      text-align: center;
+
+      .p-tabview-nav-link {
+        justify-content: center;
+        padding: 1.5rem;
+        color: #050c4431;
+      }
+    }
+  }
+
+  .p-tabview-panels {
+    padding: 0;
+
+    .p-datatable-thead {
+      tr th {
+        background-color: transparent;
+      }
+    }
+  }
+}
+
+.matches {
+  padding: 0;
+  max-height: 600px;
+  overflow-y: auto;
+
+  .match {
+    display: flex;
+    list-style: none;
+    text-align: center;
+    justify-content: space-between;
+    padding: 2rem;
+    border-bottom: 1px solid #050c441a;
+
+    .match_info {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+
+      .time {
+        font-size: 1.35rem;
+        font-weight: 700;
+        display: block;
+        position: relative;
+        margin-bottom: 0.25rem;
+      }
+
+      .separator {
+        width: 40px;
+        border: 2px solid #024cac;
+        margin: 0 auto 1rem;
+      }
+    }
+  }
+
+  .matches_footer {
+    padding: 1.5rem;
+
+    .btn_ver_calendario {
+      background-color: #0065e9;
+      color: white;
+      font-weight: 500;
+      padding: 0.5rem 2rem;
+    }
+  }
+
+  .team {
+    width: 104px;
+
+    span {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .color {
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      margin: 0 auto;
+    }
+  }
+}
+
+.matches_footer {
+  padding: 1.5rem;
+
+  .btn_ver_calendario {
+    background-color: #0065e9;
+    color: white;
+    font-weight: 500;
+    padding: 0.5rem 2rem;
+  }
+}
+
+.last_game {
+  padding: 2rem 2.5rem;
+  border-top: 1px solid #050c441a;
+  display: flex;
+  text-align: center;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+
+  .last_game_tag {
+    position: absolute;
+    top: -7.5px;
+    height: 15px;
+    left: calc(50% - 50px);
+    background-color: white;
+    width: 100px;
+    color: #050c4456;
+  }
+
+  .score {
+    padding-top: 1rem;
+
+    .result {
+      margin-bottom: 1rem;
+    }
+  }
+}
+
+.competicion_footer {
+  border-top: 1px solid #050c441a;
+  text-align: center;
+  padding: 1rem 0.5rem;
+
+  a {
+    color: #024cac;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-decoration: none;
+  }
+}
+.r_he {
+  display: block;
+}
+
+.create-competition-button {
+  @media (max-width: 500px) {
+    flex-direction: column;
+  }
+  @media (max-width: 500px) {
+    .btn_calendar {
+      button {
+        width: 300px;
+      }
+    }
+  }
+  @media (max-width: 1900px) {
+    display: flex;
+  }
+  @media (min-width: 1901px) {
+    display: none;
+  }
+}
+.btn_cal_cre {
+  display: flex;
+
+  @media (max-width: 1900px) {
+    display: none;
+  }
+  @media (max-width: 1024px) {
+    .btn_calendar {
+      margin: 12px 0;
+      button {
+        height: 45px;
+        width: 300px;
+      }
+    }
+  }
+  @media (max-width: 501px) {
+    margin-top: 1rem;
+    flex-direction: column-reverse;
+    .btn_calendar {
+      display: flex;
+      justify-content: center;
+      margin-top: 0.5rem;
+      margin-right: 1rem;
+      button {
+        width: 300px;
+        height: 45px;
+      }
+    }
+  }
+}
+.d_flex {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+@media (max-width: 1024px) {
+  .skeleton_flex {
+    flex-direction: column;
+    align-items: start;
+  }
+}
+@media (max-width: 501px) {
+  .btn_flex {
+    flex-direction: column;
+  }
+}

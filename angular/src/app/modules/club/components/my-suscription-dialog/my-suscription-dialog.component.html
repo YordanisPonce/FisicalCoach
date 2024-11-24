@@ -1,0 +1,76 @@
+<p-dialog
+  id="my_suscription_dialog"
+  class="custom_dialog"
+  [modal]="true"
+  [(visible)]="visible"
+  styleClass="fullscreenDialog"
+  maskStyleClass=""
+  (onHide)="closeDialog()"
+>
+  <div
+    id="my_suscription_dialog_container"
+    class="dialog_container"
+    [ngClass]="{ wide: step != 1 }"
+  >
+    <div class="current_suscription mb-5">
+      <div
+        class="icon"
+        style="background-image: url(/assets/img/icons/sport-equipment.svg)"
+      ></div>
+      <div class="pack">
+        <h3 class="font-weight-bold mb-4">
+          {{ dataSuscrippcionUser?.package_price?.subpackage?.name }}
+        </h3>
+        <p>
+          Este es actualmente el Pack que tienes registrado, contiene diferentes
+          beneficios que puedes saberlos aquí.
+        </p>
+      </div>
+    </div>
+    <div class="d-flex separator">
+      <span class="line"></span>
+      <span class="text">Tu nivel de suscripción actual</span>
+      <span class="line"></span>
+    </div>
+    <div class="all_packs my-5">
+      <i
+        class="pi pi-spin pi-spinner"
+        style="font-size: 2rem"
+        *ngIf="cargando"
+      ></i>
+      <p-selectButton
+        [options]="subpaquetes"
+        [(ngModel)]="subpaqueteSeleccionado"
+        optionLabel="icon"
+      >
+        <ng-template let-item pTemplate>
+          <div class="bg-white">
+            <div class="pack_icon">
+              <img alt="" src="assets/img/icons/sport-equipment.svg" />
+            </div>
+            <div class="pack_content">
+              <h5 class="font-weight-bold" style="color: #485156">
+                {{ item.name }}
+              </h5>
+              <p>Actualmente disfrutas del triple de beneficios</p>
+              <hr />
+              <h6>12 meses</h6>
+              <p>Basado en Multi-Sport Premium</p>
+            </div>
+          </div>
+          <div class="selected_tag">
+            <span>En posesión</span>
+          </div>
+        </ng-template>
+      </p-selectButton>
+    </div>
+    <div class="d-flex separator">
+      <span class="line"></span>
+      <span class="text">Los beneficios del nivel son</span>
+      <span class="line"></span>
+    </div>
+    <button class="btn btn-primary btn_ver_planes btn-block mt-5">
+      Ver otros planes
+    </button>
+  </div>
+</p-dialog>

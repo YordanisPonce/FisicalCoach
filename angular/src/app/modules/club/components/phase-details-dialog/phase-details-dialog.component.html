@@ -1,0 +1,89 @@
+<p-dialog id="phase_details_dialog" class="custom_dialog" [modal]="true" [header]="'Fase 1'" [(visible)]="visible" styleClass="" maskStyleClass="purple_mask" (onHide)="closeDialog()">
+    <div id="phase_details_dialog_container" class="dialog_container">
+        <div>
+            <div class="step_content">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="phase_details_header view_header">
+                            <div #sorting class="position-relative" id="sorting">
+                              <button (click)="sortPanel.toggle($event,sorting)" class="mr-3" id="sorting_btn" label=" "
+                                      pButton type="text">
+                                <div class="mr-2 filter_label">
+                                  Filtrar por:
+                                </div>
+                                <div>
+                                  Orden alfabético
+                                </div>
+                              </button>
+                              <p-overlayPanel #sortPanel>
+                                <ng-template pTemplate>
+                                  <div class="sorting_content">
+                                    <p>Filtro activo</p>
+                                    <div *ngFor="let i of [1,2,3,4,5]" class="option">
+                                      <span>Orden alfabético</span>
+                                      <span></span>
+                                    </div>
+                                  </div>
+                                </ng-template>
+                              </p-overlayPanel>
+                            </div>
+                            <button class="btn phase_evaluation_btn action"><span
+                              class="d-none d-sm-inline mr-2">Evaluar fase</span></button>
+                            <button class="btn lesson_day_btn action"><span
+                              class="d-none d-sm-inline mr-2">Dia de lesion</span></button>
+                        </div>
+                        <p-table [value]="players" selectionMode="single">
+                            <ng-template pTemplate="header">
+                              <tr class="text-center">
+                                <th class="text-left">Fecha</th>
+                                <th class="text-center">Dia de lesion</th>
+                                <th class="text-center">Duracion</th>
+                                <!-- <th class="text-center">Zona de lesión</th> -->
+                                <th class="text-center">RPE</th>
+                                <th class="text-center">Acciones</th>
+                              </tr>
+                            </ng-template>
+                            <ng-template let-player pTemplate="body">
+                              <tr>
+                                <td class="">{{player.lessonDay}}</td>
+                                <td class="text-center">{{player.lessonType}}</td>
+                                <td class="text-center">{{player.lessonDay}}</td>
+                                <td class="text-center">{{player.historyRFD}}</td>  
+                                <td class="actions_column">
+                                    <button class="btn"><img src="assets/img/icons/ver.svg" class="" width="18"/></button>
+                                    <button class="btn"><img src="assets/img/icons/eliminar.svg" class="" width="18"/></button>
+                                </td>
+                                <!-- <td class="text-center">8</td> -->
+                              </tr>
+                            </ng-template>
+                            <ng-template pTemplate="emptymessage">
+                              <tr>
+                                <td colspan="5" style="text-align: center;">
+                                  <!-- {{'LBL_SINREGISTROS' | translate}} -->
+                                  Sin registros
+                                </td>
+                              </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- <div>
+            <ul class="step_markers full_markers">
+                <li>
+                    <span class="step_marker" (click)="step= 1" [ngClass]="{'active' : step==1}"></span>
+                </li>
+                <li>
+                    <span class="step_marker" [ngClass]="{'active' : step==2}"></span>
+                </li>
+            </ul>
+        </div> -->
+    </div>
+    <p-footer>
+        <div class="footer_btns">
+        <button class="btn back_btn" (click)="closeDialog()">{{'LBL_ATRAS'| translate}}</button>
+        <button class="btn next_btn" (click)="closeDialog()">Finalizar</button>
+        </div>
+    </p-footer>
+</p-dialog>

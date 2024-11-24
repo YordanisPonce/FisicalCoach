@@ -1,0 +1,716 @@
+<!-- football -->
+<div
+  class="plus-button mx-3"
+  (click)="
+    !isDisabled &&
+      selectActionFromBoard(
+        matchInfo.match_situation,
+        'goal',
+        'rival_goal',
+        position
+      )
+  "
+  pTooltip="{{
+    getSportActionName(
+      matchInfo.match_situation,
+      position,
+      'teamGoal',
+      'rivalGoal'
+    ) | translate
+  }}
+  "
+  *ngIf="scoreSports.includes(sportCode) && !isFooterAction"
+>
+  <span>+</span>
+</div>
+
+<!-- volleyball -->
+<div
+  class="plus-button mx-3"
+  (click)="
+    !isDisabled &&
+      selectActionFromBoard(
+        matchInfo.match_situation,
+        'points',
+        'rival_points',
+        position
+      )
+  "
+  pTooltip="{{
+    getSportActionName(
+      matchInfo.match_situation,
+      position,
+      'point',
+      'rivalPoint'
+    ) | translate
+  }}
+  "
+  *ngIf="volleyballScore.includes(sportCode) && !isFooterAction"
+>
+  <span>+</span>
+</div>
+
+<!-- basketball -->
+<div
+  class="d-flex flex-column justify-content-center"
+  *ngIf="sportCode === 'basketball' && !isFooterAction"
+>
+  <div
+    class="plus-button mx-3 mb-3"
+    (click)="
+      !isDisabled &&
+        selectActionFromBoard(
+          matchInfo.match_situation,
+          'free_throws_scored',
+          'rival_free_throws',
+          position
+        )
+    "
+    pTooltip="{{
+      getSportActionName(
+        matchInfo.match_situation,
+        position,
+        'free_throws_scored',
+        'rival_free_throws'
+      ) | translate
+    }}
+  "
+  >
+    <span>+1</span>
+  </div>
+
+  <div
+    class="plus-button mx-3 mb-3"
+    (click)="
+      !isDisabled &&
+        selectActionFromBoard(
+          matchInfo.match_situation,
+          'two_points_shot_scored',
+          'rival_two_point_shot',
+          position
+        )
+    "
+    pTooltip="{{
+      getSportActionName(
+        matchInfo.match_situation,
+        position,
+        'two_points_shot_scored',
+        'rival_two_point_shot'
+      ) | translate
+    }}
+  "
+  >
+    <span>+2</span>
+  </div>
+
+  <div
+    class="plus-button mx-3"
+    (click)="
+      !isDisabled &&
+        selectActionFromBoard(
+          matchInfo.match_situation,
+          'three_point_shot_scored',
+          'rival_three_point_shot',
+          position
+        )
+    "
+    pTooltip="{{
+      getSportActionName(
+        matchInfo.match_situation,
+        position,
+        'three_point_shot_scored',
+        'rival_three_point_shot'
+      ) | translate
+    }}
+  "
+  >
+    <span>+3</span>
+  </div>
+</div>
+
+<!-- cricket -->
+<div
+  class="d-flex flex-column justify-content-center"
+  *ngIf="sportCode === 'cricket' && !isFooterAction"
+>
+  <div
+    class="plus-button mx-3 mb-3"
+    (click)="
+      !isDisabled &&
+        selectActionFromBoard(
+          matchInfo.match_situation,
+          'own_runs',
+          'rival_own_runs',
+          position
+        )
+    "
+    pTooltip="{{
+      getSportActionName(
+        matchInfo.match_situation,
+        position,
+        'own_runs',
+        'rival_own_runs'
+      ) | translate
+    }}
+  "
+  >
+    <span>+1</span>
+  </div>
+
+  <div
+    class="plus-button mx-3 mb-3"
+    (click)="
+      !isDisabled &&
+        selectActionFromBoard(
+          matchInfo.match_situation,
+          'four_points',
+          'rival_four_points',
+          position
+        )
+    "
+    pTooltip="{{
+      getSportActionName(
+        matchInfo.match_situation,
+        position,
+        'four_points',
+        'rival_four_points'
+      ) | translate
+    }}
+  "
+  >
+    <span>+4</span>
+  </div>
+
+  <div
+    class="plus-button mx-3"
+    (click)="
+      !isDisabled &&
+        selectActionFromBoard(
+          matchInfo.match_situation,
+          'six_points',
+          'rival_six_points',
+          position
+        )
+    "
+    pTooltip="{{
+      getSportActionName(
+        matchInfo.match_situation,
+        position,
+        'six_points',
+        'rival_six_points'
+      ) | translate
+    }}
+  "
+  >
+    <span>+6</span>
+  </div>
+</div>
+
+<!-- american soccer -->
+<div
+  class="d-flex flex-column justify-content-center"
+  *ngIf="sportCode === 'american_soccer' && !isFooterAction"
+>
+  <div
+    class="plus-button mx-3 mb-3"
+    (click)="
+      !isDisabled &&
+        selectActionFromBoard(
+          matchInfo.match_situation,
+          'extra_points',
+          'rival_extra_points',
+          position
+        )
+    "
+    pTooltip="{{
+      getSportActionName(
+        matchInfo.match_situation,
+        position,
+        'extra_points',
+        'rival_extra_points'
+      ) | translate
+    }}
+  "
+  >
+    <span>+1</span>
+  </div>
+
+  <div
+    class="plus-button mx-3 mb-3"
+    (click)="
+      !isDisabled &&
+        selectActionFromBoard(
+          matchInfo.match_situation,
+          'conversions_2p',
+          'rival_conversions_2p',
+          position
+        )
+    "
+    pTooltip="{{
+      getSportActionName(
+        matchInfo.match_situation,
+        position,
+        'conversions_2p',
+        'rival_conversions_2p'
+      ) | translate
+    }}
+  "
+  >
+    <span>+2</span>
+  </div>
+
+  <div
+    class="plus-button mx-3 mb-3"
+    (click)="
+      !isDisabled &&
+        selectActionFromBoard(
+          matchInfo.match_situation,
+          'field_goal',
+          'rival_field_goal',
+          position
+        )
+    "
+    pTooltip="{{
+      getSportActionName(
+        matchInfo.match_situation,
+        position,
+        'field_goal',
+        'rival_field_goal'
+      ) | translate
+    }}
+  "
+  >
+    <span>+3</span>
+  </div>
+
+  <div
+    class="plus-button mx-3"
+    (click)="
+      !isDisabled &&
+        selectActionFromBoard(
+          matchInfo.match_situation,
+          'touchdowns',
+          'rival_touchdowns',
+          position
+        )
+    "
+    pTooltip="{{
+      getSportActionName(
+        matchInfo.match_situation,
+        position,
+        'touchdowns',
+        'rival_touchdowns'
+      ) | translate
+    }}
+"
+  >
+    <span>+6</span>
+  </div>
+</div>
+
+<!-- rugby -->
+<div
+  class="d-flex flex-column justify-content-center"
+  *ngIf="sportCode === 'rugby' && !isFooterAction"
+>
+  <div
+    class="plus-button mx-3 mb-3"
+    (click)="
+      !isDisabled &&
+        selectActionFromBoard(
+          matchInfo.match_situation,
+          'conversions',
+          'conversions_rival',
+          position
+        )
+    "
+    pTooltip="{{
+      getSportActionName(
+        matchInfo.match_situation,
+        position,
+        'conversion_rugby',
+        'conversions_rival'
+      ) | translate
+    }}
+  "
+  >
+    <span>+2</span>
+  </div>
+
+  <div
+    class="plus-button mx-3 mb-3"
+    (click)="
+      !isDisabled &&
+        selectActionFromBoard(
+          matchInfo.match_situation,
+          'drops_goal',
+          'drops_rival',
+          position
+        )
+    "
+    pTooltip="{{
+      getSportActionName(
+        matchInfo.match_situation,
+        position,
+        'drops_goal',
+        'drops_rival'
+      ) | translate
+    }}
+  "
+  >
+    <span>+3</span>
+  </div>
+
+  <div
+    class="plus-button mx-3 mb-3"
+    (click)="
+      !isDisabled &&
+        selectActionFromBoard(
+          matchInfo.match_situation,
+          'tries',
+          'rival_tries',
+          position
+        )
+    "
+    pTooltip="{{
+      getSportActionName(
+        matchInfo.match_situation,
+        position,
+        'tries',
+        'rival_tries'
+      ) | translate
+    }}
+  "
+  >
+    <span>+5</span>
+  </div>
+</div>
+
+<!-- Footer Actions -->
+
+<div *ngIf="isFooterAction && sportsWithFault.includes(sportCode)">
+  <div
+    class="text-center text-white mt-2"
+    *ngIf="sportCode === 'indoor_soccer'"
+  >
+    <span style="font-size: 18px !important">Faltas cometidas</span>
+  </div>
+  <div class="d-flex justify-content-center mt-4">
+    <div
+      class="plus-button mb-3"
+      (click)="
+        !isDisabled &&
+          selectActionFromBoard(
+            matchInfo.match_situation,
+            'fouls_committed',
+            'fouls_received',
+            'local'
+          )
+      "
+      pTooltip="{{
+        getSportActionName(
+          matchInfo.match_situation,
+          'local',
+          'fouls_committed',
+          'fouls_received'
+        ) | translate
+      }}
+    "
+    >
+      <span>+</span>
+    </div>
+
+    <div class="mx-3 text-white">
+      <span>{{
+        getFaults(
+          matchInfo.match_situation,
+          "local",
+          results.fouls_committed.value,
+          results.fouls_received.value
+        )
+      }}</span>
+      <span class="mx-1">x</span>
+      <span>{{
+        getFaults(
+          matchInfo.match_situation,
+          "visitor",
+          results.fouls_committed.value,
+          results.fouls_received.value
+        )
+      }}</span>
+    </div>
+
+    <div
+      class="plus-button mb-3"
+      (click)="
+        !isDisabled &&
+          selectActionFromBoard(
+            matchInfo.match_situation,
+            'fouls_committed',
+            'fouls_received',
+            'visitor'
+          )
+      "
+      pTooltip="{{
+        getSportActionName(
+          matchInfo.match_situation,
+          'visitor',
+          'fouls_committed',
+          'fouls_received'
+        ) | translate
+      }}
+    "
+    >
+      <span>+</span>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="isFooterAction && sportCode === 'basketball'">
+  <div class="text-center text-white mt-2">
+    <span style="font-size: 18px !important">Faltas cometidas</span>
+  </div>
+
+  <div class="d-flex justify-content-center mt-4">
+    <div
+      class="plus-button mb-3"
+      (click)="
+        !isDisabled &&
+          selectActionFromBoard(
+            matchInfo.match_situation,
+            'fouls',
+            'rival_fouls',
+            'local'
+          )
+      "
+      pTooltip="{{
+        getSportActionName(
+          matchInfo.match_situation,
+          'local',
+          'fouls',
+          'rival_fouls'
+        ) | translate
+      }}
+    "
+    >
+      <span>+</span>
+    </div>
+
+    <div class="mx-3 text-white">
+      <span>{{
+        getFaults(
+          matchInfo.match_situation,
+          "local",
+          results.total_fouls.value,
+          results.total_fouls_rival.value
+        )
+      }}</span>
+      <span class="mx-1">x</span>
+      <span>{{
+        getFaults(
+          matchInfo.match_situation,
+          "visitor",
+          results.total_fouls.value,
+          results.total_fouls_rival.value
+        )
+      }}</span>
+    </div>
+
+    <div
+      class="plus-button mb-3"
+      (click)="
+        !isDisabled &&
+          selectActionFromBoard(
+            matchInfo.match_situation,
+            'fouls',
+            'rival_fouls',
+            'visitor'
+          )
+      "
+      pTooltip="{{
+        getSportActionName(
+          matchInfo.match_situation,
+          'visitor',
+          'fouls',
+          'rival_fouls'
+        ) | translate
+      }}
+    "
+    >
+      <span>+</span>
+    </div>
+  </div>
+</div>
+
+<!-- cricket -->
+
+<div class="mt-4" *ngIf="isFooterAction && sportCode === 'cricket'">
+  <div class="d-flex align-items-center justify-content-around mt-3">
+    <div>
+      <div class="text-center mb-3 text-white">
+        <span>Wickets</span>
+      </div>
+
+      <div class="d-flex justify-content-center">
+        <div
+          class="plus-button mb-3"
+          (click)="
+            !isDisabled &&
+              selectActionFromBoard(
+                matchInfo.match_situation,
+                'own_wickets',
+                'hit_wicket',
+                'local'
+              )
+          "
+          pTooltip="{{
+            getSportActionName(
+              matchInfo.match_situation,
+              'local',
+              'own_wickets',
+              'hit_wicket'
+            ) | translate
+          }}
+      "
+        >
+          <span>+</span>
+        </div>
+
+        <div class="mx-3 text-white">
+          <span>{{
+            getFaults(
+              matchInfo.match_situation,
+              "local",
+              results.own_wickets.value,
+              results.hit_wicket.value
+            )
+          }}</span>
+          <span class="mx-1">x</span>
+          <span>{{
+            getFaults(
+              matchInfo.match_situation,
+              "visitor",
+              results.own_wickets.value,
+              results.hit_wicket.value
+            )
+          }}</span>
+        </div>
+
+        <div
+          class="plus-button mb-3"
+          (click)="
+            !isDisabled &&
+              selectActionFromBoard(
+                matchInfo.match_situation,
+                'own_wickets',
+                'hit_wicket',
+                'visitor'
+              )
+          "
+          pTooltip="{{
+            getSportActionName(
+              matchInfo.match_situation,
+              'visitor',
+              'own_wickets',
+              'hit_wicket'
+            ) | translate
+          }}
+      "
+        >
+          <span>+</span>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="text-center mb-3 text-white">
+        <span>Batsman outs</span>
+      </div>
+      <div class="d-flex justify-content-center">
+        <div
+          class="plus-button mb-3"
+          (click)="
+            !isDisabled &&
+              selectActionFromBoard(
+                matchInfo.match_situation,
+                'outs',
+                'rival_outs',
+                'local'
+              )
+          "
+          pTooltip="{{
+            getSportActionName(
+              matchInfo.match_situation,
+              'local',
+              'outs',
+              'rival_outs'
+            ) | translate
+          }}
+      "
+        >
+          <span>+</span>
+        </div>
+
+        <div class="mx-3 text-white">
+          <span>{{
+            getFaults(
+              matchInfo.match_situation,
+              "local",
+              results.outs.value,
+              results.rival_outs.value
+            )
+          }}</span>
+          <span class="mx-1">x</span>
+          <span>{{
+            getFaults(
+              matchInfo.match_situation,
+              "visitor",
+              results.outs.value,
+              results.rival_outs.value
+            )
+          }}</span>
+        </div>
+
+        <div
+          class="plus-button mb-3"
+          (click)="
+            !isDisabled &&
+              selectActionFromBoard(
+                matchInfo.match_situation,
+                'outs',
+                'rival_outs',
+                'visitor'
+              )
+          "
+          pTooltip="{{
+            getSportActionName(
+              matchInfo.match_situation,
+              'visitor',
+              'outs',
+              'rival_outs'
+            ) | translate
+          }}
+      "
+        >
+          <span>+</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- American soccer -->
+
+<div *ngIf="isFooterAction && sportCode === 'american_soccer'">
+  <div class="d-flex align-items-center justify-content-around text-white mt-4">
+    <div>
+      <span> {{ "scouting.customActions.total_yards_won" | translate }}:</span>
+      <strong> {{ results?.total_yards_won.value }} </strong>
+    </div>
+
+    <div>
+      <span> {{ "scouting.customActions.total_yards_lost" | translate }}:</span>
+      <strong> {{ results?.total_yards_lost.value }} </strong>
+    </div>
+  </div>
+</div>

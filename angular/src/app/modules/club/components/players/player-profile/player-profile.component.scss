@@ -1,0 +1,64 @@
+:host ::ng-deep {
+  .arrow-back {
+    margin-top: -100px;
+
+    @media screen and (max-width: 600px) {
+      margin-top: -75px;
+    }
+  }
+}
+
+:host ::ng-deep .p-tabmenu {
+  overflow-x: hidden;
+
+  .p-tabmenu-nav {
+    .p-menuitem-text {
+      display: flex;
+      align-items: center;
+      color: #050c44;
+    }
+
+    .p-tabmenuitem {
+      flex: 1 1 50%;
+      justify-content: center;
+      @media screen and (max-width: 767px) {
+        margin-left: 2rem;
+      }
+      .p-menuitem-link {
+        height: 50px;
+        justify-content: center;
+        width: 195px;
+        opacity: 0.35;
+        border-width: 0 0 3px 0;
+        img {
+          margin-right: 0.75rem !important;
+        }
+      }
+      .p-menuitem-link:not(.p-disabled):focus {
+        box-shadow: unset;
+      }
+    }
+    .p-tabmenuitem.p-highlight .p-menuitem-link {
+      border-color: #024cac;
+      opacity: 1;
+    }
+    .p-tabmenuitem.p-highlight .p-menuitem-link-active {
+      color: #080c44 !important;
+    }
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  :host ::ng-deep .p-tabmenu {
+    .p-tabmenu-nav {
+      // height: 100px;
+      .p-tabmenuitem {
+        flex: 1;
+
+        .p-menuitem-link {
+          height: 80px;
+        }
+      }
+    }
+  }
+}

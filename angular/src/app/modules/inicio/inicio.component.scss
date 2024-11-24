@@ -1,0 +1,77 @@
+:host {
+  display: block;
+  height: calc(100% - 80px);
+  ::ng-deep {
+    #wrapper {
+      overflow-x: hidden;
+      background-color: #f9f9f9;
+    }
+    .secondary_sidebar_active {
+      left: 70px !important;
+    }
+    #page-content-wrapper {
+      min-width: 0;
+      width: 100%;
+      padding: 0;
+    }
+    .color {
+      background-color: white;
+      flex-grow: 1;
+    }
+    .custom-marker {
+      display: flex;
+      width: 2rem;
+      height: 2rem;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      border-radius: 50%;
+      z-index: 1;
+    }
+    .p-timeline-event-content,
+    .p-timeline-event-opposite {
+      line-height: 1;
+    }
+    .p-tabview {
+      .p-tabview-panels {
+        padding: 0;
+        .p-datatable-thead {
+          tr th {
+            background-color: transparent;
+          }
+        }
+      }
+    }
+  }
+}
+@media (min-width: 1200px) {
+  :host {
+    height: 100% !important;
+    ::ng-deep {
+      #page-content-wrapper {
+        padding: 10px 10px 10px 310px;
+      }
+    }
+  }
+}
+@media screen and (max-width: 960px) {
+  ::ng-deep {
+    .customized-timeline {
+      .p-timeline-event:nth-child(even) {
+        flex-direction: row !important;
+
+        .p-timeline-event-content {
+          text-align: left !important;
+        }
+      }
+
+      .p-timeline-event-opposite {
+        flex: 0;
+      }
+
+      .p-card {
+        margin-top: 1rem;
+      }
+    }
+  }
+}

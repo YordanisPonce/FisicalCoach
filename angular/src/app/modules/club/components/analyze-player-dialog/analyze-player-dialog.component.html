@@ -1,0 +1,67 @@
+<p-dialog
+  (onHide)="closeDialog(false)"
+  [(visible)]="visible"
+  [header]="''"
+  [modal]="true"
+  class="custom_dialog"
+  id="analyze_player_dialog"
+  maskStyleClass="purple_mask"
+  styleClass=""
+>
+  <ng-template pTemplate="header">
+    <div class="d-flex header_content p-dialog-title">
+      <span>{{ "PLAYERS.CAPACHABILI" | translate }} +</span>
+    </div>
+  </ng-template>
+  <div class="dialog_container" id="analyze_player_dialog_container">
+    <div class="row">
+      <div class="col-12">
+        <div *ngIf="options.length > 0">
+          <div *ngFor="let option of options" class="hability">
+            <div class="hability_info">
+              <div class="icon">
+                <img alt="" src="{{ urlBase + option.image.url }}" />
+              </div>
+              <div class="info">
+                <span class="title">{{ option.name }}</span>
+              </div>
+            </div>
+            <div class="hability_selectors">
+              <p-selectButton
+                (onOptionClick)="setPuntuations(option, $event.option)"
+                [(ngModel)]="option.puntuation"
+                [options]="option.puntuations"
+              >
+                <ng-template let-item pTemplate>
+                  <span>{{ item.name }}</span>
+                </ng-template>
+              </p-selectButton>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p-footer>
+    <div class="footer_btns">
+      <button
+        (click)="closeDialog(false)"
+        class="btn back_btn p-button-outlined"
+        label="{{ 'LBL_ATRAS' | translate }}"
+        pButton
+        pTooltip="{{ 'LBL_ATRAS' | translate }}"
+        tooltipPosition="top"
+      ></button>
+      <button
+        (click)="saveAssessment()"
+        [disabled]="validateDisabled()"
+        [loading]="saving"
+        class="btn next_btn"
+        label="{{ 'LBL_GUARDAR' | translate }}"
+        pButton
+        pTooltip="{{ 'LBL_GUARDAR' | translate }}"
+        tooltipPosition="top"
+      ></button>
+    </div>
+  </p-footer>
+</p-dialog>

@@ -1,0 +1,72 @@
+:host ::ng-deep {
+  .p-dialog {
+    @media screen and (max-width: 1010px) {
+      margin-left: 10px;
+      margin-right: 10px;
+    }
+    width: 1000px;
+    max-width: 1000px !important;
+    .p-dialog-header {
+      border-bottom: 1px solid #050c4433;
+    }
+    .p-dialog-content {
+      padding: 2rem !important;
+    }
+    .p-dialog-footer {
+      button {
+        flex: 0 175px !important;
+        padding: 1rem;
+      }
+      .add_btn {
+        background-color: #024cac;
+        color: white;
+        font-size: 0.9rem;
+      }
+    }
+    .p-selectbutton {
+      display: flex;
+      flex-wrap: wrap;
+      @media screen and (max-width: 400px) {
+        flex-direction: column;
+      }
+      .p-button {
+        @media screen and (max-width: 414px) {
+          display: grid;
+          place-items: center;
+        }
+        &.p-highlight {
+          background: #050c44;
+          border-color: #050c44;
+          .player_name {
+            color: white;
+          }
+        }
+        &.p-highlight:hover {
+          background: #050c44;
+          border-color: #050c44;
+          .player_name {
+            color: white;
+          }
+        }
+        flex: 0 31%;
+        margin: 1%;
+        border-radius: 27px !important;
+        border: 1px solid #050c4426;
+        display: flex;
+        justify-content: center;
+        padding: 0.5rem 1rem;
+        // flex-direction: column;
+        // justify-content: center;
+        .player_image {
+          margin-right: 0.75rem;
+          border-radius: 50%;
+        }
+        .player_name {
+          font-size: 0.9rem;
+          font-weight: 600;
+          color: #050c44;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,11 @@
+.google_btn {
+  height: 45px;
+  font-size: 0.9rem;
+  color: #fff;
+  font-weight: 600;
+  border: 0;
+
+  @media screen and (max-width: 500px) {
+    color: #050c44;
+  }
+}

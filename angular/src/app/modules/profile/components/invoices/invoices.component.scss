@@ -1,0 +1,104 @@
+.wrapper {
+  min-height: 500px;
+
+  label {
+    font-size: 0.9rem;
+  }
+
+  input {
+    height: 45px;
+  }
+  .submit-button {
+    width: 170px;
+    height: 45px;
+  }
+
+  .close-btn {
+    width: 140px;
+    height: 45px;
+  }
+
+  .suscription_level {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 16px;
+    width: 350px;
+    box-shadow: 0 3px 28px #0000001c;
+
+    .suscription_level_content {
+      display: flex;
+      flex-direction: column;
+      border-radius: 16px 16px 0 0;
+      padding: 25px 30px;
+      border-bottom: 1px solid lightgray;
+      width: 100%;
+    }
+
+    .suscription {
+      color: rgba($color: #050c44, $alpha: 0.79);
+      font-weight: 600;
+      margin: 0.25rem 0;
+    }
+
+    .renewal {
+      color: rgba($color: #050c44, $alpha: 0.43);
+      font-weight: 500;
+    }
+  }
+
+  .sport_plan {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 1.5rem;
+
+    .icon {
+      width: 125px;
+      height: 125px;
+      border-radius: 50%;
+      border: 1px solid #050c44;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      img {
+        width: 60px;
+      }
+    }
+
+    .title {
+      color: #000000;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .description {
+      color: rgba($color: #050717, $alpha: 0.61);
+      font-weight: 600;
+      text-align: center;
+      line-height: 2;
+    }
+
+    .actualizar_pack_btn {
+      height: 40px;
+      border-radius: 13px;
+      background-color: #024cac;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: white;
+      padding: 0 5rem;
+    }
+  }
+}
+.nodata {
+  font-size: 0.9rem !important;
+  color: #8b8ea9 !important;
+  font-weight: 600 !important;
+}
+.space_billing{
+  width: 100px;
+}

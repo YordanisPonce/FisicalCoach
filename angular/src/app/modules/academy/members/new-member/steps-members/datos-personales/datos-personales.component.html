@@ -1,0 +1,279 @@
+<form
+  *ngIf="formMember"
+  (ngSubmit)="onSubmit()"
+  [formGroup]="formMember"
+  id="idFormMember"
+  name="nomForm"
+>
+  <div class="row" [ngClass]="{ '': getScreenWidth() >= 768 }">
+    <!-- jobs_area_id || teacher_area_id -->
+    <div class="mb-3 col-md-6" *ngIf="member!='teacher'">
+      <label for="job_area">{{ "MEMBERS.LBL_AREA" | translate }} *</label>
+      <div>
+        <p-dropdown
+          [filter]="true"
+          [options]="listJobArea"
+          aria-describedby="inputGroup-sizing-default"
+          formControlName="jobs_area_id"
+          id="job_area"
+          optionLabel="name"
+          optionValue="id"
+          [disabled]="view"
+          [ngClass]="{'ng-invalid ng-dirty is-invalid':((f.jobs_area_id.invalid && (f.jobs_area_id.dirty || f.jobs_area_id.touched)) || (f.jobs_area_id.invalid && submitted))}" 
+          [styleClass]="'w-100 form-control'"
+          placeholder="{{ 'LBL_SELECCIONE' | translate }}"
+          (onChange)="setResponsabilityItems()"
+        >
+        </p-dropdown>
+        <div
+          *ngIf="f.jobs_area_id?.errors"
+          class="invalid-feedback"
+        >
+          {{ "MEMBERS.LBL_AREA" | translate }} {{ "LBL_REQUERIDO" | translate }}
+        </div>
+      </div>
+    </div>
+    <div class="mb-3 col-md-6" *ngIf="member=='teacher'">
+      <label for="job_area">{{ "MEMBERS.LBL_AREA" | translate }} *</label>
+      <div>
+        <p-dropdown
+          [filter]="true"
+          [options]="listJobArea"
+          aria-describedby="inputGroup-sizing-default"
+          formControlName="teacher_area_id"
+          id="job_area"
+          optionLabel="name"
+          optionValue="id"
+          [disabled]="view"
+          [ngClass]="{'ng-invalid ng-dirty is-invalid':((f.teacher_area_id.invalid && (f.teacher_area_id.dirty || f.teacher_area_id.touched)) || (f.teacher_area_id.invalid && submitted))}" 
+          [styleClass]="'w-100 form-control'"
+          placeholder="{{ 'LBL_SELECCIONE' | translate }}"
+          (onChange)="setResponsabilityItems()"
+        >
+        </p-dropdown>
+        <div
+          *ngIf="f.teacher_area_id?.errors"
+          class="invalid-feedback"
+        >
+          {{ "MEMBERS.LBL_AREA" | translate }} {{ "LBL_REQUERIDO" | translate }}
+        </div>
+      </div>
+    </div>
+    <!-- cargo -->
+    <div class="mb-3 col-md-6" *ngIf="member!='teacher'">
+      <label for="responsibility"
+        >{{ "MEMBERS.LBL_CARGORESPOSABILIDAD" | translate }} *</label
+      >
+      <p-dropdown
+      [filter]="true"
+      [options]="responsabilityItems"
+      aria-describedby="inputGroup-sizing-default"
+      id="job_area"
+      optionLabel="name"
+      [ngModelOptions]="{ standalone: true }"
+      [(ngModel)]="selectedResponsability" 
+      [disabled]="view || responsabilityItems.length==0"
+      [ngClass]="{'ng-invalid ng-dirty is-invalid':((f.position_staff_id.invalid && (f.position_staff_id.dirty || f.position_staff_id.touched)) || (f.position_staff_id.invalid && submitted))}" 
+      [styleClass]="'w-100 form-control'"
+      placeholder="{{ 'LBL_SELECCIONE' | translate }}"
+      (onChange)="setResponsabilityValue()"
+    >
+    </p-dropdown>
+      <div
+      *ngIf="f.position_staff_id?.errors"
+      class="invalid-feedback"
+      >
+        {{ "MEMBERS.LBL_CARGORESPOSABILIDAD" | translate }}
+        {{ "LBL_REQUERIDO" | translate }}
+      </div>
+    </div>
+    <!-- otro cargo -->
+    <div class="mb-3 col-md-6" *ngIf="(selectedResponsability !=null && selectedResponsability.code.includes('other')) || member == 'teacher'">
+      <label for="responsibility"
+        >{{ "MEMBERS.LBL_CARGORESPOSABILIDAD" | translate }} *</label
+      >
+      <input
+        class="form-control"
+        id="responsibility"
+        [placeholder]="('LBL_ESCRIBEAQI' | translate)"
+        sin-numeros-reactive
+        [ngClass]="{'ng-invalid ng-dirty is-invalid':((f.responsibility.invalid && (f.responsibility.dirty || f.responsibility.touched)) || (f.responsibility.invalid && submitted))}"
+        formControlName="responsibility"
+        [readOnly]="view"
+        aria-label="Default"
+        aria-describedby="inputGroup-sizing-default"
+      />
+      <div
+      *ngIf="f.responsibility?.errors"
+      class="invalid-feedback"
+      >
+        {{ "MEMBERS.LBL_CARGORESPOSABILIDAD" | translate }}
+        {{ "LBL_REQUERIDO" | translate }}
+      </div>
+    </div>
+    <!-- foto -->
+    <div class="mb-3 col-md-6">
+      <label for="name">{{ "MEMBERS.LBL_FOTO" | translate }}</label>
+      <input
+        type="file"
+        (change)="fileUpload($event)"
+        hidden
+        #file
+        id="filedata"
+        accept="image/*"
+      />
+      <button
+        type="button"
+        (click)="file.click()"
+        class="btn btn-block file_btn"
+      >
+        <i class="fa fa-camera text-white mr-3"></i>
+        {{ "MEMBERS.LBL_FOTO" | translate }}
+      </button>
+      <div *ngIf="dataUploadArchivo" class="form-text text-info">
+        {{ "MEMBERS.LBL_FOTO" | translate }}
+      </div>
+    </div>
+    <!-- nombre -->
+    <div class="mb-3 col-md-6" *ngIf="member!='teacher'">
+      <label for="name">{{ "MEMBERS.LBL_NOMBRE" | translate }} *</label>
+      <input
+        class="form-control"
+        id="name"
+        [placeholder]="('LBL_ESCRIBEAQI' | translate)"
+        formControlName="full_name"
+        [readOnly]="view"
+        sin-numeros-reactive
+        [ngClass]="{'ng-invalid ng-dirty is-invalid':((f.full_name.invalid && (f.full_name.dirty || f.full_name.touched)) || (f.full_name.invalid && submitted))}" 
+        aria-label="Default"
+        aria-describedby="inputGroup-sizing-default"
+      />
+      <div
+      *ngIf="f.full_name?.errors"
+      class="invalid-feedback"
+      >
+        {{ "MEMBERS.LBL_NOMBRE" | translate }} {{ "LBL_REQUERIDO" | translate }}
+      </div>
+    </div>
+    <div class="mb-3 col-md-6" *ngIf="member=='teacher'">
+      <label for="name">{{ "MEMBERS.LBL_NOMBRE" | translate }} *</label>
+      <input
+        class="form-control"
+        id="name"
+        [placeholder]="('LBL_ESCRIBEAQI' | translate)"
+        formControlName="name"
+        [readOnly]="view"
+        sin-numeros-reactive
+        [ngClass]="{'ng-invalid ng-dirty is-invalid':((f.name.invalid && (f.name.dirty || f.name.touched)) || (f.name.invalid && submitted))}" 
+        aria-label="Default"
+        aria-describedby="inputGroup-sizing-default"
+      />
+      <div
+      *ngIf="f.name?.errors"
+      class="invalid-feedback"
+      >
+        {{ "MEMBERS.LBL_NOMBRE" | translate }} {{ "LBL_REQUERIDO" | translate }}
+      </div>
+    </div>
+    <!-- sexo -->
+    <div class="mb-3 col-md-6">
+      <label for="gender">{{ "MEMBERS.LBL_SEXO" | translate }} *</label>
+      <p-dropdown
+        [filter]="false"
+        [options]="listGender"
+        aria-describedby="inputGroup-sizing-default"
+        [styleClass]="'w-100 form-control'"
+        [disabled]="view"
+        formControlName="gender_id"
+        id="gender"
+        [ngClass]="{'ng-invalid ng-dirty is-invalid':((f.gender_id.invalid && (f.gender_id.dirty || f.gender_id.touched)) || (f.gender_id.invalid && submitted))}" 
+        placeholder="{{ 'LBL_SELECCIONE' | translate }}"
+      ></p-dropdown>
+      <div
+      *ngIf="f.gender_id?.errors"
+      class="invalid-feedback"
+      >
+        {{ "MEMBERS.LBL_SEXO" | translate }} {{ "LBL_REQUERIDO" | translate }}
+      </div>
+    </div>
+    <!-- pseudonimo -->
+    <div class="mb-3 col-md-6">
+      <label for="seudonimo">{{ "MEMBERS.LBL_SEUDONIMO" | translate }}</label>
+      <input
+        class="form-control"
+        id="seudonimo"
+        [placeholder]="
+          ('LBL_ESCRIBEAQI' | translate)"
+        formControlName="username"
+        [readOnly]="view"
+        [ngClass]="{ 'ng-invalid ng-dirty': submitted && f.username.invalid }"
+        aria-label="Default"
+        aria-describedby="inputGroup-sizing-default"
+      />
+      <div *ngIf="submitted && f.username.invalid" class="form-text text-danger">
+        {{ "MEMBERS.LBL_SEUDONIMO" | translate }}
+        {{ "LBL_REQUERIDO" | translate }}
+      </div>
+    </div>
+    <!-- fecha de nacimiento -->
+    <div class="mb-3 col-md-6">
+      <label>{{ "MEMBERS.LBL_FECHANAC" | translate }} *</label>
+      <p-calendar
+        [readonlyInput]="true"
+        [monthNavigator]="true"
+        [yearNavigator]="true"
+        [yearRange]="yearRange"
+        [style]="{ overflow: 'visible' }"
+        class="p-calendar form-control"
+        dateFormat="dd/mm/yy"
+        formControlName="birth_date"
+        inputId="range"
+        [maxDate]="maxDate"
+        [disabled]="view"
+        [ngClass]="{'ng-invalid ng-dirty is-invalid':((f.birth_date.invalid && (f.birth_date.dirty || f.birth_date.touched)) || (f.birth_date.invalid && submitted))}" 
+        placeholder="{{ 'MEMBERS.LBL_FECHANAC' | translate }}"
+        [firstDayOfWeek]="1"
+      ></p-calendar>
+      <div
+      *ngIf="f.birth_date?.errors"
+      class="invalid-feedback"
+      >
+        {{ "MEMBERS.LBL_FECHANAC" | translate }}
+        {{ "LBL_REQUERIDO" | translate }}
+      </div>
+    </div>
+    <!-- nacionalidad -->
+    <div class="mb-3 col-md-6">
+      <label for="country"
+        >{{ "MEMBERS.LBL_NACIONALIDAD" | translate }} *</label
+      >
+      <p-dropdown
+        [filter]="true"
+        [options]="listCountries"
+        [styleClass]="'w-100 form-control'"
+        [disabled]="view"
+        [ngClass]="{'ng-invalid ng-dirty is-invalid':((f.country_id.invalid && (f.country_id.dirty || f.country_id.touched)) || (f.country_id.invalid && submitted))}" 
+        formControlName="country_id"
+        id="country"
+        (onChange)="handleCountry($event.value)"
+        placeholder="{{ 'LBL_SELECCIONE' | translate }}"
+      ></p-dropdown>
+      <div
+      *ngIf="f.country_id?.errors"
+      class="invalid-feedback"
+      >
+        {{ "MEMBERS.LBL_NACIONALIDAD" | translate }}
+        {{ "LBL_REQUERIDO" | translate }}
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-4">
+    <div class="col-md-8"></div>
+    <div class="col-md-4">
+      <button class="btn next_btn btn-primary btn-block" (click)="view ? nextstep.emit(true) : onSubmit()" pButton>
+        {{ "LBL_SIGUIENTE" | translate }}
+      </button>
+    </div>
+  </div>
+</form>

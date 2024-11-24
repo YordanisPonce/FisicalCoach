@@ -1,0 +1,187 @@
+<div *ngIf="step === 1" class="row no-gutters d-none d-xl-flex p-2 mb-5">
+  <div class="col-lg-3">
+    <div class="specs">
+      <table class="table">
+        <tbody>
+        <tr *ngFor="let dato of firstPackage.attributes" class="">
+          <td>{{ "package_attributes." + dato.code | translate }}</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="col-lg-9">
+    <div class="row mx-lg-n2">
+      <div *ngFor="let list of subscriptionData.subpackages" class="col px-2">
+        <div class="suscription_pack">
+          <table class="table">
+            <thead>
+            <th class="text-center">
+              <div class="suscription_pack_header">
+                  <span class="suscription_pack_caption">{{
+                     "registerPlank.packagename" | translate
+                    }}</span>
+                <span class="suscription_pack_name">{{ list.name }}</span>
+              </div>
+            </th>
+            </thead>
+            <tbody>
+            <tr *ngFor="let dato of list.attributes">
+              <td *ngIf="dato.pivot.quantity">{{ dato.pivot.quantity }}</td>
+              <td *ngIf="!dato.pivot.quantity && dato.pivot.available">
+                <img alt="" src="/assets/img/icons/awesome-check.png" width="20"/>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+          <div class="text-center suscription_pack_footer">
+            <h6 *ngIf="types === 'month'">{{ list.prices[0].month }} €</h6>
+            <h6 *ngIf="types === 'year'">{{ list.prices[0].year }} €</h6>
+            <button (click)="goToPayment(list.prices, list.name, list.id)" class="btn btn-block"
+                    pTooltip="{{ 'registerPlank.botoncuatro' | translate }}" tooltipPosition="top">
+              {{ "registerPlank.botoncuatro" | translate }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div *ngIf="step === 2" class="row pt-4 mb-5">
+  <div class="col-md-6 mb-4 mb-md-0 pack_and_payment">
+    <div class="d-flex d-md-none mb-4">
+      <div class="" id="go_back">
+        <i class="pi pi-angle-left"></i>
+      </div>
+      <span class="mx-auto text-uppercase font-weight-500">Checkout</span>
+    </div>
+    <div class="d-none d-md-block">
+      <h4>
+        <strong class="text-primary">{{ priceOne }} / {{ intervalType }}</strong><small> €</small>
+      </h4>
+      <h4 class="text-uppercase font-weight-bold mb-4" style="display: flex; justify-content: space-between;">
+        {{ title }} <img alt="" src="{{ icon }}"/>
+      </h4>
+    </div>
+
+    <div class="row">
+      <div class="col-12">
+        <div class="selected_pack d-flex mb-3">
+          <div class="selected_pack_info mr-3">
+            <div class="mb-2 mb-sm-0">
+              <p class="mb-0 font-weight-600">{{ name }}</p>
+            </div>
+            <span>{{ "registerMembership.licence" | translate }}<strong
+                  class="h4 font-weight-600">{{ posicion }}</strong></span>
+          </div>
+          <div class="border-left mr-3"></div>
+          <div class="selected_pack_controls py-3 text-center">
+            <button (click)="selectPlan(1)" class="btn border rounded-circle"
+                    pTooltip="{{'registerMembership.add'|translate}}"
+                    tooltipPosition="bottom">
+              <i class="fa fa-plus"></i>
+            </button>
+            <button (click)="selectPlan(-1)" class="btn border rounded-circle"
+                    pTooltip="{{'registerMembership.decrease'|translate}}"
+                    tooltipPosition="bottom">
+              <i class="fa fa-minus"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <hr class="mt-5 mb-4 d-none d-lg-block"/>
+    <div class="d-none d-lg-block mb-4">
+      <h4 class="mb-3">{{ "registerMembership.metodoPago" | translate }}</h4>
+      <p class="payment_method_text">
+        {{ "registerMembership.tex_info_payment" | translate }}
+      </p>
+    </div>
+    <div class="order_details d-md-none">
+      <ul class="list-group">
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          {{ "registerMembership.packprice" | translate }}
+          <span class="">{{ price | number }} </span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          {{ "registerMembership.adicionalLicence" | translate }}
+          <span class="">{{ posicion }}</span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          {{ "registerMembership.tax" | translate }}
+          <span class="">{{ tax }} %</span>
+        </li>
+      </ul>
+      <hr class=""/>
+      <ul class="list-group">
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          {{ "registerMembership.total" | translate }}
+          <span class="">{{ total }}</span>
+        </li>
+      </ul>
+    </div>
+    <div class="payment_methods mb-4">
+      <div class="d-flex align-items-center payment_method">
+        <div class="payment_method_radio text-center">
+          <input
+                aria-label="Radio button for following text input"
+                checked
+                type="radio"/>
+        </div>
+        <div class="border p-3 payment_method_image">
+          <img class="mr-3" src="assets/img/stripe.png" width="50"/><label
+              class="ml-2">{{ "registerMembership.stripe" | translate }}
+        </label>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col text-center">
+        <button (click)="showModalPayment()" class="btn pay_btn btn-primary btn-block mt-3 font-weight-600 py-2"
+                label="{{ 'registerMembership.procedepago' | translate }}" pButton pTooltip="{{ 'registerMembership.procedepago' | translate }}"
+                tooltipPosition="top" [loading]="loading">
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 order_details d-none d-md-block">
+    <div class="p-5 orden">
+      <h5>
+        <strong> {{ "registerMembership.detalleOrden" | translate }} </strong>
+      </h5>
+      <ul class="list-group">
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          {{ "registerMembership.packprice" | translate }}
+          <span class="">{{ price | number }} €</span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          {{ "registerMembership.adicionalLicence" | translate }}
+          <span class="">{{ posicion }}</span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          {{ "registerMembership.tax" | translate }}
+          <span class="">{{ tax }} %</span>
+        </li>
+      </ul>
+      <hr class=""/>
+      <ul class="list-group">
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          {{ "registerMembership.total" | translate }}
+          <span class="">{{ total }} €</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <p-dialog *ngIf="paymentDialog" [(visible)]="paymentDialog" [modal]="true" class="custom_dialog"
+            header="{{ 'registerPlank.validatecard' | translate }}" id="payment_dialog" maskStyleClass="purple_mask"
+            styleClass="">
+    <div class="dialog_container" id="payment_dialog_container">
+      <app-stripe-component [intervalType]="intervalType"
+                            [numero]="posicion"
+                            [packageId]="packageId"
+                            [userId]="userInfo.id"
+      ></app-stripe-component>
+    </div>
+  </p-dialog>
+</div>

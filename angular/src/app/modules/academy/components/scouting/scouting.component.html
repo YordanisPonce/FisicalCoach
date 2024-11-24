@@ -1,0 +1,232 @@
+<div class="row">
+  <div class="col-12">
+    <div class="card box-shadow">
+      <div class="card-body p-0">
+        <div class="scouting_header view_header">
+          <p-selectButton
+            [options]="views"
+            [(ngModel)]="selectedView"
+            (ngModelChange)="handleScoutingList($event)"
+            optionLabel="name"
+            optionValue="value"
+          >
+            <ng-template let-item pTemplate>
+              {{ "scouting." + item.name | translate }}
+            </ng-template>
+          </p-selectButton>
+
+          <span class="p-input-icon-left d-none d-md-inline buscador">
+            <i class="pi pi-search"></i>
+            <input
+              [(ngModel)]="searchMatch"
+              (keyup)="setValue($event)"
+              pInputText
+              placeholder="{{ 'competition.search' | translate }}"
+              type="text"
+            />
+          </span>
+
+          <p-treeSelect
+            [(ngModel)]="selectedFilter"
+            (ngModelChange)="handleSelectFilter()"
+            [options]="filterOptions"
+            placeholder="{{ 'LBL_FILTRAR' | translate }}"
+            class="mt-2 mt-sm-0"
+          ></p-treeSelect>
+
+          <div *ngIf="this.selectedFilter?.code">
+            <button
+              class="btn see_all_btn"
+              (click)="matchList = allMatches; selectedFilter = null"
+              pTooltip="{{ 'seeAll' | translate }}"
+            >
+              <i class="pi pi-times"></i>
+            </button>
+          </div>
+        </div>
+        <div>
+          <p-tabView [(activeIndex)]="indexMatches">
+            <p-tabPanel header="Partidos activos">
+              <div
+                class="matches"
+                *ngIf="selectedView === '' && !openHistoryInputs"
+              >
+                <ng-container *ngIf="loading">
+                  <div
+                    style="text-align: center; width: 100%; min-height: 2rem"
+                    class="p-3"
+                    class="row justify-content-between"
+                  >
+                    <div
+                      style="text-align: center; width: 20px"
+                      class="col-12 col-sm-6 col-lg-4"
+                      *ngFor="let i of [1, 2, 3]"
+                    >
+                      <div class="custom-skeleton p-4 colmn">
+                        <div
+                          class="d-flex mb-3 align-items-center justify-content-around"
+                        >
+                          <div>
+                            <p-skeleton
+                              shape="circle"
+                              size="4rem"
+                              styleClass="mr-2"
+                            ></p-skeleton>
+                          </div>
+                          <div>
+                            <p-skeleton
+                              width="3rem"
+                              styleClass="mx-2"
+                            ></p-skeleton>
+                          </div>
+                          <div>
+                            <p-skeleton
+                              shape="circle"
+                              size="4rem"
+                              styleClass="ml-2"
+                            ></p-skeleton>
+                          </div>
+                        </div>
+                        <p-skeleton width="190px" height="150px"></p-skeleton>
+                      </div>
+                    </div>
+                  </div>
+                </ng-container>
+                <div
+                  class="row px-n2 d-flex card_start"
+                  *ngIf="!loading && matchList.length > 0"
+                >
+                  <div
+                    class="col-12 col-sm-6 col-lg-4 my-2 px-2"
+                    *ngFor="let match of matchList"
+                  >
+                    <app-scouting-match-card
+                      [match]="match"
+                      (startScouting)="startScouting($event)"
+                      class="d-flex justify-content-center"
+                    >
+                      >
+                    </app-scouting-match-card>
+                  </div>
+                </div>
+
+                <div
+                  *ngIf="!loading && matchList.length === 0"
+                  class="match_empty"
+                >
+                  <span
+                    class="nodata"
+                    *ngIf="team.sport.code !== 'swimming'; else noTests"
+                    >{{ "nodata.sinpartidos" | translate }}</span
+                  >
+
+                  <ng-template #noTests>
+                    <span class="nodata">{{
+                      "nodata.noTests" | translate
+                    }}</span>
+                  </ng-template>
+                </div>
+              </div>
+
+              <div *ngIf="selectedView === 'history=1' && !openHistoryInputs">
+                <ng-container *ngIf="loading">
+                  <div
+                    style="text-align: center; min-height: 2rem"
+                    class="p-3 row"
+                    class="row justify-content-between"
+                  >
+                    <div
+                      style="text-align: center; width: 100%"
+                      class="col-12 col-sm-6 col-lg-4 my-3"
+                      *ngFor="let i of [1, 2, 3]"
+                    >
+                      <div class="d-flex align-items-center flex-column -4">
+                        <div
+                          class="d-flex mb-3 align-items-center justify-content-around"
+                        >
+                          <div>
+                            <p-skeleton
+                              shape="circle"
+                              size="4rem"
+                              styleClass="mr-2"
+                            ></p-skeleton>
+                          </div>
+                          <div>
+                            <p-skeleton
+                              width="3rem"
+                              styleClass="mx-2"
+                            ></p-skeleton>
+                          </div>
+                          <div>
+                            <p-skeleton
+                              shape="circle"
+                              size="4rem"
+                              styleClass="ml-2"
+                            ></p-skeleton>
+                          </div>
+                        </div>
+                        <p-skeleton width="190px" height="150px"></p-skeleton>
+                      </div>
+                    </div>
+                  </div>
+                </ng-container>
+                <div
+                  class="row px-2 px-sm-5"
+                  *ngIf="!loading && matchList.length > 0"
+                >
+                  <div
+                    class="col-12 col-sm-6 col-lg-4 my-2 px-2"
+                    *ngFor="let match of matchList"
+                  >
+                    <app-scouting-match-card
+                      [match]="match"
+                      class="j_center"
+                      [isHistoryView]="true"
+                      (startScouting)="
+                        $event.goToStatistics
+                          ? handleScoutingHistory($event)
+                          : startScouting($event)
+                      "
+                    >
+                    </app-scouting-match-card>
+                  </div>
+                </div>
+
+                <div
+                  *ngIf="!loading && matchList.length === 0"
+                  class="match_empty"
+                >
+                  <h6>{{ "home.notMatches" | translate }}</h6>
+                </div>
+              </div>
+
+              <div *ngIf="openHistoryInputs">
+                <app-scouting-after-match
+                  [match]="historyMatch"
+                ></app-scouting-after-match>
+              </div>
+            </p-tabPanel>
+          </p-tabView>
+        </div>
+      </div>
+    </div>
+  </div>
+  <app-scouting-dialog
+    [visible]="scoutingDialog"
+    *ngIf="scoutingDialog"
+    (close)="pauseScouting($event)"
+    [matchInfo]="selectedMatch"
+    [matchPlayers]="selectedMatch.players"
+    [scoutingStatus]="scoutingStatus"
+  ></app-scouting-dialog>
+
+  <app-confirm-scouting-dialog
+    *ngIf="openAlertDialog"
+    [visible]="openAlertDialog"
+    [matchInfo]="selectedMatch"
+    (startScouting)="startScoutingDialog($event)"
+    (refreshDialog)="refreshList()"
+    (close)="closeStartScoutingDialog()"
+    [match_id]="matchId"
+  ></app-confirm-scouting-dialog>
+</div>

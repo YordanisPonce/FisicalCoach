@@ -1,0 +1,386 @@
+:host ::ng-deep .p-overlaypanel {
+  width: 350px !important;
+  // left: 15px !important;
+
+  top: 90px !important;
+  // border: 1px solid #050C4440;
+
+  border: 0;
+  left: 2% !important;
+  // box-shadow: unset !important;
+  box-shadow: 0px 1px 4px #00000029;
+  .p-overlaypanel-content {
+    padding: 0 !important;
+  }
+}
+
+#academy_options {
+  div & {
+    padding: 0 !important;
+  }
+
+  width: 350px !important;
+  .suscription_item {
+    text-decoration: none;
+    .ver_planes {
+      color: #00e9c5 !important;
+    }
+
+    .suscription_img_container {
+      border-color: #00e9c5 !important;
+    }
+    .suscription_item_title {
+      color: #00e9c5 !important;
+    }
+  }
+  .suscription_item:hover {
+    background-color: black;
+    color: white;
+    border-color: #00e9c5 !important;
+  }
+  .secondary-sidebar-item {
+    font-family: "Montserrat", sans-serif;
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+    font-weight: 400;
+    border-top: 1px solid #050c4421;
+    list-style-type: none;
+    color: rgba($color: #000107, $alpha: 0.68);
+  }
+  .secondary-sidebar-item:hover {
+    background-color: #0000000f;
+    color: #050c44;
+    cursor: pointer;
+  }
+
+  .p-overlaypanel::before,
+  .p-overlaypanel::after {
+    content: unset !important;
+  }
+}
+:host ::ng-deep {
+  #secondary-sidebar {
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    width: 100%;
+    // width: calc(100% - 100px);
+    max-width: 575px;
+    height: calc(100% - 80px);
+    position: fixed;
+    top: 0;
+    // left: -100%;
+    left: 0;
+    z-index: 2;
+    transition: left 0.15s ease-in;
+    box-shadow: 4px 3px 6px #00000008;
+
+    @media screen and (max-width: 1024px) {
+      height: 750px;
+      overflow-y: auto;
+      max-width: 300px;
+    }
+    .sidebar-header > .sidebar-item {
+      background-color: #050c44 !important;
+      color: white;
+    }
+    .sidebar-item {
+      border: 0 !important;
+      font-size: 0.9rem;
+      color: #050c44;
+      padding-left: 10px;
+      padding-right: 30px;
+      font-weight: 600;
+      font-family: "Montserrat", sans-serif;
+
+      .team-image {
+        img {
+          width: 22px !important;
+          height: 22px !important;
+          border-radius: 100% !important;
+          margin-left: 0.5rem !important;
+        }
+      }
+
+      .sidebar-item-arrow {
+        @media screen and (max-width: 1024px) {
+          display: none;
+        }
+      }
+
+      &.selected-path-bg {
+        background-color: #0000000f !important;
+        color: #050c44 !important;
+      }
+
+      &:hover {
+        background-color: #0000000f;
+        color: #050c44;
+      }
+
+      p,
+      h6 {
+        color: #fff;
+      }
+
+      cursor: pointer;
+      .item_badge {
+        width: 22px;
+        height: 22px;
+        flex: 0 0 22px;
+        margin-left: 0.5rem;
+        margin-top: 0.5rem;
+        margin-bottom: 0.5rem;
+        border-radius: 50%;
+      }
+    }
+    #secondary-sidebar-teams {
+      flex: 1;
+      overflow: hidden;
+      padding-bottom: 2rem;
+      p-scrollpanel {
+        height: 100%;
+        .p-scrollpanel-content {
+          padding: 0 0 18px 0;
+        }
+      }
+    }
+    #quick_navigation {
+      height: 60px;
+      border-radius: 8px;
+      padding: 1rem;
+      font-weight: 500;
+      border: 1px solid #050c4430;
+      color: rgba($color: #000000, $alpha: 0.34);
+      &::-webkit-input-placeholder {
+        /* Edge */
+        color: rgba($color: #000000, $alpha: 0.34);
+      }
+      &::placeholder {
+        color: rgba($color: #000000, $alpha: 0.34);
+      }
+    }
+  }
+  #wrapper {
+    overflow-x: hidden;
+    background-color: #f9f9f9;
+  }
+  .new_team_btn {
+    border: 1px solid #050c444d;
+    border-radius: 5px;
+    height: 55px;
+    font-weight: 600;
+    padding: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    background-color: #024cac;
+    color: white;
+    font-weight: 400;
+
+    .plus {
+      font-size: 2rem;
+    }
+
+    &:hover {
+      .plus {
+        color: #00e9c5;
+        transition: opacity 0.2s;
+      }
+    }
+
+    span {
+      font-size: 1rem;
+    }
+
+    img {
+      padding: 4px;
+      width: 28px;
+      height: 28px;
+    }
+
+    .group-image-hover {
+      display: none;
+    }
+    &:hover {
+      .group-image {
+        display: none;
+      }
+
+      .group-image-hover {
+        display: block;
+      }
+    }
+  }
+  a:active {
+    color: #3085d6;
+  }
+  .mini-sidebar {
+    background-color: black !important;
+    width: 70px !important;
+  }
+  #wrapper.toggled #sidebar-wrapper {
+    margin-left: 0;
+  }
+  .team_sidebar {
+    width: 100%;
+    height: calc(100vh - 80px);
+    box-shadow: unset;
+    margin-bottom: 0;
+    border-radius: 0;
+    &::before,
+    &::after {
+      content: unset !important;
+    }
+    .p-overlaypanel-content {
+      padding: 0;
+      height: 100%;
+    }
+  }
+
+  .p-dialog .p-dialog-header {
+    padding: 2rem;
+  }
+
+  #selectYears .p-dropdown {
+    width: 100%;
+    margin-top: 15px;
+  }
+
+  .p-carousel-indicators {
+    display: none;
+  }
+}
+
+@media (min-width: 576px) {
+  #secondary-sidebar {
+    max-width: 300px;
+  }
+}
+
+@media (min-width: 1200px) {
+  :host ::ng-deep {
+    #secondary-sidebar {
+      left: -230px;
+      width: 280px;
+      max-width: 280px;
+      height: 100%;
+      .sidebar-header {
+        border-bottom: 1px solid rgba($color: #050c44, $alpha: 0.07);
+      }
+      .sidebar-header > .sidebar-item {
+        background-color: white !important;
+        color: #050c44;
+      }
+
+      .p-avatar {
+        height: 100%;
+      }
+    }
+
+    .secondary_sidebar_active {
+      left: 60px !important;
+      top: 0;
+
+      .no-club {
+        height: inherit;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+    #menu_club {
+      // position: fixed;
+    }
+    .team_sidebar {
+      left: 360px !important;
+      top: 15px !important;
+      margin: 0;
+      height: calc(100% - 30px);
+      max-height: calc(100% - 30px);
+      box-shadow: unset !important;
+      border: 1px solid #050c4429;
+      width: 300px;
+      border-radius: 0;
+      // position: fixed;
+      .team_sidebar_items {
+        height: calc(100% - 30px) !important;
+      }
+      // &::before,&::after{
+      //   content: unset !important;
+      // }
+    }
+  }
+}
+.p-inputtext {
+  margin: 4px !important;
+}
+
+.photo-color-team {
+  padding-right: 60px;
+}
+.border-check-team {
+  min-width: 265px;
+  min-height: 265px;
+}
+.selectColorTeam {
+  width: 30px;
+  height: 30px;
+  border: 0;
+  border-radius: 100%;
+  font-size: 0;
+  &--blue {
+    background-color: #024cac;
+  }
+  &--red {
+    background-color: #ef1616;
+  }
+  &--darkRed {
+    background-color: #a71212;
+  }
+  &--darkBlue {
+    background-color: #050c44;
+  }
+  &--aqua {
+    background-color: #00e9c5;
+  }
+  &--picker {
+    background-image: url("/assets/img/icons/colorPicker.png");
+    background-size: contain;
+  }
+}
+#selectColor:hover,
+#selectColor:active {
+  padding: 25px;
+}
+
+.border-check-team {
+  margin: 0 auto;
+  border: 1px solid #050c44;
+  border-radius: 100%;
+  width: 150px;
+  height: 150px;
+}
+.carousel-sports {
+  border: 1px solid #050c443b;
+  height: 150px;
+  width: 100%;
+}
+
+.upload-btn-wrapper {
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+}
+/* ESTILO DEL INPUT*/
+.upload-btn-wrapper input[type="file"] {
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+  width: 166px;
+  height: 166px;
+  overflow: hidden;
+}

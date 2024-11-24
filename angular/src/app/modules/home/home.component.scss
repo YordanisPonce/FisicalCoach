@@ -1,0 +1,68 @@
+.color{
+  background-color: white;
+  
+  flex-grow: 1;
+}
+
+.custom-marker {
+  display: flex;
+  width: 2rem;
+  height: 2rem;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  border-radius: 50%;
+  z-index: 1;
+}
+  
+::ng-deep {
+  .p-timeline-event-content,
+  .p-timeline-event-opposite {
+    line-height: 1;
+  }
+}
+
+:host ::ng-deep #slider_packages{
+  background-color: #131313;
+  color: white;
+  .text{
+    opacity: 0.87;
+    line-height: 2;
+  }
+  .p-carousel-prev,.p-carousel-next{
+    display: none !important;
+  }
+  .p-carousel-indicators{
+    justify-content: left;
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+:host {
+  display: block;
+  height: 100% !important;
+}
+  
+@media screen and (max-width: 960px) {
+  ::ng-deep {
+    .customized-timeline {
+      .p-timeline-event:nth-child(even) {
+        flex-direction: row !important;
+
+        .p-timeline-event-content {
+          text-align: left !important;
+        }
+      }
+
+      .p-timeline-event-opposite {
+        flex: 0;
+      }
+
+      .p-card {
+        margin-top: 1rem;
+      }
+    }
+  }
+}
+  

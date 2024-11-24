@@ -1,0 +1,184 @@
+<div class="row pt-4 mb-5">
+  <div class="col-md-6 mb-4 mb-md-0 pack_and_payment">
+    <div class="row">
+      <div class="col-12">
+        <h6>{{ "profile.keepInMindTheNextChanges" | translate }}</h6>
+
+        <ul class="mt-4">
+          <li class="mt-2">
+            {{ "profile.youreUpdatingPlan" | translate }}
+            <strong>{{ currentSubscription.subpackage_name }}</strong>
+            {{ "profile.toPlan" | translate }}
+            <strong> {{ subpackage.name }}</strong>
+          </li>
+
+          <li *ngIf="intervalMessage()">
+            {{ intervalMessage() }}
+          </li>
+          <li class="mt-2">
+            {{ "profile.itWillHaveACost" | translate }}
+            {{ currentPrice | number }} € {{ "profile.perLicense" | translate }}
+            {{ "profile.type_" + intervalType | translate }}
+          </li>
+          <li class="mt-2">
+            {{
+              "profile.theChangeWillAffect"
+                | translate : { licenseNumber: currentSubscription.quantity }
+            }}
+          </li>
+        </ul>
+
+        <div *ngIf="paymentMethod">
+          <span class="suscription"
+            >{{ "profile.tarjetaactual" | translate }} : **** **** ****
+            {{ paymentMethod.card.last4 }}</span
+          >
+        </div>
+
+        <div *ngIf="paymentMethod">
+          <span class="suscription"
+            >{{ "profile.fechavencimiento" | translate }}:
+            {{ paymentMethod.card.exp_month }} /{{
+              paymentMethod.card.exp_year
+            }}</span
+          >
+        </div>
+
+        <div class="text-center" *ngIf="!paymentMethod">
+          <strong class="suscription">{{
+            "profile.msgsintarjeta" | translate
+          }}</strong>
+
+          <div class="mt-3">
+            <button
+              (click)="addPaymentMethod()"
+              *ngIf="!paymentMethod"
+              class="btn pay_btn btn-primary"
+              label="{{ 'profile.agregar' | translate }}"
+              pButton
+            ></button>
+          </div>
+        </div>
+
+        <div class="mt-3 text-center" *ngIf="paymentMethod">
+          <strong class="suscription">{{
+            "profile.areYouSureToUpdatePlan" | translate
+          }}</strong>
+        </div>
+      </div>
+    </div>
+
+    <div class="row" *ngIf="paymentMethod">
+      <div class="col text-center mt-2">
+        <button
+          (click)="closeModal()"
+          class="btn pay_btn btn-primary mt-3 mx-2 font-weight-600 py-2"
+          tooltipPosition="top"
+          [disabled]="loading"
+        >
+          {{ "BTN_CANCELAR" | translate }}
+        </button>
+
+        <button
+          (click)="send()"
+          class="btn pay_btn btn-primary mt-3 mx-2 font-weight-600 py-2"
+          tooltipPosition="top"
+          [disabled]="loading"
+        >
+          <span *ngIf="!loading"> {{ "BTN_CONFIRMAR" | translate }}</span>
+          <span *ngIf="loading"> {{ "LBL_LOADING" | translate }}</span>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 order_details d-none d-md-block">
+    <div class="p-5 orden">
+      <h5>
+        <strong> {{ "registerMembership.detalleOrden" | translate }} </strong>
+      </h5>
+      <ul class="list-group">
+        <li
+          class="list-group-item d-flex justify-content-between align-items-center"
+        >
+          {{ "registerMembership.packprice" | translate }}
+          <span class="">{{ price | number }} €</span>
+        </li>
+        <li
+          class="list-group-item d-flex justify-content-between align-items-center"
+        >
+          {{ "registerMembership.adicionalLicence" | translate }}
+          <span class="">{{ currentSubscription.quantity }}</span>
+        </li>
+        <li
+          class="list-group-item d-flex justify-content-between align-items-center"
+        >
+          {{ "registerMembership.tax" | translate }}
+          <span class="">{{ tax }} %</span>
+        </li>
+      </ul>
+      <hr class="" />
+      <ul class="list-group">
+        <li
+          class="list-group-item d-flex justify-content-between align-items-center"
+        >
+          {{ "registerMembership.total" | translate }}
+          <span class="">{{ total }} €</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<p-dialog
+  (onHide)="showUpdateCardInput = false"
+  [(visible)]="showUpdateCardInput"
+  [modal]="true"
+  [style]="{ width: '400px' }"
+>
+  <div *ngIf="showUpdateCardInput" class="mt-2">
+    <div id="stripe-card">
+      <div class="row justify-content-center">
+        <div class="col-12 text-center example example3">
+          <img alt="" src="/assets/img/tarjeta.jpg" width="200px" />
+          <p>{{ "registerMembership.tex_info_payment" | translate }}</p>
+          <stripe-card
+            #stripeCard
+            (cardMounted)="cardCaptureReady = 1"
+            (catch)="onStripeError($event)"
+            (paymentMethodChange)="setPaymentMethod($event)"
+            (sourceChange)="setStripeSource($event)"
+            (tokenChange)="setStripeToken($event)"
+            [(complete)]="cardDetailsFilledOut"
+            [(invalid)]="invalidError"
+            [options]="options"
+            style="width: auto"
+          ></stripe-card>
+          <div *ngIf="invalidError && !cardDetailsFilledOut" class="error">
+            <span class="text-danger">{{
+              invalidError?.code | translate
+            }}</span>
+          </div>
+          <button
+            (click)="
+              stripeCard.createPaymentMethod(extraData);
+              loadingPaymentMethod = true
+            "
+            [disabled]="loadingPaymentMethod"
+            class="btn btn-block btn-main"
+            id="btn-validar"
+            pTooltip=" {{ 'registerMembership.addcard' | translate }}"
+            style="margin-top: 10px"
+            tooltipPosition="top"
+            type="button"
+          >
+            <span
+              *ngIf="loadingPaymentMethod"
+              class="pi pi-spinner pi-spin"
+            ></span>
+            {{ "registerMembership.addcard" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</p-dialog>

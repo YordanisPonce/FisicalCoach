@@ -1,0 +1,38 @@
+:host ::ng-deep .p-datatable {
+  .p-datatable-thead {
+    tr th {
+      opacity: 0.5;
+    }
+  }
+
+  .p-datatable-wrapper {
+    @media (max-width: 1200px) {
+      height: 300px;
+    }
+  }
+  .p-datatable-tbody > tr > td {
+    padding: 1.75rem 1rem;
+    font-size: 0.9rem;
+    color: rgba($color: #050c44, $alpha: 0.65);
+    font-weight: 600;
+    strong {
+      color: #050c44 !important;
+    }
+  }
+  .actions_column {
+    width: 75px;
+    .btn.outline {
+      border: 1px solid rgba($color: #050c4429, $alpha: 0.1);
+      padding: 0.25rem 0.75rem;
+    }
+  }
+}
+
+.team-text {
+  width: 130px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: flex;
+  align-items: center;
+}

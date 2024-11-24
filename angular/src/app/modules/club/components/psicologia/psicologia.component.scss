@@ -1,0 +1,65 @@
+:host ::ng-deep {
+  .p-dialog {
+    max-width: 650px !important;
+  }
+  .psicologia_header {
+    display: flex;
+    align-items: center;
+    // margin-bottom: 2rem;
+    padding: 1.5rem 2.5rem;
+    width: 100%;
+    // padding: 1rem 0rem;
+  }
+
+  .p-datatable {
+    border: 0;
+
+    .p-datatable-thead > tr > th {
+      border-width: 1px 0 1px 0;
+      padding: 2rem 1rem;
+      font-weight: 600;
+      color: #050c44 !important;
+      // background-color: rgba($color: #050c44, $alpha: 0.03) !important;
+    }
+  }
+}
+
+.imagen-player {
+  height: 25px !important;
+  width: 25px !important;
+}
+.clear-filters {
+  flex-direction: row-reverse !important;
+  width: 77%;
+  margin-right: 12px;
+}
+
+.footer_btns {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 20px;
+
+  button {
+    padding: 0.75rem 1rem;
+    margin: 0 6px;
+    font-size: 0.9rem;
+  }
+
+  .next_btn {
+    background: #024cac;
+    color: white;
+    flex: 1;
+  }
+
+  .back_btn {
+    border: 1px solid #050c4433;
+    flex: 1;
+  }
+}
+
+@media (max-width: 1440px) {
+  th {
+    min-width: 200px !important;
+  }
+}

@@ -1,0 +1,252 @@
+<div class="row">
+  <div class="col-12">
+    <div class="card box-shadow">
+      <div class="card-body p-0">
+        <div class="members_header view_header">
+          <h6 class="font-weight-600 mb-0 mr-4 text-main view_header_title">
+            {{ "MEMBERS.LBL_MEMBERS" | translate }}
+          </h6>
+          <div #sorting class="position-relative" id="sorting">
+            <!-- boton de ordenar -->
+            <button
+              (click)="sortPanel.toggle($event, sorting)"
+              class=""
+              id="sorting_btn"
+              label=" "
+              pButton
+              type="text"
+            >
+              <div class="mr-md-2 filter_label">
+                <span class="d-none d-md-block"> Filtrar por: </span>
+                <i class="pi pi-sliders-h d-md-none"></i>
+              </div>
+              <div>
+                {{ typeFilter }}
+              </div>
+            </button>
+            <p-overlayPanel #sortPanel>
+              <ng-template pTemplate>
+                <div class="sorting_content">
+                  <div
+                    (click)="typeFilter = 'desc'; loadListMember()"
+                    class="option"
+                  >
+                    <span>Orden alfabético descendente</span>
+                    <span></span>
+                  </div>
+                  <div
+                    (click)="typeFilter = 'asc'; loadListMember()"
+                    class="option"
+                  >
+                    <span>Orden alfabético ascendente</span>
+                    <span></span>
+                  </div>
+                </div>
+              </ng-template>
+            </p-overlayPanel>
+          </div>
+          <div class="p-input-icon-left d-md-inline buscador">
+            <i class="pi pi-search"></i>
+            <input
+              (input)="dt.filterGlobal(filter, 'contains')"
+              [(ngModel)]="filter"
+              [placeholder]="'LBL_SEARCH' | translate"
+              id="filter"
+              name="filter"
+              pInputText
+              type="text"
+            />
+          </div>
+          <div class="header_buttons">
+            <button
+              (click)="handleQuickCreate()"
+              class="btn add_player_btn action"
+              pButton
+            >
+              <span class="d-none d-md-inline">{{
+                "MEMBERS.LBL_NEWMEMBER" | translate
+              }}</span>
+              <i class="fa fa-plus text-white"></i>
+            </button>
+          </div>
+        </div>
+        <p-table
+          #dt
+          [globalFilterFields]="['full_name']"
+          [loading]="loading"
+          [paginator]="true"
+          [rows]="10"
+          [showLoader]="false"
+          [value]="members"
+          class="p-datatable-responsive"
+        >
+          <ng-template pTemplate="header">
+            <tr class="text-center">
+              <!-- <th style="width: 10%"></th> -->
+              <th class="text-center" pSortableColumn="full_name">
+                {{ "MEMBERS.LBL_NOMBRE" | translate }}/
+                {{ "MEMBERS.LBL_CORREO" | translate }}
+              </th>
+              <th class="text-center">
+                {{ "MEMBERS.LBL_DEPARTAMENTO" | translate }}
+              </th>
+              <th class="text-center">{{ "MEMBERS.LBL_CARGO" | translate }}</th>
+              <th class="text-center">{{ "LBL_ACTIONS" | translate }}</th>
+            </tr>
+          </ng-template>
+          <ng-template let-player pTemplate="body">
+            <tr>
+              <td>
+                <img
+                  class="rounded-circle principalImg"
+                  src="{{
+                    player.image !== null
+                      ? player.image?.full_url
+                      : player.gender.code === 'female'
+                      ? urlBase + 'images/teachers/profesora.svg'
+                      : urlBase + 'images/teachers/profesor.svg'
+                  }}"
+                  width="30px"
+                  height="30px"
+                />
+                <strong class="ml-4">{{
+                  player.full_name || player.email
+                }}</strong>
+              </td>
+              <td class="text-center">{{ player.job_area?.name || "N/A" }}</td>
+              <td class="text-center">
+                {{ player.position_staff?.name || "N/A" }}
+              </td>
+              <td class="text-center actions">
+                <button (click)="handleView(player)" class="btn">
+                  <img class="" src="assets/img/icons/ver.svg" />
+                </button>
+                <button (click)="handleEdit(player)" class="btn">
+                  <img class="" src="assets/img/icons/lapiz.svg" />
+                </button>
+                <button (click)="confirm(player)" class="btn">
+                  <img class="" src="assets/img/icons/eliminar.svg" />
+                </button>
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="4" style="text-align: center">
+                {{ "LBL_SINREGISTROS" | translate }}
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template let-columns pTemplate="loadingbody">
+            <tr *ngFor="let i of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]">
+              <td>
+                <p-skeleton height="1rem" width="100%"></p-skeleton>
+              </td>
+              <td>
+                <p-skeleton height="1rem" width="100%"></p-skeleton>
+              </td>
+              <td>
+                <p-skeleton height="1rem" width="100%"></p-skeleton>
+              </td>
+              <td class="d-flex justify-content-around">
+                <p-skeleton height="1rem" width="20px"></p-skeleton>
+                <p-skeleton height="1rem" width="20px"></p-skeleton>
+                <p-skeleton height="1rem" width="20px"></p-skeleton>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p-dialog
+  [(visible)]="showModal"
+  [modal]="true"
+  class="custom_dialog"
+  header="{{ 'MEMBERS.LBL_NEWMEMBER' | translate }}"
+  id="dialog_config_member"
+  maskStyleClass="purple_mask"
+>
+  <div class="dialog_container" id="dialog_config_member_container">
+    <app-new-member
+      (data)="handleCreate()"
+      (goBack)="showModal = false"
+      (save)="loadListMember()"
+      *ngIf="showModal"
+      [listGender]="listGender"
+      [listJobArea]="listJobArea"
+    ></app-new-member>
+  </div>
+  <ng-template pTemplate="footer">
+    <!-- <div class="footer_btns">
+      <button class="btn back_btn" type="button">{{'LBL_ATRAS'| translate}}</button>
+      <button class="btn next_btn" type="submit">{{'LBL_SIGUIENTE'|translate}}</button>
+    </div> -->
+  </ng-template>
+</p-dialog>
+
+<p-dialog
+  [(visible)]="showDataAdvance"
+  [modal]="false"
+  [resizable]="false"
+  class="custom_dialog"
+  id="new_advanced_member_dialog"
+  styleClass="fullscreenDialog"
+>
+  <ng-template pTemplate="header">
+    <div class="d-flex flex-column header_content">
+      <h5 class="title" *ngIf="role === 'sport'">
+        {{ "team.addpeople" | translate }}
+      </h5>
+      <h5 class="title" *ngIf="role === 'teacher'">
+        {{ "class.addpeople" | translate }}
+      </h5>
+      <div class="subtitle" *ngIf="role === 'sport'">
+        {{ "team.addpeoplemsg" | translate }}
+      </div>
+      <div class="subtitle" *ngIf="role === 'teacher'">
+        {{ "class.addpeoplemsg" | translate }}
+      </div>
+    </div>
+  </ng-template>
+  <app-steps-members
+    (save)="showDataAdvance = false; loadListMember()"
+    *ngIf="showDataAdvance"
+    [data]="dataBasic"
+    [listGender]="listGender"
+    [listJobArea]="listJobArea"
+    [view]="viewMember"
+  ></app-steps-members>
+</p-dialog>
+
+<p-confirmDialog
+  #cd
+  [style]="{ width: '50vw' }"
+  class="custom_dialog"
+  maskStyleClass="purple_mask"
+>
+  <!-- <ng-template pTemplate="header">
+      <h3>{{ 'LBL_CONFIRM_DIALOG' | translate}}</h3>
+  </ng-template> -->
+  <ng-template pTemplate="footer">
+    <div class="footer_btns">
+      <button
+        (click)="cd.reject()"
+        icon="pi pi-times"
+        label="{{ 'LBL_NO' | translate }}"
+        pButton
+        type="button"
+      ></button>
+      <button
+        (click)="cd.accept()"
+        class="next_btn"
+        icon="pi pi-check"
+        label="{{ 'LBL_YES' | translate }}"
+        pButton
+        type="button"
+      ></button>
+    </div>
+  </ng-template>
+</p-confirmDialog>

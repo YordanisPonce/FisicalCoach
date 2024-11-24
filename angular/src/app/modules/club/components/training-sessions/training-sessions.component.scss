@@ -1,0 +1,314 @@
+:host ::ng-deep {
+  .p-dialog-mask {
+    overflow-y: auto !important;
+  }
+
+  .p-treeselect {
+    width: 200px;
+  }
+  .nodatatext {
+    color: #050c4475;
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+
+  .w-fit {
+    width: 140px;
+  }
+
+  .p-carousel-items-content {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .p-carousel-container {
+    // padding: 30px 20px 20px 30px;
+    @media (max-width: 1024px) {
+      padding: 0;
+    }
+  }
+
+  .p-carousel .p-carousel-content .p-carousel-prev {
+    margin-bottom: 80px;
+    color: #050c44;
+  }
+  .p-carousel .p-carousel-content .p-carousel-next {
+    margin-bottom: 80px;
+    color: #050c44;
+  }
+
+  .training_sessions_header {
+    display: flex;
+    align-items: center;
+    width: 100%;
+
+    justify-content: space-between;
+    // padding: 1rem 0rem;
+    .calendar_btn {
+      height: 45px;
+      border-radius: 9px;
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+
+      @media (max-width: 501px) {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 300px;
+        margin-top: 0.5rem;
+        margin-left: 0rem;
+      }
+    }
+    .new_training_sessions_btn {
+      width: 200px !important;
+
+      color: white;
+      font-weight: 500;
+      height: 45px;
+      @media (max-width: 501px) {
+        margin-left: 0.5rem;
+        width: 300px !important;
+        margin-left: 0;
+        margin-right: 0;
+      }
+      // flex: 1 1 100%;
+      @media screen and (max-width: 477px) {
+        margin-left: 3px;
+        font-size: small;
+      }
+    }
+    #sorting {
+      #sorting_btn {
+        background-color: transparent;
+        color: #050c44;
+        font-weight: 600;
+        border-radius: 9px;
+        border: 1px solid #050c4410;
+        height: 45px;
+        font-size: 0.9rem;
+        .filter_label {
+          opacity: 0.39;
+        }
+      }
+      .p-overlaypanel {
+        top: auto !important;
+        left: auto !important;
+        min-width: 300px;
+        // max-width: 500px;
+        width: 375px;
+        box-shadow: none;
+        border: 1px solid #050c4429;
+        border-radius: 0;
+        .p-overlaypanel-content {
+          padding: 1.5rem;
+        }
+        .sorting_content {
+          color: #050c44;
+          font-weight: 600;
+          .option {
+            padding: 1rem 0;
+          }
+        }
+      }
+      .p-overlaypanel::before,
+      .p-overlaypanel::after {
+        display: none !important;
+      }
+    }
+    input {
+      // margin:0;
+      height: 45px;
+      font-weight: 500;
+      border-radius: 9px;
+      border: 1px solid #050c4410;
+    }
+  }
+  .training_sessions_container {
+    padding: 1.5rem 2.5rem;
+
+    @media (max-width: 1200px) {
+      padding: 1.5rem 1rem !important;
+    }
+    .training_session {
+      border: 1px solid #050c441f;
+      display: flex;
+
+      @media (max-width: 1024px) {
+        flex-direction: column;
+        padding: 1.5rem 0 !important;
+      }
+      .session_resume {
+        padding: 1.5rem;
+        // padding: 1.5rem 1.5rem 0 1.5rem;
+        display: flex;
+        flex-direction: column;
+
+        .exercise-order {
+          width: 30px;
+          height: 30px;
+          background-color: #050c44;
+          border: 1px solid #fff;
+          border-radius: 50%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          color: #fff;
+        }
+
+        .pointer {
+          cursor: pointer;
+        }
+        .session_info {
+          margin: auto 0;
+
+          flex-direction: column;
+          // justify-content: center;
+          align-items: center;
+          margin-bottom: 2rem;
+          * {
+            margin: .5rem 0;
+            font-size: 0.9rem;
+            color: #050c44;
+            margin-right: auto;
+          }
+          .dificultad {
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+          }
+          .p-rating {
+            margin: 0;
+            * {
+              margin: 0;
+            }
+          }
+          .author {
+            opacity: 0.3;
+            font-weight: 600;
+            @media screen and (max-width: 400px) {
+              font-size: 12px;
+            }
+          }
+          .time {
+            font-weight: 600;
+          }
+          .title {
+            font-weight: 700;
+            @media screen and (max-width: 400px) {
+              font-weight: 650;
+              font-size: 12px;
+            }
+          }
+        }
+        .session_actions {
+          display: flex;
+          color: #050c44;
+          margin-top: auto;
+          button {
+            flex: 1;
+            border-radius: 0;
+            .p-button-label {
+              color: #050c44;
+              text-decoration: none;
+              font-size: 0.9rem;
+              font-weight: 500;
+            }
+          }
+          button:nth-child(2) {
+            border-left: 1px solid #050c441f;
+            border-right: 1px solid #050c441f;
+            .p-button-label {
+              font-weight: 700;
+            }
+          }
+        }
+      }
+      .session_exercises {
+        .exercise_image {
+          padding: 1rem 0rem;
+          text-align: center;
+        }
+
+        .no-exercise-text {
+          height: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .img-session-fluid {
+          height: 100%;
+          margin: 0 auto;
+
+          @media (max-width: 600px) {
+            width: 100%;
+          }
+
+          @media (min-width: 601px) {
+            width: 100%;
+            min-width: auto;
+          }
+        }
+
+        .no-exercise-img {
+          width: 100px;
+          margin: 0 auto;
+        }
+
+        .exercise_controls {
+          display: flex;
+          align-items: center;
+          padding: 1rem 2.5rem;
+          justify-content: center;
+
+          .name {
+            font-size: 0.9rem;
+          }
+        }
+      }
+
+      .p-rating {
+        .p-rating-icon.pi-star {
+          color: #00e9c5;
+        }
+
+        .p-rating-icon {
+          color: #00e9c5;
+        }
+      }
+    }
+  }
+}
+
+@media (min-width: 1024px) {
+  :host ::ng-deep {
+    .training_sessions_header {
+      .new_training_sessions_btn {
+        width: 200px;
+      }
+    }
+
+    .training_sessions_container {
+      .training_session {
+        .session_resume {
+          flex: 0 35%;
+          border-right: 1px solid #050c441f;
+        }
+        .session_exercises {
+          flex: 0 75%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+      }
+    }
+  }
+}
+.btn_flex {
+  align-items: center;
+  justify-content: center;
+  @media (max-width: 501px) {
+    margin-top: 0.5rem;
+    flex-direction: column-reverse;
+  }
+}

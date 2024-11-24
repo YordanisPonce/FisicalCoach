@@ -1,0 +1,144 @@
+:host ::ng-deep #analyze_player_dialog {
+  .p-dialog {
+    width: 600px;
+
+    #analyze_player_dialog_container {
+      .hability {
+        display: flex;
+        flex-wrap: wrap;
+
+        .hability_info {
+          display: flex;
+          flex: 1 1 100%;
+          margin-bottom: 1rem;
+          align-items: center;
+
+          .icon {
+            margin-right: 1.5rem;
+
+            img {
+              width: 35px;
+            }
+          }
+
+          .info {
+            font-size: 0.9rem;
+            font-weight: 500;
+
+            .title {
+              display: block;
+              color: #050c44;
+            }
+
+            .points {
+              color: rgba($color: #050c44, $alpha: 0.56);
+            }
+          }
+        }
+
+        .hability_selectors {
+          flex: 1 1 100%;
+
+          .p-selectbutton {
+            display: flex;
+            justify-content: space-between;
+
+            .p-button {
+              flex: 0 30%;
+              border-radius: 18px;
+              border: 0;
+              color: rgba($color: #050c44, $alpha: 0.17);
+              font-size: 0.9rem;
+              display: flex;
+              justify-content: center;
+
+              &.p-highlight {
+                color: white;
+              }
+
+              &.p-highlight:nth-child(1) {
+                background-color: rgba($color: #ff6060, $alpha: 1);
+              }
+
+              &:nth-child(1) {
+                background-color: rgba($color: #ff6060, $alpha: 0.19);
+              }
+
+              &.p-highlight:nth-child(2) {
+                background-color: rgba($color: #e4eb3f, $alpha: 1);
+              }
+
+              &:nth-child(2) {
+                background-color: rgba($color: #e4eb3f, $alpha: 0.17);
+              }
+
+              &.p-highlight:nth-child(3) {
+                background-color: rgba($color: #5ee882, $alpha: 1);
+              }
+
+              &:nth-child(3) {
+                background-color: rgba($color: #5ee882, $alpha: 0.13);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (min-width: 1024px) {
+  :host ::ng-deep {
+    #analyze_player_dialog {
+      .p-dialog {
+        #analyze_player_dialog_container {
+          .hability {
+            display: flex;
+            flex-wrap: nowrap;
+            margin-bottom: 2rem;
+
+            .hability_info {
+              flex: 0 60%;
+              margin-bottom: 0;
+            }
+
+            .hability_selectors {
+              flex: 0 40%;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (min-width: 1200px) {
+  :host ::ng-deep {
+    #analyze_player_dialog {
+      .p-dialog {
+        width: 700px;
+
+        .p-dialog-header {
+          padding: 2.5rem 4.5rem;
+        }
+
+        .p-dialog-content {
+          padding: 0 3rem 2rem 3rem;
+        }
+
+        .p-dialog-footer {
+          padding: 1.5rem 4.5rem;
+        }
+      }
+    }
+  }
+}
+
+@media (min-width: 1200px) {
+  :host ::ng-deep {
+    #analyze_player_dialog {
+      .p-dialog {
+      }
+    }
+  }
+}

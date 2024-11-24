@@ -1,0 +1,147 @@
+<p-dialog (onHide)="closeDialog()" (onShow)="getClubId()" [(visible)]="visible" [modal]="true" class="custom_dialog"
+          id="new_team_dialog" maskStyleClass="" styleClass="fullscreenDialog">
+  <ng-template pTemplate="header">
+    <div class="d-flex header_content">
+      <img alt="" src="/assets/img/logo_panel.svg"/>
+    </div>
+  </ng-template>
+  <div class="dialog_container" id="new_team_dialog_container">
+    <form [formGroup]="classroomForm">
+      <div *ngIf="step == 1" class="step_content">
+        <div class="mb-4">
+          <h6 class="font-weight-bold mb-5">
+            {{ "create_new_classroom.step_one_title" | translate }}
+          </h6>
+        </div>
+        <div class="row">
+          <!-- nombre de la clase -->
+          <div class="col-12 mb-4">
+            <label class="mb-4" for="name">{{ "create_new_classroom.class_name" | translate }} *</label>
+            <input [ngClass]="{'ng-invalid ng-dirty is-invalid':
+                  (classroomControls.name.invalid &&
+                    (classroomControls.name.dirty ||
+                      classroomControls.name.touched)) ||
+                  (classroomControls.name.invalid && this.submittedForm)}"
+                   class="form-control" formControlName="name" id="name"
+                   placeholder="{{ 'create_new_classroom.type_name' | translate }}"/>
+            <div class="invalid-feedback">
+              {{ "create_new_classroom.validate_name" | translate }}
+            </div>
+          </div>
+          <!-- curso escolar de la clase -->
+          <div class="col-12 mb-5">
+            <label class="mb-4">{{ "create_new_classroom.school_year" | translate }} *</label>
+            <div>
+              <p-dropdown [disabled]="true" [options]="schoolYear" [styleClass]="'w-100 form-control'"
+                          optionLabel="name" optionValue="name"
+              ></p-dropdown>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="step == 2" class="step_content">
+        <div class="mb-5 position-relative d-flex align-items-center">
+          <i
+                (click)="step > 1 ? (step = step - 1) : ''"
+                class="pi pi-angle-left text-primary back_btn"></i>
+          <h6 class="font-weight-bold">
+            {{ "create_new_classroom.step_two_title" | translate }}
+          </h6>
+        </div>
+
+        <div class="row">
+          <!-- edades -->
+          <div class="col-12 mb-4">
+            <label class="mb-4">{{ "create_new_classroom.ages" | translate }}</label>
+            <div>
+              <p-dropdown [ngClass]="{'ng-invalid ng-dirty is-invalid':
+                    (classroomControls.age_id.invalid &&
+                      (classroomControls.age_id.dirty ||
+                        classroomControls.age_id.touched)) ||
+                    (classroomControls.age_id.invalid && this.submittedForm)}"
+                          [options]="ageList"
+                          [styleClass]="'w-100 form-control'"
+                          formControlName="age_id"
+                          placeholder="{{ 'create_new_classroom.select' | translate }}"
+              ></p-dropdown>
+              <div *ngIf="classroomControls.age_id?.errors" class="invalid-feedback">
+                {{ "create_new_classroom.validate_age" | translate }}
+              </div>
+            </div>
+          </div>
+
+          <!-- clase -->
+          <div class="col-12 mb-4">
+            <label class="mb-4" for="name">{{ "create_new_classroom.observations" | translate }}</label>
+            <textarea class="form-control" formControlName="observations"
+                      placeholder="{{ 'create_new_classroom.observations' | translate }}" rows="3"></textarea>
+          </div>
+
+
+        </div>
+      </div>
+
+      <div *ngIf="step == 3" class="step_content">
+        <div class="mb-5 position-relative d-flex align-items-center">
+          <i (click)="step > 1 ? (step = step - 1) : ''"
+             class="pi pi-angle-left text-primary back_btn"></i>
+          <h6 class="font-weight-bold">
+            {{ "create_new_team.step_three_title" | translate }}
+          </h6>
+        </div>
+        <div class="team_image">
+          <div class="caption">
+            {{ "create_new_classroom.upload_picture" | translate }}
+          </div>
+          <input #fileUpload (change)="onFileSelected($event)"
+                 accept="image/jpeg, image/png, image/jpg, image/svg, image/JPEG, image/PNG, image/JPG, image/SVG" class="file-input" type="file"/>
+          <div (click)="fileUpload.click()" class="image">
+            <i *ngIf="classImgPrev == ''" class="pi pi-image"></i>
+            <img *ngIf="classImgPrev != ''" [src]="classImgPrev" alt=""/>
+          </div>
+
+          <div *ngIf="isFileRejectedBySize" class="my-2 text-center">
+            <span class="text-danger">{{"fileRejectedBySize" | translate}}</span>
+          </div>
+          <div *ngIf="isFileRejectedByType" class="my-2 text-center">
+            <span class="text-danger">{{"fileRejectedByType" | translate }}</span>
+          </div>
+          <p style="text-align: center" class="fototypes">{{ "PLAYERS.FOTOTYPES" | translate }}</p>
+        </div>
+        <div class="team_color">
+          <div class="caption">
+            {{ "create_new_classroom.select_class_color" | translate }}
+          </div>
+          <div class="colors">
+            <button (click)="setTeamColor(color, false)" *ngFor="let color of colors"
+                    [ngStyle]="{ 'background-color': color }" class="color btn"></button>
+            <button *ngIf="customColor != ''" [style.background]="customColor" class="color custom_color btn"></button>
+            <button (colorPickerChange)="setTeamColor($event, true)" [(colorPicker)]="color" class="color btn" style="
+                background-image: url(assets/img/icons/color.png);
+                background-size: cover;
+              "></button>
+          </div>
+          <div *ngIf="classroomControls.color?.invalid && submittedForm" style="color:red; text-align: center">
+            {{ "create_new_classroom.imageorcolorrequiered" | translate }}
+          </div>
+          <div class="selected_color text-main my-3">
+            {{ classroomForm.value.color }}
+          </div>
+        </div>
+      </div>
+      <div *ngIf="[1, 2, 3].includes(step)" class="text-center">
+        <button (click)="step < 3? validateStep(): step == 3? onSubmit($event): closeDialog()"
+                *ngIf="!selectedClass" [disabled]="loading == true" pButton [loading]="loading"
+                class="btn next_btn" type="submit">
+          {{step < 3 ? ("LBL_SIGUIENTE" | translate) : step == 3 ? ("create_new_classroom.create_class" | translate) : ("create_new_classroom.go_to_class" | translate)}}
+        </button>
+
+        <button (click)="step < 3? validateStep(): step == 3? onSubmit($event): closeDialog()"
+                *ngIf="selectedClass" [disabled]="loading == true" pButton [loading]="loading"
+                class="btn next_btn" type="submit">
+          {{step < 3 ? ("LBL_SIGUIENTE" | translate) : step == 3 ? ("create_new_classroom.edit_class" | translate) : ("create_new_classroom.go_to_class" | translate)}}
+        </button>
+      </div>
+    </form>
+  </div>
+</p-dialog>

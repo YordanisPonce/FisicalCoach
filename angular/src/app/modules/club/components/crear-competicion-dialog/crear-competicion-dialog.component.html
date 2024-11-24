@@ -1,0 +1,332 @@
+<form (ngSubmit)="onSubmit()" [formGroup]="competitionForm" action="">
+  <p-dialog
+    (onHide)="closeDialog()"
+    [(visible)]="visible"
+    [modal]="true"
+    class="dialog"
+    header="{{ getLabel | translate }}"
+    id="crear_competicion_dialog"
+    maskStyleClass="purple_mask"
+    styleClass=""
+  >
+    <div class="" id="crear_competicion_dialog_container">
+      <div *ngIf="step == 1" class="step_content">
+        <div [ngClass]="{ 'px-3': getScreenWidth() >= 768 }" class="row">
+          <div class="mb-4 col-12 peg">
+            <label>{{ getLabelName | translate }}*</label>
+            <input
+              aria-describedby="inputGroup-sizing-default"
+              aria-label="Default"
+              class="form-control"
+              formControlName="name"
+              maxlength="50"
+              placeholder="{{ 'LBL_ESCRIBEAQI' | translate }}"
+            />
+
+            <div
+              *ngIf="f.name?.status === 'INVALID' && submited"
+              class="text-danger"
+            >
+              {{ "LBL_FIELD_REQUIRED" | translate }}
+            </div>
+          </div>
+          <div class="mb-4 col-12">
+            <div>
+              <label>{{
+                "competition.competition_dialog.select_competition_image"
+                  | translate
+              }}</label>
+
+              <div class="image" (click)="openCropperDialog = true">
+                <i
+                  *ngIf="
+                    !selectedCompetition?.image?.full_url && teamImgPrev == ''
+                  "
+                  class="pi pi-image"
+                ></i>
+                <img *ngIf="teamImgPrev != ''" [src]="teamImgPrev" alt="" />
+                <img
+                  *ngIf="selectedCompetition?.image?.full_url && !teamImgPrev"
+                  [src]="selectedCompetition?.image?.full_url"
+                  alt=""
+                />
+              </div>
+              <p class="fototypes">{{ "PLAYERS.FOTOTYPES" | translate }}</p>
+            </div>
+          </div>
+          <div class="mb-3 col-12">
+            <label class="mb-4"
+              >{{
+                (team?.sport?.code !== "swimming"
+                  ? "competition.filter.competition_type.title"
+                  : "competition.proof_type"
+                ) | translate
+              }}
+              *</label
+            >
+            <div *ngIf="competitionTypes.length < 5" class="d-flex flex-column">
+              <p-radioButton
+                *ngFor="let type of competitionTypes"
+                [value]="type.id"
+                class="mb-4"
+                formControlName="competition_type"
+                label="{{ type.name }}"
+                name="competition_type"
+              ></p-radioButton>
+            </div>
+
+            <p-scrollPanel
+              *ngIf="competitionTypes.length >= 5"
+              [style]="{ width: '100%', height: '200px' }"
+              class="d-flex flex-column"
+            >
+              <p-radioButton
+                *ngFor="let type of competitionTypes"
+                [value]="type.id"
+                class="mb-4"
+                formControlName="competition_type"
+                label="{{ type.name }}"
+                name="competition_type"
+              ></p-radioButton>
+            </p-scrollPanel>
+
+            <div
+              *ngIf="f.competition_type?.status === 'INVALID' && submited"
+              class="text-danger"
+            >
+              {{ "LBL_FIELD_REQUIRED" | translate }}
+            </div>
+          </div>
+          <div class="mb-4 col-12">
+            <label
+              >{{ "competition.competition_dialog.start_date" | translate }}
+              /
+              {{ "competition.competition_dialog.end_date" | translate }}
+              *</label
+            >
+            <div>
+              <p-calendar
+                [dateFormat]="'dd/mm/yy'"
+                [firstDayOfWeek]="1"
+                [placeholder]="'DD/MM/AAAA - DD/MM/AAAA'"
+                [selectionMode]="'range'"
+                [styleClass]="'w-100 form-control'"
+                class="w-100"
+                formControlName="date"
+                [ngClass]="{ 'selected-dates': !!f.date?.value }"
+              ></p-calendar>
+
+              <div
+                *ngIf="f.date?.status === 'INVALID' && submited"
+                class="text-danger"
+              >
+                {{ "LBL_FIELD_REQUIRED" | translate }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="step == 2" class="step_content">
+        <div [ngClass]="{ 'px-3': getScreenWidth() >= 768 }" class="row">
+          <div class="mb-4 col-12">
+            <label
+              >{{
+                "competition.competition_dialog.rival_team_name" | translate
+              }}
+              *</label
+            >
+            <input
+              aria-describedby="inputGroup-sizing-default"
+              aria-label="Default"
+              class="form-control"
+              formControlName="team_name"
+              maxlength="35"
+              placeholder="{{ 'LBL_ESCRIBEAQI' | translate }}"
+            />
+          </div>
+          <div class="mb-4 col-12">
+            <label>{{
+              "competition.competition_dialog.rival_team_image" | translate
+            }}</label>
+
+            <div (click)="openCropperDialog = true" class="image">
+              <i *ngIf="teamRivalImgPrev == ''" class="pi pi-image"></i>
+              <img
+                *ngIf="teamRivalImgPrev != ''"
+                [src]="teamRivalImgPrev"
+                alt=""
+              />
+            </div>
+            <p class="fototypes">{{ "PLAYERS.FOTOTYPES" | translate }}</p>
+            <div class="add_team_button">
+              <button
+                (click)="addTeam()"
+                [disabled]="!competitionForm.get('team_name')?.value"
+                [ngClass]="
+                  competitionForm.get('team_name')?.value
+                    ? 'selected'
+                    : 'no-selected'
+                "
+                type="button"
+              >
+                {{
+                  "competition.competition_dialog.add_team_button" | translate
+                }}
+              </button>
+            </div>
+          </div>
+          <div class="mb-3 col-12">
+            <label class="mb-4">{{
+              "competition.competition_dialog.added_teams" | translate
+            }}</label>
+            <!-- <textarea class="form-control" id="demo" rows="4"></textarea> -->
+            <div class="form-control added_teams">
+              <div *ngIf="team_list.length > 0" class="wrap_teams">
+                <div *ngFor="let team of team_list; let i = index" class="team">
+                  <div>
+                    <img
+                      [src]="
+                        team.image_preview?.includes('competitions/') ||
+                        team.image_preview?.includes('rival-teams/')
+                          ? urlBase + team.image_preview
+                          : (team.image_preview | rivalAvatarPipe)
+                      "
+                      alt="image"
+                      class="team_image"
+                    />
+                  </div>
+                  <div class="truncate">{{ team.name }}</div>
+                  <div
+                    (click)="deleteTeam(selectedCompetition ? team.id : i)"
+                    class="delete_team"
+                  >
+                    <span class="delete_team_text">x</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="step != 0">
+        <ul
+          class="step_markers"
+          *ngIf="!oneStepSports.includes(team.sport.code)"
+        >
+          <li>
+            <span [ngClass]="{ active: step == 1 }" class="step_marker"></span>
+          </li>
+          <li>
+            <span [ngClass]="{ active: step == 2 }" class="step_marker"></span>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <p-footer>
+      <div *ngIf="!oneStepSports.includes(team.sport.code)" class="footer_btns">
+        <button
+          (click)="step > 1 ? (step = step - 1) : closeDialog()"
+          [ngClass]="{ shrink_btn: step == 2 }"
+          class="btn back_btn"
+          type="button"
+        >
+          {{ "competition.competition_dialog.back_button" | translate }}
+        </button>
+
+        <button
+          *ngIf="!loading"
+          [disabled]="!competitionForm.valid && step === 2"
+          [ngClass]="{ shrink_btn: step == 2 }"
+          class="btn next_btn"
+          type="submit"
+        >
+          <span *ngIf="step === 2">
+            {{
+              (selectedCompetition
+                ? "competition.competition_dialog.edit_league"
+                : "competition.competition_dialog.create_league"
+              ) | translate
+            }}
+          </span>
+
+          <span *ngIf="step === 1">
+            {{ "LBL_SIGUIENTE" | translate }}
+          </span>
+        </button>
+        <button
+          *ngIf="loading && step === 2"
+          class="btn next_btn"
+          disabled
+          type="button"
+        >
+          <span
+            aria-hidden="true"
+            class="spinner-grow spinner-grow-sm"
+            role="status"
+          ></span>
+          {{ "LBL_GUARDANDO" | translate }}
+        </button>
+      </div>
+
+      <div *ngIf="oneStepSports.includes(team.sport.code)" class="footer_btns">
+        <button
+          (click)="step > 1 ? (step = step - 1) : closeDialog()"
+          [ngClass]="{ shrink_btn: step == 2 }"
+          class="btn back_btn"
+          type="button"
+        >
+          {{ "competition.competition_dialog.back_button" | translate }}
+        </button>
+
+        <button
+          (click)="onSubmit()"
+          *ngIf="!loading && step === 1"
+          [ngClass]="{ shrink_btn: step == 1 }"
+          class="btn next_btn"
+          type="button"
+        >
+          <span *ngIf="team?.sport?.code !== 'swimming'; else isSwimmingSport">
+            {{
+              (selectedCompetition
+                ? "competition.competition_dialog.edit_league"
+                : "competition.competition_dialog.create_league"
+              ) | translate
+            }}
+          </span>
+
+          <ng-template #isSwimmingSport>
+            <span>
+              {{
+                (selectedCompetition
+                  ? "competition.edit_proof"
+                  : "competition.create_proof"
+                ) | translate
+              }}
+            </span>
+          </ng-template>
+        </button>
+        <button
+          *ngIf="loading && step === 1"
+          class="btn next_btn"
+          disabled
+          type="button"
+        >
+          <span
+            aria-hidden="true"
+            class="spinner-grow spinner-grow-sm"
+            role="status"
+          ></span>
+          {{ "LBL_GUARDANDO" | translate }}
+        </button>
+      </div>
+    </p-footer>
+  </p-dialog>
+</form>
+
+<app-image-cropper
+  *ngIf="openCropperDialog"
+  [coverDialog]="openCropperDialog"
+  (sendImage)="getImage($event)"
+  (close)="openCropperDialog = false"
+>
+</app-image-cropper>

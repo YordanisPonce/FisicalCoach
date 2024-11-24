@@ -1,0 +1,270 @@
+<div class="row">
+  <div class="col-lg-8" id="player_matches">
+    <div class="card soft-shadow">
+      <div class="card-header">
+        <span class="mr-4">{{ "PLAYERS.partidos" | translate }}</span>
+        <span class="p-input-icon-left d-none d-md-inline">
+          <i class="pi pi-search"></i>
+          <input
+            pInputText
+            placeholder="{{ 'PLAYERS.buscarpartidos' | translate }}"
+            type="text"
+          />
+        </span>
+      </div>
+      <div class="card-body p-0 pb-5">
+        <div *ngIf="loading" class="row p-jc-center">
+          <div class="col text-center">
+            <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+          </div>
+        </div>
+        <p-table
+          *ngIf="!loading"
+          [value]="games"
+          selectionMode="single"
+          styleClass="p-datatable-responsive"
+        >
+          <ng-template pTemplate="header">
+            <tr>
+              <th class="text-center">
+                {{ "PLAYERS.fechapartidos" | translate }}
+              </th>
+              <th class="text-center">{{ "PLAYERS.partido" | translate }}</th>
+              <th class="text-center">{{ "PLAYERS.torneo" | translate }}</th>
+              <th class="text-center">{{ "PLAYERS.rpe" | translate }}</th>
+              <th style="width: 75px"></th>
+            </tr>
+          </ng-template>
+          <ng-template let-game pTemplate="body">
+            <tr>
+              <td class="text-center">
+                {{ game?.competition_match?.start_at | date : "dd/MM/YYYY" }}
+              </td>
+
+              <td class="text-center">
+                <div
+                  *ngIf="game?.competition_match?.match_situation === 'V'"
+                  class="mx-2 d-flex justify-content-md-center align-items-center"
+                >
+                  <img
+                    *ngIf="
+                      game?.competition_match?.rivals.length <= 0 &&
+                      game?.competition_match?.competition_rival_team?.url_image
+                    "
+                    [src]="
+                      urlImages +
+                      game?.competition_match?.competition_rival_team?.url_image
+                    "
+                    class="rounded-circle principalImg"
+                    width="30px"
+                    height="30px"
+                  />
+
+                  <img
+                    *ngIf="
+                      game?.competition_match?.rivals.length <= 0 &&
+                      !game?.competition_match?.competition_rival_team
+                        ?.url_image
+                    "
+                    src="{{ '' | rivalAvatarPipe }}"
+                    class="rounded-circle principalImg"
+                    width="30px"
+                    height="30px"
+                  />
+                  <span class="mx-2 font-weight-500"
+                    >{{ getScoreRival(game) }}:{{ getScoreOwn(game) }}</span
+                  >
+                  <img
+                    *ngIf="
+                      game?.competition_match?.rivals.length <= 0 && team?.image
+                    "
+                    [src]="team?.image?.full_url"
+                    class="rounded-circle principalImg"
+                    width="30px"
+                    height="30px"
+                  />
+
+                  <div
+                    [style]="{
+                      width: '30px',
+                      height: '30px',
+                      'background-color': team?.color
+                    }"
+                    class="rounded-circle principalImg"
+                    *ngIf="!team?.image && team?.color"
+                  ></div>
+                </div>
+                <div
+                  *ngIf="
+                    game?.competition_match?.match_situation === 'L' ||
+                    !game?.competition_match?.match_situation
+                  "
+                  class="mx-2 d-flex justify-content-md-center align-items-center"
+                >
+                  <img
+                    *ngIf="
+                      game?.competition_match?.rivals.length <= 0 && team?.image
+                    "
+                    [src]="team?.image?.full_url"
+                    class="rounded-circle principalImg"
+                    width="30px"
+                    height="30px"
+                  />
+
+                  <div
+                    [style]="{
+                      width: '30px',
+                      height: '30px',
+                      'background-color': team?.color
+                    }"
+                    class="rounded-circle principalImg"
+                    *ngIf="!team?.image && team?.color"
+                  ></div>
+
+                  <span class="mx-2 font-weight-500"
+                    >{{ getScoreOwn(game) }} : {{ getScoreRival(game) }}</span
+                  >
+                  <img
+                    *ngIf="
+                      game?.competition_match?.rivals.length <= 0 &&
+                      game?.competition_match?.competition_rival_team?.url_image
+                    "
+                    [src]="
+                      urlImages +
+                      game?.competition_match?.competition_rival_team?.url_image
+                    "
+                    class="rounded-circle principalImg"
+                    width="30px"
+                    height="30px"
+                  />
+
+                  <img
+                    *ngIf="
+                      game?.competition_match?.rivals.length <= 0 &&
+                      !game?.competition_match?.competition_rival_team
+                        ?.url_image
+                    "
+                    src="{{ '' | rivalAvatarPipe }}"
+                    class="rounded-circle principalImg"
+                    width="30px"
+                    height="30px"
+                  />
+                </div>
+              </td>
+              <td class="text-center">
+                {{ game?.competition_match?.competition_name }}
+              </td>
+              <td class="text-center">
+                <img
+                  [src]="game?.percept_effort?.image?.full_url"
+                  alt=""
+                  class="mr-1"
+                  width="25"
+                />
+                <div>
+                  {{ game?.percept_effort?.number }}
+                </div>
+              </td>
+              <td class="actions_column">
+                <button (click)="showStatics(game)" class="btn outline">
+                  <img
+                    alt=""
+                    src="../../../../../../assets/img/icons/bar_chart.svg"
+                    width="12px"
+                  />
+                </button>
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="6" style="text-align: center">
+                {{ "LBL_SINREGISTROS" | translate }}
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-4">
+    <div class="card soft-shadow">
+      <div class="card-header">
+        {{ "PLAYERS.estadisticagenerales" | translate }}
+      </div>
+      <div class="card-body p-4">
+        <div class="row mx-n2">
+          <div style="display: flex; justify-content: center; width: 100%">
+            <p
+              *ngIf="general_statistics_list.length <= 0"
+              class="nodata"
+              style="margin: 0"
+            >
+              {{ "LBL_SINREGISTROS" | translate }}
+            </p>
+          </div>
+
+          <div
+            *ngFor="let item of general_statistics_list"
+            class="col-sm-6 my-2 px-2"
+          >
+            <div class="match_stat">
+              <div class="name">{{ item.name }}</div>
+              <div class="stat">
+                <span class="stat_number">{{ item.value }}</span>
+                <div>
+                  <img [src]="item?.image?.full_url" alt="" width="40px" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-match-player-results
+  (close)="playerResultDialog = $event"
+  *ngIf="playerResultDialog"
+  [playerName]="playerName"
+  [playerStatistics]="playerStatistics"
+  [visible]="playerResultDialog"
+></app-match-player-results>
+<p-dialog
+  [(visible)]="visible"
+  [modal]="true"
+  id="player_stats_dialog"
+  maskStyleClass="purple_mask"
+>
+  <ng-template pTemplate="header">
+    <div class="title">
+      {{ "PLAYERS.estadisticasjugadorpartido" | translate }}
+    </div>
+    <button class="btn btn-primary btn_pdf">Ver PDF</button>
+  </ng-template>
+  <div class="player_stats_dialog_content">
+    <div class="row px-n-2">
+      <div
+        *ngFor="let i of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]"
+        class="col-sm-6 col-lg-3 my-2 px-2"
+      >
+        <div class="match_stat">
+          <div class="name">{{ "PLAYERS.totalgoles" | translate }}</div>
+          <div class="stat">
+            <span class="stat_number">1</span>
+            <div>
+              <img
+                alt=""
+                src="../../../../../../assets/img/icons/penal.png"
+                width="60px"
+              />
+            </div>
+          </div>
+          <div class="info"><span>+ 2% </span>al partido anterior</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p-footer> </p-footer>
+</p-dialog>

@@ -1,0 +1,324 @@
+<div
+  class="card box-shadow"
+  appUserPermission
+  [method]="['team_nutrition_store']"
+  (showItem)="handlePermission($event)"
+>
+  <div class="card-body p-0">
+    <div class="row">
+      <div class="col-12">
+        <div class="nutrition_header view_header p-4">
+          <div class="filters">
+            <div class="search-filter">
+              <div class="d-flex align-items-center mb-2 mb-sm-0">
+                <h6
+                  class="font-weight-600 mb-0 mr-4 text-main view_header_title"
+                >
+                  {{ "LBL_PLAYERS" | translate }}
+                </h6>
+                <span class="buscador p-input-icon-left d-md-inline">
+                  <i class="pi pi-search"></i>
+                  <input
+                    (keyup)="setValue($event)"
+                    [(ngModel)]="searchPlayer"
+                    pInputText
+                    placeholder="{{ 'LBL_SEARCH' | translate }}"
+                    type="text"
+                  />
+                </span>
+              </div>
+
+              <div
+                class="header_buttons d-flex btn_flex create-btn-section-responsive"
+                *ngIf="showPermission.store"
+              >
+                <button
+                  (click)="weightDialog = true"
+                  [disabled]="!selectedPlayer.length"
+                  class="btn btn-main mb-2 mb-sm-0"
+                >
+                  <span class="d-sm-inline mr-2">{{
+                    "nutrition.weight_control" | translate
+                  }}</span>
+                  <i class="fa fa-plus text-white"></i>
+                </button>
+                <button
+                  (click)="createNewSheet()"
+                  [disabled]="!selectedPlayer.length"
+                  class="btn action"
+                  pButton
+                >
+                  <span class="d-sm-inline mr-2">{{
+                    "nutrition.create_tab" | translate
+                  }}</span>
+                  <i class="fa fa-plus text-white"></i>
+                </button>
+              </div>
+            </div>
+            <div class="sort-input">
+              <div class="d-flex align-items-center">
+                <p-treeSelect
+                  [(ngModel)]="selectedFilter"
+                  (ngModelChange)="handleSelectFilter()"
+                  [options]="filterOptions"
+                  placeholder="{{ 'LBL_FILTRAR' | translate }}"
+                ></p-treeSelect>
+
+                <div *ngIf="this.selectedFilter?.code">
+                  <button
+                    class="btn see_all_btn"
+                    (click)="players = playerList; selectedFilter = null"
+                    pTooltip="{{ 'seeAll' | translate }}"
+                  >
+                    <i class="pi pi-times"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="header_buttons d-flex btn_flex create-btn-section"
+            *ngIf="showPermission.store"
+          >
+            <button
+              (click)="weightDialog = true"
+              [disabled]="!selectedPlayer.length"
+              class="btn action primary_btn"
+              pButton
+            >
+              <span class="d-sm-inline mr-2">{{
+                "nutrition.weight_control" | translate
+              }}</span>
+              <i class="fa fa-plus text-white"></i>
+            </button>
+            <button
+              (click)="createNewSheet()"
+              [disabled]="!selectedPlayer.length"
+              class="btn action"
+              pButton
+            >
+              <span class="d-sm-inline mr-2">{{
+                "nutrition.create_tab" | translate
+              }}</span>
+              <i class="fa fa-plus text-white"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="col-12">
+        <p-table
+          *ngIf="loading"
+          [value]="[1, 2]"
+          class="p-datatable-responsive"
+        >
+          <ng-template pTemplate="header">
+            <tr class="text-center">
+              <th style="width: 3rem; min-width: 3rem !important;">
+                <!-- <p-tableHeaderCheckbox></p-tableHeaderCheckbox> -->
+              </th>
+              <th class="text-left pl-5">{{ "nutrition.name" | translate }}</th>
+              <th class="text-center">{{ "nutrition.tab" | translate }}</th>
+              <th class="text-center">{{ "nutrition.get" | translate }}</th>
+              <th class="text-center">
+                {{ "nutrition.last_weight" | translate }}
+              </th>
+              <th class="text-center">{{ "nutrition.actions" | translate }}</th>
+            </tr>
+          </ng-template>
+          <ng-template let-product pTemplate="body">
+            <tr *ngFor="let i of [1, 2, 3]">
+              <td>
+                <p-skeleton width="7rem"></p-skeleton>
+              </td>
+              <td>
+                <p-skeleton
+                  class="d-flex justify-content-center"
+                  width="7rem"
+                ></p-skeleton>
+              </td>
+              <td>
+                <p-skeleton
+                  class="d-flex justify-content-center"
+                  width="7rem"
+                ></p-skeleton>
+              </td>
+              <td>
+                <p-skeleton
+                  class="d-flex justify-content-center"
+                  width="7rem"
+                ></p-skeleton>
+              </td>
+              <td>
+                <p-skeleton
+                  class="d-flex justify-content-center"
+                  width="7rem"
+                ></p-skeleton>
+              </td>
+              <td class="d-flex justify-content-center">
+                <p-skeleton width="4rem"></p-skeleton>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+        <p-table
+          #dt
+          *ngIf="!loading"
+          [(selection)]="selectedPlayer"
+          [paginator]="true"
+          [rows]="10"
+          [value]="players"
+          class="p-datatable-responsive"
+          selectionMode="single"
+        >
+          <ng-template pTemplate="header">
+            <tr class="text-center">
+              <th style="width: 3rem; min-width: 3rem !important;">
+                <!-- <p-tableHeaderCheckbox></p-tableHeaderCheckbox> -->
+              </th>
+              <th class="text-left" pSortableColumn="full_name">
+                {{ "nutrition.name" | translate }}
+                <p-sortIcon field="full_name"></p-sortIcon>
+              </th>
+              <th class="text-center">
+                {{ "nutrition.tab" | translate }}
+              </th>
+              <th
+                class="text-center"
+                pSortableColumn="nutritional_sheet.total_energy_expenditure"
+              >
+                {{ "nutrition.get" | translate }}
+                <p-sortIcon
+                  field="nutritional_sheet.total_energy_expenditure"
+                ></p-sortIcon>
+              </th>
+              <th class="text-center" pSortableColumn="weight">
+                {{ "nutrition.last_weight" | translate }}
+                <p-sortIcon field="weight"></p-sortIcon>
+              </th>
+              <th class="text-center">{{ "nutrition.actions" | translate }}</th>
+            </tr>
+          </ng-template>
+
+          <ng-template let-i="rowIndex" let-player pTemplate="body">
+            <tr class="colum-responsive">
+              <td class="checbox-w">
+                <p-tableCheckbox
+                  (click)="handleNutritionPlayer(player, i)"
+                  [value]="player"
+                ></p-tableCheckbox>
+              </td>
+
+              <td class="">
+                <div
+                  class="text-center d-flex justify-content-start align-items-center"
+                >
+                  <div>
+                    <img
+                      class="rounded-circle imagen-player mr-2"
+                      src="{{ player | avatarPipe }}"
+                      width="25px"
+                      height="25px"
+                    />
+                  </div>
+                  <div>
+                    <strong>{{ player.full_name || "N/a" }}</strong>
+                  </div>
+                </div>
+              </td>
+
+              <td class="text-center">
+                <div>
+                  <span class="p-column-title">{{
+                    "nutrition.tab" | translate
+                  }}</span>
+                </div>
+
+                <div>
+                  <span>
+                    <i
+                      *ngIf="player?.nutritional_sheet"
+                      class="fas fa-check check"
+                    ></i>
+                    <i
+                      *ngIf="!player?.nutritional_sheet"
+                      class="far fa-times-circle circle"
+                    ></i>
+                  </span>
+                </div>
+              </td>
+              <td class="checbox-w d-sm-none"></td>
+              <td class="text-center">
+                <div>
+                  <span class="p-column-title">GET</span>
+                </div>
+
+                <div>
+                  <span class="mr-3">
+                    {{
+                      player?.nutritional_sheet?.total_energy_expenditure
+                        ? parseValue(
+                            player?.nutritional_sheet?.total_energy_expenditure
+                          ) + " kcal"
+                        : "N/A"
+                    }}
+                  </span>
+                </div>
+              </td>
+
+              <td class="text-center">
+                <div>
+                  <span class="p-column-title">{{
+                    "nutrition.last_weight" | translate
+                  }}</span>
+                </div>
+                <div>
+                  {{ player.weight ? player.weight + " kg" : "N/A" }}
+                </div>
+              </td>
+
+              <td class="text-center w-column-full">
+                <div class="text-center">
+                  <button
+                    [disabled]="!player?.nutritional_sheet"
+                    [routerLink]="['/club/nutrition/player/' + player.id]"
+                    class="btn"
+                    pTooltip="{{ 'table_icons.seeDetails' | translate }}"
+                  >
+                    <img alt="" src="/assets/img/icons/book-icon.svg" />
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td *ngIf="!errorMessage" class="nodata text-center" colspan="6">
+                {{ "nodata.sinficha" | translate }}
+              </td>
+              <td *ngIf="errorMessage" class="nodata text-center" colspan="6">
+                {{ errorMessage }}
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
+  </div>
+</div>
+<app-create-sheet-dialog
+  (close)="close()"
+  (reloadNutritionData)="reloadData(true)"
+  *ngIf="newSheetDialog"
+  [selectedPlayer]="selectedPlayer"
+  [visible]="newSheetDialog"
+></app-create-sheet-dialog>
+<weight-control-dialog
+  (close)="weightDialog = false"
+  (refreshPlayerList)="refreshPlayerList()"
+  [handlePlayerStep]="selectedIndex"
+  [players]="playerList"
+  [selectedPlayer]="selectedPlayer"
+  [visible]="weightDialog"
+  *ngIf="weightDialog"
+></weight-control-dialog>

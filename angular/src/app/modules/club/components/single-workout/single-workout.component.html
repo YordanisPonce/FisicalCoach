@@ -1,0 +1,290 @@
+<div
+  class="workout"
+  [ngClass]="{
+    pointer: isSessionPage && !isSessionDetailsPage,
+    selected: getSelected(ejercicio) && isSessionPage
+  }"
+  (click)="isSessionPage && handleExerciseId.emit(ejercicio)"
+  appUserPermission
+  [method]="[
+    'team_exercise_update',
+    'team_exercise_delete',
+    'team_exercise_read'
+  ]"
+  (showItem)="handlePermission($event)"
+>
+  <div class="workout_img">
+    <div
+      class="exercise-order"
+      *ngIf="isSessionDetailsPage && !!getOrder(ejercicio) && !isAddList"
+    >
+      {{ getOrder(ejercicio) }}
+    </div>
+
+    <div
+      class="exercise-order"
+      *ngIf="isSessionDetailsPage && !!getOrder(ejercicio) && isAddList"
+    >
+      {{ getOrder(ejercicio) + exerciseListLength }}
+    </div>
+    <img
+      src="{{ ejercicio.image.full_url }}"
+      alt="exercise-image"
+      class="max-height"
+      *ngIf="ejercicio.image && ejercicio?.sport?.image_exercise"
+      height="190px"
+    />
+    <img
+      src="{{ ejercicio.sport.image_exercise.full_url }}"
+      alt="exercise-image"
+      class="max-height"
+      height="190px"
+      *ngIf="ejercicio?.sport?.image_exercise && !ejercicio.image"
+    />
+  </div>
+  <div class="workout_header">
+    <div class="w-100">
+      <div class="d-flex justify-content-between">
+        <h6 class="workout_author">
+          {{ ejercicio.user?.full_name || ejercicio?.author }}
+        </h6>
+
+        <div>
+          <span
+            (click)="update()"
+            role="button"
+            pTooltip="{{ 'LBL_EDIT' | translate }}"
+            class="mr-2"
+            *ngIf="!isSessionDetailsPage && showPermission.update"
+          >
+            <i class="pi pi-pencil"></i>
+          </span>
+
+          <span
+            (click)="handleDelete()"
+            role="button"
+            pTooltip="{{ 'LBL_DELETE' | translate }}"
+            *ngIf="
+              !isSessionPage &&
+              (isSessionDetailsPage || isWorkoutPage) &&
+              !deleteLoading &&
+              showPermission.delete
+            "
+          >
+            <i class="pi pi-trash"></i>
+          </span>
+
+          <span
+            role="button"
+            pTooltip="{{ 'LBL_DELETE' | translate }}"
+            *ngIf="
+              !isSessionPage &&
+              (isSessionDetailsPage || isWorkoutPage) &&
+              deleteLoading
+            "
+          >
+            <i class="pi pi-spin pi-spinner"></i>
+          </span>
+
+          <span
+            class="pointer ml-2"
+            (click)="handleLike(ejercicio.like)"
+            pTooltip="{{ 'workout.like' | translate }}"
+            *ngIf="!isSessionPage && !isSessionDetailsPage"
+          >
+            <i class="pi pi-heart" *ngIf="!this.ejercicio.like"></i>
+            <img
+              src="/assets/img/icons/heart-icon.png"
+              width="17px"
+              class="mb-1"
+              *ngIf="this.ejercicio.like"
+            />
+          </span>
+        </div>
+      </div>
+
+      <h6 class="workout_name">{{ ejercicio.title }}</h6>
+
+      <h6 class="workout_sport_name mt-1" *ngIf="role === 'teacher'">
+        {{ ejercicio.sport.name }}
+      </h6>
+    </div>
+    <div class="favorite"></div>
+  </div>
+  <div
+    class="workout_icons"
+    *ngIf="
+      ejercicio?.contents && ejercicio.contents.length > 0 && role === 'sport'
+    "
+  >
+    <div>
+      <img
+        src="{{ content.image.full_url }}"
+        alt="{{ content.code }}"
+        pTooltip="{{ content.name }}"
+        tooltipPosition="top"
+        *ngFor="let content of ejercicio.contents"
+      />
+    </div>
+
+    <div *ngIf="ejercicio?.distribution?.name">
+      <img
+        [src]="getDistributionImage(ejercicio.distribution.code)"
+        alt="distribution"
+        pTooltip="{{ ejercicio.distribution.name }}"
+        tooltipPosition="top"
+      />
+    </div>
+  </div>
+
+  <div
+    class="workout_icons flex-column"
+    *ngIf="!!ejercicio?.exercise_education_level && role === 'teacher'"
+  >
+    <strong class="mr-2">{{
+      ejercicio?.exercise_education_level?.name
+    }}</strong>
+
+    <div class="mt-2" *ngIf="ejercicio.content_blocks.length > 0">
+      <strong class="mr-2">{{ ejercicio.content_blocks[0].name }}</strong>
+    </div>
+  </div>
+
+  <div
+    class="workout_icons"
+    *ngIf="!ejercicio?.exercise_education_level && role === 'teacher'"
+  >
+    <div>
+      <span class="mr-2">{{ "exercise.noEducationLevel" | translate }}</span>
+    </div>
+
+    <div *ngIf="ejercicio?.distribution?.name">
+      <img
+        [src]="getDistributionImage(ejercicio.distribution.code)"
+        alt="distribution"
+        pTooltip="{{ ejercicio.distribution.name }}"
+        tooltipPosition="top"
+      />
+    </div>
+  </div>
+
+  <div
+    class="workout_icons align-items-center"
+    *ngIf="ejercicio?.contents?.length === 0 && role === 'sport'"
+  >
+    <p class="m-0">{{ "exercise.noContent" | translate }}</p>
+
+    <div *ngIf="ejercicio?.distribution?.name">
+      <img
+        [src]="getDistributionImage(ejercicio.distribution.code)"
+        alt="distribution"
+        pTooltip="{{ ejercicio.distribution.name }}"
+        tooltipPosition="top"
+      />
+    </div>
+  </div>
+  <div class="workout_content">
+    <div class="p-d-flex p-dir-row p-jc-between">
+      <div class="d-flex align-items-center">
+        <strong class="mr-2">{{ "exercise.difficulty" | translate }}</strong>
+        <p-rating
+          [(ngModel)]="ejercicio.difficulty"
+          [cancel]="false"
+          [disabled]="true"
+        ></p-rating>
+      </div>
+      <div class="d-flex align-items-center mb-1">
+        <strong class="mr-2">{{ "exercise.intensity" | translate }}</strong>
+
+        <img
+          src="{{ resources + '/face/' + intensityIcon?.icon }}"
+          alt="{{ intensityIcon.text }}"
+          width="25px"
+          class="ml-1"
+          *ngIf="intensityIcon"
+          pTooltip="{{ 'ratingExercise.' + intensityIcon.text | translate }}"
+        />
+
+        <span *ngIf="!intensityIcon">N/A </span>
+      </div>
+      <div class="d-flex align-items-center">
+        <strong class="mr-2">{{ "exercise.duration" | translate }}</strong>
+        <p class="description">{{ ejercicio.duration || "N/A" }}</p>
+      </div>
+    </div>
+    <p class="description auto-height">{{ ejercicio.description }}</p>
+  </div>
+  <div class="workout_footer" *ngIf="!isSessionDetailsPage">
+    <button
+      class="btn"
+      (click)="downloadPDF(ejercicio.code, ejercicio.title)"
+      [disabled]="loadingPDF"
+    >
+      <span *ngIf="!loadingPDF">{{ "workout.downloadPdf" | translate }}</span>
+      <img
+        *ngIf="loadingPDF"
+        src="assets/img/icons/loading.svg"
+        alt=""
+        width="50px"
+      />
+    </button>
+    <span class="separator"></span>
+
+    <button class="btn" (click)="createModel3D('')" *ngIf="!ejercicio.image">
+      <span>
+        {{ "workout.create" | translate }}
+      </span>
+    </button>
+
+    <button
+      class="btn"
+      (click)="createModel3D(ejercicio.image.full_url)"
+      *ngIf="ejercicio.image"
+    >
+      <span>
+        {{ "workout.see" | translate }}
+      </span>
+    </button>
+
+    <span class="separator"></span>
+
+    <button
+      class="btn"
+      [routerLink]="'/club/workout/details/' + ejercicio.code"
+      *ngIf="showPermission.read"
+    >
+      <span>
+        {{ "workout.seeEcercise" | translate }}
+      </span>
+    </button>
+  </div>
+
+  <div class="workout_footer" *ngIf="isSessionDetailsPage">
+    <button class="btn">{{ "workout.downloadPdf" | translate }}</button>
+    <span class="separator"></span>
+
+    <button
+      class="btn"
+      (click)="createModel3D(ejercicio.image.full_url)"
+      *ngIf="!isSessionPage"
+    >
+      <span>
+        {{ "workout.see" | translate }}
+      </span>
+    </button>
+
+    <span class="separator" *ngIf="!isSessionPage"></span>
+
+    <button
+      class="btn"
+      routerLink="{{
+        '/club/training-sessions/exercise/details/' + ejercicio.code
+      }}"
+    >
+      <span>
+        {{ "workout.seeEcercise" | translate }}
+      </span>
+    </button>
+  </div>
+</div>
+<!--routerLink="/club/workout/detalles"-->

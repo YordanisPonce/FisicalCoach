@@ -1,0 +1,58 @@
+<p-dialog id="daily_workout_dialog" class="custom_dialog" [modal]="true" [header]="'Trabajo diario +'" [(visible)]="visible" styleClass="" maskStyleClass="purple_mask" (onHide)="closeDialog()">
+    <div id="daily_workout_dialog_container" class="dialog_container">
+        <div>
+            <div class="step_content">
+                <!-- <div class="row">
+                    <div class="col-12 col-lg-6"> -->
+                        <div class="row">
+                            <div class="col-12 col-lg-6 mb-4">
+                                <label>Día ( Fecha y hora )</label>
+                                <input class="form-control input-rounded" placeholder="DD/MM/AAA 00:00"
+                                aria-label="Default"
+                                aria-describedby="inputGroup-sizing-default" formControlName="names">    
+                            </div>
+                            <div class="col-12 col-lg-6 mb-4">
+                                <label>RPE ( caritas )</label>
+                                <input class="form-control input-rounded" placeholder="Escribir aqui..."
+                                aria-label="Default"
+                                aria-describedby="inputGroup-sizing-default" formControlName="names">    
+                            </div>
+                            <div class="col-12 col-lg-6 mb-4">
+                                <label>Duración de la sesión</label>
+                                <input class="form-control input-rounded" placeholder="00:00:00"
+                                aria-label="Default"
+                                aria-describedby="inputGroup-sizing-default" formControlName="names">    
+                            </div>
+                            <div class="col-12 col-lg-6 mb-4">
+                                <label>Test o pruebas</label>
+                                <input class="form-control input-rounded" placeholder="Escribir aqui..."
+                                aria-label="Default"
+                                aria-describedby="inputGroup-sizing-default" formControlName="names">    
+                            </div>
+                            <div class="col-12 mb-4">
+                                <label>Descripcion de la sesion</label>
+                                <textarea class="form-control" placeholder="Escribir aquí..." name="" id="" cols="20" rows="5"></textarea>    
+                            </div>
+                        </div>
+                    <!-- </div>
+                </div> -->
+            </div>
+        </div>
+        <!-- <div>
+            <ul class="step_markers full_markers">
+                <li>
+                    <span class="step_marker" (click)="step= 1" [ngClass]="{'active' : step==1}"></span>
+                </li>
+                <li>
+                    <span class="step_marker" [ngClass]="{'active' : step==2}"></span>
+                </li>
+            </ul>
+        </div> -->
+    </div>
+    <p-footer>
+        <div class="footer_btns">
+        <button class="btn back_btn" (click)="closeDialog()">{{'LBL_ATRAS'| translate}}</button>
+        <button class="btn next_btn" (click)="closeDialog()">Registrar</button>
+        </div>
+    </p-footer>
+</p-dialog>

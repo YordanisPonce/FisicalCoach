@@ -1,0 +1,81 @@
+<p-dialog
+  (onHide)="closeDialog()"
+  [(visible)]="visible"
+  [modal]="true"
+  class="custom_dialog"
+  id="recover_password_dialog"
+  maskStyleClass="purple_mask"
+  styleClass=""
+>
+  <ng-template pTemplate="header">
+    <div class="d-flex header_content p-dialog-title">
+      <div *ngIf="step === 1" class="" id="go_back">
+        <i class="pi pi-angle-left"></i>
+      </div>
+      <span *ngIf="step == 1" class="mx-auto text-uppercase font-weight-500">
+        {{ "activeuser.titleone" | translate }}
+        <strong>{{ "activeuser.titletwo" | translate }}</strong>
+      </span>
+    </div>
+  </ng-template>
+  <div class="dialog_container" id="recover_password_dialog_container">
+    <div *ngIf="step == 1">
+      <img
+        alt=""
+        class="mt-3 mb-5"
+        src="/assets/img/recover_password.svg"
+        width="300px"
+      />
+      <!--      <p class="font-weight-500 text-uppercase text-dark">-->
+      <!--        {{ "recuperate.textEmail" | translate }}-->
+      <!--      </p>-->
+      <p class="font-weight-500 text-uppercase text-dark">
+        {{ msg }}
+      </p>
+      <div>
+        <input
+          [(ngModel)]="email"
+          aria-describedby="inputGroup-sizing-default"
+          aria-label="Default"
+          class="form-control input-rounded"
+          name="email"
+          placeholder="ejemplo@gmail.com"
+        />
+      </div>
+    </div>
+    <div *ngIf="step == 2">
+      <span *ngIf="step == 2" class="mx-auto text-uppercase font-weight-500">
+        {{ "activeuser.textemailsend" | translate }}
+        <strong> {{ "activeuser.textemailsendtwo" | translate }}</strong>
+      </span>
+      <img
+        alt=""
+        class="my-5"
+        src="/assets/img/email_sent_plane.svg"
+        width="200px"
+      />
+    </div>
+  </div>
+  <p-footer>
+    <div class="footer_btns">
+      <button *ngIf="loading" class="btn" disabled type="button">
+        <span
+          aria-hidden="true"
+          class="spinner-grow spinner-grow-sm"
+          role="status"
+        ></span>
+        Loading...
+      </button>
+      <button (click)="sendData()" *ngIf="!loading && step === 1" class="btn">
+        {{ "activeuser.textSend" | translate }}
+      </button>
+      <button
+        (click)="step = 1; closeDialog()"
+        *ngIf="!loading && step === 2"
+        class="btn"
+      >
+        {{ "activeuser.close" | translate }}
+      </button>
+    </div>
+  </p-footer>
+</p-dialog>

@@ -1,0 +1,173 @@
+<p-dialog
+      (onHide)="closeDialog()"
+      [(visible)]="visible"
+      [header]="('qualification.new_qualification'|translate)"
+      [modal]="true"
+      class="custom_dialog"
+      id="new_calification_dialog"
+      maskStyleClass="purple_mask"
+>
+  <form [formGroup]="newCalificationForm" action="">
+    <div class="dialog_container" id="calification_dialog_container">
+      <div class="row">
+        <div class="col-md-6 mb-4">
+          <label class="mb-4"
+          >{{ 'qualification.title' | translate }} *</label>
+          <div class="">
+            <input
+                  [ngClass]="{'ng-invalid ng-dirty is-invalid':(newCalificationControls.title.invalid && (newCalificationControls.title.dirty || newCalificationControls.title.touched))}"
+                  [readonly]="details===true"
+                  aria-describedby="inputGroup-sizing-default"
+                  aria-label="Default"
+                  class="form-control"
+                  formControlName="title"
+                  placeholder="{{'LBL_TYPE_HERE' | translate}}">
+            <div *ngIf="newCalificationControls.title?.errors?.required" class="invalid-feedback">
+              {{"validations.required_field" | translate}}
+            </div>
+            <div *ngIf="newCalificationControls.title?.errors?.minlength" class="invalid-feedback">
+              {{ 'validations.min_length' | translate:({ value: newCalificationControls.title.errors?.minlength.requiredLength })}}
+            </div>
+          </div>
+        </div>
+        <!-- period -->
+        <div class="col-md-6 mb-4">
+          <label class="mb-4">{{ "MEMBERS.LBL_PERIODO" | translate }} *</label>
+          <div>
+            <p-dropdown
+                  [ngClass]="{'ng-invalid ng-dirty is-invalid':(newCalificationControls.classroom_academic_period_id.invalid && (newCalificationControls.classroom_academic_period_id.dirty || newCalificationControls.classroom_academic_period_id.touched))}"
+                  [options]="periods"
+                  [readonly]="details===true"
+                  [styleClass]="'w-100 form-control'"
+                  formControlName="classroom_academic_period_id"
+                  id="period"
+                  optionLabel="title"
+                  optionValue="id"
+                  placeholder="{{ 'LBL_SELECCIONE' | translate }}"
+            ></p-dropdown>
+            <div *ngIf="newCalificationControls.classroom_academic_period_id?.errors" class="invalid-feedback">
+              {{"validations.required_field" | translate}}
+            </div>
+          </div>
+        </div>
+        <!-- porcentaje -->
+        <!-- descripcion -->
+        <div class="col-12 mb-4">
+          <label>{{"qualification.description" | translate}} *</label>
+          <textarea
+                [ngClass]="{'ng-invalid ng-dirty is-invalid':(newCalificationControls.description.invalid && (newCalificationControls.description.dirty || newCalificationControls.description.touched))}"
+                [readonly]="details===true"
+                class="form-control"
+                formControlName="description"
+                placeholder="{{'LBL_TYPE_HERE' | translate}}"
+                rows="2">
+          </textarea>
+          <div *ngIf="newCalificationControls.description?.errors?.required" class="invalid-feedback">
+            {{"validations.required_field" | translate}}
+          </div>
+          <div *ngIf="newCalificationControls.description?.errors?.minlength" class="invalid-feedback">
+            {{ 'validations.min_length' | translate:({ value: newCalificationControls.description.errors?.minlength.requiredLength })}}
+          </div>
+        </div>
+      </div>
+      <button (click)="addRubric()" [disabled]="details===true" class="btn btn_add_rubric btn-block">
+        <span>{{ 'qualification.add_rubric' | translate }} +</span>
+      </button>
+      <h6 class="my-4 d-flex">
+        {{ 'qualification.available_rubrics' | translate }}
+        <span *ngIf="rubrics" [ngClass]="{'text-danger':getIndicatorsTotalpercentage()!=100}"
+              class="ml-auto d-flex align-items-center" pTooltip="{{'new_rubric.indicators_validation' | translate}}"
+              tooltipPosition="left">
+          <i *ngIf="getIndicatorsTotalpercentage()!=100" class="pi pi-info-circle mr-1"></i>
+          Total: {{getIndicatorsTotalpercentage()}}%
+        </span>
+      </h6>
+      <div *ngIf="(qualificationRubrics && qualificationRubrics.length>0) && loadingRubrics===false" class="rubrics">
+        <p-scrollPanel [style]="{width: '100%', height: '230px'}">
+          <div *ngFor="let rubric of qualificationRubrics; index as i" class="rubric btn btn-block">
+            <span class="rubric_name">({{rubric.percentage}}%) - {{rubric.name}}</span>
+            <button (click)="details!=true ? removeRubric(rubric.classroom_rubric_id) : ''" [disabled]="details===true"
+                    class="btn">
+              <i class="pi pi-trash text-white"></i>
+            </button>
+            <button (click)="editRubric(rubric, i)" [disabled]="details===true" class="btn">
+              <i class="pi pi-pencil text-white"></i>
+            </button>
+          </div>
+        </p-scrollPanel>
+      </div>
+      <div *ngIf="loadingRubrics === false && rubrics && rubrics.length === 0" class="">
+        <p class="p-4 text-center">
+          {{ "new_rubric.no_indicators" | translate }}
+        </p>
+      </div>
+    </div>
+  </form>
+  <ng-template pTemplate="footer">
+    <div class="footer_btns">
+      <button (click)="closeDialog()" class="back_btn btn">{{"LBL_ATRAS"|translate}}</button>
+      <button
+            (click)="details!=true ? onSubmit() : ''"
+            [disabled]="(loading === true || details===true || loadingRubrics===true || (rubrics && getIndicatorsTotalpercentage()!=100))"
+            class="next_btn btn"
+      >
+        {{ editing ? ('qualification.edit_qualification' | translate) : ('qualification.create_qualification' | translate) }}
+      </button>
+    </div>
+  </ng-template>
+</p-dialog>
+
+<!-- add rubric dialog -->
+<p-dialog (onHide)="closeRubricDialog()" [(visible)]="addRubricDialog" [modal]="true" class="custom_dialog"
+          header="{{ 'qualification.add_rubric' | translate }}" id="add_rubric_dialog" maskStyleClass="purple_mask"
+          styleClass="">
+  <div class="dialog_container" id="add_rubric_dialog_container">
+    <form [formGroup]="addRubricForm">
+      <div class="step_content">
+        <div class="row">
+          <!-- rubrica -->
+          <div class="col-12 mb-4">
+            <label class="mb-4">{{ "qualification.rubric" | translate }} *</label>
+            <div>
+              <p-dropdown (onChange)="selectRubric($event.value)" [(ngModel)]="selectedRubric"
+                          [ngClass]="{'ng-invalid ng-dirty is-invalid':(addRubricControls.classroom_rubric_id.invalid && (addRubricControls.classroom_rubric_id.dirty || addRubricControls.classroom_rubric_id.touched))}"
+                          [ngModelOptions]="{ standalone: true }" [options]="rubricsList"
+                          [styleClass]="'w-100 form-control'" id="rubric" optionLabel="name"
+                          placeholder="{{ 'LBL_SELECCIONE' | translate }}"></p-dropdown>
+              <div *ngIf="addRubricControls.classroom_rubric_id?.errors" class="invalid-feedback">
+                {{"validations.required_field" | translate}}
+              </div>
+            </div>
+          </div>
+          <!-- porcentaje -->
+          <div class="col-12">
+            <label>{{"qualification.percentage" | translate}}*</label>
+            <div class="input-group mb-2">
+              <div class="input-group-prepend">
+                <div class="input-group-text">%</div>
+              </div>
+              <input
+                    [ngClass]="{'ng-invalid ng-dirty is-invalid':(addRubricControls.percentage.invalid && (addRubricControls.percentage.dirty || addRubricControls.percentage.touched))}"
+                    class="form-control" formControlName="percentage" max="100" maxlength="3" min="1"
+                    placeholder="{{ 'qualification.porcentage' | translate }}" type="number">
+              <div *ngIf="addRubricControls.percentage?.errors?.required" class="invalid-feedback">
+                {{"validations.required_field" | translate}}
+              </div>
+              <div *ngIf="addRubricControls.percentage?.errors?.max" class="invalid-feedback">
+                {{ 'validations.max_value' | translate:({ value: addRubricControls.percentage?.errors?.max.max })}}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <p-footer>
+    <div class="footer_btns">
+      <button (click)="closeRubricDialog()" class="btn back_btn">{{'LBL_ATRAS'| translate}}</button>
+      <button (click)="onSubmitRubric()" [disabled]="(loading == true)" class="btn next_btn">
+        {{'LBL_ANADIR'|translate}}
+      </button>
+    </div>
+  </p-footer>
+</p-dialog>

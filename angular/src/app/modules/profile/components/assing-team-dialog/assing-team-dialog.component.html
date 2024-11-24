@@ -1,0 +1,84 @@
+<p-dialog
+  id="asistence_dialog"
+  class="custom_dialog"
+  [modal]="true"
+  [(visible)]="visible"
+  styleClass=""
+  maskStyleClass="purple_mask"
+  (onHide)="closeDialog()"
+>
+  <ng-template pTemplate="header">
+    <div>
+      <span class="p-dialog-title mr-3">
+        {{ "profile.assing_team" | translate }}
+      </span>
+      <span class="buscador p-input-icon-left d-none d-md-inline">
+        <i class="pi pi-search"></i>
+        <input
+          type="text"
+          pInputText
+          placeholder="{{ 'LBL_SEARCH' | translate }}"
+          [(ngModel)]="searchPlayer"
+          (keyup)="setValue($event)"
+        />
+      </span>
+    </div>
+  </ng-template>
+
+  <p-table [value]="teams" [(selection)]="selectedteams">
+    <ng-template pTemplate="header">
+      <tr class="text-center">
+        <th style="width: 3rem">
+          <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+        </th>
+        <th class="text-left" style="width: 300px">
+          {{ "profile.teams" | translate }}
+        </th>
+        <th class="text-center"></th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-item>
+      <tr>
+        <td>
+          <p-tableCheckbox [value]="item"></p-tableCheckbox>
+        </td>
+        <td class="text-center">
+          <div class="d-flex align-items-center">
+            <span class="rounded-circle sidebar-item-img">
+              <img
+                src="{{ item.image?.full_url }}"
+                class="rounded-circle"
+                width="30px"
+                *ngIf="item.image?.full_url"
+              />
+
+              <div
+                *ngIf="item?.color && !item.image"
+                [style]="'background-color:' + item.color"
+                class="color"
+              ></div>
+            </span>
+            <span class="ml-2">{{ item.name }}</span>
+          </div>
+        </td>
+        <td></td>
+      </tr>
+    </ng-template>
+  </p-table>
+
+  <p-footer>
+    <div class="footer_btns">
+      <button
+        class="btn btn_primary add_btn"
+        *ngIf="!loading"
+        (click)="assingExercise()"
+      >
+        {{ "LBL_GUARDAR" | translate }}
+      </button>
+
+      <button class="btn btn_primary add_btn" disabled *ngIf="loading">
+        {{ "LBL_GUARDANDO" | translate }}
+      </button>
+    </div>
+  </p-footer>
+</p-dialog>

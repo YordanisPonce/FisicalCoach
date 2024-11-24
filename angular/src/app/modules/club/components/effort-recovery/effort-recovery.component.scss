@@ -1,0 +1,49 @@
+:host ::ng-deep {
+  .strategy_check_icon {
+    font-size: 24px;
+    color: #00e9c5;
+  }
+  .answer {
+    // opacity: .85;
+  }
+  .very_low-text {
+    color: #f92f28;
+  }
+  .low-text {
+    color: #ffa200;
+  }
+  .normal-text {
+    color: #c8df00;
+  }
+  .high-text {
+    color: #0065e9;
+  }
+  .very_high-text {
+    color: #00e9c5;
+  }
+  .bg-light-warning {
+    background-color: rgba($color: #ffde0a, $alpha: 0.17);
+  }
+  .bg-light-success {
+    background-color: rgba($color: #12ff0a, $alpha: 0.17);
+  }
+  .effort_recovery_header {
+    display: flex;
+    align-items: center;
+    // margin-bottom: 2rem;
+    padding: 1.5rem 2.5rem;
+    width: 100%;
+    // padding: 1rem 0rem;
+  }
+
+  .circle {
+    color: #ff4a4a;
+    font-size: 24px;
+  }
+}
+
+@media (max-width: 1440px) {
+  th {
+    min-width: 195px !important;
+  }
+}

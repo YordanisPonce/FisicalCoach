@@ -1,0 +1,407 @@
+<p-dialog
+  (onHide)="closeDialog()"
+  [(visible)]="visible"
+  [modal]="true"
+  class="custom_dialog"
+  id="invitar_miembros_dialog"
+  maskStyleClass=""
+  styleClass="fullscreenDialog"
+>
+  <ng-template pTemplate="header">
+    <div class="d-flex header_content">
+      <img alt="" src="/assets/img/logo_panel.svg" />
+    </div>
+  </ng-template>
+  <div
+    [ngClass]="{ 'not-wide': step === 2 || step === 4 }"
+    class="dialog_container"
+    id="invitar_miembros_dialog_container"
+  >
+    <form>
+      <div *ngIf="step == 1" class="step_content">
+        <div class="border-0 px-0 view_header">
+          <h6 class="font-weight-600 mb-0 mr-4">
+            {{ "academySidebar.invite_members" | translate }}
+          </h6>
+          <div
+            class="p-input-icon-left d-block d-md-inline buscador my-3 my-md-0 mr-md-3"
+          >
+            <i class="pi pi-search"></i>
+            <input
+              (input)="searchMember($event)"
+              pInputText
+              placeholder="{{ 'LBL_SEARCH' | translate }}..."
+              type="text"
+            />
+          </div>
+          <button (click)="step = 2" class="btn action ml-auto" type="button">
+            <span class="">{{ "invite_members.invite" | translate }}</span>
+          </button>
+        </div>
+        <div class="members_container">
+          <p-chip
+            (click)="selectMember(member)"
+            *ngFor="let member of clubMembers"
+            [ngClass]="{ selected: member.selected == true }"
+            [style]="{ cursor: 'pointer' }"
+          >
+            <div class="member">
+              <img src="{{ member | avatarTeacherPipe }}" width="30px" />
+              <div class="name">
+                {{ member.full_name || member.email }}
+              </div>
+            </div>
+          </p-chip>
+        </div>
+      </div>
+
+      <div
+        *ngIf="step == 2"
+        class="step_content m-auto"
+        style="max-width: 400px"
+      >
+        <!-- <form action=""> -->
+        <div class="d-flex align-items-center mb-5">
+          <button
+            (click)="step = 1"
+            [disabled]="clubMembers.length === 0"
+            class="btn"
+            pTooltip="{{ 'LBL_ATRAS' | translate }}"
+            tooltipPosition="top"
+            type="button"
+          >
+            <i
+              class="pi pi-angle-left text-primary back_btn"
+              style="font-size: 30px"
+            ></i>
+          </button>
+          <h6 class="font-weight-bold mb-0">
+            {{ "invite_members.invite_title" | translate }}
+          </h6>
+        </div>
+        <div class="row">
+          <div class="col-12 mb-3">
+            <label>{{ "invite_members.guest_emails" | translate }}</label>
+            <div class="invitados">
+              <p-chip *ngFor="let invitation of emailInvitations">
+                <div class="p-chip-text">
+                  {{ invitation?.email }}
+                </div>
+                <span
+                  (click)="removeInvitation(invitation.email)"
+                  class="pi pi-times-circle pi-chip-remove-icon"
+                ></span>
+              </p-chip>
+            </div>
+          </div>
+          <div class="col-12 mb-5">
+            <input
+              #emailInvitation="ngModel"
+              (blur)="addGuest($event, emailInvitation.valid)"
+              (keydown.enter)="addGuest($event, emailInvitation.valid)"
+              [ngClass]="{
+                'ng-invalid ng-dirty is-invalid':
+                  (emailInvitation.invalid &&
+                    (emailInvitation.dirty || emailInvitation.touched)) ||
+                  (emailInvitation.invalid && this.submittedForm)
+              }"
+              [ngModelOptions]="{ standalone: true }"
+              class="form-control"
+              email
+              ngModel
+              pTooltip="{{ 'invite_members.press_enter' | translate }}"
+              pattern="^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$"
+              placeholder="{{ 'LBL_ESCRIBEAQI' | translate }}"
+              type="email"
+            />
+            <div *ngIf="emailInvitation.invalid" class="invalid-feedback">
+              {{ "invite_members.invalid_email" | translate }}
+            </div>
+          </div>
+          <div class="col-12 mb-4">
+            <label>{{ "invite_members.add_note" | translate }}</label>
+            <div>
+              <textarea
+                [(ngModel)]="annotation"
+                [ngModelOptions]="{ standalone: true }"
+                class="form-control"
+                cols="30"
+                id=""
+                name=""
+                rows="10"
+              ></textarea>
+            </div>
+          </div>
+        </div>
+        <div
+          class="row"
+          style="
+            justify-content: center;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+          "
+        >
+          <button
+            (click)="step = 1"
+            class="btn back_btn"
+            style="
+              border: 1px solid lightgrey;
+              border-radius: 32px;
+              margin-right: 5px;
+            "
+            type="button"
+          >
+            {{ "LBL_ATRAS" | translate }}
+          </button>
+          <button
+            (click)="prepareInvitations()"
+            [disabled]="emailInvitations.length === 0"
+            class="btn btn-block"
+            id="btn-send-invitation"
+            type="button"
+          >
+            {{ "BTN_CONTINUAR" | translate }}
+          </button>
+        </div>
+      </div>
+
+      <div *ngIf="step == 3" class="step_content split_content">
+        <div class="d-flex align-items-center mb-5">
+          <button
+            (click)="step = 2"
+            *ngIf="!_editInvitation"
+            [disabled]="clubMembers.length === 0"
+            class="btn"
+            pTooltip="{{ 'LBL_ATRAS' | translate }}"
+            tooltipPosition="top"
+          >
+            <i
+              class="pi pi-angle-left text-primary back_btn"
+              style="font-size: 30px"
+            ></i>
+          </button>
+          <h6 class="font-weight-bold mb-0">
+            {{ "invite_members.select_team_msg" | translate }}
+          </h6>
+        </div>
+        <div class="permisos_container">
+          <div class="selected_members">
+            <p-chip
+              (click)="selectInvitationEmail(invitation)"
+              *ngFor="let invitation of emailInvitations"
+              [ngClass]="{
+                selected: selectedInvitation?.email === invitation.email
+              }"
+            >
+              <div class="member">
+                <img
+                  class="image team_email"
+                  src="{{ invitation | avatarPipe }}"
+                  alt="invitation-img"
+                />
+                <div class="name">{{ invitation?.email }}</div>
+              </div>
+            </p-chip>
+          </div>
+          <div class="permisos">
+            <table>
+              <div class="view_header">
+                <h6 class="font-weight-600 mb-0 mb-4 mb-md-0 mr-lg-4">
+                  {{ "invite_members.permissions" | translate }}
+                </h6>
+                <div>
+                  <p-dropdown
+                    (onChange)="selectInvitationEmail($event.value)"
+                    [(ngModel)]="selectedInvitation"
+                    [ngModelOptions]="{ standalone: true }"
+                    [options]="mobileEmailInvitations()"
+                    [styleClass]="'form-control d-lg-none'"
+                    class="w-100 d-lg-none"
+                    optionLabel="email"
+                    optionValue="email"
+                    placeholder="Selecciona una invitación"
+                  >
+                    <ng-template let-email pTemplate="selectedItem">
+                      <div
+                        *ngIf="selectedInvitation"
+                        class="team-item team-item-value d-flex align-items-center"
+                      >
+                        <span class="team-item-color mr-1 team_email"></span>
+                        <div>{{ email.email }}</div>
+                      </div>
+                    </ng-template>
+                    <ng-template let-email pTemplate="item">
+                      <div class="team-item d-flex align-items-center">
+                        <span class="team-item-color mr-1 team_email"></span>
+                        <div>{{ email.email }}</div>
+                      </div>
+                    </ng-template>
+                  </p-dropdown>
+                </div>
+                <div>
+                  <p-dropdown
+                    (onChange)="selectInvitationTeam($event)"
+                    [(ngModel)]="selectedTeam"
+                    [filter]="false"
+                    [ngModelOptions]="{ standalone: true }"
+                    [options]="_editInvitation ? editTeams : clubTeams"
+                    [showClear]="false"
+                    [styleClass]="'form-control my-3'"
+                    class="w-100"
+                    optionLabel="name"
+                    placeholder="{{ 'invite_members.select_team' | translate }}"
+                  >
+                    <ng-template pTemplate="selectedItem">
+                      <div
+                        *ngIf="selectedTeam"
+                        class="team-item team-item-value d-flex align-items-center"
+                      >
+                        <span
+                          [ngStyle]="{ 'background-color': selectedTeam.color }"
+                          class="team-item-color mr-1"
+                        ></span>
+                        <div>{{ selectedTeam.name }}</div>
+                      </div>
+                    </ng-template>
+                    <ng-template let-team pTemplate="item">
+                      <div class="team-item d-flex align-items-center">
+                        <span
+                          [ngStyle]="{ 'background-color': team.color }"
+                          class="team-item-color mr-1"
+                        ></span>
+                        <div>{{ team.name }}</div>
+                      </div>
+                    </ng-template>
+                  </p-dropdown>
+                </div>
+                <p-checkbox
+                  (onChange)="setAllModulesPermissions($event)"
+                  [(ngModel)]="allModulePermissions"
+                  [binary]="true"
+                  [disabled]="
+                    selectedInvitation === null || selectedTeam === null
+                  "
+                  class="mb-3 mb-lg-0 mx-md-3"
+                  label="{{ 'invite_members.all_permissions' | translate }}"
+                  name="groupname"
+                >
+                </p-checkbox>
+                <button
+                  (click)="onSubmit()"
+                  [disabled]="loading"
+                  class="btn action ml-lg-auto"
+                >
+                  <span class="d-sm-inline">{{
+                    _editInvitation
+                      ? ("invite_members.save" | translate)
+                      : ("invite_members.save_invite" | translate)
+                  }}</span>
+                </button>
+              </div>
+              <tbody>
+                <tr *ngFor="let item of usersPermissions">
+                  <td class="permiso">
+                    <span>{{ "invite_members." + item.type | translate }}</span>
+                  </td>
+                  <td>
+                    <div class="options">
+                      <p-checkbox
+                        #cb
+                        (onChange)="
+                          setInvitationPermissions(
+                            item.type,
+                            item.permissions,
+                            permission.name
+                          )
+                        "
+                        *ngFor="let permission of item.permissions"
+                        [(ngModel)]="currentPermissions"
+                        [disabled]="
+                          selectedInvitation === null || selectedTeam === null
+                        "
+                        [label]="getLabelPermissionName(permission.name)"
+                        name="permissions"
+                        value="{{ permission.name }}"
+                      >
+                      </p-checkbox>
+                      <p-checkbox
+                        #all
+                        (onChange)="setAllPermissions($event, item.permissions)"
+                        *ngIf="!optionsOnlyUpdate.includes(item.type)"
+                        [(ngModel)]="allPermissions[item.type]"
+                        [binary]="true"
+                        [disabled]="
+                          selectedInvitation === null || selectedTeam === null
+                        "
+                        label="{{ 'invite_members.all' | translate }}"
+                        name="{{ item.type }}"
+                      >
+                      </p-checkbox>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+              <div class="view_header" style="justify-content: center">
+                <div
+                  class="row"
+                  style="
+                    display: grid;
+                    grid-template-columns: 1fr 1fr;
+                    justify-content: center;
+                  "
+                >
+                  <button
+                    (click)="step = 2"
+                    class="btn back_btn"
+                    style="
+                      border: 1px solid lightgrey;
+                      border-radius: 8px;
+                      margin-right: 5px;
+                    "
+                  >
+                    {{ "LBL_ATRAS" | translate }}
+                  </button>
+                  <button
+                    (click)="onSubmit()"
+                    [disabled]="loading"
+                    class="btn action ml-lg-auto"
+                    style="margin-left: auto; margin-right: auto"
+                  >
+                    <span class="d-sm-inline" style="color: white">
+                      {{
+                        _editInvitation
+                          ? ("invite_members.save" | translate)
+                          : ("invite_members.save_invite" | translate)
+                      }}</span
+                    >
+                  </button>
+                </div>
+              </div>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="step == 4" class="step_content">
+        <div
+          class="mb-5 position-relative d-flex align-items-center justify-content-center"
+        >
+          <h6 class="font-weight-bold" *ngIf="!isEditing">
+            {{ "invite_members.invitation_created" | translate }}
+          </h6>
+          <h6 class="font-weight-bold" *ngIf="isEditing">
+            {{ "invite_members.invitation_updated" | translate }}
+          </h6>
+        </div>
+        <div class="success_content">
+          <div class="success_sphere">
+            <i class="pi pi-check"></i>
+          </div>
+          <div class="caption" *ngIf="!isEditing">
+            {{ "invite_members.invitation_created_caption" | translate }}
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</p-dialog>

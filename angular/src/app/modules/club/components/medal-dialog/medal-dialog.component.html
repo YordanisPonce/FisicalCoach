@@ -1,0 +1,25 @@
+<p-dialog 
+id="medal_dialog" 
+class="custom_dialog" 
+[modal]="true" 
+[header]="title" 
+[(visible)]="visible" 
+styleClass="" 
+maskStyleClass="purple_mask" 
+(onHide)="closeDialog()"
+>
+    <div id="medal_dialog_container" class="dialog_container">
+        <div class="text-center">
+            <img src="{{images+'images/rfd_injuries/good_work.svg'}}" alt="" *ngIf="success" width="200px">
+            <img src="{{images+'images/rfd_injuries/work_not_been_good.svg'}}" alt="" *ngIf="!success" width="200px">
+
+
+            <h6 class="mt-4" class="{{success ? 'text-aqua' : 'text-danger'}}" [innerHTML]="msg"></h6>
+        </div>
+    </div>
+    <p-footer>
+        <div class="footer_btns">
+            <button class="btn next_btn" (click)="closeDialog()">{{'LBL_CERRAR'| translate}}</button>
+        </div>
+    </p-footer>
+</p-dialog>

@@ -1,0 +1,82 @@
+<ng-container *ngIf="situation === 'local'">
+  <div
+    [style]="{
+      width: '50px',
+      height: '50px',
+      backgroundColor: matchInfo.team.color,
+      borderRadius: '50%',
+      marginBottom: '7px'
+    }"
+    *ngIf="
+      matchInfo.match_situation === 'L' &&
+      !matchInfo.team.image &&
+      matchInfo.team.color
+    "
+  ></div>
+  <img
+    src="{{ matchInfo.competition_rival_team.url_image | rivalAvatarPipe }}"
+    alt="avatar"
+    *ngIf="
+      matchInfo.match_situation === 'V' &&
+      !matchInfo.competition_rival_team?.url_image
+    "
+  />
+
+  <img
+    src="{{ matchInfo.team.image?.full_url }}"
+    alt="avatar"
+    *ngIf="matchInfo.match_situation === 'L' && matchInfo.team.image"
+    class="border-circle"
+  />
+
+  <img
+    src="{{ urlBaseImagenes + matchInfo.competition_rival_team?.url_image }}"
+    alt="avatar"
+    *ngIf="
+      matchInfo.match_situation === 'V' &&
+      matchInfo.competition_rival_team?.url_image
+    "
+    class="border-circle"
+  />
+</ng-container>
+
+<ng-container *ngIf="situation === 'guess'">
+  <div
+    [style]="{
+      width: '50px',
+      height: '50px',
+      backgroundColor: matchInfo.team.color,
+      borderRadius: '50%',
+      marginBottom: '7px'
+    }"
+    *ngIf="
+      matchInfo.match_situation === 'V' &&
+      !matchInfo.team.image &&
+      matchInfo.team.color
+    "
+  ></div>
+  <img
+    src="{{ matchInfo.competition_rival_team.url_image | rivalAvatarPipe }}"
+    alt="avatar"
+    *ngIf="
+      matchInfo.match_situation === 'L' &&
+      !matchInfo.competition_rival_team?.url_image
+    "
+  />
+
+  <img
+    src="{{ matchInfo.team.image?.full_url }}"
+    alt="avatar"
+    *ngIf="matchInfo.match_situation === 'V' && matchInfo.team.image"
+    class="border-circle"
+  />
+  <img
+    src="{{ urlBaseImagenes + matchInfo.competition_rival_team?.url_image }}"
+    alt="avatar"
+    *ngIf="
+      matchInfo.match_situation === 'L' &&
+      matchInfo.competition_rival_team?.url_image
+    "
+    class="border-circle"
+  />
+</ng-container>

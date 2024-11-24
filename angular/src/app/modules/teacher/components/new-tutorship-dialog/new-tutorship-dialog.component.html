@@ -1,0 +1,214 @@
+<p-dialog
+  (onHide)="closeDialog()"
+  [(visible)]="visible"
+  [header]="
+    editingTutorship
+      ? ('tutor.edit_tutorship' | translate)
+      : ('tutor.create_new_tutorship' | translate)
+  "
+  [modal]="true"
+  class="custom_dialog"
+  id="new_tutor_dialog"
+  maskStyleClass="purple_mask"
+  styleClass=""
+>
+  <div
+    class="dialog_container"
+    [ngClass]="{ 'step-h': step === 2 }"
+    id="new_tutor_dialog_container"
+  >
+    <form [formGroup]="newTutorshipForm">
+      <div *ngIf="step == 0" class="text-center step_content">
+        <img
+          [src]="urlImages + '/images/tutorship/nueva_tutoria.svg'"
+          alt="equipo"
+          class="py-5"
+          width="300px"
+        />
+        <h6 class="mb-4">
+          {{
+            editingTutorship
+              ? ("tutor.edit_tutorship" | translate)
+              : ("tutor.create_new_tutorship" | translate)
+          }}
+        </h6>
+      </div>
+      <div *ngIf="step == 1" class="step_content">
+        <div class="row">
+          <div class="col-12 mb-4">
+            <label>{{ "tutor.date" | translate }}</label>
+            <p-calendar
+              (onSelect)="setTutorshipDate($event)"
+              [(ngModel)]="dateValue"
+              [firstDayOfWeek]="1"
+              [ngClass]="{
+                'ng-invalid ng-dirty is-invalid':
+                  newTutorshipControls.date.invalid &&
+                  (newTutorshipControls.date.dirty ||
+                    newTutorshipControls.date.touched)
+              }"
+              [ngModelOptions]="{ standalone: true }"
+              [readonlyInput]="true"
+              class="form-control"
+              dateFormat="dd/mm/yy"
+              inputId="range"
+              placeholder="{{ 'LBL_SELECCIONE' | translate }}"
+            ></p-calendar>
+            <div
+              *ngIf="newTutorshipControls.date?.errors"
+              class="invalid-feedback"
+            >
+              {{ "tutor.date" | translate }} {{ "requerido" | translate }}
+            </div>
+          </div>
+          <div class="mb-4 col-12">
+            <label for="">{{ "tutor.teacher" | translate }}</label>
+            <div>
+              <p-dropdown
+                [ngClass]="{
+                  'ng-invalid ng-dirty is-invalid':
+                    newTutorshipControls.teacher_id.invalid &&
+                    (newTutorshipControls.teacher_id.dirty ||
+                      newTutorshipControls.teacher_id.touched)
+                }"
+                [options]="teachers"
+                [styleClass]="'w-100 form-control'"
+                formControlName="teacher_id"
+                optionLabel="name"
+                optionValue="id"
+                placeholder="{{ 'LBL_SELECCIONE' | translate }}"
+              ></p-dropdown>
+              <div
+                *ngIf="newTutorshipControls.teacher_id?.errors"
+                class="invalid-feedback"
+              >
+                {{ "tutor.teacher" | translate }} {{ "requerido" | translate }}
+              </div>
+            </div>
+          </div>
+          <div class="col-12">
+            <label>{{ "tutor.tutorshipType" | translate }}</label>
+            <div class="tutor_types">
+              <p-radioButton
+                *ngFor="let type of tutorshipTypes"
+                [ngClass]="{
+                  'ng-invalid ng-dirty is-invalid':
+                    newTutorshipControls.tutorship_type_id.invalid &&
+                    (newTutorshipControls.tutorship_type_id.dirty ||
+                      newTutorshipControls.tutorship_type_id.touched)
+                }"
+                formControlName="tutorship_type_id"
+                label="{{ type.name }}"
+                name="tutorship_type_id"
+                value="{{ type.id }}"
+              ></p-radioButton>
+              <div
+                *ngIf="newTutorshipControls.tutorship_type_id?.errors"
+                class="invalid-feedback"
+              >
+                {{ "tutor.tutorshipType" | translate }}
+                {{ "requerido" | translate }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="step == 2" class="step_content">
+        <div class="row">
+          <div class="col-12 mb-4">
+            <label>{{ "tutor.reason" | translate }}</label>
+            <input
+              [ngClass]="{
+                'ng-invalid ng-dirty is-invalid':
+                  newTutorshipControls.reason.invalid &&
+                  (newTutorshipControls.reason.dirty ||
+                    newTutorshipControls.reason.touched)
+              }"
+              aria-describedby="inputGroup-sizing-default"
+              aria-label="Default"
+              class="form-control"
+              formControlName="reason"
+              placeholder="{{ 'LBL_ESCRIBEAQI' | translate }}"
+            />
+            <div
+              *ngIf="newTutorshipControls.reason?.errors"
+              class="invalid-feedback"
+            >
+              {{ "tutor.reason" | translate }} {{ "requerido" | translate }}
+            </div>
+          </div>
+          <div class="col-12 mb-4">
+            <label>{{ "tutor.tutorship_resume" | translate }}</label>
+            <textarea
+              [ngClass]="{
+                'ng-invalid ng-dirty is-invalid':
+                  newTutorshipControls.resume.invalid &&
+                  (newTutorshipControls.resume.dirty ||
+                    newTutorshipControls.resume.touched)
+              }"
+              class="form-control"
+              cols="30"
+              formControlName="resume"
+              id=""
+              maxlength="1000"
+              name=""
+              rows="10"
+            ></textarea>
+            <div
+              *ngIf="newTutorshipControls.resume?.errors"
+              class="invalid-feedback"
+            >
+              {{ "tutor.tutorship_resume" | translate }}
+              {{ "requerido" | translate }}
+            </div>
+          </div>
+          <div class="mb-4 col-12">
+            <label for="">{{ "tutor.specialist" | translate }}</label>
+            <div>
+              <p-dropdown
+                [ngClass]="{
+                  'ng-invalid ng-dirty is-invalid':
+                    newTutorshipControls.specialist_referral_id.invalid &&
+                    (newTutorshipControls.specialist_referral_id.dirty ||
+                      newTutorshipControls.specialist_referral_id.touched)
+                }"
+                [options]="specialists"
+                [styleClass]="'w-100 form-control'"
+                formControlName="specialist_referral_id"
+                optionLabel="name"
+                optionValue="id"
+                placeholder="{{ 'LBL_SELECCIONE' | translate }}"
+              ></p-dropdown>
+              <div
+                *ngIf="newTutorshipControls.specialist_referral_id?.errors"
+                class="invalid-feedback"
+              >
+                {{ "tutor.specialist" | translate }}
+                {{ "requerido" | translate }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <p-footer>
+    <div class="footer_btns">
+      <button
+        (click)="step > 0 ? (step = step - 1) : closeDialog()"
+        [ngClass]="{ shrink_btn: step == 2 }"
+        class="btn back_btn"
+      >
+        {{ "LBL_ATRAS" | translate }}
+      </button>
+      <button
+        (click)="step <= 2 ? validateStep() : ''"
+        [disabled]="loading == true"
+        [ngClass]="{ shrink_btn: step == 2 }"
+        class="btn next_btn"
+      >
+        {{ step == 2 ? "Finalizar" : ("LBL_SIGUIENTE" | translate) }}
+      </button>
+    </div>
+  </p-footer>
+</p-dialog>

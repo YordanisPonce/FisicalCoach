@@ -1,0 +1,57 @@
+.arrow-position {
+  margin-top: -100px;
+  margin-left: 15px;
+  @media (max-width: 600px) {
+    margin-top: -80px;
+    margin-left: 9px;
+  }
+}
+:host ::ng-deep .p-tabmenu {
+  .p-tabmenuitem:not(.p-hidden) {
+    display: unset !important;
+  }
+
+ 
+  .p-tabmenu-nav {
+    // height: 100px;
+    .p-menuitem-text {
+      display: flex;
+      align-items: center;
+      // font-weight: 500;
+      color: #050c44;
+    }
+    .p-tabmenuitem {
+      flex: 1 1 50%;
+      .p-menuitem-link {
+        height: 50px;
+        justify-content: center;
+        opacity: 0.35;
+        border-width: 0 0 3px 0;
+        img {
+          margin-right: 0.75rem !important;
+        }
+      }
+      .p-menuitem-link:not(.p-disabled):focus {
+        box-shadow: unset;
+      }
+    }
+    .p-tabmenuitem.p-highlight .p-menuitem-link {
+      border-color: #024cac;
+      opacity: 1;
+    }
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  :host ::ng-deep .p-tabmenu {
+    .p-tabmenu-nav {
+      // height: 100px;
+      .p-tabmenuitem {
+        flex: 1;
+        .p-menuitem-link {
+          height: 80px;
+        }
+      }
+    }
+  }
+}

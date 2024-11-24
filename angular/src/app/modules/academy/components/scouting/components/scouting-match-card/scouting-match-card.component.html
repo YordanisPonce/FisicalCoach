@@ -1,0 +1,194 @@
+<div class="match">
+  <div class="match_container">
+    <div
+      class="match_content"
+      *ngIf="!showSportsWithPlayers.includes(team.sport.code)"
+    >
+      <div class="team" *ngIf="match.match_situation === 'L'">
+        <p-avatar
+          [image]="match.team.image?.full_url"
+          size="large"
+          shape="circle"
+          *ngIf="match.team.image"
+        ></p-avatar>
+
+        <div
+          *ngIf="match.team.color && !match.team.image"
+          [style]="{
+            width: '45px',
+            height: '45px',
+            'background-color': match.team.color,
+            'border-radius': '50%',
+            color: 'transparent',
+            'user-select': 'none'
+          }"
+        >
+          <span>t</span>
+        </div>
+        <div class="name">
+          <span class="d-block font-weight-600">{{ match.team.name }}</span>
+        </div>
+      </div>
+      <div class="team" *ngIf="match.match_situation === 'V'">
+        <p-avatar
+          [image]="match.competition_rival_team.url_image | rivalAvatarPipe"
+          size="large"
+          shape="circle"
+        ></p-avatar>
+        <div class="name">
+          <span class="d-block font-weight-600">{{
+            match.competition_rival_team?.rival_team
+          }}</span>
+        </div>
+      </div>
+
+      <div class="match_info">
+        <span class="date">{{ convertDate(match.start_at, "date") }}</span>
+        <span class="time">{{ convertDate(match.start_at, "hour") }}</span>
+      </div>
+
+      <div class="team" *ngIf="match.match_situation === 'V'">
+        <p-avatar
+          [image]="match.team.image?.full_url"
+          size="large"
+          shape="circle"
+          *ngIf="match.team.image"
+        ></p-avatar>
+
+        <div
+          *ngIf="match.team.color && !match.team.image"
+          [style]="{
+            width: '45px',
+            height: '45px',
+            'background-color': match.team.color,
+            'border-radius': '50%',
+            color: 'transparent',
+            'user-select': 'none'
+          }"
+        >
+          <span>t</span>
+        </div>
+        <div class="name">
+          <span class="d-block font-weight-600">{{ match.team.name }}</span>
+        </div>
+      </div>
+      <div class="team" *ngIf="match.match_situation === 'L'">
+        <p-avatar
+          [image]="match.competition_rival_team.url_image | rivalAvatarPipe"
+          size="large"
+          shape="circle"
+        ></p-avatar>
+        <div class="name">
+          <span class="d-block font-weight-600">{{
+            match.competition_rival_team?.rival_team
+          }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="match_content"
+      *ngIf="showSportsWithPlayers.includes(team.sport.code)"
+    >
+      <div *ngIf="match.players.length > 0">
+        <div
+          *ngFor="let player of match.players"
+          class="d-flex align-items-center mb-2"
+        >
+          <p-avatar
+            [image]="player.player | avatarPipe"
+            [style]="{ width: '30px', height: '30px' }"
+            shape="circle"
+          ></p-avatar>
+
+          <span class="ml-2">
+            {{ player.player.full_name }}
+          </span>
+        </div>
+      </div>
+
+      <div class="match_info player-card">
+        <span class="date">{{ convertDate(match.start_at, "date") }}</span>
+        <span class="time">{{ convertDate(match.start_at, "hour") }}</span>
+      </div>
+    </div>
+
+    <div class="match_name player-card">
+      {{ match.competition_name }}
+    </div>
+    <div class="match_action">
+      <button
+        *ngIf="match.scouting_status !== 'FINISHED' && !isHistoryView"
+        class="btn"
+        (click)="
+          match.scouting_status === 'NOT_STARTED' ||
+          match.scouting_status === null
+            ? handleScouting(false, match)
+            : handleScouting(true, match)
+        "
+      >
+        <span
+          *ngIf="
+            match.scouting_status === 'NOT_STARTED' || !match.scouting_status
+          "
+        >
+          {{ "scouting.makeScouting" | translate }}
+        </span>
+        <span
+          *ngIf="
+            match.scouting_status === 'PAUSED' ||
+            match.scouting_status === 'STARTED'
+          "
+        >
+          {{ "scouting.restartScouting" | translate }}
+        </span>
+      </button>
+
+      <div *ngIf="isHistoryView" class="history-buttons">
+        <button
+          class="btn"
+          *ngFor="let item of buttonList; index as i"
+          (click)="
+            i === 0
+              ? match.scouting_status === 'PAUSED' ||
+                match.scouting_status === 'STARTED'
+                ? handleScouting(true, match, false)
+                : handleScouting(false, match, false)
+              : handleScouting(true, match, true)
+          "
+          [disabled]="match.scouting_status === 'FINISHED' && item.value"
+        >
+          <span>
+            {{ "scouting." + item.name | translate }}
+          </span>
+        </button>
+      </div>
+
+      <div
+        *ngIf="match.scouting_status === 'FINISHED'"
+        style="margin-top: 1rem"
+        class="d-flex flex-column"
+      >
+        <p
+          style="color: #9c9fb5"
+          *ngIf="team.sport.code !== 'swimming'; else noTests"
+        >
+          {{ "scouting.matchFinished" | translate }}
+        </p>
+
+        <ng-template #noTests>
+          <p style="color: #9c9fb5">
+            {{ "matchResults.swimming_FINISHED" | translate }}
+          </p>
+        </ng-template>
+
+        <p
+          routerLink="{{ '/club/competition/match/details/' + match.match_id }}"
+          class="pointer"
+        >
+          {{ "scouting.seeScouting" | translate }}
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

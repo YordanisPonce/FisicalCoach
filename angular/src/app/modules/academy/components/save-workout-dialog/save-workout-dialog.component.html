@@ -1,0 +1,465 @@
+<p-dialog
+  id="save_workout_dialog"
+  [modal]="true"
+  header="{{ 'workout.edit_exercise' | translate }} +"
+  [(visible)]="visible"
+  styleClass=""
+  [ngClass]="{ small_dialog: step != 1 && getScreenWidth() >= 768 }"
+  (onHide)="salir()"
+>
+  <form
+    *ngIf="formulario"
+    [formGroup]="formulario"
+    id="idFormRP"
+    name="nomForm"
+    (ngSubmit)="onSubmit()"
+    [ngClass]="{ 'w-100': step === 3 }"
+  >
+    <div id="save_workout_dialog_container" class="dialog_container">
+      <div>
+        <div class="step_content" *ngIf="step == 1">
+          <div class="row">
+            <div class="col-12 mt-3">
+              <label class="label-color"
+                >{{ "new_exercises.exercise_name" | translate }} *</label
+              >
+              <input
+                class="form-control"
+                placeholder="{{ 'LBL_ESCRIBIR' | translate }}"
+                aria-label="Default"
+                aria-describedby="inputGroup-sizing-default"
+                formControlName="title"
+                [ngClass]="{
+                  'ng-invalid ng-dirty': submitted && f.title.invalid
+                }"
+              />
+              <div
+                *ngIf="submitted && f.title.invalid"
+                class="form-text text-danger"
+              >
+                {{ "LBL_FIELD_REQUIRED" | translate }}
+              </div>
+            </div>
+            <div class="col-12 mt-3">
+              <label class="label-color">{{
+                "new_exercises.exercise_description" | translate
+              }}</label>
+              <textarea
+                class="form-control"
+                cols="20"
+                rows="5"
+                placeholder="{{ 'LBL_ESCRIBIR' | translate }}"
+                formControlName="description"
+              ></textarea>
+            </div>
+            <div class="col-12 col-sm-6 mt-3">
+              <label class="label-color">{{
+                "new_exercises.distribution" | translate
+              }}</label>
+              <div class="d-flex align-items-center">
+                <p-radioButton
+                  name="distribution_exercise_id"
+                  *ngFor="let item of distributionList"
+                  formControlName="distribution_exercise_id"
+                  [label]="item.name"
+                  class="mr-3"
+                  [value]="item.id"
+                ></p-radioButton>
+              </div>
+            </div>
+            <div
+              class="col-12 mt-3"
+              style="display: flex; flex-direction: column"
+            >
+              <label for="dimensiones" class="label-color">{{
+                "new_exercises.dimensions" | translate
+              }}</label>
+              <p-inputMask
+                mask="99x99 m"
+                formControlName="dimentions"
+                placeholder="__x__ m"
+                class="inputmask-dark"
+                id="dimensiones"
+                aria-describedby="inputGroup-sizing-default"
+                aria-label="Default"
+              ></p-inputMask>
+            </div>
+          </div>
+        </div>
+        <div class="step_content" *ngIf="step == 2">
+          <div class="row">
+            <div class="col-12 col-sm-6">
+              <div class="height-auto">
+                <label>{{ "workout.exerciseDuration" | translate }} *</label>
+                <p-inputMask
+                  mask="99:99"
+                  formControlName="duration"
+                  placeholder="00:00"
+                  class="inputmask-dark"
+                  id="duration"
+                  aria-describedby="inputGroup-sizing-default"
+                  aria-label="Default"
+                  [ngClass]="{
+                    'ng-invalid ng-dirty': submitted && f.duration.invalid
+                  }"
+                ></p-inputMask>
+                <div
+                  *ngIf="submitted && f.duration.invalid"
+                  class="form-text text-danger"
+                >
+                  {{ "validations.required_field" | translate }}
+                </div>
+              </div>
+
+              <div class="height-auto">
+                <label>Series</label>
+                <input
+                  type="number"
+                  class="form-control input-dark"
+                  placeholder="{{ 'LBL_ESCRIBIR' | translate }}"
+                  aria-label="Default"
+                  aria-describedby="inputGroup-sizing-default"
+                  formControlName="series"
+                />
+              </div>
+
+              <div class="height-auto">
+                <label>{{ "workout.restBetweenSeries" | translate }}</label>
+                <p-inputMask
+                  mask="99:99"
+                  formControlName="break_series"
+                  placeholder="00:00"
+                  class="inputmask-dark"
+                  id="break_series"
+                  aria-describedby="inputGroup-sizing-default"
+                  aria-label="Default"
+                ></p-inputMask>
+              </div>
+            </div>
+            <div class="col-12 col-sm-6">
+              <div class="height-auto">
+                <label>{{ "workout.repetitions" | translate }}</label>
+                <input
+                  class="form-control input-dark"
+                  placeholder="{{ 'LBL_ESCRIBIR' | translate }}"
+                  formControlName="repetitions"
+                  [(ngModel)]="repetitions"
+                  (ngModelChange)="handleRepetitions($event, 'repetition')"
+                  type="number"
+                />
+              </div>
+
+              <div class="height-auto">
+                <label>{{ "workout.repetitionDuration" | translate }}</label>
+                <p-inputMask
+                  mask="99:99"
+                  formControlName="duration_repetitions"
+                  placeholder="00:00"
+                  class="inputmask-dark"
+                  id="duration_repetitions"
+                  aria-describedby="inputGroup-sizing-default"
+                  aria-label="Default"
+                  [(ngModel)]="repetitionDuration"
+                  (ngModelChange)="handleRepetitions($event, 'duration')"
+                ></p-inputMask>
+              </div>
+
+              <div class="height-auto">
+                <label>{{
+                  "workout.restBetweenRepetitions" | translate
+                }}</label>
+                <p-inputMask
+                  mask="99:99"
+                  formControlName="break_repetitions"
+                  placeholder="00:00"
+                  class="inputmask-dark pt-4"
+                  id="break_repetitions"
+                  aria-describedby="inputGroup-sizing-default"
+                  aria-label="Default"
+                ></p-inputMask>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <ng-container
+          *ngIf="
+            validateRoles(isProfilepage ? 'sport' : '', exerciseRole) ||
+            (role === 'sport' && !isProfilepage)
+          "
+        >
+          <ng-container *ngFor="let content of workoutContentList; index as i">
+            <div class="step_content" *ngIf="step == extraSteps[i]">
+              <div class="p-input-icon-left d-md-inline search">
+                <i class="pi pi-search"></i>
+                <input
+                  type="text"
+                  pInputText
+                  [(ngModel)]="searchContent"
+                  [ngModelOptions]="{ standalone: true }"
+                  placeholder="{{ 'LBL_SEARCH' | translate }}"
+                  (input)="setValue()"
+                  class="mb-3 form-control"
+                />
+              </div>
+
+              <div class="row">
+                <div class="col-12 mt-3">
+                  <h6 class="mb-3 content-title">
+                    {{ content.name }}
+                  </h6>
+                  <p-accordion *ngIf="content.targets.length === 0">
+                    <p-accordionTab
+                      header="{{ subContent.name }}"
+                      *ngFor="let subContent of content.sub_contents"
+                    >
+                      <p-selectButton
+                        [options]="subContent.targets"
+                        [(ngModel)]="selectedTargets"
+                        (ngModelChange)="handleTargets()"
+                        [ngModelOptions]="{ standalone: true }"
+                        [multiple]="true"
+                        optionLabel="name"
+                        optionValue="value"
+                      ></p-selectButton>
+                    </p-accordionTab>
+                  </p-accordion>
+
+                  <div *ngIf="content.targets.length > 0" class="mt-5">
+                    <p-selectButton
+                      [options]="content.targets"
+                      [(ngModel)]="selectedTargets"
+                      (ngModelChange)="handleTargets()"
+                      [ngModelOptions]="{ standalone: true }"
+                      [multiple]="true"
+                      optionLabel="name"
+                      optionValue="value"
+                    ></p-selectButton>
+                  </div>
+                </div>
+
+                <div
+                  *ngIf="contentError"
+                  class="form-text text-danger mt-3 ml-3"
+                >
+                  {{ "validations.required_field" | translate }}
+                </div>
+              </div>
+            </div>
+          </ng-container>
+        </ng-container>
+
+        <ng-container
+          *ngIf="
+            validateRoles(isProfilepage ? 'teacher' : '', exerciseRole) ||
+            (role === 'teacher' && !isProfilepage)
+          "
+        >
+          <div class="step_content" *ngIf="step === extraSteps[0]">
+            <div class="p-input-icon-left d-md-inline search">
+              <i class="pi pi-search"></i>
+              <input
+                type="text"
+                pInputText
+                [(ngModel)]="searchContent"
+                [ngModelOptions]="{ standalone: true }"
+                placeholder="{{ 'LBL_SEARCH' | translate }}"
+                (input)="setValue()"
+                class="mb-3 form-control"
+              />
+            </div>
+
+            <div class="row">
+              <div class="col-12 mt-3">
+                <h6 class="mb-3 content-title">Bloque de contenidos</h6>
+
+                <p-selectButton
+                  [options]="contentBlocks"
+                  [(ngModel)]="selectedBlockTargets"
+                  (ngModelChange)="handleTargets()"
+                  [ngModelOptions]="{ standalone: true }"
+                  [multiple]="true"
+                  optionLabel="name"
+                  optionValue="id"
+                ></p-selectButton>
+              </div>
+
+              <div *ngIf="contentError" class="form-text text-danger mt-3 ml-3">
+                {{ "validations.required_field" | translate }}
+              </div>
+            </div>
+          </div>
+
+          <div class="step_content" *ngIf="step === extraSteps[1]">
+            <div class="p-input-icon-left d-md-inline search">
+              <i class="pi pi-search"></i>
+              <input
+                type="text"
+                pInputText
+                [(ngModel)]="searchContent"
+                [ngModelOptions]="{ standalone: true }"
+                placeholder="{{ 'LBL_SEARCH' | translate }}"
+                (input)="setValue()"
+                class="mb-3 form-control"
+              />
+            </div>
+
+            <div class="row">
+              <div class="col-12 mt-3">
+                <h6 class="mb-3 content-title">
+                  {{ "exercise.educationalLevel" | translate }}
+                </h6>
+
+                <p-selectButton
+                  [options]="educationLevels"
+                  [(ngModel)]="selectedEducationalTargets"
+                  (ngModelChange)="handleTargets()"
+                  [ngModelOptions]="{ standalone: true }"
+                  [multiple]="false"
+                  optionLabel="name"
+                  optionValue="id"
+                ></p-selectButton>
+              </div>
+
+              <div *ngIf="contentError" class="form-text text-danger mt-3 ml-3">
+                {{ "validations.required_field" | translate }}
+              </div>
+            </div>
+          </div>
+        </ng-container>
+
+        <div class="step_content" *ngIf="step == 4 + extraSteps.length - 1">
+          <div class="row">
+            <div class="col-12 text-center">
+              <h6 class="text-white">
+                {{ "workout.whatDifficultyHadTheExercise" | translate }}
+              </h6>
+              <p-rating
+                formControlName="difficulty"
+                [cancel]="false"
+              ></p-rating>
+            </div>
+
+            <div class="col-12 text-center">
+              <h6 class="text-white">
+                {{ "workout.intensity" | translate }}
+              </h6>
+              <!-- <p-rating formControlName="intensity" [cancel]="false"></p-rating> -->
+
+              <div class="row justify-content-center">
+                <div
+                  class="col-2 mt-1 px-0"
+                  *ngFor="let intensity of ratingIcons; index as i"
+                >
+                  <p>
+                    <span
+                      *ngIf="
+                        !formulario.get('intensity')?.value ||
+                        selectedIntesityIndex !== i
+                      "
+                      class="empty-dash"
+                    >
+                      -
+                    </span>
+                    <span
+                      *ngIf="
+                        formulario.get('intensity')?.value &&
+                        selectedIntesityIndex === i
+                      "
+                      [style]="{ color: intensity.color }"
+                    >
+                      {{
+                        "ratingExercise." +
+                          ratingIcons[formulario.get("intensity")?.value - 1]
+                            .text | translate
+                      }}
+                    </span>
+                  </p>
+
+                  <p *ngIf="!formulario.get('intensity')?.value"></p>
+
+                  <button
+                    class="btn intensity-btn"
+                    type="button"
+                    (click)="selectIntensity(intensity.value, i)"
+                    [ngClass]="{ selected: f['intensity'].value - 1 === i }"
+                    pTooltip="{{
+                      'ratingExercise.' + intensity.tooltip | translate
+                    }}"
+                  >
+                    <img
+                      src="{{ resources + '/face/' + intensity.icon }}"
+                      alt=""
+                      width="35px"
+                    />
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12 mt-3">
+              <div
+                class="d-flex justify-content-center align-items-center mt-3"
+              >
+                <button
+                  class="btn next_btn model3d mt-5"
+                  (click)="open3D()"
+                  type="button"
+                >
+                  {{ "exercise.open3D" | translate }}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+  <p-footer>
+    <div class="footer_btns">
+      <button
+        class="btn back_btn"
+        type="button"
+        [ngClass]="{ shrink_btn: step == 2 }"
+        (click)="step > 1 ? (step = step - 1) : salir()"
+      >
+        {{ "LBL_ATRAS" | translate }}
+      </button>
+      <button
+        class="btn next_btn ml-2"
+        type="button"
+        [ngClass]="{ shrink_btn: step == 2 }"
+        (click)="save()"
+        *ngIf="!loading && step < 4 + extraSteps.length - 1"
+      >
+        {{ "LBL_SIGUIENTE" | translate }}
+      </button>
+
+      <button
+        class="btn next_btn ml-2"
+        type="button"
+        [ngClass]="{ shrink_btn: step == 4 + extraSteps.length - 1 }"
+        (click)="save()"
+        *ngIf="!loading && step === 4 + extraSteps.length - 1"
+        [disabled]="
+          (selectedTargets.length === 0 && selectedBlockTargets.length === 0) ||
+          (selectedEducationalTargets === 0 && role === 'teacher')
+        "
+      >
+        {{
+          (ejercicio && ejercicio.id ? "LBL_EDIT" : "LBL_CREATE") | translate
+        }}
+      </button>
+
+      <button
+        class="btn next_btn ml-2"
+        type="button"
+        [ngClass]="{ shrink_btn: step == 2 }"
+        *ngIf="loading"
+        disabled
+      >
+        {{ "LBL_GUARDANDO" | translate }}
+      </button>
+    </div>
+  </p-footer>
+</p-dialog>

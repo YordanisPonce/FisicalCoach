@@ -1,0 +1,211 @@
+:host ::ng-deep {
+  .p-galleria-item-container {
+    min-height: 550px;
+    display: flex;
+    align-items: center;
+  }
+  .container-fluid {
+    // min-height: 100%;
+    // height: 100vh;
+    background: #cadffb;
+    background-image: url("/assets/img/cloud.svg"), url("/assets/img/cloud.svg"),
+      url("/assets/img/cloud_rev.svg"), url("/assets/img/cloud.svg"),
+      url("/assets/img/cloud.svg");
+    background-size: 20%, 10%, 20%, 20%, 10%, 50px;
+    background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, no-repeat;
+    background-position: 5% 90%, 10% 60%, 90% 10%, 10% 10%, 95% 90%,
+      center bottom;
+  }
+
+  .p-password {
+    width: 100%;
+    height: 45px;
+    border-radius: 6px;
+
+    color: rgba($color: #050c44, $alpha: 0.36);
+
+    .p-inputtext {
+      width: 100% !important;
+    }
+  }
+
+  .header {
+    padding: 30px 20px;
+    background-color: #cadffb;
+    .header_btn {
+      height: 50px;
+      box-shadow: 0px 0px 4px #00000029;
+      padding: 0 1rem;
+      font-weight: 600;
+      min-width: 150px;
+
+      &.p-dropdown .p-dropdown-label {
+        line-height: 35px;
+      }
+    }
+  }
+}
+
+#login_row {
+  display: flex;
+  flex-direction: column;
+  height: 85vh;
+  #login_header_mobile {
+    flex: 0 0 165px;
+    background-position: bottom left;
+    background-size: cover;
+    background-repeat: no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  #login_content {
+    flex: 1;
+    max-width: 1190px;
+
+    .login-bg {
+      padding: 0px;
+      background: #fff;
+      background-image: url("../../assets/img/landing-new.svg");
+      background-size: 100%;
+      background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, no-repeat;
+      background-position: bottom;
+      max-width: 501px;
+      min-width: 500px;
+
+      @media screen and (max-width: 500px) {
+        min-width: 300px;
+      }
+    }
+    #login_container {
+      #login_form {
+        label {
+          color: #050c44;
+          font-weight: 600;
+          margin-bottom: 1rem;
+        }
+        input,
+        .p-password {
+          height: 45px;
+          border-radius: 6px;
+          border: 1px solid #00000024;
+          color: rgba($color: #050c44, $alpha: 1);
+        }
+        .p-input-icon-left > i:first-of-type {
+          left: 1rem;
+        }
+        .p-input-icon-left > .p-inputtext {
+          padding-left: 3rem;
+        }
+        .input-group-prepend {
+          .input-group-text {
+            background-color: transparent;
+          }
+        }
+      }
+
+      @media screen and (max-width: 600px) {
+        padding: 30px 30px 0 30px !important;
+      }
+    }
+  }
+  .login-image-bg {
+    max-width: 500px;
+
+    .pie-text {
+      font-size: 0.78rem;
+      font-weight: 500;
+    }
+  }
+  .login-btn {
+    width: 94%;
+    text-align: center;
+    background-color: #01e9c2;
+    color: white !important;
+    border-radius: 32px;
+    font-weight: 600 !important;
+    height: 45px;
+  }
+  .register-btn {
+    width: 94%;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 32px;
+    font-weight: 600 !important;
+    height: 45px;
+    color: #000633;
+    box-shadow: 0px 0px 4px #00000029;
+  }
+  .dibujosconten {
+    padding: 0px;
+    background: #ebf4ff;
+    background-size: 20%, 10%, 20%, 20%, 10%, 50px;
+    background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, no-repeat;
+    background-position: 5% 90%, 10% 60%, 90% 10%, 10% 10%, 95% 90%,
+      center bottom;
+  }
+  .block-img {
+    width: 63%;
+    max-width: 400px;
+    margin-top: 20px;
+  }
+  .imgback {
+    background-size: 80%;
+    background-position: center;
+    flex: 1;
+    display: flex;
+    align-items: center;
+  }
+  .block-back-img {
+    left: 10vh;
+    top: 7vh;
+    height: 70%;
+    position: absolute;
+    z-index: 1;
+  }
+  li {
+    background-color: grey;
+    width: 10px;
+    height: 10px;
+  }
+  .pie {
+    font-size: small;
+  }
+}
+
+@media (max-width: 500px) {
+  #login_row {
+    margin: 0 !important;
+
+    .m-none {
+      margin: 0 !important;
+    }
+  }
+}
+
+// Large devices (desktops, 992px and up)
+@media (min-width: 1200px) {
+  #login_row {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    #login_content {
+      background-color: white;
+      max-width: 1000px;
+      // flex: 1;
+      #login_container {
+        .logo {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+
+          img {
+            width: 230px;
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,8 @@
+:host ::ng-deep {
+  #new_tutor_dialog_container {
+    &.step-h {
+      height: 625px;
+      overflow-y: hidden;
+    }
+  }
+}

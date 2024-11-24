@@ -1,0 +1,392 @@
+<div class="card box-shadow">
+  <div class="card-body p-0">
+    <div class="row">
+      <div class="col-12">
+        <div class="competicion_header view_header p-4">
+          <div class="mch">
+            <div class="icon_left" routerLink="/club/competitions">
+              <i class="fas fa-chevron-left"></i>
+            </div>
+            <h6 class="font-weight-600 mb-0 mr-3">
+              {{ "competition_details.partidos" | translate }}
+            </h6>
+          </div>
+          <div class="d-flex ml-4" *ngIf="competitionDetails">
+            <div class="d-flex align-items-center competition-range mr-4">
+              <div class="range-block">
+                <h6 class="font-weight-600">
+                  {{ "competition.start" | translate }}
+                </h6>
+                {{ competitionDetails?.date_start | date : "dd/MM/YYYY" }}
+              </div>
+              <div class="range-separator">
+                <span>{{ " - " }}</span>
+              </div>
+              <div class="range-block">
+                <span>
+                  <h6 class="font-weight-600">
+                    {{ "competition.finish" | translate }}
+                  </h6>
+                  {{ competitionDetails?.date_end | date : "dd/MM/YYYY" }}
+                </span>
+              </div>
+            </div>
+            <span class="buscador p-input-icon-left d-none d-md-inline mr-3">
+              <i class="pi pi-search"></i>
+              <input
+                pInputText
+                placeholder="{{
+                  (isSwimmingSport(team.sport.code)
+                    ? 'competition_details.search_match'
+                    : 'competition_details.search_proof'
+                  ) | translate
+                }}"
+                type="text"
+              />
+            </span>
+          </div>
+          <button
+            class="btn new_game_btn btn-primary d-flex justify-content-center"
+            (click)="openMatchDialog()"
+            [disabled]="loadingPlayers || validateEndDate(matchMaxDate)"
+            pButton
+          >
+            <div style="text-align: center; width: 100%" *ngIf="loadingPlayers">
+              <i class="pi pi-spin pi-spinner" style="font-size: 1.5rem"></i>
+            </div>
+            <span
+              class="d-sm-inline mr-2 d-md-none d-lg-inline"
+              *ngIf="!loadingPlayers"
+              >{{
+                (isSwimmingSport(team.sport.code)
+                  ? "competition_details.new_match"
+                  : "competition_details.new_test"
+                ) | translate
+              }}
+              <i class="fa fa-plus text-white"></i
+            ></span>
+
+            <span class="d-none d-md-inline d-lg-none">
+              <i class="fa fa-plus text-white"></i>
+            </span>
+          </button>
+          <create-match-dialog
+            *ngIf="newGameDialog"
+            [visible]="newGameDialog"
+            [match]="selectedMatch"
+            [matchDate]="matchDate"
+            (close)="closeMatchDialog()"
+            (loadignPlayers)="loadingPlayers = $event"
+            (refreshMatchList)="refreshMatchList()"
+          ></create-match-dialog>
+        </div>
+      </div>
+      <div class="col-12">
+        <p-table
+          [value]="[1, 2]"
+          *ngIf="loading"
+          selectionMode="single"
+          class="p-datatable-responsive"
+        >
+          <ng-template pTemplate="header">
+            <tr class="text-center">
+              <th class="text-center">
+                {{ "competition_details.table.date" | translate }}
+              </th>
+              <th class="text-center">
+                {{ "competition_details.table.hour" | translate }}
+              </th>
+              <th
+                class="text-center"
+                *ngIf="!this.oneStepSports.includes(team.sport.code)"
+              >
+                {{ "competition_details.table.local" | translate }}
+              </th>
+              <th
+                class="text-center"
+                *ngIf="!this.oneStepSports.includes(team.sport.code)"
+              >
+                {{ "competition_details.table.result" | translate }}
+              </th>
+              <th
+                class="text-center"
+                *ngIf="!this.oneStepSports.includes(team.sport.code)"
+              >
+                {{ "competition_details.table.visitor" | translate }}
+              </th>
+              <th class="text-center">
+                {{ "LBL_ACTIONS" | translate }}
+              </th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-product>
+            <tr *ngFor="let i of [1, 2, 3]">
+              <td><p-skeleton></p-skeleton></td>
+              <td><p-skeleton></p-skeleton></td>
+              <td><p-skeleton></p-skeleton></td>
+              <td><p-skeleton></p-skeleton></td>
+              <td><p-skeleton></p-skeleton></td>
+              <td><p-skeleton></p-skeleton></td>
+            </tr>
+          </ng-template>
+        </p-table>
+
+        <p-table
+          [value]="matches"
+          *ngIf="!loading"
+          [paginator]="true"
+          [rows]="5"
+          class="p-datatable-responsive"
+        >
+          <ng-template pTemplate="header">
+            <tr class="text-center">
+              <th class="text-center">
+                {{ "competition_details.table.date" | translate }}
+              </th>
+              <th class="text-center">
+                {{ "competition_details.table.hour" | translate }}
+              </th>
+              <th
+                class="text-center"
+                *ngIf="!this.oneStepSports.includes(team.sport.code)"
+              >
+                {{ "competition_details.table.local" | translate }}
+              </th>
+              <th
+                class="text-center"
+                *ngIf="!this.oneStepSports.includes(team.sport.code)"
+              >
+                {{ "competition_details.table.result" | translate }}
+              </th>
+              <th
+                class="text-center"
+                *ngIf="!this.oneStepSports.includes(team.sport.code)"
+              >
+                {{ "competition_details.table.visitor" | translate }}
+              </th>
+              <th class="text-center">
+                {{ "LBL_ACTIONS" | translate }}
+              </th>
+            </tr>
+          </ng-template>
+
+          <ng-template pTemplate="body" let-match>
+            <tr class="colum-responsive center-columns competition-details">
+              <td class="text-center column-md">
+                <div>
+                  <span class="p-column-title">
+                    {{ "competition_details.table.date" | translate }}
+                  </span>
+                </div>
+                <div>
+                  <strong class="ml-2">{{
+                    (match.start_at | utcDate).date
+                  }}</strong>
+                </div>
+              </td>
+              <td class="text-center column-md">
+                <div>
+                  <span class="p-column-title">
+                    {{ "competition_details.table.hour" | translate }}
+                  </span>
+                </div>
+                <div>
+                  <span>
+                    {{ (match.start_at | utcDate).hour }}
+                  </span>
+                </div>
+              </td>
+              <td
+                class="text-center column-sm"
+                *ngIf="!this.oneStepSports.includes(team.sport.code)"
+              >
+                <span class="p-column-title">
+                  {{ "competition_details.table.local" | translate }}
+                </span>
+                <div
+                  class="d-flex align-items-center as justify-content-center"
+                >
+                  <div class="text-center d-flex align-items-center">
+                    <div class="truncate mr-1 mr-sm-2">
+                      <span class="mr-0 mr-sm-3">
+                        {{
+                          match.match_situation === "L"
+                            ? team.name
+                            : match.competition_rival_team.rival_team
+                        }}
+                      </span>
+                    </div>
+
+                    <span class="sidebar-item-img">
+                      <img
+                        [src]="team.image.full_url"
+                        class="rounded-circle d-none d-sm-block"
+                        width="30px"
+                        height="30px"
+                        *ngIf="
+                          team.image?.full_url && match.match_situation === 'L'
+                        "
+                      />
+                      <img
+                        [src]="
+                          match.competition_rival_team.url_image
+                            | rivalAvatarPipe
+                        "
+                        class="rounded-circle d-none d-sm-block"
+                        width="30px"
+                        height="30px"
+                        *ngIf="match.match_situation === 'V'"
+                      />
+
+                      <div
+                        *ngIf="
+                          team?.color &&
+                          !team.image &&
+                          match.match_situation === 'L'
+                        "
+                        [style]="'background-color:' + team.color"
+                        class="color d-none d-sm-block"
+                      >
+                        e
+                      </div>
+                    </span>
+                  </div>
+                </div>
+              </td>
+              <td
+                class="text-center column-sm"
+                *ngIf="!this.oneStepSports.includes(team.sport.code)"
+              >
+                <div>
+                  <span class="p-column-title">
+                    {{ "competition_details.table.result" | translate }}
+                  </span>
+                </div>
+
+                <div>
+                  <span>
+                    {{ match.score?.own || 0 }} : {{ match.score?.rival || 0 }}
+                  </span>
+                </div>
+              </td>
+              <td
+                class="text-center column-sm"
+                *ngIf="!this.oneStepSports.includes(team.sport.code)"
+              >
+                <span class="p-column-title">
+                  {{ "competition_details.table.visitor" | translate }}
+                </span>
+                <div class="d-flex align-items-center justify-content-center">
+                  <div class="d-flex align-items-center">
+                    <span class="rounded-circle sidebar-item-img">
+                      <img
+                        [src]="team.image.full_url"
+                        class="auto-height rounded-circle d-none d-sm-block"
+                        width="30px"
+                        height="30px"
+                        style="height: 30px !important"
+                        *ngIf="
+                          team.image?.full_url && match.match_situation === 'V'
+                        "
+                      />
+
+                      <img
+                        [src]="
+                          match.competition_rival_team.url_image
+                            | rivalAvatarPipe
+                        "
+                        class="auto-height rounded-circle d-none d-sm-block"
+                        width="30px"
+                        height="30px"
+                        style="height: 30px !important"
+                        *ngIf="match.match_situation === 'L'"
+                      />
+
+                      <div
+                        *ngIf="
+                          team?.color &&
+                          !team.image &&
+                          match.match_situation === 'V'
+                        "
+                        [style]="'background-color:' + team.color"
+                        class="color d-none d-sm-block"
+                      >
+                        e
+                      </div>
+                    </span>
+
+                    <div class="truncate ml-1 ml-sm-2">
+                      <span class="ml-0 ml-sm-3">
+                        {{
+                          match.match_situation === "V"
+                            ? team.name
+                            : match.competition_rival_team.rival_team
+                        }}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </td>
+              <td class="text-center w-column-full d-none d-md-block">
+                <span class="p-column-title">
+                  {{ "LBL_ACTIONS" | translate }}
+                </span>
+                <button
+                  pButton
+                  pRipple
+                  icon="pi pi-pencil"
+                  class="p-button-rounded p-button-plain p-button-text p-mr-2"
+                  (click)="editMatch(match)"
+                ></button>
+                <button
+                  pButton
+                  pRipple
+                  icon="pi pi-eye"
+                  class="p-button-rounded p-button-plain p-button-text p-mr-2"
+                  [routerLink]="[
+                    '/club/competition/match/details/' + match?.id
+                  ]"
+                ></button>
+              </td>
+
+              <td
+                class="text-center w-column-full d-flex align-items-center flex-column d-md-none"
+              >
+                <span class="p-column-title">
+                  {{ "LBL_ACTIONS" | translate }}
+                </span>
+
+                <div>
+                  <button
+                    pButton
+                    pRipple
+                    icon="pi pi-pencil"
+                    class="p-button-rounded p-button-plain p-button-text p-mr-2"
+                    (click)="editMatch(match)"
+                  ></button>
+                  <button
+                    pButton
+                    pRipple
+                    icon="pi pi-eye"
+                    class="p-button-rounded p-button-plain p-button-text p-mr-2"
+                    [routerLink]="[
+                      '/club/competition/match/details/' + match?.id
+                    ]"
+                  ></button>
+                </div>
+              </td>
+            </tr>
+          </ng-template>
+
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="6" style="text-align: center">
+                {{ "nodata.sinpartidos" | translate }}
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
+  </div>
+</div>

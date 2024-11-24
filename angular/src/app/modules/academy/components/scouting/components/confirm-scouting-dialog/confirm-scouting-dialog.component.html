@@ -1,0 +1,141 @@
+<p-dialog
+  class="dialog"
+  [modal]="true"
+  id="scouting-confirm-dialog"
+  [(visible)]="visible"
+  styleClass=""
+  maskStyleClass="purple_mask"
+  (onHide)="closeDialog()"
+>
+  <div class="scouting">
+    <div class="main-image">
+      <img
+        src="{{ resources + '/images/scouting/new_scouting.svg' }}"
+        alt="start"
+      />
+    </div>
+    <h5 class="title" *ngIf="team.sport.code !== 'swimming'; else elseBlock">
+      {{ "scouting.doYouWantMakeScoutingMatch" | translate }}
+    </h5>
+
+    <ng-template #elseBlock>
+      <h5 class="title">
+        {{ "scouting.doYouWantMakeScoutingTest" | translate }}
+      </h5>
+    </ng-template>
+
+    <p class="sub-title">
+      {{ "scouting.thisWillStartTheProcess" | translate }}
+    </p>
+    <p class="sub-title">{{ "scouting.toolInRealTime" | translate }}</p>
+
+    <div *ngIf="showTeamsToStart.includes(team.sport.code)">
+      <h6 class="mt-5 mb-2 text-center">
+        {{ "scouting.teamToStart" | translate }}
+      </h6>
+      <div class="d-flex justify-content-between align-items-center p-4 mt-3">
+        <div
+          class="select-start-team"
+          [ngClass]="{ selected: selectedTeamToStart === 'L' }"
+          (click)="selectTeam('L')"
+        >
+          <p-avatar
+            [image]="team.image.full_url"
+            [style]="{ width: '30px', height: '30px' }"
+            shape="circle"
+            *ngIf="team.image"
+          ></p-avatar>
+
+          <div
+            *ngIf="team.color && !team.image"
+            [style]="{
+              width: '30px',
+              height: '30px',
+              'background-color': team.color,
+              'border-radius': '50%',
+              color: 'transparent',
+              'user-select': 'none'
+            }"
+          >
+            <span>t</span>
+          </div>
+          <strong class="mt-2 text-elipsis">{{ team.name }}</strong>
+        </div>
+
+        <div
+          class="select-start-team"
+          [ngClass]="{ selected: selectedTeamToStart === 'V' }"
+          (click)="selectTeam('V')"
+        >
+          <p-avatar
+            [image]="'assets/img/isotipo-gris.png'"
+            [style]="{ width: '30px', height: '30px' }"
+            shape="circle"
+          ></p-avatar>
+          <strong class="mt-2 text-elipsis">Rival</strong>
+        </div>
+      </div>
+
+      <div *ngIf="team.sport.code === 'tennis'" class="mt-3">
+        <h6>{{ "scouting.selectSetNumber" | translate }}</h6>
+
+        <div class="d-flex justify-content-around align-items-center mt-3">
+          <div>
+            <p-button
+              styleClass="p-button-rounded p-button-text p-button-raised"
+              [ngClass]="{
+                'bg-selected': this.selectedSet === 3
+              }"
+              label="3"
+              (onClick)="selectTennisSet(3)"
+            ></p-button>
+          </div>
+
+          <div>
+            <p-button
+              styleClass="p-button-rounded   p-button-text p-button-raised"
+              [ngClass]="{
+                'bg-selected': this.selectedSet === 5
+              }"
+              label="5"
+              (onClick)="selectTennisSet(5)"
+            ></p-button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p-footer>
+    <div class="footer_btns">
+      <button type="button" class="btn back_btn" (click)="close.emit(true)">
+        {{ "LBL_ATRAS" | translate }}
+      </button>
+      <button
+        type="button"
+        class="btn next_btn"
+        *ngIf="loading"
+        [disabled]="loading"
+      >
+        <span
+          class="spinner-grow spinner-grow-sm"
+          role="status"
+          aria-hidden="true"
+        ></span>
+        {{ "LBL_INICIANDO" | translate }}
+      </button>
+      <button
+        type="button"
+        class="btn next_btn"
+        (click)="handleScouting()"
+        [disabled]="
+          (showTeamsToStart.includes(team.sport.code) &&
+            !selectedTeamToStart) ||
+          (team.sport.code === 'tennis' && !selectedSet)
+        "
+        *ngIf="!loading"
+      >
+        {{ "LBL_INICIAR" | translate }}
+      </button>
+    </div>
+  </p-footer>
+</p-dialog>

@@ -1,0 +1,45 @@
+<div>
+  <p>
+    <span>{{ 'adminUsers.LBL_Users' | translate }}</span>
+  </p>
+  
+  <div *ngIf="selectedUsers.length > 0" class="selected-users">
+    <p>{{ 'adminUsers.LBL_SELECTED_USERS' | translate }}</p>
+    <div class="selected-user-info" *ngFor="let user of selectedUsers">
+      <div class="selected-user-container">
+        <img [src]="user.avatarUrl" alt="{{ user.name }}" class="selected-user-avatar" />
+        <span>{{ user.name }}</span>
+      
+        <button (click)="deselectUser(user)" class="deselect-button">
+          <i class="fas fa-times"></i> 
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <br>
+
+  <div class="search-bar">
+    <input 
+      type="text" 
+      [placeholder]= "'adminUsers.searchbarPlaceholder' | translate"
+      [(ngModel)]="searchText" 
+      (input)="searchUsers()" 
+      class="form-control" 
+    />
+  </div>
+  
+  <div *ngIf="searchText.length > 0 && filteredUsers.length > 0" class="search-results">
+    <ul>
+      <li *ngFor="let user of filteredUsers" (click)="selectUser(user)">
+        <img [src]="user.avatarUrl" alt="{{ user.name }}" class="user-avatar" />
+        <span>{{ user.name }}</span>
+        <span *ngIf="isSelected(user)" class="selected-tick">✔</span> 
+      </li>
+    </ul>
+  </div>
+
+  <div *ngIf="filteredUsers.length === 0 && searchText.length > 0" class="no-results">
+    <span>{{ 'adminUsers.LBL_NO_USERS' | translate }}</span>
+  </div>
+</div>

@@ -1,0 +1,361 @@
+<p-dialog
+  (onHide)="closeDialog()"
+  (onShow)="prepareData()"
+  [(visible)]="visible"
+  [modal]="true"
+  class="custom_dialog"
+  id="new_team_dialog"
+  maskStyleClass=""
+  styleClass="fullscreenDialog"
+>
+  <ng-template pTemplate="header">
+    <div class="d-flex header_content">
+      <img alt="" src="/assets/img/logo_panel.svg" />
+    </div>
+  </ng-template>
+  <div class="dialog_container" id="new_team_dialog_container">
+    <form [formGroup]="newTeamForm">
+      <div *ngIf="step == 1" class="step_content">
+        <div class="mb-4">
+          <h6 class="font-weight-bold mb-5">
+            {{
+              (!editingTeam
+                ? "create_new_team.step_one_title"
+                : "create_new_team.update_team"
+              ) | translate
+            }}
+          </h6>
+        </div>
+
+        <div class="row">
+          <div class="col-12 mb-5">
+            <label class="mb-4" for="name"
+              >{{ "create_new_team.team_name" | translate }} *</label
+            >
+            <input
+              [ngClass]="{
+                'ng-invalid ng-dirty is-invalid':
+                  (newTeamControls.name.invalid &&
+                    (newTeamControls.name.dirty ||
+                      newTeamControls.name.touched)) ||
+                  (newTeamControls.name.invalid && this.submittedForm)
+              }"
+              class="form-control"
+              formControlName="name"
+              id="name"
+              placeholder="{{ 'create_new_team.type_name' | translate }}"
+            />
+            <div class="invalid-feedback">
+              {{ "create_new_team.validate_name" | translate }}
+            </div>
+          </div>
+        </div>
+
+        <p-carousel
+          *ngIf="editingTeam == null"
+          [numVisible]="2"
+          [responsiveOptions]="responsiveOptions"
+          [value]="sports"
+        >
+          <ng-template let-sport pTemplate="item">
+            <div (click)="selectSport($event, sport)" class="h-100">
+              <label
+                [ngClass]="{
+                  selected: sport.id === newTeamControls.sport_id.value
+                }"
+                class="sport h-100"
+              >
+                <img alt="" class="sport_icon" [src]="sport?.image?.full_url" />
+                <span class="sport_name">{{ sport.name }}</span>
+              </label>
+            </div>
+            <!-- </div> -->
+          </ng-template>
+        </p-carousel>
+        <div *ngIf="newTeamControls.sport_id.invalid" class="">
+          <input
+            [ngClass]="{
+              'ng-invalid ng-dirty is-invalid':
+                (newTeamControls.sport_id.invalid &&
+                  (newTeamControls.sport_id.dirty ||
+                    newTeamControls.sport_id.touched)) ||
+                (newTeamControls.sport_id.invalid && this.submittedForm)
+            }"
+            aria-describedby="sportInputFeedback"
+            class="form-control"
+            hidden
+          />
+          <div class="invalid-feedback" id="sportInputFeedback">
+            {{ "create_new_team.validate_sport" | translate }}
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="step == 2" class="step_content">
+        <div class="mb-5 position-relative d-flex align-items-center">
+          <i
+            (click)="step > 1 ? (step = step - 1) : ''"
+            class="pi pi-angle-left text-primary back_btn"
+          ></i>
+          <h6 class="font-weight-bold">
+            {{ "create_new_team.step_two_title" | translate }}
+          </h6>
+        </div>
+
+        <div class="row">
+          <!-- tipo de equipo -->
+          <div class="col-12 mb-4">
+            <label class="mb-4">{{
+              "create_new_team.team_type" | translate
+            }}</label>
+            <div>
+              <p-radioButton
+                *ngFor="let type of teamTypes"
+                formControlName="type_id"
+                label="{{ type.name }}"
+                name="type_id"
+                value="{{ type.id }}"
+              >
+              </p-radioButton>
+              <div
+                *ngIf="newTeamControls.type_id?.errors"
+                class="invalid-feedback"
+              >
+                {{ "create_new_team.select" | translate }}
+              </div>
+            </div>
+          </div>
+          <!-- temporada -->
+          <div class="col-12 mb-4">
+            <label class="mb-4"
+              >{{ "create_new_team.season" | translate }} *</label
+            >
+            <div>
+              <p-dropdown
+                [ngClass]="{
+                  'ng-invalid ng-dirty is-invalid':
+                    (newTeamControls.season_id.invalid &&
+                      (newTeamControls.season_id.dirty ||
+                        newTeamControls.season_id.touched)) ||
+                    (newTeamControls.season_id.invalid && this.submittedForm)
+                }"
+                [options]="seasons"
+                [styleClass]="'w-100 form-control'"
+                formControlName="season_id"
+                optionLabel="name"
+                optionValue="id"
+                placeholder="{{ 'create_new_team.select' | translate }}"
+              ></p-dropdown>
+              <div
+                *ngIf="newTeamControls.season_id?.errors"
+                class="invalid-feedback"
+              >
+                {{ "create_new_team.validate_season" | translate }}
+              </div>
+            </div>
+          </div>
+          <!-- Modalidad -->
+          <div
+            *ngIf="teamModalities != (null || undefined)"
+            class="col-12 mb-4"
+          >
+            <label class="mb-4">{{
+              "create_new_team.modality" | translate
+            }}</label>
+            <div>
+              <p-radioButton
+                *ngFor="let modality of teamModalities"
+                formControlName="modality_id"
+                label="{{ modality.name }}"
+                name="modality_id"
+                value="{{ modality.id }}"
+              >
+              </p-radioButton>
+              <div
+                *ngIf="newTeamControls.modality_id?.errors"
+                class="invalid-feedback"
+              >
+                Selecciona una modalidad
+              </div>
+            </div>
+          </div>
+          <!-- Categoria -->
+          <div class="col-12 mb-4">
+            <label class="mb-4"
+              >{{ "create_new_team.category" | translate }} *</label
+            >
+            <input
+              [ngClass]="{
+                'ng-invalid ng-dirty is-invalid':
+                  (newTeamControls.category.invalid &&
+                    (newTeamControls.category.dirty ||
+                      newTeamControls.category.touched)) ||
+                  (newTeamControls.category.invalid && this.submittedForm)
+              }"
+              aria-describedby="inputGroup-sizing-default"
+              aria-label="Default"
+              class="form-control"
+              formControlName="category"
+              id="category"
+              placeholder="{{ 'create_new_team.type_here' | translate }}"
+            />
+            <div class="invalid-feedback">
+              {{ "create_new_team.validate_category" | translate }}
+            </div>
+          </div>
+          <!-- Sexo -->
+          <div class="col-12 mb-4">
+            <label class="mb-4">{{
+              "create_new_team.gender" | translate
+            }}</label>
+            <div>
+              <p-radioButton
+                *ngFor="let gender of genders"
+                formControlName="gender_id"
+                label="{{ gender.code }}"
+                name="gender_id"
+                value="{{ gender.id }}"
+              >
+              </p-radioButton>
+              <div
+                *ngIf="newTeamControls.gender_id?.errors"
+                class="invalid-feedback"
+              >
+                Selecciona el genero del equipo
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="step == 3" class="step_content">
+        <div class="mb-5 position-relative d-flex align-items-center">
+          <i
+            (click)="step > 1 ? (step = step - 1) : ''"
+            class="pi pi-angle-left text-primary back_btn"
+          ></i>
+          <h6 class="font-weight-bold">
+            {{ "create_new_team.step_three_title" | translate }}
+          </h6>
+        </div>
+        <div class="team_image">
+          <div class="caption">
+            {{ "create_new_team.upload_picture" | translate }}
+          </div>
+          <!----------------------Imagen del equipo-------------------------->
+
+          <div (click)="openCropperDialog = true" class="image">
+            <i
+              *ngIf="!editingTeam?.image?.full_url && teamImgPrev == ''"
+              class="pi pi-image"
+            ></i>
+            <img *ngIf="teamImgPrev != ''" [src]="teamImgPrev" alt="" />
+            <img
+              *ngIf="editingTeam?.image?.full_url && !teamImgPrev"
+              [src]="editingTeam.image.full_url"
+              alt=""
+            />
+          </div>
+          <p class="fototypes">{{ "PLAYERS.FOTOTYPES" | translate }}</p>
+          <div *ngIf="isFileRejectedBySize" class="my-2 text-center">
+            <span class="text-danger">{{
+              "fileRejectedBySize" | translate
+            }}</span>
+          </div>
+          <div *ngIf="isFileRejectedByType" class="my-2 text-center">
+            <span class="text-danger">{{
+              "fileRejectedByType" | translate
+            }}</span>
+          </div>
+        </div>
+        <div class="team_color">
+          <div class="caption">
+            {{ "create_new_team.select_team_color" | translate }}
+          </div>
+          <div class="colors">
+            <button
+              (click)="setTeamColor(color, false)"
+              *ngFor="let color of colors"
+              [ngStyle]="{ 'background-color': color }"
+              class="color btn"
+            ></button>
+            <button
+              *ngIf="customColor != ''"
+              [style.background]="customColor"
+              class="color custom_color btn"
+            ></button>
+            <button
+              (colorPickerChange)="setTeamColor($event, true)"
+              [(colorPicker)]="color"
+              class="color btn"
+              style="
+                background-image: url(assets/img/icons/color.png);
+                background-size: cover;
+              "
+            ></button>
+          </div>
+          <div class="selected_color text-main my-3">
+            {{ newTeamForm.value.color }}
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="step == 4" class="step_content">
+        <div
+          class="mb-5 position-relative d-flex align-items-center justify-content-center"
+        >
+          <h6 class="font-weight-bold">
+            {{ "create_new_team.created_team" | translate }}
+          </h6>
+        </div>
+        <div class="success_content">
+          <div class="success_sphere">
+            <i class="pi pi-check"></i>
+          </div>
+          <div class="caption">
+            {{ "create_new_team.team_available" | translate }}
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="[1, 2, 3, 4].includes(step)" class="text-center">
+        <button
+          (click)="
+            step < 3
+              ? validateStep()
+              : step === 3
+              ? onSubmit($event)
+              : closeDialog(true)
+          "
+          [disabled]="
+            loading == true ||
+            isFileRejectedBySize ||
+            isFileRejectedByType ||
+            (step === 3 &&
+              newTeamForm.value.color === '' &&
+              newTeamForm.value.image === '')
+          "
+          class="btn next_btn"
+        >
+          {{
+            step < 3
+              ? ("LBL_SIGUIENTE" | translate)
+              : step === 3
+              ? editingTeam == null
+                ? ("create_new_team.create_team" | translate)
+                : ("create_new_team.update_team" | translate)
+              : ("create_new_team.go_to_team" | translate)
+          }}
+        </button>
+      </div>
+    </form>
+  </div>
+</p-dialog>
+
+<app-image-cropper
+  *ngIf="openCropperDialog"
+  [coverDialog]="openCropperDialog"
+  (sendImage)="onFileSelected($event)"
+  (close)="openCropperDialog = false"
+>
+</app-image-cropper>

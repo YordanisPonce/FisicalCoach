@@ -1,0 +1,403 @@
+<div class="card box-shadow">
+  <div class="card-body p-0">
+    <div class="row">
+      <div class="col-12">
+        <div class="nutrition_player_header view_header">
+          <span class="icon_left" routerLink="/club/nutrition"
+            ><i class="fas fa-chevron-left"></i>
+          </span>
+          <h6 class="font-weight-600 mb-0 mr-5">
+            {{ "nutrition.nutrition_details.title" | translate }}
+          </h6>
+        </div>
+      </div>
+
+      <div class="col-12">
+        <div class="row nutrition_players_container">
+          <div class="col-12 my-3">
+            <div class="col-12 row-download text-lg-right pr-0" *ngIf="isData">
+              <i
+                (click)="
+                  downloadAllReports(playerSheets[currentIndex].player.id)
+                "
+                *ngIf="!loadingPDFS && playerSheets.length > 0"
+                class="fa fa-download fa-1x"
+                pTooltip="{{ 'nutrition.download_reports' | translate }}"
+                role="button"
+                tooltipPosition="top"
+              ></i>
+              <i
+                *ngIf="loadingPDFS"
+                class="fa fa-spinner fa-1x"
+                role="button"
+              ></i>
+            </div>
+            <div class="nutrition_player_profile">
+              <div class="nutrition_player_profile_image">
+                <p-skeleton
+                  *ngIf="loading"
+                  shape="circle"
+                  size="100px"
+                  styleClass="mb-2"
+                ></p-skeleton>
+                <img
+                  *ngIf="!loading"
+                  [src]="geturlImage(playerSheets[currentIndex])"
+                  alt="player"
+                  class="nutrition_player_profile_image"
+                />
+              </div>
+              <div *ngIf="!loading" class="row">
+                <div class="col-12 w-100">
+                  <div class="nutrition_player_profile_title">
+                    <span *ngIf="isData">{{
+                      playerSheets[currentIndex]?.player?.full_name
+                    }}</span>
+                    <span *ngIf="!isData">{{ player?.full_name }}</span>
+                  </div>
+                  <div class="nutrition_player_profile_academy">
+                    <span *ngIf="isData">{{
+                      playerSheets[currentIndex]?.team?.name
+                    }}</span>
+                    <span *ngIf="!isData">{{ team?.name }}</span>
+                  </div>
+                  <div class="d-flex">
+                    <div class="mr-4">
+                      <div class="nutrition_player_profile_info_title">
+                        <span>GET</span>
+                      </div>
+                      <div class="nutrition_player_profile_info_desc">
+                        <span>{{
+                          parseValue(
+                            playerSheets[currentIndex]
+                              ?.total_energy_expenditure || 0
+                          ) + " Kcal"
+                        }}</span>
+                      </div>
+                    </div>
+                    <div class="mr-4">
+                      <div class="nutrition_player_profile_info_title">
+                        <span>GER</span>
+                      </div>
+                      <div class="nutrition_player_profile_info_desc">
+                        <span>{{
+                          parseValue(
+                            playerSheets[currentIndex]
+                              ?.basal_energy_expenditure || 0
+                          ) + " Kcal"
+                        }}</span>
+                      </div>
+                    </div>
+                    <div class="mr-4">
+                      <div class="nutrition_player_profile_info_title">
+                        <span>{{ "nutrition.last_weight" | translate }}</span>
+                      </div>
+                      <div
+                        class="nutrition_player_profile_info_desc text-center"
+                      >
+                        <span *ngIf="isData">{{
+                          (playerSheets[currentIndex]?.player?.weight
+                            | number : "1.0-0") + " Kg"
+                        }}</span>
+                        <span *ngIf="!isData">{{
+                          (player?.weight | number : "1.0-0") + " Kg"
+                        }}</span>
+                      </div>
+                    </div>
+                    <div>
+                      <div class="nutrition_player_profile_info_title">
+                        <span>{{ "nutrition.height" | translate }}</span>
+                      </div>
+                      <div class="nutrition_player_profile_info_desc">
+                        <span *ngIf="isData"
+                          >{{
+                            playerSheets[currentIndex]?.player?.height
+                              | number : "1.0-0"
+                          }}
+                          cm</span
+                        >
+                        <span *ngIf="!isData"
+                          >{{ player?.height | number : "1.0-0" }} Cm</span
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div *ngIf="loading" class="row">
+                <div class="col-12">
+                  <p-skeleton
+                    height="15px"
+                    shape="rectangle"
+                    styleClass="mb-2"
+                    width="150px"
+                  ></p-skeleton>
+                  <div class="d-flex justify-content-between">
+                    <p-skeleton
+                      height="15px"
+                      shape="rectangle"
+                      styleClass="mb-2 mr-2"
+                      width="50px"
+                    ></p-skeleton>
+                    <p-skeleton
+                      height="15px"
+                      shape="rectangle"
+                      styleClass="mb-2 mr-2"
+                      width="50px"
+                    ></p-skeleton>
+                    <p-skeleton
+                      height="15px"
+                      shape="rectangle"
+                      styleClass="mb-2 mr-2"
+                      width="50px"
+                    ></p-skeleton>
+                  </div>
+                  <div class="d-flex justify-content-between">
+                    <p-skeleton
+                      height="15px"
+                      shape="rectangle"
+                      styleClass="mb-2 mr-2"
+                      width="60px"
+                    ></p-skeleton>
+                    <p-skeleton
+                      height="15px"
+                      shape="rectangle"
+                      styleClass="mb-2 mr-2"
+                      width="50px"
+                    ></p-skeleton>
+                    <p-skeleton
+                      height="15px"
+                      shape="rectangle"
+                      styleClass="mb-2 mr-2"
+                      width="50px"
+                    ></p-skeleton>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <ng-container *ngIf="playerSheets.length > 0 && !loading">
+          <p-carousel
+            (onPage)="getPageIndex($event)"
+            [circular]="false"
+            [numScroll]="1"
+            [numVisible]="1"
+            [value]="playerSheets"
+            styleClass="custom_carousel"
+          >
+            <ng-template let-sheet pTemplate="item">
+              <div class="col-12">
+                <div class="n_row nutrition_players_container border-0 pr-0">
+                  <div class="col-12 my-3">
+                    <div class="row">
+                      <div class="col-12 text-lg-right mb-5">
+                        <i
+                          (click)="downloadPdfById(sheet.id)"
+                          *ngIf="!loadingSinglePDF"
+                          class="fa fa-download fa-1x"
+                          pTooltip="{{
+                            'nutrition.download_report' | translate
+                          }}"
+                          role="button"
+                          tooltipPosition="top"
+                        ></i>
+                        <i
+                          (click)="downloadPdfById(sheet.id)"
+                          *ngIf="loadingSinglePDF"
+                          class="fa fa-spinner fa-1x"
+                          role="button"
+                        ></i>
+                      </div>
+                      <div class="col-sm-6 col-xl-4 mb-5">
+                        <div class="nutrition_player_info_title">
+                          <span>
+                            {{
+                              "nutrition.nutrition_details.take_supplements"
+                                | translate
+                            }}</span
+                          >
+                        </div>
+                        <span class="nutrition_player_info_text">{{
+                          sheet?.take_supplements ? "SI" : "NO"
+                        }}</span>
+                      </div>
+                      <div class="col-sm-6 col-xl-4 mb-5">
+                        <div class="nutrition_player_info_title">
+                          <span>
+                            {{
+                              "nutrition.create_sheet_dialog.take_diet.title"
+                                | translate
+                            }}</span
+                          >
+                        </div>
+                        <span class="nutrition_player_info_text">{{
+                          sheet?.take_diets ? "SI" : "NO"
+                        }}</span>
+                      </div>
+                      <div class="col-sm-6 col-xl-4 mb-5">
+                        <div class="nutrition_player_info_title">
+                          <span>
+                            {{
+                              "nutrition.nutrition_details.factor_activity_result"
+                                | translate
+                            }}</span
+                          >
+                        </div>
+                        <span class="nutrition_player_info_text">
+                          {{ sheet?.activity_factor }}
+                        </span>
+                      </div>
+                      <div class="col-sm-6 col-xl-4 mb-5">
+                        <div class="nutrition_player_info_title">
+                          <span>{{ "nutrition.supplements" | translate }}</span>
+                        </div>
+                        <div>
+                          <div
+                            *ngFor="let item of sheet?.supplements"
+                            class="item"
+                          >
+                            <div>{{ item.name }}</div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-sm-6 col-xl-4 mb-5">
+                        <div class="nutrition_player_info_title">
+                          <span>{{ "nutrition.diets" | translate }}</span>
+                        </div>
+                        <div>
+                          <div *ngFor="let item of sheet?.diets" class="item">
+                            <div>{{ item.name }}</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ng-template>
+          </p-carousel>
+        </ng-container>
+        <ng-container
+          *ngIf="!playerSheets || (playerSheets.length <= 0 && !loading)"
+        >
+          <div class="col-12 notdata">
+            <h5 class="sindatos">
+              {{ "PLAYERS.NUTRITIONNOTDATA" | translate }}
+            </h5>
+          </div>
+        </ng-container>
+        <div class="col-12" *ngIf="loading">
+          <div class="row nutrition_players_container">
+            <div class="col-12">
+              <div class="row">
+                <div class="col-sm-6 col-xl-4 mb-5">
+                  <div class="nutrition_player_info_title">
+                    <span>{{
+                      "nutrition.nutrition_details.take_supplements" | translate
+                    }}</span>
+                  </div>
+
+                  <p-skeleton
+                    height="15px"
+                    shape="rectangle"
+                    styleClass="mb-2"
+                    width="25%"
+                  ></p-skeleton>
+                </div>
+
+                <div class="col-sm-6 col-xl-4 mb-5">
+                  <div class="nutrition_player_info_title">
+                    <span>{{
+                      "nutrition.create_sheet_dialog.take_diet.title"
+                        | translate
+                    }}</span>
+                  </div>
+
+                  <p-skeleton
+                    height="15px"
+                    shape="rectangle"
+                    styleClass="mb-2"
+                    width="25%"
+                  ></p-skeleton>
+                </div>
+                <div class="col-sm-6 col-xl-4 mb-5">
+                  <div class="nutrition_player_info_title">
+                    <span>{{
+                      "nutrition.nutrition_details.factor_activity_result"
+                        | translate
+                    }}</span>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-xl-4 mb-5">
+                  <div class="nutrition_player_info_title">
+                    <span>{{ "nutrition.supplements" | translate }}</span>
+                  </div>
+                  <div>
+                    <p-skeleton
+                      borderRadius="25px"
+                      height="25px"
+                      shape="rectangle"
+                      styleClass="mb-2"
+                      width="75%"
+                    ></p-skeleton>
+                    <p-skeleton
+                      borderRadius="25px"
+                      height="25px"
+                      shape="rectangle"
+                      styleClass="mb-2"
+                      width="50%"
+                    ></p-skeleton>
+                    <p-skeleton
+                      borderRadius="25px"
+                      height="25px"
+                      shape="rectangle"
+                      styleClass="mb-2"
+                      width="90%"
+                    ></p-skeleton>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-xl-4 mb-5">
+                  <div class="nutrition_player_info_title">
+                    <span>{{ "nutrition.diets" | translate }}</span>
+                  </div>
+                  <div>
+                    <p-skeleton
+                      borderRadius="25px"
+                      height="25px"
+                      shape="rectangle"
+                      styleClass="mb-2"
+                      width="75%"
+                    ></p-skeleton>
+                    <p-skeleton
+                      borderRadius="25px"
+                      height="25px"
+                      shape="rectangle"
+                      styleClass="mb-2"
+                      width="50%"
+                    ></p-skeleton>
+                    <p-skeleton
+                      borderRadius="25px"
+                      height="25px"
+                      shape="rectangle"
+                      styleClass="mb-2"
+                      width="90%"
+                    ></p-skeleton>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-xl-4">
+                  <p-skeleton
+                    height="25px"
+                    shape="rectangle"
+                    styleClass="mb-2"
+                    width="25%"
+                  ></p-skeleton>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

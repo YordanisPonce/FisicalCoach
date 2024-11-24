@@ -1,0 +1,22 @@
+<div class="timeline_steps ">
+  <div class="timeline_steps_container">
+    <div class="timeline_step" *ngFor="let item of steps; index as i;">
+      <div class="timeline_step_titles">
+        <div class="title">
+          {{item.title}}
+        </div>
+        <div class="subtitle">
+          {{item.subtitle}}
+        </div>
+      </div>
+      <div class="timeline_step_icon" [ngClass]="{'active-step': i+1 == step}" (click)="selectItem(i+1, item)">
+        <!-- <i class="fa fa-2x" [ngClass]="item.icon"></i> -->
+        <img src="/assets/img/icons/{{(i+1 == step) ? item.icon_active : item.icon}}" alt="">
+      </div>
+      <div class="timeline_step_selector" (click)="selectItem(i+1, item)">
+        <div class="center" [ngClass]="{'active': i+1 == step}"></div>
+      </div>
+    </div>
+    <div class="timeline_steps_line"></div>
+  </div>
+</div>

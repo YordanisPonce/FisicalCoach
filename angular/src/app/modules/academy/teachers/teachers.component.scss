@@ -1,0 +1,140 @@
+:host ::ng-deep {
+  .members_header {
+    display: flex;
+    align-items: center;
+    padding: 1.5rem 2.5rem;
+    width: 100%;
+  }
+
+  #dialog_config_member {
+    .p-dialog {
+      .p-dialog-header {
+        border-top-right-radius: 11px !important;
+        border-top-left-radius: 11px !important;
+      }
+      .p-dialog-content {
+        padding-left: 3rem;
+        padding-right: 3rem;
+      }
+    }
+  }
+
+  #new_advanced_member_dialog {
+    .p-dialog {
+      .p-dialog-header {
+        .header_content {
+          .title {
+            color: #000000;
+            font-weight: 600;
+          }
+          .subtitle {
+            font-family: "Montserrat", sans-serif;
+            font-weight: 500;
+            color: rgba($color: #050717, $alpha: 0.84);
+          }
+        }
+      }
+      .p-dialog-content {
+        .file_btn {
+          height: 45px;
+          background-color: #024cac;
+          text-align: left;
+          color: white;
+          border-radius: 8px;
+          padding-left: 2rem;
+          font-weight: 400;
+        }
+        .back_btn {
+          height: 45px;
+          border: 1px solid #050c4433;
+          flex: 1;
+          color: rgba($color: #050c44, $alpha: 0.44);
+          border-radius: 8px;
+        }
+        .next_btn {
+          background: #024cac;
+          height: 45px;
+          color: white;
+          border-radius: 8px;
+        }
+        .form-control {
+          color: rgba($color: #050c44, $alpha: 0.4) !important;
+          font-weight: 400 !important;
+        }
+        .form-control::placeholder {
+          color: rgba($color: #050c44, $alpha: 0.4) !important;
+          font-weight: 400 !important;
+          // padding-left: 1rem;
+        }
+        .p-dropdown .p-dropdown-label.p-placeholder {
+          color: rgba($color: #050c44, $alpha: 0.4);
+        }
+      }
+    }
+  }
+}
+
+@media (min-width: 576px) {
+}
+@media (min-width: 1024px) {
+}
+@media (min-width: 1200px) {
+  :host ::ng-deep {
+    #dialog_config_member {
+      .p-dialog {
+        width: 500px;
+        .p-dialog-header {
+          padding: 2.5rem 4.5rem;
+        }
+        .p-dialog-content {
+          #dialog_config_member_container {
+            padding: 0 3rem;
+          }
+        }
+        .p-dialog-footer {
+          padding: 1.5rem 4.5rem;
+        }
+      }
+    }
+
+    #new_advanced_member_dialog {
+      .p-dialog {
+        .p-dialog-header {
+          padding-left: 3rem;
+          padding-right: 3rem;
+          padding-top: 3rem;
+          .header_content {
+            .title {
+              font-size: 2rem;
+            }
+          }
+        }
+        .p-dialog-content {
+          .back_btn {
+            height: 55px;
+          }
+          .next_btn {
+            height: 55px;
+          }
+        }
+      }
+    }
+  }
+}
+@media (min-width: 1200px) {
+  :host ::ng-deep {
+    #dialog_config_member {
+    }
+
+    #new_advanced_member_dialog {
+      .p-dialog {
+        .p-dialog-content {
+          display: flex;
+          app-steps-members {
+            flex: 1;
+          }
+        }
+      }
+    }
+  }
+}

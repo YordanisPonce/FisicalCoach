@@ -1,0 +1,526 @@
+<div class="row" style="margin: 2px">
+  <div class="col-12">
+    <form
+      (ngSubmit)="onSubmit()"
+      [formGroup]="formSportingData"
+      id="player_family_data_form"
+      name="nomFormSportingData"
+    >
+      <div class="row pb-2">
+        <div class="col-md-6">
+          <div class="mb-3 my-3">
+            <label class="" for="sports_name"
+              >{{ "PLAYERS.LBL_NOMBREDEPORTIVO" | translate }} *</label
+            >
+            <input
+              [ngClass]="{
+                'ng-invalid ng-dirty is-invalid':
+                  (f.alias.invalid && (f.alias.dirty || f.alias.touched)) ||
+                  (f.alias.invalid && submitted)
+              }"
+              aria-describedby="inputGroup-sizing-default"
+              aria-label="Default"
+              class="form-control input-rounded"
+              formControlName="alias"
+              id="sports_name"
+              placeholder="{{ 'LBL_ESCRIBEAQI' | translate }}"
+              type="text"
+            />
+            <div *ngIf="f.alias?.errors" class="invalid-feedback">
+              {{ "PLAYERS.LBL_NOMBREDEPORTIVO" | translate }}
+              {{ "LBL_REQUERIDO" | translate }}
+            </div>
+          </div>
+          <div *ngIf="listPositions.length > 0" class="mb-3 my-3">
+            <label class="" for="demarcation"
+              >{{ "PLAYERS.LBL_DEMARCACION" | translate }} *</label
+            >
+            <p-dropdown
+              (onChange)="getPositionSpec($event)"
+              [ngClass]="{
+                'ng-invalid ng-dirty is-invalid':
+                  (f.position_id.invalid &&
+                    (f.position_id.dirty || f.position_id.touched)) ||
+                  (f.position_id.invalid && submitted)
+              }"
+              [options]="listPositions"
+              [styleClass]="'w-100 form-control'"
+              aria-describedby="inputGroup-sizing-default"
+              formControlName="position_id"
+              id="demarcation"
+              placeholder="{{ 'LBL_SELECCIONE' | translate }}"
+            ></p-dropdown>
+            <div *ngIf="f.position_id?.errors" class="invalid-feedback">
+              {{ "PLAYERS.LBL_DEMARCACION" | translate }}
+              {{ "LBL_REQUERIDO" | translate }}
+            </div>
+          </div>
+          <div *ngIf="showListeSpec" class="mb-3 my-3">
+            <label class="" for="specific_demarcation">{{
+              "PLAYERS.LBL_DEMARCACIONESPECIFICA" | translate
+            }}</label>
+            <p-dropdown
+              [options]="listPositionsSpec"
+              [styleClass]="'w-100 form-control'"
+              aria-describedby="inputGroup-sizing-default"
+              class="control-custom"
+              formControlName="position_spec_id"
+              id="specific_demarcation"
+              placeholder="{{ 'LBL_SELECCIONE' | translate }}"
+            ></p-dropdown>
+            <div *ngIf="f.position_spec_id?.errors" class="invalid-feedback">
+              {{ "PLAYERS.LBL_DEMARCACIONESPECIFICA" | translate }}
+              {{ "LBL_REQUERIDO" | translate }}
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="player_number">
+            <span class="font-weight-600 text-secondary"
+              >{{ "PLAYERS.LBL_DORSAL" | translate }} *</span
+            >
+            <div class="player_shirt">
+              <img
+                alt="dorsal"
+                src="../../../../../../assets/img/casual-t-shirt.svg"
+              />
+              <span class="number">{{ dorsal }}</span>
+            </div>
+            <div>
+              <button
+                (click)="showModal = true"
+                *ngIf="playerSportingData.id"
+                class="btn"
+                pTooltip="{{ 'PLAYERS.LBL_CAMBIARDORSAL' | translate }}"
+                tooltipPosition="top"
+                type="button"
+              >
+                {{ "PLAYERS.LBL_CAMBIARDORSAL" | translate }}
+              </button>
+              <p-inputNumber
+                (onBlur)="handleDorsal()"
+                *ngIf="!playerSportingData.id"
+                [inputStyleClass]="'w-100 form-control'"
+                [min]="0"
+                [ngClass]="{
+                  'ng-invalid ng-dirty is-invalid':
+                    (f.shirt_number.invalid &&
+                      (f.shirt_number.dirty || f.shirt_number.touched)) ||
+                    (f.shirt_number.invalid && submitted)
+                }"
+                [styleClass]="'d-block'"
+                formControlName="shirt_number"
+                id="dorsal1"
+                inputId="dorsal"
+                name="dorsal"
+                placeholder="{{ 'LBL_ESCRIBEAQI' | translate }}"
+              >
+              </p-inputNumber>
+              <div *ngIf="f.shirt_number?.errors" class="invalid-feedback">
+                {{ "PLAYERS.LBL_DORSAL" | translate }}
+                {{ "LBL_REQUERIDO" | translate }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="listLaterality.length > 0" class="row align-items-center">
+        <div class="col-12 col-md-6 my-3">
+          <label class="d-block">{{
+            "PLAYERS.LBL_LATERALIDAD" | translate
+          }}</label>
+          <div class="d-flex justify-content-between">
+            <p-radioButton
+              *ngFor="let item of listLaterality"
+              [label]="item.label"
+              [value]="item.value"
+              formControlName="laterality_id"
+              name="laterality_id"
+            ></p-radioButton>
+            <div
+              *ngIf="submitted && f.laterality_id.invalid"
+              class="form-text text-danger"
+            >
+              {{ "PLAYERS.LBL_LATERALIDAD" | translate }}
+              {{ "LBL_REQUERIDO" | translate }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row align-items-center" *ngIf="!isAvancedFormRegister">
+        <div class="col-12 col-md-6 my-3">
+          <label class="" for="sports_name"
+            >{{ "PLAYERS.LBL_AGENTES" | translate }}
+          </label>
+          <input
+            class="form-control input-rounded"
+            formControlName="agents"
+            id="agents"
+            placeholder="{{ 'LBL_ESCRIBEAQI' | translate }}"
+            type="text"
+          />
+        </div>
+        <!--        <h5>{{'PLAYERS.LBL_AGENTES'|translate}}</h5>-->
+        <!--        <ul>-->
+        <!--          <li><label>{{playerSportingData.agents}}</label></li>-->
+        <!--        </ul>-->
+        <!--        <hr>-->
+      </div>
+      <div *ngIf="playerSportingData.id" class="row">
+        <div class="col-md-6 col-lg-6"></div>
+        <div class="col-sm-12 col-md-6 col-lg-6">
+          <button
+            [loading]="saving"
+            class="btn btn-primary btn-block py-2 botone"
+            label="{{ 'PLAYERS.BTN_GUARDAR' | translate }}"
+            pButton
+            pTooltip="{{ 'PLAYERS.BTN_GUARDAR' | translate }}"
+            type="submit"
+          ></button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<hr />
+
+<div *ngIf="playerSportingData.id" class="row">
+  <div class="col-xl-6">
+    <label style="display: flex; min-height: 45px; justify-content: center">
+      {{ "PLAYERS.TRAYECTORIADEPORTIVA" | translate }}</label
+    >
+    <div class="trayectoria" id="trayectoria">
+      <div class="trayectoria_line"></div>
+      <ng-container>
+        <div *ngFor="let item of trayectory" class="trayectoria_item">
+          <span class="point" (click)="showTrayectoryModal(item)"></span>
+          <span
+            class="image"
+            style="background-image: url('/angular/src/assets/img/equipo.png')"
+          ></span>
+          <span class="name">{{ item.title }}</span>
+          <span class="year"
+            >{{ item.start_date | date : "YYYY" }} -
+            {{ item.end_date | date : "YYYY" }}</span
+          >
+        </div>
+      </ng-container>
+      <div *ngIf="!loading && trayectory.length == 0" class="text-center">
+        <h5 class="nodatatext">{{ "PLAYERS.SINDATOS" | translate }}</h5>
+      </div>
+      <div *ngIf="loading" class="text-center">
+        <i class="fa fa-spin fa-spinner fa-2x"></i>
+      </div>
+      <div class="trayectoria_action">
+        <button
+          (click)="showModalTrajectory = true"
+          class="btn btn-outline btn-block py-3 p-button-outlined"
+          icon="pi pi-plus"
+          iconPos="right"
+          label=" {{ 'PLAYERS.ADDNUEVA' | translate }}"
+          pButton
+          pTooltip=" {{ 'PLAYERS.ADDNUEVA' | translate }}"
+          tooltipPosition="top"
+        ></button>
+      </div>
+    </div>
+  </div>
+  <div class="col-xl-6">
+    <label style="display: flex; min-height: 45px">{{
+      "PLAYERS.VALORACIONTITLE" | translate
+    }}</label>
+    <ng-container
+      *ngIf="!loadingAssessment && assessment.performance_assessment"
+    >
+      <div id="valoraciones">
+        <ul>
+          <li class="valoracion">
+            <span
+              class="title font-weight-600"
+              style="font-size: 20px; color: #04e9c5"
+              >{{ "PLAYERS.RFINAL" | translate }}</span
+            >
+            <span
+              [style]="{
+                color: assessment.performance_assessment_punctuation?.color
+              }"
+              class="value"
+              >{{ assessment.performance_assessment_punctuation?.name }}</span
+            >
+          </li>
+          <li *ngFor="let item of assessment.skills" class="valoracion">
+            <span class="title">{{ item.skills.name }}</span>
+            <span
+              class="value"
+              style="{{ 'color:' + item.punctuation.color }}"
+              >{{ item.punctuation.name }}</span
+            >
+          </li>
+        </ul>
+        <div class="px-4 pb-3">
+          <button
+            (click)="analyzePlayerDialog = true"
+            class="btn btn-outline btn-block py-3 p-button-outlined"
+            label="{{ 'PLAYERS.ANALIZARJUGADOR' | translate }}"
+            pButton
+            pTooltip="{{ 'PLAYERS.ANALIZARJUGADOR' | translate }}"
+            tooltipPosition="top"
+          ></button>
+        </div>
+      </div>
+    </ng-container>
+    <div
+      *ngIf="!loadingAssessment && !assessment.performance_assessment"
+      class="trayectoria"
+    >
+      <ng-container>
+        <div class="text-center">
+          <h5 class="nodatatext">{{ "PLAYERS.SINDATOS" | translate }}</h5>
+          <div class="" style="margin-top: 40px">
+            <button
+              (click)="analyzePlayerDialog = true"
+              class="btn btn-outline btn-block py-3 p-button-outlined"
+              label="{{ 'PLAYERS.ANALIZARJUGADOR' | translate }}"
+              pButton
+              pTooltip="{{ 'PLAYERS.ANALIZARJUGADOR' | translate }}"
+              tooltipPosition="top"
+            ></button>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+    <div *ngIf="loadingAssessment" class="text-center">
+      <i class="fa fa-spin fa-spinner fa-2x"></i>
+    </div>
+  </div>
+</div>
+<p-dialog
+  [(visible)]="showModal"
+  [modal]="true"
+  [style]="{ 'max-width': '30vw' }"
+  header="{{ 'PLAYERS.LBL_CAMBIARDORSAL' | translate }}"
+  styleClass="rounded"
+>
+  <div class="row justify-content-md-center">
+    <div class="col-md-6 col-sm-12 col-lg-6 mt-3 text-center">
+      <div class="player_shirt">
+        <img
+          alt="dorsal"
+          src="../../../../../../assets/img/casual-t-shirt.svg"
+        />
+      </div>
+      <label class="" for="demarcation">{{
+        "PLAYERS.LBL_DORSAL" | translate
+      }}</label>
+      <p-inputNumber
+        [(ngModel)]="dorsal"
+        [min]="0"
+        [style]="{ width: '100%' }"
+        id="dorsal"
+        inputId="withoutgrouping"
+        name="dorsal"
+        placeholder="{{ 'LBL_ESCRIBEAQI' | translate }}"
+      >
+      </p-inputNumber>
+    </div>
+  </div>
+  <div *ngIf="playerSportingData.id" class="row">
+    <div class="col-md-12 col-sm-12 col-lg-12 mt-3">
+      <button
+        (click)="changeDorsal()"
+        *ngIf="saving"
+        class="btn btn-outline btn-block py-3"
+        pTooltip="{{ 'LBL_GUARDAR' | translate }}"
+        tooltipPosition="top"
+      >
+        {{ "LBL_GUARDAR" | translate }}
+      </button>
+      <button
+        *ngIf="saving"
+        class="btn btn-saving mb-3 mb-sm-0"
+        disabled
+        pTooltip="{{ 'LBL_GUARDANDO' | translate }}"
+        tooltipPosition="top"
+        type="button"
+      >
+        <span
+          aria-hidden="true"
+          class="spinner-grow spinner-grow-sm"
+          role="status"
+        ></span>
+        {{ "LBL_GUARDANDO" | translate }}
+      </button>
+    </div>
+  </div>
+</p-dialog>
+
+<p-dialog
+  *ngIf="showModalTrajectory"
+  [(visible)]="showModalTrajectory"
+  [modal]="true"
+  class="custom_dialog"
+  header="{{
+    (!selectedCLub
+      ? 'PLAYERS.LBL_NEWCLUBPROCEDENT'
+      : 'PLAYERS.LBL_LUBPROCEDENT'
+    ) | translate
+  }}"
+  maskStyleClass="purple_mask"
+  (onHide)="handleBack()"
+>
+  <form
+    [formGroup]="formTrajectory"
+    id="player_trayectory"
+    name="nomFormTrajectory"
+  >
+    <div class="row pb-2">
+      <div class="col-12">
+        <label class="" for="title">{{ "MEMBERS.LBL_CLUB" | translate }}</label>
+        <input
+          aria-describedby="inputGroup-sizing-default"
+          aria-label="Default"
+          class="form-control input-rounded"
+          formControlName="title"
+          id="title"
+          placeholder="{{ 'LBL_ESCRIBEAQI' | translate }}"
+          type="text"
+        />
+        <div
+          *ngIf="submitted && ft.title.invalid"
+          class="form-text text-danger"
+        >
+          {{ "MEMBERS.LBL_CLUB" | translate }} {{ "LBL_REQUERIDO" | translate }}
+        </div>
+      </div>
+      <div class="col-12 mt-3">
+        <label class="" for="category">{{
+          "PLAYERS.LBL_CATEGORY" | translate
+        }}</label>
+        <input
+          aria-describedby="inputGroup-sizing-default"
+          aria-label="Default"
+          class="form-control input-rounded"
+          formControlName="category"
+          id="category"
+          placeholder="{{ 'LBL_ESCRIBEAQI' | translate }}"
+          type="text"
+        />
+        <div
+          *ngIf="submittedTrajectory && ft.category.invalid"
+          class="form-text text-danger"
+        >
+          {{ "PLAYERS.LBL_CATEGORY" | translate }}
+          {{ "LBL_REQUERIDO" | translate }}
+        </div>
+      </div>
+      <div class="col-12 mt-3">
+        <label class="" for="club_arrival_type_id">{{
+          "PLAYERS.LBL_TYPEARRYVAL" | translate
+        }}</label>
+        <p-dropdown
+          [filter]="true"
+          [options]="listTypeArrival"
+          [styleClass]="'w-100 form-control'"
+          aria-describedby="inputGroup-sizing-default"
+          formControlName="club_arrival_type_id"
+          id="club_arrival_type_id"
+          placeholder="{{ 'LBL_SELECCIONE' | translate }}"
+        ></p-dropdown>
+        <div
+          *ngIf="submittedTrajectory && ft.club_arrival_type_id.invalid"
+          class="form-text text-danger"
+        >
+          {{ "PLAYERS.LBL_TYPEARRYVAL" | translate }}
+          {{ "LBL_REQUERIDO" | translate }}
+        </div>
+      </div>
+      <div class="col-12 mt-3">
+        <label class="" for="start_date">{{
+          "MEMBERS.LBL_FECHAINICIO" | translate
+        }}</label>
+        <p-calendar
+          [firstDayOfWeek]="1"
+          [maxDate]="maxDate"
+          [monthNavigator]="true"
+          [readonlyInput]="true"
+          [style]="{ overflow: 'visible', 'border-radius': '30px' }"
+          [yearNavigator]="true"
+          [yearRange]="yearRange"
+          class="p-calendar form-control"
+          dateFormat="dd/mm/yy"
+          formControlName="start_date"
+          id="start_date"
+          inputId="range"
+          placeholder="{{ 'MEMBERS.LBL_FECHAINICIO' | translate }}"
+        ></p-calendar>
+        <div
+          *ngIf="submittedTrajectory && ft.start_date.invalid"
+          class="form-text text-danger"
+        >
+          {{ "MEMBERS.LBL_FECHAINICIO" | translate }}
+          {{ "LBL_REQUERIDO" | translate }}
+        </div>
+      </div>
+      <div class="col-12 mt-3">
+        <label class="" for="end_date">{{
+          "MEMBERS.LBL_FECHAFIN" | translate
+        }}</label>
+        <p-calendar
+          [firstDayOfWeek]="1"
+          [maxDate]="maxDate"
+          [monthNavigator]="true"
+          [readonlyInput]="true"
+          [style]="{
+            overflow: 'visible',
+            'border-radius': '30px'
+          }"
+          [yearNavigator]="true"
+          [yearRange]="yearRange"
+          class="p-calendar form-control"
+          dateFormat="dd/mm/yy"
+          formControlName="end_date"
+          id="end_date"
+          inputId="range"
+          placeholder="{{ 'MEMBERS.LBL_FECHAFIN' | translate }}"
+        ></p-calendar>
+        <div
+          *ngIf="submitted && ft.end_date.invalid"
+          class="form-text text-danger"
+        >
+          {{ "MEMBERS.LBL_FECHAFIN" | translate }}
+          {{ "LBL_REQUERIDO" | translate }}
+        </div>
+      </div>
+    </div>
+  </form>
+  <ng-template pTemplate="footer">
+    <div class="footer_btns">
+      <button
+        (click)="handleBack()"
+        class="back_btn btn p-button-outlined"
+        label="{{ 'LBL_ATRAS' | translate }}"
+        pButton
+        pTooltip="{{ 'LBL_ATRAS' | translate }}"
+        tooltipPosition="top"
+      ></button>
+      <button
+        *ngIf="!selectedCLub"
+        (click)="onSubmitArrival()"
+        [loading]="savingTrayectory"
+        class="next_btn btn"
+        label="{{ 'LBL_GUARDAR' | translate }}"
+        pButton
+        pTooltip="{{ 'LBL_GUARDAR' | translate }}"
+        tooltipPosition="top"
+      ></button>
+    </div>
+  </ng-template>
+</p-dialog>
+
+<app-analyze-player-dialog
+  (close)="assessmentValidation($event)"
+  [listPuntuations]="listPuntuations"
+  [listSkill]="listSkill"
+  [visible]="analyzePlayerDialog"
+  *ngIf="analyzePlayerDialog"
+></app-analyze-player-dialog>

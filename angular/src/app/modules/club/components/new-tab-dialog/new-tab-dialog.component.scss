@@ -1,0 +1,29 @@
+:host ::ng-deep{
+    .p-dialog{
+        #new_tab_dialog_container{
+            max-width: 400px;
+            margin: 0 auto;
+            .back_btn{
+                flex: 0 50px;
+                cursor: pointer;
+            }
+            .next_btn{
+                background-color: #0065E9;
+                border-radius: 32px;
+                color: white;
+                font-weight: 600;
+                font-size: .9rem;
+                padding: .65rem;
+            }
+            .p-inputswitch.p-inputswitch-checked .p-inputswitch-slider {
+                background: #024CAC;
+            }
+            // .p-radiobutton-label{}
+            label:not(.p-radiobutton-label){
+                // color: rgba($color: #050C44, $alpha: .66);
+                margin-bottom: 1.5rem;
+                font-size: .9rem;
+            }
+        }
+    }
+}

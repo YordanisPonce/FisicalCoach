@@ -1,0 +1,190 @@
+:host ::ng-deep{
+  .p-dialog{
+    .p-dialog-footer{
+      border-top: 0 !important;
+    }
+  }
+}
+i {
+	width: 15px;
+	margin-left:auto;
+	margin-right:auto;
+}
+h6 {
+  color: rgba($color: #050C44, $alpha: .75);
+  font-weight: 600;
+  margin-bottom: 2rem;
+}
+li{
+  border:none;
+  background-color:transparent;
+}
+
+.orden{
+  background-color:#FAFAFB;
+  li{
+    padding-left: 0;
+  }
+}
+.pack_and_payment{
+  padding: 0 2rem;
+}
+.order_resume{
+  .item{
+    display: flex;
+    margin-bottom: 2rem;
+    // align-items: center;
+    .item_icon{
+      width: 70px;
+      // height: 60px;
+      border: 1px solid #050C441C;
+      border-radius: 9px;
+      text-align: center;
+      line-height: 60px;
+      margin-right: 15px;
+    }
+    .item_resume{
+      span{
+        font-weight: 700;
+      }
+      .name{
+        color: #050717;
+        font-weight: 500;
+        font-size: .9rem;
+      }
+      .renewal{
+        color: rgba($color: #000000, $alpha: .64);
+        margin: .5rem 0;
+        font-weight: 600;
+        font-size: .9rem;
+      }
+      .price{
+        color: #000000;
+        font-weight: 700;
+      }
+    }
+  }
+}
+.help_icon{
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
+  text-align: center;
+  border-radius: 50%;
+  background-color: #050C44;
+  color: white;
+  margin-left: .5rem;
+}
+.selected_pack{
+  border: 1px solid #050C441C;
+  border-radius: 9px;  
+  .selected_pack_info{
+    flex: 1 1 auto;
+    padding: 1rem 1.5rem;
+
+  }
+  .selected_pack_controls{
+    display: flex;
+    padding-left: 1rem;
+    margin: 1rem;
+    
+    // flex: 0 0 100px;
+  }
+  .btn_margin_right{
+    @media (max-width:576px){
+      margin-right: 0.5rem;
+    }
+  }
+}
+
+.selected_pack_text,.payment_method_text{
+  line-height: 1.75;
+}
+
+.order_details{
+  table{
+    tr{
+      td{
+        padding: 1rem 0;
+      }
+      td:nth-child(1){
+        width: 30%;
+        font-weight: 700;
+        vertical-align: top;
+      }
+      td:nth-child(2){
+        color: #050C44;
+        font-weight: 600;
+      }
+    }
+  }
+}
+.payment_method_radio{
+  flex: 0 0 50px;  
+}
+
+.payment_method_image{
+  flex: 1 1 auto;
+}
+
+.pay_btn{
+  background-color: #050C44;
+  font-size: .9rem;
+  border-radius: 28px;
+  letter-spacing: 1px;
+  font-weight: 600;
+  height: 50px;
+  text-transform: uppercase;
+}
+
+// Small devices (landscape phones, 576px and up)
+@media (min-width: 576px) {
+  .selected_pack{
+    .selected_pack_info{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 1.5rem;
+  
+    }
+    .selected_pack_controls{
+      flex-direction: column;
+      align-items: center;
+      margin: 0;
+      padding-left: 0;
+      padding: 1rem;
+      // flex: 0 0 100px;
+    }
+  }
+}
+
+// Medium devices (tablets, 768px and up)
+@media (min-width: 1024px) {
+  .pack_and_payment{
+    padding-left: 2.5rem;
+  }
+  .order_details{
+    padding-right: 2.5rem;
+  }
+}
+
+// Large devices (desktops, 992px and up)
+@media (min-width: 1200px) {
+  .pack_and_payment{
+    padding-left: 4rem;
+  }
+  .order_details{
+    padding-right: 5rem;
+  }
+}
+
+// Extra large devices (large desktops, 1200px and up)
+@media (min-width: 1200px) {
+  .pack_and_payment{
+    padding-left: 4rem;
+  }
+  .order_details{
+    padding-right: 7rem;
+  }
+
+}

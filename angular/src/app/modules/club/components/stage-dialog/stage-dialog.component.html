@@ -1,0 +1,469 @@
+<p-dialog
+  id="evolucion_psicologica_dialog"
+  class="custom_dialog"
+  [modal]="true"
+  [(visible)]="visible"
+  styleClass="fullscreenDialog"
+  maskStyleClass=""
+  (onHide)="closeDialog()"
+  *ngIf="!loadingClosedPhase"
+>
+  <ng-template pTemplate="header">
+    <div class="d-flex header_content">
+      <img src="/assets/img/logo_panel.svg" alt="" />
+    </div>
+  </ng-template>
+  <div
+    id="evolucion_psicologica_dialog_container"
+    class="dialog_container"
+    [ngClass]="{ wide: step != 1 }"
+  >
+    <div class="step_content split_content" *ngIf="step == 1">
+      <div class="intro_image text-center p-4">
+        <div class="injurie_progress mb-5 flex justify-content-center">
+          <p-knob
+            [(ngModel)]="phaseDetail.percentage_complete"
+            valueTemplate="{value}%"
+            [strokeWidth]="9"
+            [size]="175"
+            [readonly]="true"
+            [valueColor]="getPercentageColor(phaseDetail.percentage_complete)"
+          ></p-knob>
+        </div>
+      </div>
+      <div class="intro">
+        <h5 class="title fisical-color" *ngIf="phaseIndex !== 0">
+          {{ "RFD.phase" | translate }} {{ phaseIndex }}
+        </h5>
+        <h5
+          class="title"
+          [ngClass]="{
+            'mb-4': isEvolutionPhase()
+          }"
+        >
+          {{ phaseDetail?.phase?.name }}
+        </h5>
+
+        <p class="text mb-2" *ngIf="!isEvolutionPhase()">
+          {{
+            "RFD." + getPhaseLevel(phaseDetail.percentage_complete).text
+              | translate
+          }}
+        </p>
+
+        <div class="test_field mb-5">
+          <h5 class="title">{{ "RFD.staff" | translate }}</h5>
+          <p-dropdown
+            [options]="staff"
+            [styleClass]="'w-100 form-control'"
+            [(ngModel)]="selectedStaff"
+            [optionLabel]="'full_name'"
+            [optionValue]="'id'"
+            [ngModelOptions]="{ standalone: true }"
+            placeholder="{{ 'LBL_SELECCIONE' | translate }}"
+          ></p-dropdown>
+        </div>
+        <div class="resume mb-4" *ngIf="!isEvolutionPhase()">
+          <span class="mr-2 mb-2">
+            <img src="/assets/img/icons/awesome-check.png" alt="check" />
+            {{ "RFD.playerHasNoEdema" | translate }}
+          </span>
+          <span>
+            <img src="/assets/img/icons/awesome-check.png" alt="check2" />
+            {{ "RFD.controlTestpassed" | translate }}
+          </span>
+        </div>
+        <div class="text-center nav_btns">
+          <button
+            class="btn back_btn"
+            (click)="closeDialog()"
+            *ngIf="!hasPreviousAnswers"
+            [disabled]="loadingSummary"
+          >
+            {{ "LBL_ATRAS" | translate }}
+          </button>
+
+          <button
+            class="btn back_btn"
+            (click)="getPhaseDetailTest(phaseDetail.code, true)"
+            *ngIf="hasPreviousAnswers"
+            [disabled]="loadingSummary || loadingTest"
+          >
+            {{ "RFD.seeSummary" | translate }}
+          </button>
+
+          <button
+            class="btn next_btn"
+            (click)="getPhaseDetailTest(phaseDetail.code)"
+            *ngIf="!loadingTest"
+            [disabled]="!selectedStaff"
+          >
+            <span *ngIf="phaseIndex !== 0">
+              {{ "RFD.start_test" | translate }}
+            </span>
+
+            <span *ngIf="phaseIndex === 0">
+              {{ "RFD.start_questionarie" | translate }}
+            </span>
+          </button>
+          <button class="btn next_btn" *ngIf="loadingTest" disabled>
+            <span *ngIf="showLoading">{{ "RFD.start_test" | translate }}</span>
+            <span *ngIf="!showLoading">{{ "LBL_LOADING" | translate }}</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="step_content" *ngIf="step == 2">
+      <ng-template pTemplate="header">
+        <div class="d-flex header_content">
+          <img src="/assets/img/logo_panel.svg" alt="" />
+        </div>
+      </ng-template>
+      <div
+        id="evolucion_psicologica_dialog_container"
+        class="dialog_container"
+        [ngClass]="{ wide: step == 2 }"
+      >
+        <form>
+          <div class="step_content" *ngIf="step == 2">
+            <div *ngIf="!category_questions.includes(phaseTest.code)">
+              <div *ngFor="let item of phaseTest.question_test; let i = index">
+                <div class="questions" *ngIf="currentQuestion === i">
+                  <div class="question">
+                    <div>
+                      <div class="text-center">
+                        <h5
+                          class="font-weight-500 mb-4"
+                          style="margin-top: 7rem"
+                        >
+                          {{ item?.question?.name }}
+                        </h5>
+                        <small class="my-4 font-weight-600 subtitle">{{
+                          "RFD.selectOneOption" | translate
+                        }}</small>
+                      </div>
+                      <div
+                        class="options my-5 row"
+                        *ngIf="item.question?.field_type === 'alphanumber'"
+                      >
+                        <div
+                          *ngFor="let response of item?.responses"
+                          class="option-content"
+                          [ngClass]="{
+                            'col-12 maxWidth': item?.responses.length < 6,
+                            'col-6': item?.responses.length > 5,
+                            selected:
+                              response.value === answers[item.code]?.responseId
+                          }"
+                          [style]="{
+                            'background-color':
+                              response.question_responses_id ===
+                              answers[item.code]?.id
+                                ? response.color
+                                : ''
+                          }"
+                        >
+                          <p-radioButton
+                            [name]="response.value"
+                            value="{{
+                              answers[item.code]?.responseId &&
+                              answers[item.code]?.responseId === response.value
+                                ? answers[item.code]?.responseId
+                                : response.value
+                            }}"
+                            label="{{ response.name }}"
+                            [(ngModel)]="
+                              answers[item.code]?.responseId &&
+                              answers[item.code].responseId
+                            "
+                            (ngModelChange)="
+                              handleSelectedAnswer(
+                                $event,
+                                item.code,
+                                response.question_responses_id,
+                                response.name,
+                                item.question.field_type
+                              )
+                            "
+                            pTooltip="{{ response.tooltip }}"
+                          ></p-radioButton>
+
+                          <img
+                            src="{{ response.image.full_url }}"
+                            alt="icon"
+                            *ngIf="response.image"
+                            width="25"
+                            height="25"
+                            class="ml-2"
+                          />
+                        </div>
+                      </div>
+                      <div
+                        class="options my-5"
+                        *ngIf="item.question?.field_type === 'checkbox'"
+                      >
+                        <p-checkbox
+                          *ngFor="let response of item?.responses; index as i"
+                          [name]="response.value"
+                          value="{{ response.id }}"
+                          label="{{ response.name }}"
+                          [(ngModel)]="
+                            multipleResponseList[step - 1][i]?.responseId &&
+                            multipleResponseList[step - 1][i].responseId
+                          "
+                          [ngClass]="{
+                            selected:
+                              response.question_responses_id ===
+                              answers[response.id]?.id
+                          }"
+                          (ngModelChange)="
+                            handleSelectedAnswer(
+                              response.question_responses_id,
+                              item.code,
+                              response.question_responses_id,
+                              response.name,
+                              item.question.field_type
+                            )
+                          "
+                        ></p-checkbox>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="questions_nav">
+                    <button
+                      class="btn back_btn"
+                      (click)="
+                        currentQuestion > 0 &&
+                          (currentQuestion = currentQuestion - 1)
+                      "
+                    >
+                      <i class="pi pi-arrow-left"></i>
+                    </button>
+                    <div class="questions_bar">
+                      <p-progressBar
+                        [value]="
+                          ((currentQuestion + 1) * 100) /
+                          phaseTest.question_test.length
+                        "
+                        [showValue]="false"
+                      ></p-progressBar>
+                    </div>
+                    <button
+                      class="btn btn-primary next_question_btn"
+                      (click)="
+                        currentQuestion < phaseTest.question_test.length - 1
+                          ? (currentQuestion = currentQuestion + 1)
+                          : currentQuestion ===
+                            phaseTest.question_test.length - 1
+                          ? submit()
+                          : ''
+                      "
+                      [disabled]="
+                        (!answers[item.code]?.responseId &&
+                          item.question.field_type === 'alphanumber') ||
+                        loadingPhase
+                      "
+                    >
+                      <span>{{
+                        currentQuestion === phaseTest.question_test.length - 1
+                          ? ("finish_test" | translate)
+                          : ("next_question" | translate)
+                      }}</span>
+                      <i class="pi pi-arrow-right"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div *ngIf="category_questions.includes(phaseTest.code)">
+              <div
+                *ngFor="
+                  let item of valorationReadaptationPhase.question_test;
+                  let i = index
+                "
+              >
+                <div class="questions" *ngIf="currentQuestion === i">
+                  <div class="question">
+                    <div>
+                      <div class="text-center">
+                        <h5 class="font-weight-500 mb-4">
+                          {{ item?.question?.name }}
+                        </h5>
+                      </div>
+
+                      <button
+                        class="btn btn-primary action mb-2"
+                        (click)="handleSelectAllAnswers()"
+                        pButton
+                      >
+                        {{ "donwgrade_plan.select_all" | translate }}
+                      </button>
+
+                      <div class="options mb-5">
+                        <p-checkbox
+                          *ngFor="let response of item?.responses; index as i"
+                          [name]="response.value"
+                          value="{{ response.question_responses_id }}"
+                          label="{{ response.name }}"
+                          [disabled]="response.question_responses_id === 246"
+                          [(ngModel)]="multipleResponseList"
+                          [ngClass]="{
+                            selected: multipleResponseList.includes(
+                              response.question_responses_id.toString()
+                            )
+                          }"
+                          (ngModelChange)="
+                            handleSelectedAnswer(
+                              response.question_responses_id,
+                              item.code,
+                              response.question_responses_id,
+                              response.name,
+                              'checkbox'
+                            )
+                          "
+                          pTooltip="{{ response.tooltip }}"
+                          tooltipPosition="right"
+                        ></p-checkbox>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="questions_nav">
+                    <button
+                      class="btn back_btn"
+                      (click)="
+                        currentQuestion > 0 &&
+                          (currentQuestion = currentQuestion - 1)
+                      "
+                    >
+                      <i class="pi pi-arrow-left"></i>
+                    </button>
+                    <div class="questions_bar">
+                      <p-progressBar
+                        [value]="
+                          ((currentQuestion + 1) * 100) /
+                          valorationReadaptationPhase.question_test.length
+                        "
+                        [showValue]="false"
+                      ></p-progressBar>
+                    </div>
+                    <button
+                      class="btn btn-primary next_question_btn"
+                      (click)="
+                        currentQuestion <
+                        valorationReadaptationPhase.question_test.length - 1
+                          ? (currentQuestion = currentQuestion + 1)
+                          : currentQuestion ===
+                            valorationReadaptationPhase.question_test.length - 1
+                          ? submit()
+                          : ''
+                      "
+                      [disabled]="
+                        (!answers[item.code]?.responseId &&
+                          item.question.field_type === 'alphanumber') ||
+                        loadingPhase
+                      "
+                    >
+                      <span>{{
+                        currentQuestion ===
+                        valorationReadaptationPhase.question_test.length - 1
+                          ? ("finish_test" | translate)
+                          : ("next_question" | translate)
+                      }}</span>
+                      <i class="pi pi-arrow-right"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</p-dialog>
+
+<a
+  href="https://www.redalyc.org/pdf/2351/235131674030.pdf"
+  target="_blank"
+  class="float btn btn-icon"
+  id="menu-share"
+  *ngIf="isEvolutionPhase() && !loadingClosedPhase"
+  style="margin-top: 1.5rem"
+>
+  <span class="icon">!</span>
+  <div class="label-container">
+    <div class="label-text">
+      Olmedilla, Aurelio, & Gómez, Pedro, & Contreras, Onofre, & Ortega,
+      Enrique, & Sainz de Baranda, Pilar (2014).
+      <span class="itallic">
+        Diseño y validación de un cuestionario sobre la percepción del
+        deportista respecto a su reincorporación al entrenamiento tras una
+        lesión. Revista de Psicología del Deporte, 23(2),479-487.
+      </span>
+    </div>
+  </div>
+</a>
+
+<app-rfd-detail-summary
+  *ngIf="openSummaryDialog"
+  [visible]="openSummaryDialog"
+  [previousAnswers]="answers"
+  [phase]="phaseTest"
+  [index]="phaseIndex"
+  [loadingClosedPhase]="loadingClosedPhase"
+  [categoryQuestions]="valorationReadaptationPhase.question_test"
+  (close)="closeSummaryDialog()"
+  (editPhase)="handlePhasefromSummary()"
+>
+</app-rfd-detail-summary>
+
+<p-dialog
+  id="test_phase_results"
+  class="custom_dialog"
+  [modal]="true"
+  [(visible)]="showTestPassedDialog"
+  styleClass=""
+  [showHeader]="false"
+  maskStyleClass="purple_mask"
+>
+  <div class="result-wrapper">
+    <div class="d-flex justify-content-center align-items-center flex-column">
+      <div>
+        <img
+          src="{{ resources + '/rfd_injuries/good_work.svg' }}"
+          class="result_image"
+          *ngIf="testPassed"
+        />
+        <img
+          src="{{ resources + '/rfd_injuries/work_not_been_good.svg' }}"
+          class="result_image"
+          *ngIf="!testPassed"
+        />
+      </div>
+
+      <p class="title" *ngIf="testPassed && phaseIndex !== 0">
+        {{ "RFD.phasePassed" | translate }}
+      </p>
+      <p class="title" *ngIf="!testPassed && phaseIndex !== 0">
+        {{ "RFD.phaseNotPassed" | translate }}
+      </p>
+
+      <p class="title" *ngIf="testPassed && phaseIndex === 0">
+        {{ "RFD.questionariePassed" | translate }}
+      </p>
+      <p class="title" *ngIf="!testPassed && phaseIndex === 0">
+        {{ "RFD.questionarieNotPassed" | translate }}
+      </p>
+    </div>
+
+    <div class="text-center">
+      <button class="btn close-btn mt-4" type="button" (click)="closeDialog()">
+        {{ "LBL_CERRAR" | translate }}
+      </button>
+    </div>
+  </div>
+</p-dialog>

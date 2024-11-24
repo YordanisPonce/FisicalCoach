@@ -1,0 +1,206 @@
+<p-dialog
+  id="create_workout_dialog"
+  [modal]="true"
+  [(visible)]="visible"
+  styleClass=""
+  [blockScroll]="true"
+  [closable]="true"
+  (onHide)="closeDialog()"
+>
+  <ng-template pTemplate="header">
+    <div class="d-flex header_content">
+      <div class="title">
+        {{ "new_exercises.create_new_exercise" | translate }}
+      </div>
+    </div>
+  </ng-template>
+  <div
+    id="create_workout_dialog_container"
+    class="dialog_container container-fluid"
+  >
+    <div class="row h-100">
+      <div class="col-12 col-lg-8 h-100" id="workout_type">
+        <div class="workouts_type_filters">
+          <small class="text-white">{{
+            ("new_exercises.select_template" | translate).toUpperCase()
+          }}</small>
+
+          <div class="search-input p-input-icon-left d-none d-md-inline">
+            <i class="pi pi-search"></i>
+            <input
+              type="text"
+              pInputText
+              placeholder="{{ 'LBL_SEARCH' | translate }}"
+              (input)="filter($event)"
+            />
+          </div>
+        </div>
+        <p-scrollPanel [style]="{ width: '100%', height: '600px' }">
+          <div class="row px-n-2">
+            <p-dataView
+              #dv
+              [value]="listadoTemplates"
+              [paginator]="false"
+              filterBy="title"
+              [emptyMessage]="' '"
+              layout="grid"
+              [loading]="cargandoEjercicios"
+              [style]="{ padding: '15px' }"
+            >
+              <ng-template let-item pTemplate="gridItem">
+                <div
+                  class="px-2"
+                  (click)="seleccionarEjercicio(item)"
+                  [ngClass]="{ 'select-template': template?.id === item?.id }"
+                >
+                  <div class="workout_item">
+                    <div class="workout_img">
+                      <img
+                        src="{{ item.image.full_url }}"
+                        alt="exercise-image"
+                        class="img-exercise-fluid"
+                        *ngIf="item.image && item?.sport?.image_exercise"
+                      />
+                      <img
+                        src="{{ item.sport.image_exercise.full_url }}"
+                        alt="exercise-image"
+                        class="img-exercise-fluid"
+                        *ngIf="item?.sport?.image_exercise && !item.image"
+                      />
+                    </div>
+                    <div class="workout_title">
+                      <span class="workout_name">{{ item.title }}</span>
+                      <!-- <span class="workout_arrow">></span> -->
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
+            </p-dataView>
+          </div>
+        </p-scrollPanel>
+      </div>
+      <div class="col-12 col-lg-4" id="workout_details">
+        <form
+          *ngIf="workoutForm"
+          [formGroup]="workoutForm"
+          id="idFormRP"
+          name="nomForm"
+          (ngSubmit)="onSubmit()"
+        >
+          <div class="row">
+            <div class="mb-4 col-12">
+              <label class="label-color"
+                >{{ "new_exercises.exercise_name" | translate }} *</label
+              >
+              <input
+                class="form-control"
+                placeholder="{{ 'LBL_ESCRIBIR' | translate }}"
+                aria-label="Default"
+                aria-describedby="inputGroup-sizing-default"
+                formControlName="title"
+                [ngClass]="{
+                  'ng-invalid ng-dirty': submitted && f.title.invalid
+                }"
+              />
+              <div
+                *ngIf="submitted && f.title.invalid"
+                class="form-text text-danger"
+              >
+                {{ "LBL_FIELD_REQUIRED" | translate }}
+              </div>
+            </div>
+            <div class="mb-4 col-12">
+              <label class="label-color">{{
+                "new_exercises.exercise_description" | translate
+              }}</label>
+              <textarea
+                class="form-control"
+                cols="20"
+                rows="5"
+                placeholder="{{ 'LBL_ESCRIBIR' | translate }}"
+                formControlName="description"
+              ></textarea>
+            </div>
+            <div class="mb-4 col-12 col-sm-6">
+              <label class="label-color">{{
+                "new_exercises.distribution" | translate
+              }}</label>
+              <div class="d-flex align-items-center">
+                <p-radioButton
+                  name="distribution_exercise_id"
+                  *ngFor="let item of listadoDistribuciones"
+                  formControlName="distribution_exercise_id"
+                  [label]="item.name"
+                  class="mr-3"
+                  [value]="item.id"
+                ></p-radioButton>
+              </div>
+            </div>
+
+            <div
+              class="mb-4 col-12"
+              style="display: flex; flex-direction: column"
+              *ngIf="role === 'teacher'"
+            >
+              <p-dropdown
+                placeholder="{{ 'workout.select_sport' | translate }}"
+                [options]="sportList"
+                optionLabel="name"
+                optionValue="id"
+                [styleClass]="'w-100 mt-2 form-control'"
+                formControlName="sport_id"
+                [ngClass]="{
+                  'ng-invalid ng-dirty': submitted && f.sport_id.invalid
+                }"
+              >
+              </p-dropdown>
+
+              <div
+                *ngIf="submitted && f.sport_id.invalid"
+                class="form-text text-danger"
+              >
+                {{ "LBL_FIELD_REQUIRED" | translate }}
+              </div>
+            </div>
+
+            <div
+              class="mb-4 col-12"
+              style="display: flex; flex-direction: column"
+            >
+              <label for="dimensiones" class="label-color">{{
+                "new_exercises.dimensions" | translate
+              }}</label>
+              <p-inputMask
+                mask="99x99 m"
+                formControlName="dimentions"
+                placeholder="__x__ m"
+                class="inputmask-dark"
+                id="dimensiones"
+                aria-describedby="inputGroup-sizing-default"
+                aria-label="Default"
+              ></p-inputMask>
+            </div>
+          </div>
+          <div class="actions">
+            <button class="btn_crear" type="submit" *ngIf="!loading">
+              {{ "LBL_CREATE" | translate }}
+            </button>
+
+            <button
+              class="btn_crear"
+              type="button"
+              [disabled]="loading"
+              *ngIf="loading"
+            >
+              {{ "LBL_CREATE" | translate }}
+            </button>
+
+            <button class="btn_salir" (click)="closeDialog()">
+              {{ "LBL_CERRAR" | translate }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</p-dialog>

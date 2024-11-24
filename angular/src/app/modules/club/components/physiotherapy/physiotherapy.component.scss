@@ -1,0 +1,74 @@
+:host ::ng-deep {
+  .physiotherapy_header {
+    display: flex;
+    align-items: center;
+    // margin-bottom: 2rem;
+    padding: 1.5rem 2.5rem;
+    width: 100%;
+    // padding: 1rem 0rem;
+  }
+
+  .p-datatable {
+    border: 0;
+    .p-checkbox .p-checkbox-box.p-highlight {
+      border-color: #024cac;
+      background: #024cac;
+    }
+
+    // .p-datatable-footer{
+    //     background: transparent;
+    //     border-width: 1px 0 0 0;
+    // }
+    .actions_column {
+      button {
+        padding: 0.375rem 0.5rem;
+        img {
+          // max-width: 15px;
+        }
+      }
+    }
+  }
+
+  .create_sheet_btn {
+    background-color: #fff;
+    border: 1px solid #00000029;
+    border-radius: 8px;
+    color: #8e92ab;
+    font-weight: 500;
+    font-size: 0.9rem;
+    height: 62px;
+    width: 203px;
+    // flex: 1 1 100%;
+  }
+}
+
+.selectedPlayer {
+  background-color: #024cac;
+  color: #fff;
+  border: 1px solid #00000029;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 0.9rem;
+  height: 62px;
+  width: 203px;
+}
+
+.check {
+  color: #00e9c5;
+  font-size: 24px;
+
+  &.closed {
+    color: #8b8fa8;
+  }
+}
+
+.circle {
+  color: #ff4a4a;
+  font-size: 24px;
+}
+
+@media (max-width: 1440px) {
+  th {
+    min-width: 200px !important;
+  }
+}

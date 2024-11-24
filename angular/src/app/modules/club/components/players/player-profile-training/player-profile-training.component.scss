@@ -1,0 +1,169 @@
+.card{
+    border-radius: 0;
+}
+.card-header{
+    color: #050C44;
+    background-color: white;
+    font-weight: 600;
+    padding: 1.5rem;
+    border-color: rgba($color: #050C44, $alpha: .07);
+    input{
+        // margin:0;
+        height: 45px;
+        font-weight: 500;
+        border-radius: 8px;
+        color: #050C44;
+        opacity: .39;
+        font-family: "Montserrat", sans-serif;
+    }
+}
+#player_matches{
+
+}
+
+.match_stat{
+    font-size: .875rem;
+    // border: 1px solid #050C4422;
+    border-radius: 13px;
+    padding: .75rem;
+    box-shadow: 0px 0px 12px rgba($color: #000000, $alpha: .22);
+    .name{
+        color: #050C44;
+        opacity: .56;
+    }
+    .stat{
+        display: flex;
+        margin: .5rem 0;
+        justify-content: space-between;
+        .stat_number{
+            // margin: 0 auto;
+            font-size: 1.75rem;
+            font-weight: 600;
+        }
+        img{
+            opacity: .08;
+        }
+    }
+}
+.card-footer{
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+    button{
+        box-shadow: 0px 0px 3px #050C441A;
+        border-radius: 10px;
+        font-size: .9rem;
+        color: rgba($color: #050C44, $alpha: .62);
+        flex: 0 48%;
+        padding: .75rem;
+    }
+}
+
+:host ::ng-deep .p-datatable {
+    .p-datatable-thead{
+        tr th{
+            opacity: .5;
+        }
+    }
+    .p-datatable-tbody > tr > td {
+        padding: 1.5rem 1rem;
+        font-size: .875rem;
+        color: rgba($color: #050C44, $alpha: .65);
+        font-weight: 600;
+        strong{
+            color: #050C44 !important;
+        }
+    }
+    .actions_column{
+        width: 75px;
+        .btn.outline{
+            border: 1px solid rgba($color: #050C4429, $alpha: .1);
+            padding: 0.25rem 0.75rem;
+        }
+    }
+}
+
+:host ::ng-deep {
+    .p-dialog-header{
+        display: flex;
+    }
+    .p-dialog-footer{
+        border-top: 0 !important;
+    }
+}
+
+// responsive i think
+
+// :host ::ng-deep {
+//     .p-datatable-responsive .p-datatable-tbody > tr > td .p-column-title {
+//         display: none;
+//     }
+// }
+
+// @media screen and (max-width: 40rem) {
+//     :host ::ng-deep {
+//         .p-datatable {
+//             &.p-datatable-responsive {
+//                 .p-datatable-thead > tr > th,
+//                 .p-datatable-tfoot > tr > td {
+//                     display: none !important;
+//                 }
+
+//                 .p-datatable-tbody > tr > td {
+//                     text-align: left;
+//                     display: block;
+//                     width: 100%;
+//                     float: left;
+//                     clear: left;
+//                     border: 0 none;
+
+//                     .p-column-title {
+//                         padding: .4rem;
+//                         min-width: 30%;
+//                         display: inline-block;
+//                         margin: -.4em 1em -.4em -.4rem;
+//                         font-weight: bold;
+//                     }
+
+//                     &:last-child {
+//                         border-bottom: 1px solid var(--surface-d);
+//                     }
+//                 }
+//             }
+//         }
+//     }
+// }
+
+@media screen and (min-width: 1200px) {
+    :host ::ng-deep {
+        .p-datatable {
+            .p-datatable-tbody tr td:nth-child(2),
+            .p-datatable-tbody tr td:nth-child(5) {
+                // width: 65px;
+            }
+        }
+        .p-dialog-header{
+            padding: 2rem 3rem;
+            .btn_pdf{
+                flex: 0 40%;
+                padding: 1rem 0;
+                border-radius: 8px;
+            }
+            .title{
+                color: #050C44;
+                opacity: .27;
+                font-weight: 600;
+            }
+        }
+        .p-dialog-content{
+            padding: 0 3rem 2rem 3rem;
+        }
+    }
+}
+.flexcolunm{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}

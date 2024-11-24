@@ -1,0 +1,469 @@
+<div
+  class="card box-shadow"
+  appUserPermission
+  [method]="[
+    'team_session_exercise_store',
+    'team_session_exercise_update',
+    'team_session_exercise_delete'
+  ]"
+  (showItem)="handlePermission($event)"
+>
+  <div class="card-body p-0 container-fluid">
+    <div class="row">
+      <div class="col-12">
+        <div class="training_sessions_header view_header">
+          <div class="d-flex align-items-center flex-column flex-sm-row">
+            <div class="filters">
+              <div class="search-filter">
+                <div class="d-flex align-items-center mb-2  mb-sm-0">
+                  <h6 class="font-weight-600 mr-4 d-none d-md-inline">
+                    {{ "exercise.my_sessions" | translate }}
+                  </h6>
+                  <span class="buscador p-input-icon-left">
+                    <i class="pi pi-search"></i>
+                    <input
+                      type="text"
+                      pInputText
+                      placeholder="{{ 'LBL_SEARCH' | translate }}"
+                    />
+                  </span>
+                </div>
+                <div class="btn_flex create-btn-section-responsive">
+                  <button
+                    type="button"
+                    class="btn btn-main calendar_btn"
+                    routerLink="/club/training-sessions/calendar"
+                    pTooltip="{{ 'training_session.calendar' | translate }}"
+                  >
+                    <span
+                      class="d-block d-sm-none"
+                      style="margin-right: 0.5rem"
+                      >{{ "training_session.calendar" | translate }}</span
+                    >
+                    <i class="pi pi-calendar"></i>
+                  </button>
+  
+                  <button
+                    class="btn new_training_sessions_btn action d-flex justify-content-center"
+                    (click)="newSessionDialog = true; isNewSession = true"
+                    *ngIf="showPermission.store"
+                    pButton
+                  >
+                    <span class="mr-2"
+                      >{{ "training_session.create_new" | translate }}
+                    </span>
+                    <i class="fa fa-plus text-white"></i>
+                  </button>
+                </div>
+              </div>
+
+
+              <div class="sort-input">
+                <p-treeSelect
+                  [(ngModel)]="selectedFilter"
+                  (ngModelChange)="handleSelectFilter()"
+                  [options]="filterOptions"
+                  placeholder="{{ 'LBL_FILTRAR' | translate }}"
+                ></p-treeSelect>
+
+                <div *ngIf="this.selectedFilter?.code">
+                  <button
+                    class="btn see_all_btn"
+                    (click)="
+                      trainingSessions = allTrainingSessions;
+                      selectedFilter = null
+                    "
+                    pTooltip="{{ 'seeAll' | translate }}"
+                  >
+                    <i class="pi pi-times"></i>
+                  </button>
+                </div>
+
+                <app-order-button
+                  [list]="trainingSessions"
+                  (convertedList)="handleOrderFilter($event)"
+                  class="d-flex"
+                >
+                </app-order-button>
+              </div>
+            </div>
+          </div>
+          <div class="btn_flex create-btn-section">
+            <button
+              type="button"
+              class="btn btn-main calendar_btn"
+              routerLink="/club/training-sessions/calendar"
+              pTooltip="{{ 'training_session.calendar' | translate }}"
+            >
+              <span class="d-block d-sm-none" style="margin-right: 0.5rem">{{
+                "training_session.calendar" | translate
+              }}</span>
+              <i class="pi pi-calendar"></i>
+            </button>
+
+            <button
+              class="btn new_training_sessions_btn action d-flex justify-content-center"
+              (click)="newSessionDialog = true; isNewSession = true"
+              *ngIf="showPermission.store"
+              pButton
+            >
+              <span class="mr-2"
+                >{{ "training_session.create_new" | translate }}
+              </span>
+              <i class="fa fa-plus text-white"></i>
+            </button>
+          </div>
+
+          <new-session-dialog
+            [visible]="newSessionDialog"
+            [isReusedSession]="isReusedSession"
+            [isNewSession]="isNewSession"
+            [sessions]="trainingSessions.length"
+            [selectedSession]="selectedSession"
+            *ngIf="newSessionDialog"
+            (refreshSessionList)="refreshSessionList()"
+            (close)="resetSelected()"
+          ></new-session-dialog>
+        </div>
+      </div>
+
+      <div class="col-12">
+        <div class="row training_sessions_container">
+          <div class="p-4" *ngIf="loading" class="col-12 my-3">
+            <div class="training_session" *ngFor="let i of [1, 2]">
+              <div class="session_resume">
+                <div class="session_info text-center">
+                  <p-skeleton width="10rem" styleClass="mx-2"></p-skeleton>
+                  <p-skeleton width="12rem" styleClass="mx-2"></p-skeleton>
+                  <p-skeleton width="12rem" styleClass="mx-2"></p-skeleton>
+                  <p-skeleton width="10rem" styleClass="mx-2"></p-skeleton>
+                </div>
+
+                <div
+                  class="session_actions w-10 d-flex justify-content-around mt-3"
+                >
+                  <p-skeleton width="5rem" styleClass="mx-2"></p-skeleton>
+                  <p-skeleton width="5rem" styleClass="mx-2"></p-skeleton>
+                  <p-skeleton width="5rem" styleClass="mx-2"></p-skeleton>
+                </div>
+              </div>
+              <div
+                class="session_exercises d-flex justify-content-center align-items-center"
+              >
+                <p-skeleton
+                  width="15rem"
+                  height="150px"
+                  styleClass="mx-2"
+                ></p-skeleton>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="!loading" class="col-12 my-3">
+            <div *ngFor="let trainingSession of trainingSessions; index as i">
+              <div class="training_session">
+                <div class="session_resume">
+                  <div
+                    class="d-flex align-items-center justify-content-between mb-2"
+                  >
+                    <div>
+                      <div
+                        class="exercise-order"
+                        *ngIf="trainingSession?.order"
+                      >
+                        {{ trainingSession?.order }}
+                      </div>
+                    </div>
+
+                    <div>
+                      <span
+                        role="button"
+                        pTooltip="{{ 'LBL_EDIT' | translate }}"
+                        class="mr-2"
+                        (click)="edit(trainingSession)"
+                        *ngIf="showPermission.update"
+                      >
+                        <i class="pi pi-pencil"></i>
+                      </span>
+
+                      <span
+                        role="button"
+                        pTooltip="{{ 'LBL_DELETE' | translate }}"
+                        (click)="deleteSession(trainingSession.code || '')"
+                        *ngIf="showPermission.delete"
+                      >
+                        <i class="pi pi-trash"></i>
+                      </span>
+
+                      <span
+                        class="pointer ml-2"
+                        (click)="
+                          handleLike(trainingSession.like, trainingSession.id)
+                        "
+                        pTooltip="{{ 'workout.like' | translate }}"
+                      >
+                        <i
+                          class="pi pi-heart"
+                          *ngIf="!trainingSession.like"
+                        ></i>
+                        <img
+                          src="/assets/img/icons/heart-icon.png"
+                          width="17px"
+                          class="mb-1"
+                          *ngIf="trainingSession.like"
+                        />
+                      </span>
+                    </div>
+                  </div>
+                  <div class="session_info">
+                    <span class="favorite"></span>
+
+                    <div class="row justify-content-center">
+                      <div class="d-flex flex-column col-5">
+                        <span class="title">
+                          {{ "training_session.title" | translate }}</span
+                        >
+                        <span class="author">{{ trainingSession.title }}</span>
+                      </div>
+
+                      <div class="d-flex flex-column col-5">
+                        <span class="title">
+                          {{ "training_session.author" | translate }}</span
+                        >
+                        <span class="author">{{ trainingSession.author }}</span>
+                      </div>
+                    </div>
+
+                    <div class="row justify-content-center">
+                      <div class="d-flex flex-column col-5">
+                        <span class="title">
+                          {{
+                            "training_session.session_date" | translate
+                          }}</span
+                        >
+                        <span class="author">{{
+                          (trainingSession.exercise_session_execution
+                            .date_session | date : "dd/MM/yyyy") +
+                            " " +
+                            trainingSession.exercise_session_execution
+                              .hour_session
+                        }}</span>
+                      </div>
+
+                      <div class="d-flex flex-column col-5">
+                        <span class="title">
+                          {{
+                            "training_session.session_place" | translate
+                          }}</span
+                        >
+                        <span class="author">{{
+                          trainingSession.exercise_session_execution
+                            .exercise_session_place?.place_session
+                        }}</span>
+                      </div>
+                    </div>
+
+                    <div class="row justify-content-center">
+                      <div class="font-weight-500 col-5">
+                        <span class="mr-2 title">
+                          {{ "training_session.difficulty" | translate }}
+                        </span>
+
+                        <div class="col-12 px-0 mt-3">
+                          <p-rating
+                            [(ngModel)]="trainingSession.difficulty"
+                            [disabled]="true"
+                            [cancel]="false"
+                          ></p-rating>
+                        </div>
+                      </div>
+
+                      <div class="d-flex flex-column col-5">
+                        <span class="title">{{
+                          "training_session.media_intensity" | translate
+                        }}</span>
+                        <div>
+                          <img
+                            src="{{
+                              resources +
+                                '/face/' +
+                                trainingSession.intensityIcon?.icon
+                            }}"
+                            alt="{{ trainingSession.intensityIcon.text }}"
+                            width="25px"
+                            class="ml-1"
+                            *ngIf="trainingSession.intensityIcon"
+                            pTooltip="{{
+                              'ratingExercise.' +
+                                trainingSession.intensityIcon.text | translate
+                            }}"
+                          />
+
+                          <span *ngIf="!trainingSession.intensityIcon"
+                            >N/A
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="row justify-content-center">
+                      <div class="d-flex flex-column col-5 title">
+                        <span>
+                          {{ "training_session.exercices" | translate }}
+                        </span>
+
+                        <span class="qty font-weight-600">
+                          {{
+                            trainingSession.exercise_session_exercises.length
+                          }}
+                        </span>
+                      </div>
+
+                      <div
+                        class="time d-flex flex-column col-5"
+                        *ngIf="trainingSession.duration"
+                      >
+                        <span class="title">
+                          {{ "training_session.total_time" | translate }}
+                        </span>
+                        <span class="author">{{
+                          trainingSession.duration
+                        }}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="session_actions">
+                    <button
+                      *ngIf="!loadingPDF"
+                      pButton
+                      type="button"
+                      label="{{ 'workout.downloadPdf' | translate }}"
+                      class="p-button-link"
+                      (click)="
+                        downloadSessionPDF(
+                          trainingSession?.code || '',
+                          trainingSession.title || ''
+                        )
+                      "
+                    ></button>
+                    <button
+                      *ngIf="loadingPDF"
+                      pButton
+                      type="button"
+                      class="p-button-link"
+                    >
+                      <div style="margin: auto; width: 100%">
+                        <img
+                          src="assets/img/icons/loading.svg"
+                          alt=""
+                          width="50px"
+                        />
+                      </div>
+                    </button>
+                    <button
+                      pButton
+                      type="button"
+                      label="{{ 'training_session.seeSession' | translate }}"
+                      class="p-button-link"
+                      routerLink="/club/training-sessions/details/{{
+                        trainingSession.code
+                      }}"
+                    ></button>
+                    <button
+                      pButton
+                      type="button"
+                      (click)="reuseSession(trainingSession)"
+                      label="{{ 'training_session.reuse' | translate }}"
+                      class="p-button-link"
+                    ></button>
+                  </div>
+                </div>
+                <div class="session_exercises">
+                  <div
+                    *ngIf="
+                      trainingSession.exercise_session_exercises.length > 0
+                    "
+                  >
+                    <div class="exercise_image">
+                      <p-carousel
+                        [value]="trainingSession.exercise_session_exercises"
+                        [numVisible]="1"
+                        [numScroll]="1"
+                        [showIndicators]="false"
+                        [showNavigators]="true"
+                        #carousel
+                      >
+                        <ng-template let-item pTemplate="item">
+                          <div>
+                            <div class="mb-3">
+                              <img
+                                src="{{ item.exercise.image?.full_url }}"
+                                alt="exercise-image"
+                                class="img-session-fluid"
+                                *ngIf="item.exercise.image"
+                              />
+
+                              <img
+                                src="{{
+                                  item.exercise?.sport.image_exercise.full_url
+                                }}"
+                                alt="exercise-image"
+                                class="img-session-fluid"
+                                *ngIf="
+                                  item.exercise?.sport?.image_exercise &&
+                                  !item.exercise?.image
+                                "
+                              />
+                            </div>
+                          </div>
+
+                          <div class="exercise_controls text-center">
+                            <span class="name font-weight-500 text-main">
+                              {{ item.index }}/{{
+                                trainingSession.exercise_session_exercises
+                                  .length
+                              }}
+                              {{ " " }} {{ item.exercise.title }}</span
+                            >
+                          </div>
+                        </ng-template>
+                      </p-carousel>
+                    </div>
+                  </div>
+
+                  <div
+                    *ngIf="
+                      trainingSession.exercise_session_exercises.length === 0
+                    "
+                    class="no-exercise-text d-flex flex-column justify-content-center align-items-center py-5"
+                  >
+                    <img
+                      src="assets/img/no-pictures.svg"
+                      alt="exercise-image"
+                      class="no-exercise-img"
+                    />
+
+                    <div class="nodatatext mt-3">
+                      <span>
+                        {{ "workout.noExercices" | translate }}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="w-100 text-center"
+            *ngIf="(trainingSessions.length === 0 || errorMessage) && !loading"
+          >
+            <span class="nodata" *ngIf="!errorMessage">{{
+              "nodata.sinsesiones" | translate
+            }}</span>
+            <span class="nodata" *ngIf="errorMessage">{{ errorMessage }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

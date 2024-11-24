@@ -1,0 +1,837 @@
+<div class="row" id="register_content">
+  <div class="col-md-12 col-xl-8" id="register_form_col">
+    <div class="ingresa_tus_datos">
+      <div id="go_back">
+        <i (click)="handleHome()" class="pi pi-angle-left"></i>
+        <h4 class="ml-1" style="display: inline-block">
+          {{ "register.register" | translate }}
+        </h4>
+      </div>
+      <h3 class="font-weight-bold d-none d-md-block">
+        {{ "register.title" | translate }}
+      </h3>
+      <h6 class="text-center d-md-none">{{ "register.title" | translate }}</h6>
+      <p class="d-none d-md-none lead">
+        <small
+          >{{ "register.textone" | translate }} <br />
+          {{ "register.texttwo" | translate }}</small
+        >
+      </p>
+    </div>
+    <div class="flex-grow-1" id="register_data">
+      <div class="data_form_container">
+        <form [formGroup]="registerForm" class="" id="data_form">
+          <p-scrollPanel [style]="{ width: '100%', height: '100%' }">
+            <div class="row pb-2">
+              <div class="mb-3 col-11 col-md-11 col-lg-11">
+                <label for="fullname"
+                  >{{ "register.name" | translate }} *</label
+                >
+                <span class="p-input-icon-left d-block">
+                  <i class="d-flex"
+                    ><img alt="" src="/assets/img/icons/icon-feather-user.svg"
+                  /></i>
+                  <input
+                    [maxlength]="320"
+                    [ngClass]="{
+                      'control-error':
+                        f.fullname?.errors &&
+                        registerForm.value.fullname?.length > 0
+                    }"
+                    class="form-control"
+                    formControlName="fullname"
+                    id="fullname"
+                    pInputText
+                    placeholder="{{ 'register.name' | translate }}"
+                    type="text"
+                  />
+                  <i
+                    *ngIf="f.fullname.valid"
+                    class="fa fa-check icon-float"
+                  ></i>
+                </span>
+                <div
+                  *ngIf="submmit && f.fullname?.errors"
+                  class="form-text text-danger"
+                >
+                  <p>
+                    <small>{{ "register.fielRequired" | translate }}</small>
+                  </p>
+                </div>
+              </div>
+              <div class="mb-3 col-12 col-md-6 col-lg-5">
+                <label for="address"
+                  >{{ "register.address" | translate }} *</label
+                >
+                <span class="p-input-icon-left d-block">
+                  <i class="d-flex"
+                    ><img alt="" src="/assets/img/icons/location.svg"
+                  /></i>
+                  <input
+                    [maxlength]="320"
+                    [ngClass]="{
+                      'control-error':
+                        f.address?.errors &&
+                        registerForm.value?.address?.length > 0
+                    }"
+                    class="form-control"
+                    formControlName="address"
+                    id="address"
+                    pInputText
+                    placeholder="{{ 'register.address' | translate }}"
+                    type="text"
+                  />
+                  <i *ngIf="f.address.valid" class="fa fa-check icon-float"></i>
+                </span>
+                <div
+                  *ngIf="submmit && f.address?.errors"
+                  class="form-text text-danger"
+                >
+                  <p>
+                    <small>{{ "register.fielRequired" | translate }}</small>
+                  </p>
+                </div>
+              </div>
+              <div class="mb-3 col-12 col-md-6 col-lg-5 offset-lg-1">
+                <label for="email">{{ "register.email" | translate }} *</label>
+                <span class="p-input-icon-left d-block">
+                  <i class="d-flex"
+                    ><img alt="" src="/assets/img/icons/message2.svg"
+                  /></i>
+                  <input
+                    [maxlength]="320"
+                    [ngClass]="{
+                      'control-error':
+                        f.email?.errors && registerForm.value?.email?.length > 0
+                    }"
+                    class="form-control"
+                    formControlName="email"
+                    id="email"
+                    pInputText
+                    placeholder="name@example.com"
+                    type="email"
+                  />
+                  <i *ngIf="f.email.valid" class="fa fa-check icon-float"></i>
+                </span>
+                <div
+                  *ngIf="submmit && f.email?.errors"
+                  class="form-text text-danger"
+                >
+                  <p>
+                    <small>{{ "register.fielRequired" | translate }}</small>
+                  </p>
+                </div>
+              </div>
+              <div class="mb-3 col-12 col-md-6 col-lg-5">
+                <label for="country"
+                  >{{ "register.country" | translate }} *</label
+                >
+                <div class="field-custom">
+                  <p-dropdown
+                    (onChange)="callProvicias()"
+                    [filter]="true"
+                    [ngClass]="{
+                      'control-error':
+                        f.country?.errors &&
+                        registerForm.value?.country?.length > 0
+                    }"
+                    [options]="country"
+                    [style]="{ width: '100%', height: '45px' }"
+                    aria-describedby="inputGroup-sizing-default"
+                    class="form-control"
+                    formControlName="country"
+                    id="country"
+                    placeholder="{{ 'register.selectCountry' | translate }}"
+                  >
+                  </p-dropdown>
+                  <i
+                    *ngIf="f.country.valid"
+                    class="fa fa-check icon-float-2"
+                  ></i>
+                </div>
+                <div
+                  *ngIf="submmit && f.country.invalid"
+                  class="form-text text-danger"
+                >
+                  <p>
+                    <small>{{ "register.fielRequired" | translate }}</small>
+                  </p>
+                </div>
+              </div>
+              <div class="mb-3 col-12 col-md-6 col-lg-5 offset-lg-1">
+                <label for="provincia"
+                  >{{ "register.provincia" | translate }} *</label
+                >
+                <div class="field-custom">
+                  <p-dropdown
+                    [disabled]="!registerForm.value.country"
+                    [filter]="true"
+                    [ngClass]="{
+                      'control-error':
+                        f.province_id?.errors &&
+                        registerForm.value.province_id?.length > 0
+                    }"
+                    [optionLabel]="'name'"
+                    [optionValue]="'id'"
+                    [options]="provinces"
+                    [style]="{ width: '100%', height: '45px' }"
+                    aria-describedby="inputGroup-sizing-default"
+                    class="form-control"
+                    formControlName="province_id"
+                    id="provincia"
+                    placeholder=" {{ 'register.selectProvince' | translate }}"
+                  >
+                  </p-dropdown>
+                  <i
+                    *ngIf="f.province_id.valid"
+                    class="fa fa-check icon-float-2"
+                  ></i>
+                </div>
+                <div
+                  *ngIf="submmit && f.province_id.invalid"
+                  class="form-text text-danger"
+                >
+                  <p>
+                    <small>{{ "register.fielRequired" | translate }}</small>
+                  </p>
+                </div>
+              </div>
+              <div class="mb-3 col-12 col-md-6 col-lg-5">
+                <label for="city">{{ "register.city" | translate }} *</label>
+                <div class="field-custom">
+                  <input
+                    [maxlength]="320"
+                    [ngClass]="{
+                      'control-error':
+                        f.zipcode?.errors &&
+                        registerForm.value?.zipcode?.length > 0
+                    }"
+                    aria-describedby="inputGroup-sizing-default"
+                    aria-label="Default"
+                    class="form-control"
+                    formControlName="city"
+                    id="city"
+                    placeholder="{{ 'register.city' | translate }}"
+                    type="text"
+                  />
+                  <i *ngIf="f.city.valid" class="fa fa-check icon-float-2"></i>
+                </div>
+                <div
+                  *ngIf="submmit && f.city.invalid"
+                  class="form-text text-danger"
+                >
+                  <p>
+                    <small>{{ "register.fielRequired" | translate }}</small>
+                  </p>
+                </div>
+              </div>
+              <div class="mb-3 col-12 col-md-6 col-lg-5 offset-lg-1">
+                <label for="idcard">{{ "register.dni" | translate }} *</label>
+                <div class="field-custom">
+                  <input
+                    [maxlength]="9"
+                    [ngClass]="{
+                      'control-error':
+                        f.idcard?.errors && registerForm.value?.idcard?.length > 0
+                    }"
+                    aria-describedby="inputGroup-sizing-default"
+                    aria-label="Default"
+                    class="form-control"
+                    formControlName="idcard"
+                    id="idcard"
+                    placeholder="{{ 'register.dni' | translate }}"
+                    type="text"
+                  />
+                  <i
+                    *ngIf="f.idcard.valid"
+                    class="fa fa-check icon-float-2"
+                  ></i>
+                </div>
+                <div
+                  *ngIf="submmit && f.idcard.invalid"
+                  class="form-text text-danger"
+                >
+                  <p>
+                    <small>{{ "register.fielRequired" | translate }}</small>
+                  </p>
+                </div>
+              </div>
+              <div class="mb-3 col-12 col-md-6 col-lg-5">
+                <label for="zipcode"
+                  >{{ "register.zip_code" | translate }} *</label
+                >
+                <div class="field-custom">
+                  <input
+                    [maxlength]="10"
+                    [ngClass]="{
+                      'control-error':
+                        f.zipcode?.errors &&
+                        registerForm.value?.zipcode?.length > 0
+                    }"
+                    aria-describedby="inputGroup-sizing-default"
+                    aria-label="Default"
+                    class="form-control"
+                    formControlName="zipcode"
+                    id="zipcode"
+                    placeholder="{{ 'register.zip_code' | translate }}"
+                    type="text"
+                  />
+                  <i
+                    *ngIf="f.zipcode.valid"
+                    class="fa fa-check icon-float-2"
+                  ></i>
+                </div>
+                <div
+                  *ngIf="submmit && f.zipcode.invalid"
+                  class="form-text text-danger"
+                >
+                  <p>
+                    <small>{{ "register.fielRequired" | translate }}</small>
+                  </p>
+                </div>
+              </div>
+              <div class="mb-3 col-12 col-md-6 col-lg-5 offset-lg-1">
+                <label for="phone">{{ "register.phone" | translate }} *</label>
+                <div class="field-custom">
+                  <input
+                    (keydown)="validateMobile($event)"
+                    [maxlength]="20"
+                    [ngClass]="{
+                      'control-error':
+                        f.phone?.errors && registerForm.value?.phone?.length > 0
+                    }"
+                    aria-describedby="inputGroup-sizing-default"
+                    aria-label="Default"
+                    class="form-control"
+                    formControlName="phone"
+                    id="phone"
+                    placeholder="{{ 'register.phone' | translate }}"
+                    type="text"
+                  />
+                  <i *ngIf="f.phone.valid" class="fa fa-check icon-float-2"></i>
+                </div>
+                <div
+                  *ngIf="submmit && f.phone.invalid"
+                  class="form-text text-danger"
+                >
+                  <p>
+                    <small>{{ "register.fielRequired" | translate }}</small>
+                  </p>
+                </div>
+              </div>
+              <div class="mb-3 col-12 col-md-6 col-lg-5">
+                <label for="username"
+                  >{{ "register.username" | translate }} *</label
+                >
+                <div class="field-custom">
+                  <input
+                    [maxlength]="100"
+                    [ngClass]="{
+                      'control-error':
+                        f.username?.errors &&
+                        registerForm.value?.username?.length > 0
+                    }"
+                    aria-describedby="inputGroup-sizing-default"
+                    aria-label="Default"
+                    autocomplete="do-not-autofill"
+                    class="form-control"
+                    formControlName="username"
+                    id="username"
+                    placeholder="{{ 'register.username' | translate }}"
+                    type="text"
+                  />
+                  <i
+                    *ngIf="f.username.valid"
+                    class="fa fa-check icon-float-2"
+                  ></i>
+                </div>
+                <div
+                  *ngIf="submmit && f.username.invalid"
+                  class="form-text text-danger"
+                >
+                  <p>
+                    <small>{{ "register.fielRequired" | translate }}</small>
+                  </p>
+                </div>
+              </div>
+              <div class="col-12 col-md-6 col-lg-5 offset-lg-1">
+                <label for="gender">{{ "register.sex" | translate }} *</label>
+                <div class="field-custom">
+                  <p-dropdown
+                    [ngClass]="{
+                      'control-error':
+                        f.gender?.errors && registerForm.value.gender?.length > 0
+                    }"
+                    [options]="gender"
+                    [style]="{ width: '100%', height: '45px' }"
+                    aria-describedby="inputGroup-sizing-default"
+                    class="form-control"
+                    formControlName="gender"
+                    id="gender"
+                    optionLabel="code"
+                    optionValue="id"
+                    placeholder=" {{ 'register.selectSex' | translate }}"
+                  >
+                  </p-dropdown>
+                  <i
+                    *ngIf="f.gender.valid"
+                    class="fa fa-check icon-float-2"
+                  ></i>
+                </div>
+                <div
+                  *ngIf="submmit && f.gender.invalid"
+                  class="form-text text-danger"
+                >
+                  <p>
+                    <small>{{ "register.fielRequired" | translate }}</small>
+                  </p>
+                </div>
+              </div>
+              <div class="mb-3 col-12 col-md-6 col-lg-5">
+                <label for="password"
+                  >{{ "register.password" | translate }} *</label
+                >
+                <div class="field-custom">
+                  <span class="p-input-icon-right d-block" style="width: 100%">
+                    <input
+                      maxlength="100"
+                      [ngClass]="{
+                        'control-error':
+                          f.password?.errors &&
+                          registerForm.value.password?.length > 0
+                      }"
+                      [type]="showPassword ? 'text' : 'password'"
+                      aria-describedby="inputGroup-sizing-default"
+                      aria-label="Default"
+                      autocomplete="do-not-autofill"
+                      class="form-control"
+                      formControlName="password"
+                      id="password"
+                      placeholder="{{ 'register.password' | translate }}"
+                    />
+                    <i
+                      (click)="showPassword = false"
+                      *ngIf="showPassword"
+                      class="pi pi-eye"
+                      role="button"
+                    ></i>
+                    <i
+                      (click)="showPassword = true"
+                      *ngIf="!showPassword"
+                      class="pi pi-eye-slash"
+                      role="button"
+                    ></i>
+                  </span>
+                  <i
+                    *ngIf="f.password.valid"
+                    class="fa fa-check icon-float-2"
+                  ></i>
+                </div>
+                <div
+                  *ngIf="
+                    submmit &&
+                    f.password.invalid &&
+                    registerForm.value.password?.length === 0
+                  "
+                  class="form-text text-danger"
+                >
+                  <p>
+                    <small>{{ "register.fielRequired" | translate }}</small>
+                  </p>
+                </div>
+                <div
+                  *ngIf="submmit && f.password.errors?.pattern"
+                  class="form-text text-danger"
+                >
+                  <p>
+                    <small>{{
+                      "register.validate_password" | translate
+                    }}</small>
+                  </p>
+                </div>
+              </div>
+              <div class="mb-3 col-12 col-md-6 col-lg-5 offset-lg-1">
+                <label for="confirmPassword"
+                  >{{ "register.confirm" | translate }} *</label
+                >
+                <div class="field-custom">
+                  <span class="p-input-icon-right d-block" style="width: 100%">
+                    <input
+                      [maxlength]="100"
+                      [ngClass]="{
+                        'control-error':
+                          f.confirmPassword?.errors &&
+                          registerForm.value.confirmPassword?.length > 0
+                      }"
+                      [type]="showConfirmPassword ? 'text' : 'password'"
+                      aria-describedby="inputGroup-sizing-default"
+                      aria-label="Default"
+                      autocomplete="do-not-autofill"
+                      class="form-control"
+                      formControlName="confirmPassword"
+                      id="confirmPassword"
+                      placeholder="{{ 'register.confirm' | translate }}"
+                    />
+                    <i
+                      (click)="showConfirmPassword = false"
+                      *ngIf="showConfirmPassword"
+                      class="pi pi-eye"
+                      role="button"
+                    ></i>
+                    <i
+                      (click)="showConfirmPassword = true"
+                      *ngIf="!showConfirmPassword"
+                      class="pi pi-eye-slash"
+                      role="button"
+                    ></i>
+                  </span>
+                  <i
+                    *ngIf="f.confirmPassword.valid"
+                    class="fa fa-check icon-float-2"
+                  ></i>
+                </div>
+                <div
+                  *ngIf="
+                    submmit &&
+                    f.confirmPassword.invalid &&
+                    registerForm.value.confirmPassword?.length === 0
+                  "
+                  class="form-text text-danger"
+                >
+                  <p>
+                    <small> {{ "register.fielRequired" | translate }}</small>
+                  </p>
+                </div>
+                <div
+                  *ngIf="f.confirmPassword.errors?.mustMatch"
+                  class="form-text text-danger"
+                >
+                  <p>
+                    <small>{{
+                      "register.passwordsDoesntMatch" | translate
+                    }}</small>
+                  </p>
+                </div>
+              </div>
+              <div class="col-12 text-center">
+                <div class="custom-control custom-checkbox">
+                  <input
+                    (change)="checkCompany(registerForm.value.is_company)"
+                    (toggle)="('#scrollElement')"
+                    aria-describedby="invalidCheck3Feedback"
+                    class="custom-control-input"
+                    formControlName="is_company"
+                    id="invalidCheck3"
+                    type="checkbox"
+                    value=""
+                  />
+                  <label
+                    class="custom-control-label text-secondary"
+                    for="invalidCheck3"
+                  >
+                    {{ "register.is_company" | translate }}
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="registerForm.value.is_company" class="row">
+              <div class="mb-3 col-11">
+                <label for="company_name">{{
+                  "register.company_name" | translate
+                }}</label>
+                <input
+                  [maxlength]="50"
+                  aria-describedby="inputGroup-sizing-default"
+                  aria-label="Default"
+                  class="form-control"
+                  formControlName="company_name"
+                  id="company_name"
+                  placeholder="{{ 'register.company_name' | translate }}"
+                  type="text"
+                />
+                <div
+                  *ngIf="submmit && f.company_name.invalid"
+                  class="form-text text-danger"
+                >
+                  <p>
+                    <small> {{ "register.fielRequired" | translate }}</small>
+                  </p>
+                </div>
+              </div>
+              <div class="mb-3 col-12 col-md-6 col-lg-5">
+                <label for="company_idnumber">{{
+                  "register.company_idnumber" | translate
+                }}</label>
+                <input
+                  [maxlength]="15"
+                  aria-describedby="inputGroup-sizing-default"
+                  aria-label="Default"
+                  class="form-control"
+                  formControlName="company_idnumber"
+                  id="company_idnumber"
+                  placeholder="{{ 'register.company_address' | translate }}"
+                  type="text"
+                />
+                <div
+                  *ngIf="submmit && f.company_idnumber.invalid"
+                  class="form-text text-danger"
+                >
+                  <p>
+                    <small> {{ "register.fielRequired" | translate }}</small>
+                  </p>
+                </div>
+              </div>
+              <div class="mb-3 col-12 col-md-6 col-lg-5 offset-lg-1">
+                <label for="company_vat">{{
+                  "register.company_vat" | translate
+                }}</label>
+                <input
+                  [maxlength]="20"
+                  class="form-control"
+                  formControlName="company_vat"
+                  id="company_vat"
+                  placeholder="{{ 'register.company_vat' | translate }}"
+                  type="text"
+                />
+                <div
+                  *ngIf="submmit && f.company_vat.invalid"
+                  class="form-text text-danger"
+                >
+                  <p>
+                    <small> {{ "register.fielRequired" | translate }}</small>
+                  </p>
+                </div>
+              </div>
+              <div class="mb-3 col-12 col-md-6 col-lg-5">
+                <label for="company_address">{{
+                  "register.company_address" | translate
+                }}</label>
+                <input
+                  [maxlength]="50"
+                  aria-describedby="inputGroup-sizing-default"
+                  aria-label="Default"
+                  class="form-control"
+                  formControlName="company_address"
+                  id="company_address"
+                  placeholder="{{ 'register.company_address' | translate }}"
+                  type="text"
+                />
+                <div
+                  *ngIf="submmit && f.company_address.invalid"
+                  class="form-text text-danger"
+                >
+                  <p>
+                    <small> {{ "register.fielRequired" | translate }}</small>
+                  </p>
+                </div>
+              </div>
+              <div class="mb-3 col-12 col-md-6 col-lg-5 offset-lg-1">
+                <label for="company_city">{{
+                  "register.company_city" | translate
+                }}</label>
+                <input
+                  [maxlength]="50"
+                  aria-describedby="inputGroup-sizing-default"
+                  aria-label="Default"
+                  class="form-control"
+                  formControlName="company_city"
+                  id="company_city"
+                  placeholder="{{ 'register.company_city' | translate }}"
+                  type="text"
+                />
+                <div
+                  *ngIf="submmit && f.company_city.invalid"
+                  class="form-text text-danger"
+                >
+                  <p>
+                    <small> {{ "register.fielRequired" | translate }}</small>
+                  </p>
+                </div>
+              </div>
+              <div class="mb-3 col-12 col-md-6 col-lg-5">
+                <label for="company_zipcode">{{
+                  "register.company_zipcode" | translate
+                }}</label>
+                <input
+                  [maxlength]="10"
+                  aria-describedby="inputGroup-sizing-default"
+                  aria-label="Default"
+                  class="form-control"
+                  formControlName="company_zipcode"
+                  id="company_zipcode"
+                  placeholder="{{ 'register.company_zipcode' | translate }}"
+                  type="text"
+                />
+                <div
+                  *ngIf="submmit && f.company_zipcode.invalid"
+                  class="form-text text-danger"
+                >
+                  <p>
+                    <small> {{ "register.fielRequired" | translate }}</small>
+                  </p>
+                </div>
+              </div>
+              <div class="mb-3 col-12 col-md-6 col-lg-5 offset-lg-1">
+                <label for="company_phone">{{
+                  "register.company_phone" | translate
+                }}</label>
+                <input
+                  (keydown)="validateMobile($event)"
+                  [maxlength]="20"
+                  aria-describedby="inputGroup-sizing-default"
+                  aria-label="Default"
+                  class="form-control"
+                  formControlName="company_phone"
+                  id="company_phone"
+                  placeholder="{{ 'register.company_phone' | translate }}"
+                  type="text"
+                />
+                <div
+                  *ngIf="submmit && f.company_phone.invalid"
+                  class="form-text text-danger"
+                >
+                  <p>
+                    <small> {{ "register.fielRequired" | translate }}</small>
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div #scrollElement></div>
+          </p-scrollPanel>
+        </form>
+      </div>
+      <div class="text-secondary">{{ "register.leyenda" | translate }}</div>
+      <div class="aceptar_politicas_container">
+        <form [formGroup]="registerForm">
+          <div class="form-group">
+            <div class="custom-control custom-checkbox">
+              <input
+                aria-describedby="invalidCheck3Feedback"
+                class="custom-control-input"
+                formControlName="check"
+                id="invalidCheckmoscar"
+                required
+                type="checkbox"
+                value=""
+              />
+              <label
+                class="custom-control-label text-secondary"
+                for="invalidCheckmoscar"
+              >
+                {{ "register.privacityone" | translate }}
+                <a href="https://fisicalcoach.com/terminos-de-uso/">
+                  <strong>{{ "register.privacitytwo" | translate }} </strong>
+                </a>
+                {{ "register.and" | translate }}
+                <a href="https://fisicalcoach.com/politica-privacidad/">
+                  <strong>{{ "register.privacitythree" | translate }} </strong>
+                </a>
+              </label>
+            </div>
+            <div
+              *ngIf="submmit && !registerForm.value.check"
+              class="form-text text-danger"
+            >
+              <p>
+                <small>{{ "register.fielRequired" | translate }}</small>
+              </p>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="button_container">
+        <button
+          *ngIf="loading"
+          class="btn btn_crear btn-block my-3"
+          disabled
+          type="button"
+        >
+          <span
+            aria-hidden="true"
+            class="spinner-grow spinner-grow-sm"
+            role="status"
+          ></span>
+          Loading...
+        </button>
+        <button (click)="ir()" *ngIf="!loading" class="btn btn-block btn_crear">
+          {{ "register.boton" | translate }}
+        </button>
+      </div>
+      <p class="" id="login_footer">
+        {{ "register.textpieone" | translate }}
+        <a class="" routerLink="/login">{{
+          "register.textpietwo" | translate
+        }}</a>
+      </p>
+    </div>
+  </div>
+  <div style="display: flex; align-items: center">
+    <img [src]="splashImage" alt="enmask" width="500" />
+  </div>
+</div>
+
+<p-dialog
+  [visible]="showSuccessDialog"
+  class="custom_dialog"
+  [modal]="true"
+  styleClass=""
+  maskStyleClass="purple_mask"
+  (onHide)="redirect()"
+>
+  <ng-template pTemplate="header">
+    <img src="assets/img/logo_panel.svg" class="logo" />
+  </ng-template>
+  <div *ngIf="!registeredUserMessage">
+    <h6 class="text-center mt-4 mb-5">
+      {{ "register.success_title" | translate }}
+    </h6>
+
+    <div class="text-center mb-5">
+      <img
+        src="https://testing-cdn.fisicalcoach.com/resources/images/fi/splash_tutorial.png"
+        width="150"
+      />
+    </div>
+
+    <h6 class="text-center mb-3">
+      {{ "register.success_link" | translate }}
+    </h6>
+
+    <h6 class="text-center mb-4">
+      {{ "register.time_link" | translate }}
+    </h6>
+
+    <h6 class="text-center mb-4">
+      {{ "register.success_check" | translate }}
+    </h6>
+
+    <h6 class="text-center mb-4 verify-color">
+      {{ "register.success_verify" | translate }}
+    </h6>
+
+    <div class="text-center">
+      <button class="btn btn-primary btn-accept" (click)="redirect()">
+        {{ "LBL_ACCEPT" | translate }}
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="registeredUserMessage">
+    <h6 class="text-center mt-4 mb-5">
+      {{ registeredUserMessage }}
+    </h6>
+
+    <div class="text-center mb-5">
+      <img
+        src="https://testing-cdn.fisicalcoach.com/resources/images/fi/splash_tutorial.png"
+        width="150"
+      />
+    </div>
+
+    <div class="text-center">
+      <button class="btn btn-primary btn-accept" (click)="redirect()">
+        {{ "LBL_ACCEPT" | translate }}
+      </button>
+    </div>
+  </div>
+</p-dialog>

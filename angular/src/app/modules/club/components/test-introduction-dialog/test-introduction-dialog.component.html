@@ -1,0 +1,31 @@
+<p-dialog
+  *ngIf="open"
+  [(visible)]="open"
+  [modal]="true"
+  [closable]="false"
+  id="add_space_dialog"
+  maskStyleClass="purple_mask"
+  styleClass=""
+>
+  <div class="text-center">
+    <img
+      alt="equipo"
+      class="pb-5"
+      src="{{ resources + imageUrl }}"
+      width="600px"
+    />
+
+    <h6 class="mb-5">
+      {{ description | translate }}
+    </h6>
+  </div>
+
+  <div class="footer_btns">
+    <button class="btn back_btn shrink_btn" (click)="closeDialog()">
+      {{ "LBL_ATRAS" | translate }}
+    </button>
+    <button class="btn next_btn shrink_btn" (click)="openTestDialog()">
+      <span>{{ "LBL_SIGUIENTE" | translate }}</span>
+    </button>
+  </div>
+</p-dialog>

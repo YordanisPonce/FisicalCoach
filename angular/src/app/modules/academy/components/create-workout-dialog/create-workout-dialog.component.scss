@@ -1,0 +1,287 @@
+:host ::ng-deep #create_workout_dialog {
+  .p-dialog {
+    padding: 0 20px;
+  }
+
+  .img-exercise-fluid {
+    width: 200px;
+    height: 150px;
+  }
+
+  ::-webkit-input-placeholder {
+    /* WebKit, Blink, Edge */
+    color: #fff !important;
+  }
+  .p-dropdown .p-dropdown-label.p-placeholder {
+    color: #fff;
+  }
+
+  .p-dropdown-items-wrapper {
+    background-color: #122a37;
+  }
+
+  .p-dropdown-panel .p-dropdown-items .p-dropdown-item {
+    color: #fff;
+  }
+
+  .p-dropdown-panel
+    .p-dropdown-items
+    .p-dropdown-item:not(.p-highlight):not(.p-disabled):hover {
+    background: #193747 !important;
+  }
+
+  .p-dropdown-panel .p-dropdown-items .p-dropdown-item.p-highlight {
+    background: #193747 !important;
+  }
+
+  .p-dropdown.form-control .p-inputtext {
+    color: #fff;
+  }
+
+  :-moz-placeholder {
+    /* Mozilla Firefox 4 to 18 */
+    color: #fff !important;
+    opacity: 1;
+  }
+  ::-moz-placeholder {
+    /* Mozilla Firefox 19+ */
+    color: #fff !important;
+    opacity: 1;
+  }
+  :-ms-input-placeholder {
+    /* Internet Explorer 10-11 */
+    color: #fff !important;
+  }
+  ::-ms-input-placeholder {
+    /* Microsoft Edge */
+    color: #fff !important;
+  }
+
+  ::placeholder {
+    /* Most modern browsers support this now. */
+    color: #fff !important;
+  }
+
+  input,
+  textarea {
+    border: 1px solid #ffffff6e !important;
+
+    &:hover {
+      border: 1px solid #00e9c5 !important;
+    }
+  }
+
+  textarea {
+    padding-top: 6px;
+  }
+
+  .p-dialog {
+    .p-dialog-header {
+      border-top-right-radius: 0px;
+      border-top-left-radius: 0px;
+      background-color: #122a37;
+      border-bottom: 1px solid rgba($color: white, $alpha: 0.07);
+
+      .header_content {
+        flex: 1;
+        align-items: center;
+        border-bottom: 1px solid #050c4417;
+        font-family: "Montserrat", sans-serif;
+
+        .title {
+          color: white;
+          font-weight: 600 !important;
+        }
+      }
+    }
+
+    .p-dialog-content {
+      padding: 0;
+      overflow: hidden !important;
+
+      .dialog_container {
+        padding-left: 2rem !important;
+        padding-right: 2rem !important;
+        background-color: #122a37;
+
+        @media (max-width: 600px) {
+          height: 600px;
+          overflow-y: auto;
+        }
+
+        p-scrollpanel {
+          height: 100%;
+          .p-dataview {
+            .p-dataview-content {
+              .p-grid {
+                display: flex;
+                flex-wrap: wrap;
+                // margin-right: -15px;
+                // margin-left: -15px;
+              }
+            }
+          }
+        }
+
+        .label-color {
+          margin: 5px 0;
+          color: #00e9c5 !important;
+        }
+
+        .form-control {
+          background-color: transparent;
+          border: 1px solid #ffffff6e;
+          border-radius: 10px;
+          color: aliceblue;
+        }
+
+        .actions {
+          display: flex;
+          justify-content: space-between;
+
+          button {
+            font-weight: 600;
+            border: 1px solid #ffffff38;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            flex: 0 46%;
+            padding: 0.75rem 0.5rem;
+          }
+
+          .btn_crear {
+            background-color: #00e9c5;
+          }
+
+          .btn_salir {
+            background-color: #122a37;
+            color: rgba($color: white, $alpha: 1);
+          }
+        }
+
+        #workout_type {
+          padding-top: 1rem;
+          padding-bottom: 1rem;
+          background-color: #122a37;
+          display: flex;
+          overflow: hidden;
+          flex-direction: column;
+
+          .workouts_type_filters {
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+
+            #sorting_btn {
+              color: white;
+              background-color: rgba($color: white, $alpha: 0.07);
+            }
+
+            .pi-search {
+              color: white;
+              margin-left: 20px;
+            }
+
+            input {
+              background-color: rgba($color: white, $alpha: 0.07);
+              color: white;
+              margin-left: 20px;
+
+              font-size: 0.9rem;
+              font-family: "Montserrat", sans-serif;
+              font-weight: 500;
+              border-radius: 9px;
+              height: 45px;
+              padding-left: 2.5rem;
+              border: 1px solid rgba(5, 12, 68, 0.04);
+            }
+          }
+
+          .workout_item {
+            box-shadow: 0px 3px 6px #00000029;
+            margin: 0.5rem 0;
+
+            .workout_title {
+              padding: 1rem;
+              background-color: rgba($color: #090909, $alpha: 0.25);
+              display: flex;
+              justify-content: space-between;
+
+              .workout_name {
+                color: white;
+                opacity: 0.84;
+                text-transform: uppercase;
+                font-weight: 100;
+                font-size: 0.9rem;
+              }
+            }
+          }
+        }
+
+        #workout_details {
+          padding-top: 1rem;
+          padding-bottom: 1rem;
+          background-color: #0d2736;
+        }
+      }
+    }
+
+    .p-dialog-footer {
+      border-bottom-right-radius: 0px;
+      border-bottom-left-radius: 0px;
+      background-color: #122a37;
+    }
+
+    label {
+      color: rgba($color: white, $alpha: 0.77) !important;
+      font-weight: 500;
+    }
+
+    .p-radiobutton-label {
+      font-size: 0.9rem;
+      color: white !important;
+    }
+
+    .inputmask-dark {
+      input {
+        width: 100% !important;
+        border-radius: 10px !important;
+        background-color: transparent !important;
+        border: 1px solid #ffffff6e !important;
+        color: aliceblue;
+        height: 45px;
+
+        &:hover {
+          border: 1px solid #00e9c5 !important;
+        }
+      }
+    }
+    .p-dataview-content {
+      background: #132a37 !important;
+    }
+  }
+  .select-template {
+    border: 1px solid #00eac4;
+  }
+}
+
+label {
+  font-size: 0.9rem;
+}
+
+@media (min-width: 1200px) {
+  :host ::ng-deep {
+    .p-dialog {
+      width: 800px;
+    }
+  }
+}
+
+@media (min-width: 1200px) {
+  :host ::ng-deep {
+    #create_workout_dialog {
+      .p-dialog {
+        width: 1100px;
+      }
+    }
+  }
+}

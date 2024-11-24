@@ -1,0 +1,549 @@
+<div class="row">
+  <!-- informacion del jugador -->
+  <div class="col-lg-6 col-xl-4 mb-3 mb-xl-0" id="info">
+    <div class="info_content">
+      <div class="player_info">
+        <div class="player_name" *ngIf="!loadingData">
+          <h5 class="mb-3">{{ playerInterface?.player?.full_name }}</h5>
+
+          <p class="mb-3 alias font-weight-500">
+            <span>{{ playerInterface?.player?.alias }}</span>
+          </p>
+          <div
+            class="mb-3"
+            pTooltip="{{ 'PLAYERS.LBL_DORSAL' | translate }}"
+            tooltipPosition="top"
+          >
+            <span class="player_shirt">
+              <img
+                [src]="urlImages + 'images/icons/t_shirt_white.svg'"
+                alt="Camisa"
+                width="25"
+              />
+            </span>
+            <span class="ml-2 font-weight-500" style="font-size: 15px">{{
+              playerInterface?.player?.shirt_number
+            }}</span>
+          </div>
+          <div
+            class="d-flex"
+            pTooltip="{{ 'PLAYERS.LBL_DEMARCACION' | translate }}"
+            tooltipPosition="top"
+          >
+            <span class="player_icon">
+              <img
+                [src]="urlImages + 'images/icons/individual-white.svg'"
+                alt="Camisa"
+                width="20"
+              />
+            </span>
+            <div class="ml-2" style="display: flex; align-items: center">
+              <span class="font-weight-500" style="font-size: 15px">{{
+                playerInterface?.player?.position?.name || ""
+              }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="player_name" *ngIf="loadingData">
+          <h5 class="mb-3">
+            <p-skeleton width="60px"></p-skeleton>
+          </h5>
+
+          <p class="mb-3 alias font-weight-500">
+            <span> <p-skeleton width="60px"></p-skeleton></span>
+          </p>
+          <div
+            class="mb-3"
+            pTooltip="{{ 'PLAYERS.LBL_DORSAL' | translate }}"
+            tooltipPosition="top"
+          >
+            <span class="player_shirt"> </span>
+            <span class="ml-2 font-weight-500" style="font-size: 15px">
+              <p-skeleton width="60px"></p-skeleton
+            ></span>
+          </div>
+          <div
+            class="d-flex"
+            pTooltip="{{ 'PLAYERS.LBL_DEMARCACION' | translate }}"
+            tooltipPosition="top"
+          >
+            <span class="player_icon"> </span>
+            <div style="display: flex; align-items: center">
+              <span class="font-weight-500" style="font-size: 15px">
+                <p-skeleton width="60px"></p-skeleton
+              ></span>
+            </div>
+          </div>
+        </div>
+        <div class="player_image" *ngIf="loadingData">
+          <p-skeleton
+            width="100px"
+            height="100px"
+            styleClass="border-cirvle"
+          ></p-skeleton>
+        </div>
+        <div class="player_image" *ngIf="!loadingData">
+          <img
+            class="rounded-circle"
+            src="{{ playerInterface?.player | avatarPipe }}"
+            width="100px"
+            height="100px"
+          />
+        </div>
+      </div>
+      <div class="info_stats"></div>
+      <div class="info_attr">
+        <div class="row">
+          <div class="col-6 col-xl-4 my-2 attr">
+            <div class="attr_content">
+              <span *ngIf="!playerInterface?.player?.weight" class="attr_value"
+                >N/A</span
+              >
+              <span class="attr_value"
+                >{{
+                  playerInterface?.player?.weight | number : "1.0-0"
+                }}
+                kg</span
+              >
+              <small class="attr_name">{{
+                "PLAYERS.LBL_PESO" | translate
+              }}</small>
+            </div>
+          </div>
+          <div class="col-6 col-xl-4 my-2 attr">
+            <div class="attr_content">
+              <span *ngIf="!playerInterface?.player?.height" class="attr_value"
+                >N/A</span
+              >
+              <span class="attr_value"
+                >{{
+                  playerInterface?.player?.height | number : "1.0-0"
+                }}
+                cm</span
+              >
+              <small class="attr_name">{{
+                "PLAYERS.LBL_ALTURA" | translate
+              }}</small>
+            </div>
+          </div>
+          <div class="col-6 col-xl-4 my-2 attr">
+            <div class="attr_content">
+              <span *ngIf="!playerInterface?.player?.age" class="attr_value"
+                >N/A</span
+              >
+              <span *ngIf="playerInterface?.player?.age" class="attr_value"
+                >{{ playerInterface?.player?.age }}
+                {{ "ANIOS" | translate }}</span
+              >
+              <small class="attr_name">{{
+                "PSYCHOLOGY.LBL_AGE" | translate
+              }}</small>
+            </div>
+          </div>
+          <div class="col-6 col-xl-4 my-2 attr">
+            <div class="attr_content">
+              <span
+                *ngIf="!playerInterface?.player?.heart_rate"
+                class="attr_value"
+                >N/A</span
+              >
+              <span class="attr_value"
+                >{{ playerInterface?.player?.heart_rate | number : "1.0-0" }}
+                {{ "LBL_PPM" | translate }}</span
+              >
+              <small class="attr_name">FCR</small>
+            </div>
+          </div>
+          <div class="col-6 col-xl-4 my-2 attr">
+            <div class="attr_content">
+              <span
+                *ngIf="!playerInterface?.player?.max_heart_rate"
+                class="attr_value"
+                >N/A</span
+              >
+              <span class="attr_value"
+                >{{
+                  playerInterface?.player?.max_heart_rate | number : "1.0-0"
+                }}
+                {{ "LBL_PPM" | translate }}</span
+              >
+              <small class="attr_name">FCM</small>
+            </div>
+          </div>
+          <div class="col-6 col-xl-4 my-2 attr">
+            <div class="attr_content">
+              <span class="attr_value">{{ imc | number : "1.0-0" }}</span>
+              <small class="attr_name">{{
+                "PLAYERS.LBL_IMC" | translate
+              }}</small>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="info_actions">
+        <button
+          (click)="goToTests()"
+          class="btn"
+          label="{{ 'PLAYERS.LBL_VIEW_TEST' | translate }}"
+          pButton
+        ></button>
+        <button
+          (click)="goToMakeTest()"
+          class="btn btn-primary"
+          label="{{ 'PLAYERS.LBL_DO_TEST' | translate }}"
+          pButton
+        ></button>
+      </div>
+    </div>
+  </div>
+  <!-- ultimo partido jugado -->
+  <div class="col-lg-6 col-xl-4 mb-3 mb-xl-0" id="last_game">
+    <div class="match">
+      <div class="match_result">
+        <h6 class="mb-4 font-weight-600">
+          {{ "PLAYERS.LBL_LAST_MATCH_PLAY" | translate }}
+        </h6>
+
+        <div
+          class="match_score mb-4"
+          *ngIf="playerInterface?.last_match?.match_situation === 'L'"
+        >
+          <div class="team">
+            <img
+              src="{{ team?.image?.full_url }}"
+              class="avatar_image_match"
+              *ngIf="team.image"
+            />
+
+            <div
+              [style]="{
+                width: '50px',
+                height: '50px',
+                'border-radius': '50%',
+                'background-color': team.color
+              }"
+              *ngIf="team?.color && !team.image"
+            ></div>
+
+            <small class="mb-2 font-weight-bold text-center">{{
+              team?.name
+            }}</small>
+            <small>{{ team.category }}</small>
+          </div>
+          <div class="score text-center">
+            <div class="font-weight-bold h3 mb-0">
+              <span>{{ playerInterface?.last_match?.score?.own || 0 }}</span>
+              <span class="mx-2">:</span>
+              <span>{{ playerInterface?.last_match?.score?.rival || 0 }}</span>
+            </div>
+            <div class="d-flex">
+              <small>{{
+                "matchResults." + playerInterface?.last_match?.scouting?.status
+                  | translate
+              }}</small>
+            </div>
+
+            <div *ngIf="playerInterface.last_match?.scouting">
+              <small>{{
+                playerInterface.last_match?.scouting?.created_at
+                  | date : "dd/MM/YYYY"
+              }}</small>
+              -
+              <small>{{
+                playerInterface.last_match?.scouting?.created_at
+                  | date : "HH:mm"
+              }}</small>
+            </div>
+          </div>
+          <div class="team">
+            <img
+              src="{{
+                urlImages +
+                  playerInterface?.last_match?.competition_rival_team?.url_image
+              }}"
+              class="avatar_image_match"
+              *ngIf="
+                playerInterface?.last_match?.competition_rival_team?.url_image
+              "
+            />
+            <img
+              src="{{ '' | rivalAvatarPipe }}"
+              class="avatar_image_match"
+              *ngIf="
+                !playerInterface?.last_match?.competition_rival_team?.url_image
+              "
+            />
+            <small class="mb-2 font-weight-bold text-center">{{
+              playerInterface.last_match?.competition_rival_team?.rival_team
+            }}</small>
+          </div>
+        </div>
+        <div
+          class="match_score mb-4"
+          *ngIf="playerInterface?.last_match?.match_situation === 'V'"
+        >
+          <div class="team">
+            <img
+              src="{{
+                urlImages +
+                  playerInterface?.last_match?.competition_rival_team?.url_image
+              }}"
+              class="avatar_image_match"
+              *ngIf="
+                playerInterface?.last_match?.competition_rival_team?.url_image
+              "
+            />
+            <img
+              src="{{ '' | rivalAvatarPipe }}"
+              class="avatar_image_match"
+              *ngIf="
+                !playerInterface?.last_match?.competition_rival_team?.url_image
+              "
+            />
+            <small class="mb-2 font-weight-bold text-center">{{
+              playerInterface.last_match?.competition_rival_team?.rival_team
+            }}</small>
+            <small>Sub-15 Div</small>
+          </div>
+          <div class="score text-center">
+            <div class="font-weight-bold h3 mb-0">
+              <span>{{ playerInterface?.last_match?.score?.rival || 0 }}</span>
+              <span class="mx-2">:</span>
+              <span>{{ playerInterface?.last_match?.score?.own || 0 }}</span>
+            </div>
+            <div class="d-flex">
+              <small>{{
+                "matchResults." + playerInterface?.last_match?.scouting?.status
+                  | translate
+              }}</small>
+            </div>
+
+            <div *ngIf="playerInterface.last_match?.scouting">
+              <small>{{
+                playerInterface.last_match?.scouting?.created_at
+                  | date : "dd/MM/YYYY"
+              }}</small>
+              -
+              <small>{{
+                playerInterface.last_match?.scouting?.created_at
+                  | date : "HH:mm"
+              }}</small>
+            </div>
+          </div>
+          <div class="team">
+            <img
+              src="{{ team?.image?.full_url }}"
+              class="avatar_image_match"
+              *ngIf="team?.image"
+            />
+
+            <div
+              [style]="{
+                width: '50px',
+                height: '50px',
+                'border-radius': '50%',
+                'background-color': team.color
+              }"
+              *ngIf="team?.color && !team.image"
+            ></div>
+
+            <small class="mb-2 font-weight-bold text-center">{{
+              team?.name
+            }}</small>
+            <small>{{ team.category }}</small>
+          </div>
+        </div>
+
+        <div class="text-center mb-2" *ngIf="!playerInterface?.last_match">
+          <span>{{ "nodata.no_match" | translate }}</span>
+        </div>
+        <button class="btn btn-outline" (click)="goToMatch()">
+          {{ "PLAYERS.LBL_AVIEW_DATA_MATCH" | translate }}
+        </button>
+      </div>
+      <div class="match_data">
+        <p-scrollPanel
+          [style]="{ width: '100%', height: '700px' }"
+          *ngIf="!loadingStatistics && playerStatistics.length > 0"
+        >
+          <div class="row mb-4">
+            <div *ngFor="let statistic of playerStatistics" class="col-6 my-2">
+              <div class="stat">
+                <div>
+                  <small class="mb-2">{{ statistic.name }}</small>
+                </div>
+
+                <div class="stat_result">
+                  <span class="stat_value">{{ statistic.value }}</span>
+                  <img [src]="statistic?.image" alt="" width="40px" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </p-scrollPanel>
+
+        <p-scrollPanel
+          [style]="{ width: '100%', height: '700px' }"
+          *ngIf="loadingStatistics"
+        >
+          <div class="row mb-4">
+            <div
+              *ngFor="let statistic of [1, 2, 3, 4, 5, 6]"
+              class="col-6 my-2"
+            >
+              <div class="stat">
+                <div>
+                  <small class="mb-2">
+                    <p-skeleton height="1rem" width="80px"></p-skeleton
+                  ></small>
+                </div>
+
+                <div class="stat_result">
+                  <span>
+                    <p-skeleton
+                      styleClass="mt-2"
+                      height="1rem"
+                      width="60px"
+                    ></p-skeleton>
+                  </span>
+                  <p-skeleton height="40px" width="40px"></p-skeleton>
+                </div>
+              </div>
+            </div>
+          </div>
+        </p-scrollPanel>
+
+        <div class="text-center mb-2" *ngIf="playerStatistics.length === 0">
+          <span>{{ "nodata.no_competition" | translate }}</span>
+        </div>
+
+        <button class="btn btn-outline mt-4" (click)="goToCompetition()">
+          {{ "PLAYERS.LBL_VIEW_DATA_COMPETITION" | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+  <!-- acceso directo y estado de salud -->
+  <div class="col-12 col-lg-4">
+    <div class="row">
+      <div class="col-12 mb-3">
+        <div class="acceso_directo">
+          <h6 class="mb-3 font-weight-600">
+            {{ "PLAYERS.LBL_DIRECT_ASSETS" | translate }}
+          </h6>
+          <ul>
+            <li
+              *ngFor="let module of healthConditions; index as i"
+              class="my-3"
+            >
+              <span>{{ module.label | translate }}</span>
+              <a (click)="goTo(module.key)" style="cursor: pointer"
+                >{{ "PLAYERS.vertodo" | translate }}
+                <img
+                  alt=""
+                  class="ml-2"
+                  src="../../../../../../assets/img/icons/shortcut_arrow.svg"
+              /></a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-12">
+        <div class="estado_de_salud">
+          <div class="header">
+            <h6 class="font-weight-600 mb-0">
+              {{ "PLAYERHEALTH.LBL_ESTADOSALUD" | translate }}
+            </h6>
+            <span *ngIf="playerInterface?.health_status; else healthBlock">
+              <img
+                alt=""
+                src="../../../../../assets/img/icons/metro-cancel.png"
+              />
+              <small>{{ "PLAYERS.LBL_CHECK" | translate }}</small>
+            </span>
+            <ng-template #healthBlock>
+              <span>
+                <img
+                  alt=""
+                  src="../../../../../assets/img/icons/awesome-check.png"
+                />
+                <small>{{ "PLAYERS.LBL_OPTIMUN" | translate }}</small>
+              </span>
+            </ng-template>
+          </div>
+
+          <div class="ultima_lesion">
+            <h6 class="font-weight-600 mb-3 wrapper" style="display: flex">
+              {{ "PLAYERHEALTH.LBL_HISLESIONES" | translate }}
+              <label class="activity_icon">!</label>
+              <div class="tooltip">
+                <ul style="list-style: none; padding: 0; margin: 0">
+                  <li
+                    style="
+                      color: black;
+                      padding: 5px;
+                      width: 100%;
+                      background-color: #00ff00;
+                    "
+                  >
+                    {{ "PLAYERHEALTH.LBL_MINIMUN" | translate }}
+                  </li>
+                  <li
+                    style="
+                      color: black;
+                      padding: 5px;
+                      width: 100%;
+                      background-color: #feff00;
+                    "
+                  >
+                    {{ "PLAYERHEALTH.LBL_MILD" | translate }}
+                  </li>
+                  <li
+                    style="padding: 5px; width: 100%; background-color: #fe6d01"
+                  >
+                    {{ "PLAYERHEALTH.LBL_MODERATE" | translate }}
+                  </li>
+                  <li
+                    style="padding: 5px; width: 100%; background-color: #ff3f3e"
+                  >
+                    {{ "PLAYERHEALTH.LBL_SERIOUS" | translate }}
+                  </li>
+                </ul>
+              </div>
+            </h6>
+            <div>
+              <div class="col m-auto">
+                <ng-container>
+                  <injury-body [injuryImage]="injuriesImages"></injury-body>
+                  <div class="lesion">
+                    <small>{{
+                      "PLAYERHEALTH.LBL_LAST_LESSION" | translate
+                    }}</small>
+                    <h5>
+                      {{ playerInterface?.lastet_injury?.location?.name }}
+                    </h5>
+                    <button (click)="goToLastInjury()" class="btn btn-outline">
+                      {{ "PLAYERHEALTH.LBL_VIEW_LAST_LESSION" | translate }}
+                    </button>
+                  </div>
+                </ng-container>
+                <ng-container *ngIf="!injuriesHistory">
+                  <injury-body></injury-body>
+                  {{ "PLAYERHEALTH.LBL_NO_INJURIES" | translate }}
+                </ng-container>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<app-match-player-results
+  (close)="playerResultDialog = $event"
+  *ngIf="playerResultDialog"
+  [playerName]="playerName"
+  [playerStatistics]="playerStatistics"
+  [visible]="playerResultDialog"
+></app-match-player-results>

@@ -1,0 +1,94 @@
+<p-dialog
+  id="asistence_dialog"
+  class="custom_dialog"
+  [modal]="true"
+  [(visible)]="visible"
+  styleClass=""
+  maskStyleClass="purple_mask"
+  (onHide)="closeDialog()"
+>
+  <ng-template pTemplate="header">
+    <div>
+      <span class="p-dialog-title mr-3">
+        {{ "test.playersRegisteredToTheTest" | translate }}
+      </span>
+      <span class="buscador p-input-icon-left d-none d-md-inline">
+        <i class="pi pi-search"></i>
+
+        <input
+          type="text"
+          pInputText
+          placeholder="{{ 'nutrition.search_player' | translate }}"
+          type="text"
+          (keyup)="setValue($event)"
+          [(ngModel)]="searchPlayer"
+        />
+      </span>
+    </div>
+  </ng-template>
+  <div
+    id="asistence_dialog_container"
+    class="dialog_container"
+    *ngIf="players.length === 0"
+  >
+    <p-selectButton
+      [options]="players"
+      [(ngModel)]="value"
+      optionLabel="icon"
+      [multiple]="true"
+    >
+      <ng-template let-item pTemplate>
+        <img src="/assets/img/{{ item.image }}" alt="" class="player_image" />
+        <span class="player_name">{{ item.name }}</span>
+      </ng-template>
+    </p-selectButton>
+    <!-- <div class="material">
+            img
+        </div> -->
+  </div>
+
+  <div
+    id="asistence_dialog_container"
+    class="dialog_container"
+    *ngIf="players.length > 0"
+  >
+    <p-selectButton
+      [options]="players"
+      [(ngModel)]="value"
+      optionLabel="icon"
+      [multiple]="true"
+      class="mb-2"
+    >
+      <ng-template let-item pTemplate>
+        <div class="d-flex">
+          <img
+            src="{{ item | avatarPipe }}"
+            alt=""
+            class="player_image mr-2"
+            width="30px"
+            height="30px"
+          />
+          <span class="player_name"
+            >{{ item.full_name }} ({{ item.shirt_number }})</span
+          >
+        </div>
+      </ng-template>
+    </p-selectButton>
+    <!-- <div class="material">
+            img
+        </div> -->
+  </div>
+
+  <p-footer>
+    <div class="footer_btns">
+      <!-- <button class="back_btn btn">Eliminar miembro</button> -->
+      <button
+        class="btn btn_primary add_btn"
+        (click)="sendPlayers()"
+        [disabled]="value?.length === 0"
+      >
+        {{ "BTN_CONTINUAR" | translate }}
+      </button>
+    </div>
+  </p-footer>
+</p-dialog>

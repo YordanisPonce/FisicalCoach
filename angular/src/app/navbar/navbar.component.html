@@ -1,0 +1,257 @@
+<div>
+  <nav
+    class="d-flex navbar navbar-expand-lg header mb-3 py-0 px-0"
+    id="top_navbar"
+  >
+    <div class="top_div">
+      <div class="px-3">
+        <button class="btn py-xl-0 d-xl-none " (click)="handleOpenSidebar()">
+          <i
+            class="pi pi-bars"
+            *ngIf="
+              (!!team && currentRoute === 'home') ||
+              !hideSidebarIcon.includes(currentRoute)
+            "
+            ngClass="bar-icon"
+          ></i>
+        </button>
+      </div>
+      <div class="navbar-brand font-weight-500 px-md-3 px-lg-4">
+        <img
+          [src]="icon"
+          class="d-none d-sm-inline principalImg mr-2"
+          width="15px"
+          height="15px"
+        />
+        <span class="page_title">
+          {{ translateKey }}
+          {{
+            currentRoute === "team" || currentRoute === "class" ? team.name : ""
+          }}</span
+        >
+      </div>
+      <div class="px-4 px-md-4 px-lg-5 d-block show_btn"></div>
+    </div>
+
+    <strong></strong>
+    <div
+      *ngIf="
+        (url.includes('players/perfil') || url.includes('alumns/profile')) &&
+        person
+      "
+      id="selected_player"
+    >
+      <div (click)="nextPlayer(-1)" class="prev_player btn">
+        <div class="arrow">
+          <img alt="" src="assets/img/icons/shortcut_arrow.svg" />
+        </div>
+      </div>
+      <div class="player_info">
+        <div
+          [style.backgroundImage]="getBackgroundUrl"
+          class="avatar_image avatar_40 rounded-circle mr-2"
+        ></div>
+        <span class="player_name">
+          <span class="last_name">{{ person ? person.full_name : "" }}</span>
+          <span><!--            {{ person ? person.alias : "" }}--> </span>
+        </span>
+      </div>
+      <button (click)="nextPlayer(1)" class="next_player btn">
+        <div class="arrow">
+          <img alt="" src="assets/img/icons/shortcut_arrow.svg" />
+        </div>
+      </button>
+    </div>
+    <div
+      class="ml-md-auto d-flex align-items-center"
+      id="navbarSupportedContent"
+    >
+      <div
+        class="pr-2 d-flex align-items-center nav-actions"
+        [ngClass]="{
+          'justify-content-between': !isOneRole,
+          'justify-content-center': isOneRole
+        }"
+      >
+        <button
+          (click)="goProfile()"
+          *ngIf="!isOneRole && !loadingUser"
+          class="btn mr-3 d-flex align-items-center"
+          pTooltip="{{ 'LBL_' + checkProfile() | translate }}"
+          style="font-size: 1.5vh"
+        >
+          <img
+            *ngIf="role === 'teacher'"
+            alt=""
+            src="https://testing-cdn.fisicalcoach.com/resources/images/menu/sports_blue.svg"
+            width="28px"
+          />
+          <img
+            *ngIf="role === 'sport'"
+            alt=""
+            src="https://testing-cdn.fisicalcoach.com/resources/images/menu/teacher/class.svg"
+            width="25px"
+          />
+          <span class="ml-2 d-lg-inline text-secondary" style="font-size: 1rem">
+            {{ "LBL_" + checkProfile() | translate }}
+          </span>
+        </button>
+        <p-dropdown
+          (onChange)="cambiar($event)"
+          [(ngModel)]="idioma"
+          [options]="languages"
+          optionLabel="name"
+          optionValue="value"
+          styleClass="border-0"
+        >
+          <ng-template pTemplate="selectedItem">
+            <div
+              *ngIf="idioma"
+              class="country-item country-item-value d-flex align-items-center"
+            >
+              <i
+                class="pi pi-globe mr-2 text-main"
+                style="font-size: 1.25rem"
+              ></i>
+              <img
+                [src]="idioma === 'es' ? spanishFlag : englishFlag"
+                width="15"
+                class="mx-1"
+              />
+              <div>{{ idioma.toUpperCase() }}</div>
+            </div>
+          </ng-template>
+          <ng-template let-language pTemplate="item">
+            <div class="language-item" style="display: flex">
+              <img
+                [src]="language.value === 'es' ? spanishFlag : englishFlag"
+                width="15"
+              />
+              <div style="margin-left: 3px">{{ language.name }}</div>
+            </div>
+          </ng-template>
+        </p-dropdown>
+      </div>
+      <ul
+        class="navbar-nav py-2 px-4 d-none d-xl-flex hidden_us"
+        id="user_navbar"
+      >
+        <li class="nav-item">
+          <span>
+            <img
+              *ngIf="!loadingUser"
+              [src]="getAvatarUrl"
+              class="rounded-circle principalImg"
+              height="50px"
+              width="50px"
+            />
+            <span>
+              <p-skeleton
+                *ngIf="loadingUser"
+                shape="circle"
+                size="50px"
+              ></p-skeleton>
+            </span>
+          </span>
+        </li>
+        <li class="nav-item dropdown d-none d-md-block">
+          <a
+            aria-expanded="false"
+            aria-haspopup="true"
+            class="nav-link dropdown-toggle font-weight-500 d-flex align-items-center"
+            data-toggle="dropdown"
+            href="#"
+            id="navbarDropdown"
+            role="button"
+          >
+            <div class="d-md-none d-lg-inline">
+              <small
+                *ngIf="!loadingUser"
+                class="text-secondary d-block font-weight-500"
+                >{{ "USUARIO" | translate }}</small
+              >
+              <span *ngIf="!loadingUser" class="text-dark font-weight-600">{{
+                userData?.full_name
+              }}</span>
+            </div>
+            <div>
+              <small *ngIf="loadingUser">
+                <p-skeleton styleClass="mb-2" width="3rem"></p-skeleton>
+              </small>
+              <span *ngIf="loadingUser">
+                <p-skeleton width="6rem"></p-skeleton
+              ></span>
+            </div>
+          </a>
+          <div
+            aria-labelledby="navbarDropdown"
+            class="dropdown-menu dropdown-menu-right"
+            id="account-dropdown"
+          >
+            <div class="px-3 py-4 header">{{ "MYACCOUNT" | translate }}</div>
+            <div
+              class="border-top border-bottom p-3 d-flex align-items-center justify-content-start"
+            >
+              <span *ngIf="!loadingUser">
+                <img
+                  [src]="getAvatarUrl"
+                  class="rounded-circle principalImg mr-3"
+                  height="50px"
+                  width="50px"
+                />
+              </span>
+              <span *ngIf="loadingUser">
+                <p-skeleton
+                  *ngIf="loadingUser"
+                  shape="circle"
+                  size="50px"
+                ></p-skeleton>
+              </span>
+              <div class="d-flex flex-column px-2">
+                <span class="user_name">{{ userData?.full_name }}</span>
+                <small class="suscription_plan">
+                  {{
+                    sportSubscription &&
+                      teacherSubscription &&
+                      sportSubscription + " / " + teacherSubscription
+                  }}
+                </small>
+                <small
+                  *ngIf="sportSubscription && !teacherSubscription"
+                  class="suscription_plan"
+                  >{{ sportSubscription }}</small
+                >
+                <small
+                  *ngIf="teacherSubscription && !sportSubscription"
+                  class="suscription_plan"
+                  >{{ teacherSubscription }}</small
+                >
+              </div>
+            </div>
+            <a class="dropdown-item py-3" routerLink="/profile/my-exercises">{{
+              "profile.my_profile" | translate
+            }}</a>
+
+            <a
+              class="dropdown-item py-3"
+              routerLink="/profile/update-subscription/{{ role }}"
+              >{{ "profile.view_plans" | translate }}</a
+            >
+            <span role="button" (click)="close()" class="dropdown-item py-3">{{
+              "profile.logout" | translate
+            }}</span>
+          </div>
+        </li>
+      </ul>
+      <!-- <div class="px-3 px-md-4 px-lg-5 d-block hidden_btn">
+        <i
+          (click)="notifications()"
+          class="pi pi-bell"
+          pBadge
+          style="font-size: 1.25rem; cursor: pointer"
+          value="2"
+        ></i>
+      </div> -->
+    </div>
+  </nav>
+</div>

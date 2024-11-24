@@ -1,0 +1,81 @@
+<div class="row">
+  <div class="col-lg-4" id="player_information_menu">
+    <div class="card soft-shadow">
+      <div class="card-header">
+        {{ "PLAYERHEALTH.LBL_ESTADOSALUD" | translate }}
+      </div>
+      <div class="card-body p-0">
+        <div
+          aria-orientation="vertical"
+          class="nav flex-column nav-pills"
+          id="v-pills-tab"
+          role="tablist"
+        >
+          <a
+            (click)="view(type.GENERAL)"
+            aria-selected="true"
+            class="nav-link active"
+            data-toggle="pill"
+            role="tab"
+            >{{ "PLAYERHEALTH.LBL_INFOGENERAL" | translate }}</a
+          >
+          <a
+            (click)="view(type.HISTORY)"
+            aria-selected="false"
+            class="nav-link"
+            data-toggle="pill"
+            role="tab"
+            >{{ "PLAYERHEALTH.LBL_HISLESIONES" | translate }}</a
+          >
+          <!--          <a (click)="view(type.DETAIL)" aria-controls="v-pills-injury-details" aria-selected="false" class="nav-link"-->
+          <!--             data-toggle="pill">Detalles de lesion</a>-->
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-8">
+    <div class="card soft-shadow">
+      <div class="card-header">
+        <img
+          (click)="goToList()"
+          alt=""
+          src="assets/img/icons/shortcut_arrow.svg"
+          *ngIf="injuriesTotal || show === type.DETAIL"
+          style="
+            transform: rotate(180deg);
+            width: 10px;
+            cursor: pointer;
+            margin-right: 10px;
+          "
+        />
+        {{ "PLAYERHEALTH.LBL_INFOGENERAL" | translate }}
+      </div>
+      <div class="card-body p-0">
+        <div class="tab-content" id="v-pills-tabContent">
+          <!-- panel uno -->
+          <ng-container *ngIf="show === type.GENERAL">
+            <div style="padding: 25px">
+              <app-player-health-information-data></app-player-health-information-data>
+            </div>
+          </ng-container>
+          <!-- panel dos -->
+          <ng-container *ngIf="show === type.HISTORY">
+            <div style="padding: 25px">
+              <app-player-health-injuries-history-data
+                [(injuriesTotal)]="injuriesTotal"
+                (details)="setInjuryDetails($event)"
+              ></app-player-health-injuries-history-data>
+            </div>
+          </ng-container>
+          <!-- panel tres -->
+          <ng-container *ngIf="show === type.DETAIL">
+            <app-player-health-injuries-details
+              (close)="closeDetail()"
+              [injuryId]="injuryDetails"
+            ></app-player-health-injuries-details>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

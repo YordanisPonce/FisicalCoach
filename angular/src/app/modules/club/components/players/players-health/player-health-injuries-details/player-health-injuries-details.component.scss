@@ -1,0 +1,28 @@
+nav{
+    .nav-link{
+        color: #050C4467;
+        font-weight: 600;
+        font-size: .9rem;
+        padding: 1.15rem 1.5rem;
+        &.active{
+            color: #050C44!important;
+            border: 0;
+        }
+        &:hover{
+            border: 0;
+        }
+    }
+}
+.element{
+    // text-align: center;
+    .title{
+        display: block;
+        color: #050C44;
+        font-weight: 500;
+        margin-bottom: 1rem;
+    }
+    .value{
+        color: #000000;
+        font-size: .95rem;
+    }
+}

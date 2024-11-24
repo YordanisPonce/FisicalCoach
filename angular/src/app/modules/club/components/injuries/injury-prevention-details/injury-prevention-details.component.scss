@@ -1,0 +1,136 @@
+:host ::ng-deep {
+    .injury_prevention_header {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      padding: 1.5rem 2rem;
+  
+      h6 {
+        color: #050c44;
+      }
+    }
+  
+    .player_profile {
+      display: flex;
+      align-items: center;
+      font-weight: 600;
+      flex-direction: column;
+
+      &_image {
+        width: 108px;
+        height: 108px;
+        border-radius: 50%;
+      }
+  
+      &_title {
+        font-size: 1.25rem;
+        color: #050c44;
+        margin: .5rem 0;
+        text-align: center;
+      }
+  
+      &_academy {
+        font-size: .9rem;
+        margin: .5rem 0;
+        color: rgba($color: #000000, $alpha: .6);
+        font-weight: 600;
+        text-transform: uppercase;
+      }
+  
+      &_info {
+        &_title {
+          font-size: .9rem;
+          color: #000000;
+          opacity: 0.55;
+          margin-bottom: 10px;
+        }
+  
+        &_desc {
+          font-size: 1.125rem;
+          color: #050c44;
+        }
+      }
+      &_actions{
+        button{
+            height: 45px;
+            border-radius: 25px;
+            // padding: 0 1.5rem;
+            margin: 0 .5rem;
+        }
+      }
+    }
+  
+    .player_info {
+      &_title {
+        margin-bottom: 24px;
+        // font-size: 1.125rem;
+        font-weight: 600;
+        color: #050c44;
+        opacity: 0.61;
+      }
+      &_text {
+        font-weight: 500;
+        opacity: 0.7;
+      }
+      &_factor_result {
+        margin-left: 100px;
+        font-weight: 700;
+      }
+    }
+  
+    .item {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      width: max-content;
+      height: 45px;
+      border: 1px solid #050c4426;
+      border-radius: 27px;
+      padding: 10px 32px;
+      margin: 0 14px 15px 0;
+      color: #050c44;
+      font-weight: 600;
+      font-size: .9rem;
+    }
+    .delete_item {
+      width: 25px;
+      height: 25px;
+      display: flex;
+  
+      justify-content: center;
+      align-items: center;
+      border-radius: 50%;
+      margin-left: 10px;
+      background: #f0f1f4;
+      margin-left: 12px;
+      cursor: pointer;
+    }
+    .delete_item_text {
+      color: #e0e2e8;
+    }
+  
+    .injury_prevention_container {
+      padding: 1.5rem 4rem;
+      border-bottom: 1px solid #050c441a;
+      margin: 0;
+    }
+  }
+  
+  @media (min-width: 1200px) {
+    :host ::ng-deep {  
+      .player_profile {
+        flex-direction: row;
+    
+        &_image {
+          margin-right: 1.5rem;
+        }
+    
+        &_title {
+          font-size: 1.25rem;
+          margin: 0;
+          text-align: left;
+        }
+      }
+    }
+  }
+    

@@ -1,0 +1,56 @@
+<div class="card soft-shadow">
+    <div class="card-body p-0">               
+        <div class="row">
+            <div class="col-12">
+                <div class="competicion_header">
+                    <h6 class="font-weight-600 mb-0">Competiciones</h6>
+                    <span class="p-input-icon-left d-none d-md-inline">
+                        <i class="pi pi-search"></i>
+                        <input type="text" pInputText placeholder="Buscar competición">         
+                    </span>
+                    <button class="btn crear_competicion_btn" (click)="crearCompeticionDialog=true"><span class="d-none d-sm-inline mr-2">Crear competición</span><i class="pi pi-plus"></i></button>
+                    <crear-competicion-dialog [visible]="crearCompeticionDialog" (close)="crearCompeticionDialog=$event"></crear-competicion-dialog>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="row px-3 px-md-5">
+                    <div class="col-md-6" *ngFor="let team of [0,1,2,3]">
+                        <div class="competicion">
+                            <div class="competicion_content">
+                                <div class="competicion_info">
+                                    <p-avatar image="assets/img/equipo.png" size="large"></p-avatar>
+                                    <div class="d-flex flex-column ml-3">
+                                        <span class="league_name">Prime League</span>
+                                        <span class="championship">Liga de Football</span>
+                                    </div>
+                                </div>
+                                <div class="last_game">
+                                    <small class="last_game_tag">Último partido</small>
+                                    <div class="team">
+                                        <p-avatar image="assets/img/equipo.png" size="large"></p-avatar>
+                                        <span class="d-block font-weight-600">ALF</span>
+                                    </div>
+                                    <div class="score">
+                                        <div class="result">
+                                            <small class="font-weight-bold">5</small>
+                                            <small class="px-3 text-success"><</small>
+                                            <small>2</small>
+                                        </div>
+                                        <small class="font-weight-600 text-secondary">Premiere League</small>
+                                    </div>
+                                    <div class="team">
+                                        <p-avatar image="assets/img/equipo.png" size="large"></p-avatar>
+                                        <span class="d-block font-weight-600">ALF</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="competicion_footer">
+                                <a [routerLink]="['/club/academy/competicion/detalles']">Ver competición</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

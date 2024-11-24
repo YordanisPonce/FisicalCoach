@@ -1,0 +1,51 @@
+image: php:7.1.29
+
+definitions:
+  steps:
+    - step: &build-step
+        name: SonarQube analysis
+        script:
+          - pipe: sonarsource/sonarqube-scan:1.0.0
+            variables:
+              SONAR_HOST_URL: ${SONAR_HOST_URL} # Get the value from the repository/workspace variable.
+              SONAR_TOKEN: ${SONAR_TOKEN} # Get the value from the repository/workspace variable. You shouldn't set secret in clear text here.
+  caches:
+    sonar: ~/.sonar
+
+clone:
+  depth: full
+
+pipelines:
+  branches:
+    develop:
+    #- step: *build-step
+    - step:
+        script:
+          - pipe: atlassian/ssh-run:0.2.4
+            variables:
+              SSH_USER: $USERNAME
+              SERVER: $SERVER
+              PORT: $PORT
+              MODE: 'command'
+              COMMAND: 'bash /home/stack_front/scripts/deploit_front_testing_fisicalcoach'
+    demo:
+     - step:
+        script:
+          - pipe: atlassian/ssh-run:0.2.4
+            variables:
+              SSH_USER: $USERNAME_DEMO
+              SERVER: $SERVER_DEMO
+              PORT: $PORT_DEMO
+              MODE: 'command'
+              COMMAND: 'bash /home/stack_front/scripts/deploit_front_demo_fisicalcoach'
+    
+    master:
+    - step:
+        script:
+          - pipe: atlassian/ssh-run:0.2.4
+            variables:
+              SSH_USER: $USERNAME_PROD
+              SERVER: $SERVER_PROD
+              PORT: $PORT_PROD
+              MODE: 'command'
+              COMMAND: 'bash /home/stack_front/scripts/deploit_front_fisicalcoach'

@@ -1,0 +1,202 @@
+<p-dialog
+  id="player_evolution_dialog"
+  class="custom_dialog"
+  [modal]="true"
+  [(visible)]="visible"
+  *ngIf="visible"
+  styleClass="fullscreenDialog"
+  maskStyleClass=""
+  (onHide)="closeDialog()"
+>
+  <ng-template pTemplate="header">
+    <div class="d-flex header_content">
+      <img src="/angular/src/assets/img/logo_panel.svg" alt="" />
+    </div>
+  </ng-template>
+  <div
+    id="player_evolution_dialog_container"
+    class="dialog_container"
+    [ngClass]="{ wide: step != 1 }"
+  >
+    <form>
+      <div class="step_content split_content" *ngIf="step == 1">
+        <div class="intro_image text-center p-4">
+          <img src="{{ test.image.full_url }}" alt="" />
+        </div>
+        <div class="intro">
+          <h5 class="title">
+            {{ "physiotherapy.playerEvolution" | translate }}
+          </h5>
+          <p class="text">
+            {{ "physiotherapy.thisQuestionarie" | translate }}
+          </p>
+
+          <div class="mb-5 mt-1">
+            <h5 class="title">{{ "RFD.staff" | translate }}</h5>
+            <p-dropdown
+              [options]="staff"
+              [styleClass]="'w-100 form-control'"
+              [(ngModel)]="selectedStaff"
+              [optionLabel]="'full_name'"
+              [optionValue]="'id'"
+              [ngModelOptions]="{ standalone: true }"
+              placeholder="{{ 'LBL_SELECCIONE' | translate }}"
+            ></p-dropdown>
+          </div>
+
+          <div class="text-center nav_btns">
+            <button class="btn back_btn" (click)="step = 2">
+              {{ "LBL_ATRAS" | translate }}
+            </button>
+            <button class="btn next_btn" (click)="step = 2">
+              {{ "physiotherapy.start_questionarie" | translate }}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="step_content" *ngIf="step == 2">
+        <ng-template pTemplate="header">
+          <div class="d-flex header_content">
+            <img src="/angular/src/assets/img/logo_panel.svg" alt="" />
+          </div>
+        </ng-template>
+        <div
+          id="evolucion_psicologica_dialog_container"
+          class="dialog_container"
+          [ngClass]="{ wide: step == 2 }"
+        >
+          <form>
+            <div class="step_content" *ngIf="step == 2">
+              <div>
+                <div *ngFor="let item of test.question_test; let i = index">
+                  <div class="questions" *ngIf="currentQuestion === i">
+                    <div class="question">
+                      <div>
+                        <div class="text-center">
+                          <h5 class="font-weight-500 mb-4">
+                            {{ item?.question?.name }}
+                          </h5>
+                          <small class="my-4 font-weight-600 subtitle">{{
+                            "RFD.selectOneOption" | translate
+                          }}</small>
+                        </div>
+                        <div
+                          class="options my-5 row"
+                          *ngIf="item.question?.field_type === 'alphanumber'"
+                        >
+                          <div
+                            *ngFor="let response of item?.responses"
+                            class="option-content"
+                            [ngClass]="{
+                              'col-12 maxWidth': item?.responses.length < 6,
+                              'col-6': item?.responses.length > 5,
+                              selected:
+                                response.value ===
+                                answers[item.code]?.responseId
+                            }"
+                            [style]="{
+                              'background-color':
+                                response.question_responses_id ===
+                                answers[item.code]?.id
+                                  ? response.color
+                                  : ''
+                            }"
+                          >
+                            <p-radioButton
+                              [name]="response.value"
+                              value="{{
+                                answers[item.code]?.responseId &&
+                                answers[item.code]?.responseId ===
+                                  response.value
+                                  ? answers[item.code]?.responseId
+                                  : response.value
+                              }}"
+                              label="{{ response.name }}"
+                              [(ngModel)]="
+                                answers[item.code]?.responseId &&
+                                answers[item.code].responseId
+                              "
+                              (ngModelChange)="
+                                handleSelectedAnswer(
+                                  $event,
+                                  item.code,
+                                  response.question_responses_id,
+                                  response.name,
+                                  item.question.field_type
+                                )
+                              "
+                              pTooltip="{{ response.tooltip }}"
+                            ></p-radioButton>
+
+                            <img
+                              src="{{ response.image.full_url }}"
+                              alt="icon"
+                              *ngIf="response.image"
+                              width="25"
+                              height="25"
+                              class="ml-2"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="questions_nav">
+                      <button
+                        class="btn back_btn"
+                        (click)="
+                          currentQuestion > 0 &&
+                            (currentQuestion = currentQuestion - 1)
+                        "
+                      >
+                        <i class="pi pi-arrow-left"></i>
+                      </button>
+                      <div class="questions_bar">
+                        <p-progressBar
+                          [value]="
+                            ((currentQuestion + 1) * 100) /
+                            test.question_test.length
+                          "
+                          [showValue]="false"
+                        ></p-progressBar>
+                      </div>
+                      <button
+                        class="btn btn-primary next_question_btn"
+                        (click)="
+                          currentQuestion < test.question_test.length - 1
+                            ? (currentQuestion = currentQuestion + 1)
+                            : currentQuestion === test.question_test.length - 1
+                            ? submit()
+                            : ''
+                        "
+                        [disabled]="
+                          (!answers[item.code]?.responseId &&
+                            item.question.field_type === 'alphanumber') ||
+                          loadingPhase
+                        "
+                      >
+                        <span>{{
+                          currentQuestion === test.question_test.length - 1
+                            ? ('PLAYERS.finalizarprueba'|translate)
+                            : ('PLAYERS.siguienteprueba'|translate)
+                        }}</span>
+                        <i class="pi pi-arrow-right"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- <div class="text-center" [ngClass]="{'shrink_btn' : step==2}" *ngIf="[1,2].includes(step)">
+        <button class="btn back_btn" (click)="(step>1) ? step=step-1 : ''" *ngIf="step>=2">Atras</button>
+        <button class="btn next_btn"
+                (click)="(step<3) ? step=step+1 : ''">{{step < 3 ? 'Siguiente' : 'Finalizar programa preventivo'}}</button>
+      </div> -->
+    </form>
+  </div>
+</p-dialog>

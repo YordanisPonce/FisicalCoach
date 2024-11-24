@@ -1,0 +1,124 @@
+.profile_list {
+  border-radius: 9px;
+  border: 1px solid #050c4417;
+  padding: 2rem 0;
+  margin-bottom: 4rem;
+
+  .profile_element {
+    display: flex;
+    align-items: center;
+    border: 0;
+    padding: 1.5rem;
+
+    .icon {
+      margin-right: 1.5rem;
+    }
+
+    .info,
+    .edit_info {
+      p {
+        margin-bottom: 0;
+        font-size: 0.9rem;
+        font-weight: 600;
+      }
+
+      .name {
+        color: rgba($color: #050c44, $alpha: 0.36);
+      }
+
+      p::not(".name") {
+        opacity: 1;
+      }
+    }
+
+    .action_btn {
+      width: 45px;
+      height: 45px;
+      background-color: rgba($color: #050c44, $alpha: 0.03);
+      border-radius: 50%;
+
+      i,
+      img {
+        opacity: 0.3;
+      }
+    }
+  }
+}
+
+@media (min-width: 600px) {
+}
+
+@media (min-width: 1200px) {
+  // :host ::ng-deep{
+  .profile_list {
+    .profile_element {
+      padding: 1.5rem 3rem;
+
+      .edit_btn {
+        // margin-left: auto;
+        i,
+        img {
+        }
+      }
+    }
+  }
+  // }
+}
+
+:host ::ng-deep {
+  .p-dialog {
+    .p-checkbox-label {
+      margin-bottom: 0;
+    }
+
+    .p-checkbox:not(.p-checkbox-disabled) .p-checkbox-box:hover {
+      border-color: #007bff !important;
+    }
+
+    .p-checkbox:not(.p-checkbox-disabled) .p-checkbox-box.p-focus {
+      box-shadow: 0 0 0.2rem #007bff !important;
+      border-color: #007bff !important;
+    }
+
+    .p-checkbox .p-checkbox-box.p-highlight {
+      border-color: #007bff !important;
+      background: #007bff !important;
+    }
+
+    .p-radiobutton .p-radiobutton-box.p-highlight {
+      border-color: #007bff !important;
+      background: #007bff !important;
+    }
+
+    .p-radiobutton .p-radiobutton-box:not(.p-disabled):not(.p-highlight):hover {
+      border-color: #007bff !important;
+    }
+  }
+}
+
+@media (min-width: 1200px) {
+}
+
+.county_selector {
+  font-size: 23px;
+  padding-right: 5px;
+  padding-bottom: 0;
+  margin: 0;
+  margin-bottom: -5px;
+}
+.icon-float {
+  margin-left: 10px;
+  float: right;
+  color: #01e9c5;
+  font-size: 22px;
+}
+.icon-float-error {
+  margin-left: 10px;
+  float: right;
+  color: red;
+  font-size: 22px;
+}
+
+.check {
+  color: #01e9c5 !important;
+}

@@ -1,0 +1,136 @@
+:host ::ng-deep {
+  .undo_btn i {
+    transform: rotate(-25deg);
+  }
+  .redo_btn i {
+    transform: rotate(150deg);
+  }
+  .p-carousel {
+    .p-carousel-indicators,
+    .p-carousel-prev,
+    .p-carousel-next {
+      display: none;
+    }
+    .p-carousel-item {
+      flex: 1 0 14.333333% !important;
+      button {
+        background-color: #0065e90a;
+        border: 1px solid #0065e91c;
+        color: #0065e9;
+        width: 100%;
+        height: 85px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: start;
+        .value {
+          align-self: flex-end;
+        }
+        .icon {
+          img {
+            width: 24px;
+          }
+        }
+        .title {
+          font-size: 0.8rem;
+        }
+        &[disabled] {
+          background-color: rgba($color: #00e9c5, $alpha: 0.15);
+          // color: #000a;
+        }
+      }
+    }
+  }
+
+  .p-datatable {
+    .p-datatable-tbody > tr > td:nth-child(1) {
+      font-weight: bold;
+      .player_image {
+        flex: 0 30px;
+        height: 30px;
+        border-radius: 50%;
+        // background-color: brown;
+        background-position: center;
+        background-size: cover;
+        background-repeat: no-repeat;
+        margin-right: 0.5rem;
+      }
+      .player_name {
+        flex: 1;
+      }
+    }
+    .p-datatable-tbody > tr > td:nth-child(3) {
+      // width: 125px;
+      button {
+        background-color: #0065e90a;
+        border: 1px solid #0065e9;
+        border-radius: 25px;
+        font-size: 0.9rem;
+        height: 30px;
+        color: #0065e9;
+      }
+    }
+  }
+
+  .p-dialog {
+    .p-dialog-content {
+      #reset_dialog_container {
+        p {
+          width: 75%;
+          margin: auto;
+        }
+      }
+    }
+    .p-dialog-footer {
+      border: 0;
+    }
+  }
+}
+
+// Small devices (landscape phones, 576px and up)
+@media (max-width: 576px) {
+  .load_btn {
+    display: flex;
+    justify-content: center;
+    margin-top: 0.25rem;
+  }
+  .action {
+    margin-right: 0 !important;
+  }
+}
+
+// Medium devices (tablets, 768px and up)
+@media (min-width: 768px) {
+}
+
+// Large devices (desktops, 992px and up)
+@media (min-width: 1200px) {
+  :host ::ng-deep {
+    .p-carousel {
+      .p-carousel-prev,
+      .p-carousel-next {
+        display: block;
+        color: white;
+        border-radius: 0;
+        text-align: center;
+        height: 85px;
+        margin: 0;
+        background-color: #0065e9;
+        width: 15px;
+      }
+    }
+    .p-datatable {
+      .p-datatable-tbody > tr > td:nth-child(1) {
+        width: 175px;
+      }
+      .p-datatable-tbody > tr > td:nth-child(3) {
+        width: 125px;
+        text-align: center;
+      }
+    }
+  }
+}
+
+// Extra large devices (large desktops, 1200px and up)
+@media (min-width: 1200px) {
+}

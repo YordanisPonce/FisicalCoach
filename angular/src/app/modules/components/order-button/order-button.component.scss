@@ -1,0 +1,15 @@
+:host ::ng-deep {
+  .p-button {
+    background: #041144 !important;
+    height: 45px;
+    border-radius: 8px;
+  }
+
+  .selected {
+    color: #01e9c5 !important;
+  }
+
+  .p-selectbutton .p-button.p-highlight {
+    border-color: unset;
+  }
+}

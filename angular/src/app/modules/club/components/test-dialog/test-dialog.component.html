@@ -1,0 +1,583 @@
+<p-dialog
+  id="test_dialog"
+  class="custom_dialog"
+  [modal]="visible"
+  [(visible)]="visible"
+  styleClass="fullscreenDialog"
+  maskStyleClass=""
+  (onHide)="closeDialog()"
+>
+  <ng-template pTemplate="header">
+    <div class="d-flex header_content">
+      <img loading="lazy" src="/assets/img/logo_panel.svg" alt="" />
+      <!-- <div class="title">{{'PLAYERS.LBL_DATOSJUGADOR'| translate}}</div> -->
+      <!-- <div class="subtitle">{{'PLAYERS.LBL_INFOJUGADOR'| translate}}</div> -->
+      <button
+        class="group_btn ml-auto"
+        (click)="players = true"
+        *ngIf="step < 5"
+      >
+        <img loading="lazy" src="/assets/img/icons/grupo.svg" alt="" />
+      </button>
+    </div>
+  </ng-template>
+  <div
+    id="test_dialog_container"
+    class="dialog_container"
+    [ngClass]="{ wide: step != 1 }"
+  >
+    <form>
+      <div class="step_content" *ngIf="step == 1">
+        <div class="text-center mb-4">
+          <!-- <i class="pi pi-angle-left text-primary back_btn" (click)="(step>1) ? step=step-1 : ''"></i> -->
+          <h6 class="font-weight-bold mb-4">
+            {{ "test.selectTestType" | translate }}
+          </h6>
+        </div>
+
+        <div
+          style="text-align: center; width: 100%"
+          class="p-4"
+          *ngIf="loadingTypes"
+        >
+          <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+        </div>
+        <div
+          *ngIf="!loadingTypes"
+          id="test_btn_group"
+          class="btn-group btn-group-toggle"
+        >
+          <div
+            *ngFor="let type of testTypeList"
+            class="btn-group btn-group-toggle"
+            id="test_btn_group"
+            data-toggle="buttons"
+          >
+            <label
+              class="btn btn-secondary"
+              [ngClass]="{ active: selectedTestType?.id === type.id }"
+              (click)="selectType(type)"
+            >
+              <img
+                loading="lazy"
+                src="{{ type.image?.full_url }}"
+                alt=""
+                class="test_icon"
+              />
+              <span class="test_name">{{ type.name }}</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="step_content" *ngIf="step == 2">
+        <div class="text-center mb-4">
+          <h6 class="font-weight-bold mb-4">
+            {{ selectedTestType?.name }}
+            {{ selectedSubTypeText ? " - " + selectedSubTypeText.name : "" }}
+          </h6>
+          <small class="subtitle">{{
+            "test.scrollThrought" | translate
+          }}</small>
+        </div>
+
+        <div
+          style="text-align: center; width: 100%"
+          class="p-4"
+          *ngIf="loadingTests"
+        >
+          <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+        </div>
+        <p-carousel
+          [value]="testList"
+          [responsiveOptions]="responsiveOptions"
+          *ngIf="!loadingTests"
+        >
+          <ng-template let-test pTemplate="item">
+            <div
+              class="card test"
+              [ngClass]="{ selected: test?.id === selectedTest?.id }"
+              (click)="selectTest(test)"
+            >
+              <img
+                loading="lazy"
+                src="{{ test.image?.full_url }}"
+                class="image"
+              />
+              <div class="card-body p-0">
+                <div class="test_content">
+                  <div class="test_info">
+                    <div class="test_info_content">
+                      <h5 class="font-weight-600 mb-3 test_title">
+                        {{ test.name }}
+                      </h5>
+                    </div>
+                  </div>
+                  <div class="test_actions">
+                    <button class="btn test_btn">
+                      <span>{{ "test.makeTest" | translate }}</span>
+                      <i class="pi pi-angle-right ml-3"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-template>
+        </p-carousel>
+      </div>
+
+      <div class="step_content split_content" *ngIf="step == 3">
+        <div class="test_image text-center p-4 d_none">
+          <img
+            loading="lazy"
+            src="{{ selectedTest?.image?.full_url }}"
+            alt="test-image"
+          />
+        </div>
+        <div class="selected_test_description">
+          <h5 class="title mb-5">{{ selectedTest?.name }}</h5>
+
+          <!-- <p class="description">
+            {{ selectedTest?.description }}
+          </p> -->
+
+          <ul class="intructions">
+            <li>
+              <span class="title-text"
+                >{{ "test.introduction" | translate }}:
+              </span>
+              {{ selectedTest?.instruction }}
+            </li>
+            <li>
+              <span class="title-text"
+                >{{ "test.material" | translate }}:
+              </span>
+              {{ selectedTest?.material }}
+            </li>
+            <li>
+              <span class="title-text"
+                >{{ "test.procedure" | translate }}:
+              </span>
+              {{ selectedTest?.procedure }}
+            </li>
+            <li>
+              <span class="title-text"
+                >{{ "test.evaluation" | translate }}:
+              </span>
+              {{ selectedTest?.evaluation }}
+            </li>
+          </ul>
+
+          <div
+            *ngFor="let test of previousQuestionsTest; index as i"
+            class="test_field mt-3 mb-3"
+          >
+            <div class="test_field">
+              <label for="names"
+                >{{ test.question.name }}
+                <span
+                  *ngIf="
+                    test.question.unit?.code &&
+                    (test.question.field_type === 'number' ||
+                      test.question.field_type === 'numeric')
+                  "
+                  sty
+                  >({{ test.question.unit?.abbreviation }})</span
+                >
+              </label>
+
+              <div>
+                <app-test-input-type
+                  [isConfig]="true"
+                  [id]="test.question.name"
+                  [type]="test.question.field_type"
+                  [name]="test.question.name"
+                  [required]="test.question.required"
+                  [responseList]="test.responses"
+                  (model)="handleQuestions($event, 'previous')"
+                  [question]="previousQuestions[test.id]"
+                  (selectedMeassureOuput)="selectMeassurement($event)"
+                ></app-test-input-type>
+              </div>
+            </div>
+          </div>
+
+          <div class="test_field mb-3">
+            <label for="names">{{ "test.staff" | translate }}</label>
+            <p-dropdown
+              [options]="staff"
+              [styleClass]="'w-100 form-control'"
+              [(ngModel)]="selectedStaff"
+              [optionLabel]="'full_name'"
+              [optionValue]="'id'"
+              [ngModelOptions]="{ standalone: true }"
+              placeholder="{{ 'LBL_SELECCIONE' | translate }}"
+            ></p-dropdown>
+          </div>
+
+          <div class="text-center nav_btns mt-5">
+            <button class="btn back_btn" (click)="step = 2">
+              {{ "LBL_ATRAS" | translate }}
+            </button>
+
+            <button
+              type="button"
+              class="btn next_btn"
+              [ngClass]="{ shrink_btn: step == 3 }"
+              *ngIf="!loadingStartTest && step === 3"
+              (click)="step <= 3 ? (step = step + 1) : ''"
+              [disabled]="
+                validateRequiredFields(previousQuestions) || !selectedStaff
+              "
+            >
+              {{ "LBL_SIGUIENTE" | translate }}
+            </button>
+            <button
+              *ngIf="loadingStartTest && step === 3"
+              class="btn next_btn"
+              type="button"
+              disabled
+            >
+              <span
+                class="spinner-grow spinner-grow-sm"
+                role="status"
+                aria-hidden="true"
+              ></span>
+              {{ "LBL_LOADING" | translate }}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="step === 4">
+        <h4 class="title text-center mb-5 bold">
+          {{ selectedTest?.name }}
+        </h4>
+      </div>
+      <div class="step_content split_content" *ngIf="step === 4">
+        <div class="test_image text-center p-4">
+          <img
+            loading="lazy"
+            src="{{ selectedTest?.image?.full_url }}"
+            alt="test-image"
+          />
+        </div>
+        <div class="selected_test_fields">
+          <div class="row mb-5">
+            <div class="col-12 mb-4">
+              <div class="current_player">
+                <button
+                  class="btn"
+                  (click)="
+                    currentPlayerNumber > 0 &&
+                      (currentPlayerNumber = currentPlayerNumber - 1)
+                  "
+                >
+                  <i class="pi pi-angle-left"></i>
+                </button>
+                <div
+                  class="player d-flex justify-content-center align-items-center"
+                  *ngIf="role === 'sport'"
+                >
+                  <p-avatar
+                    [image]="
+                      selectedPlayerList[currentPlayerNumber]?.image
+                        ? selectedPlayerList[currentPlayerNumber]?.image
+                            .full_url
+                        : '../../../../../assets/img/chico.png'
+                    "
+                    class="player_image mr-3"
+                    shape="circle"
+                  ></p-avatar>
+                  <span class="player_name"
+                    >{{ selectedPlayerList[currentPlayerNumber].full_name }} (
+                    {{ selectedPlayerList[currentPlayerNumber].shirt_number }}
+                    )</span
+                  >
+                </div>
+
+                <div
+                  class="player d-flex justify-content-center align-items-center"
+                  *ngIf="role === 'teacher'"
+                >
+                  <p-avatar
+                    image="{{
+                      selectedPlayerList[currentPlayerNumber] | alumnAvatarPipe
+                    }}"
+                    class="player_image mr-3"
+                    shape="circle"
+                  ></p-avatar>
+                  <span class="player_name"
+                    >{{ selectedPlayerList[currentPlayerNumber].full_name }}
+                    <span
+                      *ngIf="
+                        selectedPlayerList[currentPlayerNumber].shirt_number
+                      "
+                    >
+                      (
+                      {{ selectedPlayerList[currentPlayerNumber].shirt_number }}
+                      )
+                    </span>
+                  </span>
+                </div>
+                <button
+                  class="btn"
+                  (click)="
+                    currentPlayerNumber < selectedPlayerList.length - 1
+                      ? (currentPlayerNumber = currentPlayerNumber + 1)
+                      : null
+                  "
+                >
+                  <i class="pi pi-angle-right"></i>
+                </button>
+              </div>
+            </div>
+
+            <div
+              *ngFor="let test of questionTest; index as i"
+              class="{{
+                selectedTest?.code === 'valoration_psychological' ||
+                test.question.field_type === 'textarea'
+                  ? 'col-12  test_field '
+                  : 'col-lg-9 mb-2'
+              }}"
+              [ngClass]="{
+                textAreaInput: test.question.field_type === 'textarea'
+              }"
+            >
+              <h5
+                class="title mt-3"
+                *ngIf="!!checkCategoryPosition(questionCategories, i).name"
+              >
+                <ul class="category-title">
+                  <li>
+                    {{ checkCategoryPosition(questionCategories, i).name }}
+                  </li>
+                </ul>
+              </h5>
+              <div
+                class="test_field"
+                [ngClass]="{
+                  textAreaInput: test.question.field_type === 'textarea',
+                  'justify-content-between':
+                    selectedTest?.code === 'valoration_psychological',
+                  'w-100': selectedTest?.code === 'valoration_psychological'
+                }"
+              >
+                <label
+                  for="names"
+                  [ngClass]="{
+                    'large-text': isLargeQuestion,
+                    'extra-large-text': isExtraLargeQuestion
+                  }"
+                  >{{ test.question.name }}
+                </label>
+
+                <app-test-input-type
+                  class="border-bottom-input"
+                  [id]="test.question.name"
+                  [type]="
+                    selectedTest?.code === 'valoration_psychological'
+                      ? 'checkbox'
+                      : test.question.field_type
+                  "
+                  [required]="test.question.required"
+                  [responseList]="test.responses"
+                  (model)="handleQuestions($event, 'player')"
+                  [question]="questions[test.id]"
+                  [ngClass]="{
+                    textAreaInputWidth: test.question.field_type === 'textarea'
+                  }"
+                ></app-test-input-type>
+                <span
+                  *ngIf="
+                    selectedMeassure &&
+                    !test.question.unit?.code &&
+                    (test.question.field_type === 'number' ||
+                      test.question.field_type === 'numeric')
+                  "
+                  >{{ selectedMeassure }}</span
+                >
+
+                <span *ngIf="test.question.unit?.code">{{
+                  test.question.unit?.abbreviation
+                }}</span>
+              </div>
+            </div>
+          </div>
+          <div class="text-center nav_btns">
+            <button class="btn back_btn" (click)="step = 3">
+              {{ "LBL_ATRAS" | translate }}
+            </button>
+
+            <button
+              class="btn next_btn"
+              *ngIf="loadingTestApplication"
+              [disabled]="loadingTestApplication"
+            >
+              <span
+                class="spinner-grow spinner-grow-sm"
+                role="status"
+                aria-hidden="true"
+              ></span>
+              {{ "LBL_LOADING" | translate }}
+            </button>
+            <button
+              class="btn next_btn"
+              (click)="addTest()"
+              *ngIf="!loadingTestApplication"
+              [disabled]="validateRequiredFields(questions)"
+            >
+              {{ "test.register" | translate }}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="step_content split_content" *ngIf="step === 5">
+        <div class="test_image text-center p-4">
+          <img
+            loading="lazy"
+            src="{{ selectedTest?.image?.full_url }}"
+            alt="test-image"
+          />
+        </div>
+        <div class="selected_test_fields">
+          <div
+            class="player d-flex justify-content-center align-items-center mb-3"
+          >
+            <p-avatar
+              [image]="
+                selectedPlayerList[currentPlayerNumber].image
+                  ? selectedPlayerList[currentPlayerNumber].image.full_url
+                  : '../../../../../assets/img/chico.png'
+              "
+              class="player_image mr-3"
+              shape="circle"
+            ></p-avatar>
+            <span class="player_name"
+              >{{ selectedPlayerList[currentPlayerNumber].full_name }} (
+              {{ selectedPlayerList[currentPlayerNumber].shirt_number }}
+              )</span
+            >
+          </div>
+
+          <h5 class="title mb-3">
+            {{ "test.results" | translate }}
+          </h5>
+
+          <h4 class="title mb-4 text-dark-blue">{{ selectedTest?.name }}</h4>
+
+          <app-test-player-results
+            [results]="resultList"
+            [selectedMeassure]="unitResult || selectedMeassure"
+            [questions]="questions"
+          ></app-test-player-results>
+        </div>
+      </div>
+
+      <div
+        class="text-center"
+        [ngClass]="{ shrink_btn: step == 2 }"
+        *ngIf="[1, 2, 3].includes(step)"
+      >
+        <button
+          class="btn back_btn"
+          (click)="step > 1 ? (step = step - 1) : ''"
+          *ngIf="step === 2"
+        >
+          {{ "LBL_ATRAS" | translate }}
+        </button>
+        <button
+          class="btn next_btn"
+          (click)="step < 2 ? (step = step + 1) : ''"
+          [disabled]="
+            !selectedTestType ||
+            (step === 2 && !selectedTest) ||
+            (subtypeList.includes(selectedTestType?.code || '') &&
+              !selectedSubTypeText?.code)
+          "
+          *ngIf="step < 2"
+          (click)="startTest()"
+        >
+          {{ "LBL_SIGUIENTE" | translate }}
+        </button>
+
+        <button
+          class="btn next_btn"
+          (click)="step === 2 ? startTest() : ''"
+          [disabled]="!selectedTestType || (step === 2 && !selectedTest)"
+          *ngIf="step === 2 && selectedTest && !loadingStartTest"
+        >
+          {{ "LBL_SIGUIENTE" | translate }}
+        </button>
+
+        <button
+          *ngIf="loadingStartTest && step === 2"
+          class="btn next_btn"
+          type="button"
+          disabled
+        >
+          <span
+            class="spinner-grow spinner-grow-sm"
+            role="status"
+            aria-hidden="true"
+          ></span>
+          {{ "LBL_LOADING" | translate }}
+        </button>
+
+        <!-- <button
+          class="btn next_btn"
+          (click)="step < 3 ? (step = step + 1) : ''"
+          *ngIf="step === 3"
+        >
+          Finalizar programa preventivo
+        </button> -->
+      </div>
+
+      <div
+        class="text-center"
+        [ngClass]="{ shrink_btn: step == 5 }"
+        *ngIf="[5].includes(step)"
+      >
+        <button
+          class="btn next_btn"
+          (click)="refreshList()"
+          *ngIf="
+            step === 5 &&
+            (selectedPlayerList.length === 0 || selectedPlayerList.length === 1)
+          "
+        >
+          {{ "LBL_ACCEPT" | translate }}
+        </button>
+
+        <button
+          class="btn next_btn"
+          (click)="step > 4 ? handleNextPlayer() : ''"
+          *ngIf="step === 5 && selectedPlayerList.length > 1"
+        >
+          {{ "test.next_player" | translate }}
+        </button>
+      </div>
+    </form>
+  </div>
+</p-dialog>
+<app-test-player-list
+  [visible]="players"
+  [players]="playersList"
+  [selectedPlayers]="selectedPlayerList"
+  (close)="players = false"
+  (sendSelectedPlayers)="getPlayersFromModal($event)"
+  *ngIf="players"
+></app-test-player-list>
+
+<app-test-sub-type-dialog
+  [visible]="showTestSubTypeDialog"
+  [test]="selectedTestType"
+  [subTypeList]="selectedSubTypeList"
+  (close)="showTestSubTypeDialog = false"
+  (selectedSubTypeList)="selectedSubType = $event"
+  (selectedSubType)="selectedSubTypeText = $event"
+  (nextStep)="selectSubTpe()"
+  *ngIf="showTestSubTypeDialog"
+></app-test-sub-type-dialog>

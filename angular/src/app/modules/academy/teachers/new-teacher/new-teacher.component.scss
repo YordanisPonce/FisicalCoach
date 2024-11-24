@@ -1,0 +1,44 @@
+@media (min-width: 1200px) {
+  :host ::ng-deep {
+    #dialog_config_member {
+      .p-dialog {
+        width: 500px;
+        .p-dialog-header {
+          padding: 2.5rem 3.5rem;
+        }
+        .p-dialog-content {
+          #dialog_config_member_container {
+            padding: 0 2rem;
+          }
+        }
+        .p-dialog-footer {
+          padding: 1.5rem 3.5rem;
+        }
+      }
+    }
+
+    //   #new_advanced_member_dialog{
+    //     .p-dialog{
+    //       .p-dialog-header{
+    //         padding-left: 3rem;
+    //         padding-right: 3rem;
+    //         padding-top: 3rem;
+    //         .header_content{
+    //           .title{
+    //             font-size: 2rem;
+    //           }
+    //         }
+    //       }
+    //       .p-dialog-content{
+    //         .back_btn{
+    //           height: 55px;
+    //         }
+    //         .next_btn{
+    //           height: 55px;
+    //         }
+    //       }
+    //     }
+
+    //   }
+  }
+}

@@ -1,0 +1,167 @@
+<div class="alumn_academic_data_form_container">
+  <form
+    id="player_personal_data_form"
+    (ngSubmit)="onSubmit()"
+    [formGroup]="formAcademicData"
+    name="nomFormDataPersonal"
+  >
+    <div class="row pb-2">
+      <!-- numero de lista -->
+      <div class="my-3 col-12 col-md-6">
+        <label>
+          {{ "new_alumn.list_number" | translate }} *</label
+        >
+        <input
+          type="text"
+          class="form-control"
+          inputId="withoutgrouping"
+          [min]="0"
+          id="list_number"
+          placeholder="{{ 'LBL_ESCRIBEAQI' | translate }}"
+          formControlName="list_number"
+          type="number"
+          [ngClass]="{'ng-invalid ng-dirty is-invalid':((f.list_number.invalid && (f.list_number.dirty || f.list_number.touched)) || (f.list_number.invalid && submitted))}" 
+        />
+        <div *ngIf="f.list_number?.errors" class="invalid-feedback">
+          {{ "new_alumn.list_number" | translate }} {{ "LBL_REQUERIDO" | translate }}
+        </div>
+      </div>
+      <!-- situacion del alumno -->
+      <div class="mb-3 my-lg-3 col-12 col-md-6">
+        <label>
+          {{ "new_alumn.alumn_situation" | translate }}</label
+        >
+        <div class="d-flex flex-wrap justify-content-between mt-3">
+          <p-checkbox formControlName="is_new_entry" label="Nuevo ingreso" [binary]="true"></p-checkbox>
+          <p-checkbox formControlName="is_advanced_course" label="Curso adelantado" [binary]="true"></p-checkbox>
+          <p-checkbox formControlName="is_repeater" label="Repetidor/a" [binary]="true" (onChange)="clearPendingSubjects($event.checked)"></p-checkbox>
+        </div>
+      </div>
+      <!-- materias pendientes -->
+      <div class="mb-3 col-12" *ngIf="f.is_repeater.value === true">
+        <label>
+          {{ "new_alumn.pending_courses" | translate }}</label
+        >
+        <p-multiSelect
+        [filter]="true"
+        [options]="listCourses"
+        optionLabel="name"
+        optionValue="id"
+        formControlName="pending_subjects"
+        [maxSelectedLabels]="1"
+        [selectedItemsLabel]="'{0} items '+('LBL_SELECTED'|translate)"
+        [styleClass]="'w-100 form-control'"
+        placeholder="{{ 'LBL_SELECCIONE' | translate }}"
+        ></p-multiSelect>
+      </div>
+      <!-- delegado -->
+      <div class="mb-3 col-md-6">
+        <label class="mb-0 mr-3">
+          {{ "new_alumn.delegate" | translate }}</label
+        >
+        <!-- <div> -->
+          <p-checkbox formControlName="is_delegate" [binary]="true"></p-checkbox>
+        <!-- </div> -->
+      </div>
+      <!-- subdelegado -->
+      <div class="mb-3 col-md-6">
+        <label class="mb-0 mr-3">
+          {{ "new_alumn.subdelegate" | translate }}</label
+        >
+        <!-- <div> -->
+          <p-checkbox formControlName="is_sub_delegate" [binary]="true"></p-checkbox>
+        <!-- </div> -->
+      </div>
+      <!-- brecha digital -->
+      <div class="mb-3 col-md-6">
+        <label class="mb-0 mr-3">
+          {{ "new_alumn.digital_divide" | translate }}</label
+        >
+        <!-- <div> -->
+          <p-checkbox formControlName="has_digital_difficulty" [binary]="true"></p-checkbox>
+        <!-- </div> -->
+      </div>
+      <!-- acneae -->
+      <div class="mb-3 col-md-6">
+        <label class="mb-0 mr-3">
+          ACNEAE</label
+        >
+        <!-- <div> -->
+          <p-checkbox formControlName="acneae" [binary]="true" (onChange)="clearAcneaeData($event.checked)"></p-checkbox>
+        <!-- </div> -->
+      </div>
+      <!-- tipos de acneae -->
+      <div class="mb-3 col-md-6" *ngIf="f.acneae.value === true">
+        <label class=""
+          >{{ "new_alumn.acneae_type" | translate }}</label
+        >
+        <p-dropdown
+          [filter]="true"
+          [options]="acneaeTypes"
+          aria-describedby="inputGroup-sizing-default"
+          [styleClass]="'w-100 form-control'"
+
+          optionLabel="name"
+          [(ngModel)]="selectedAcneae"
+          [ngModelOptions]="{ standalone: true }"
+          id="acneae_type_id"
+          placeholder="{{ 'LBL_SELECCIONE' | translate }}"
+          (onChange)="setAcneaeSubtypes($event.value)"
+        ></p-dropdown>
+      </div>
+      <!-- subtipo de acneae -->
+      <div class="mb-3 col-md-6" *ngIf="selectedAcneae && ['acnee','attention_or_learning_disorder'].includes(selectedAcneae.code)">
+        <label class=""
+          >{{ "new_alumn.acneae_subtype" | translate }}</label
+        >
+        <p-dropdown
+          [filter]="true"
+          [options]="acneaeSubtypes"
+          aria-describedby="inputGroup-sizing-default"
+          [styleClass]="'w-100 form-control'"
+          formControlName="acneae_subtype_id"
+          id="acneae_subtype_id"
+          optionLabel="name"
+          optionValue="id"
+          [ngClass]="{'ng-invalid ng-dirty is-invalid':((f.acneae_type_id.invalid && (f.acneae_type_id.dirty || f.acneae_type_id.touched)) || (f.acneae_type_id.invalid && submitted))}" 
+          placeholder="{{ 'LBL_SELECCIONE' | translate }}"
+        ></p-dropdown>
+        <div *ngIf="f.acneae_type_id?.errors" class="invalid-feedback">
+          {{ "PLAYERS.LBL_NACIONALIDAD" | translate }}
+          {{ "LBL_REQUERIDO" | translate }}
+        </div>
+      </div>
+      <!-- especificar acneae -->
+      <div class="mb-3 col-md-6" *ngIf="f.acneae.value === true">
+        <label for="names" class=""
+          >{{ "new_alumn.acneae_description" | translate }} </label
+        >
+        <input
+          formControlName="acneae_description"
+          type="text"
+          class="form-control"
+          placeholder="{{ 'LBL_ESCRIBEAQI' | translate }}"
+          aria-label="Default"
+          aria-describedby="inputGroup-sizing-default"
+          id="names"
+          [ngClass]="{'ng-invalid ng-dirty is-invalid':((f.acneae_description.invalid && (f.acneae_description.dirty || f.acneae_description.touched)) || (f.acneae_description.invalid && submitted))}" 
+        />
+        <div *ngIf="f.acneae_description?.errors" class="invalid-feedback">
+          {{ "PLAYERS.LBL_NOMBRECOMPLETO" | translate }}
+          {{ "LBL_REQUERIDO" | translate }}
+        </div>
+      </div>
+    </div>
+    <div class="row my-5" *ngIf="alumn.id">
+      <div class="col-12">
+        <button
+          [disabled]="saving"
+          class="btn btn-primary btn-block py-2 save_btn"
+          type="submit"
+        >
+          {{ "PLAYERS.BTN_GUARDAR" | translate }}
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

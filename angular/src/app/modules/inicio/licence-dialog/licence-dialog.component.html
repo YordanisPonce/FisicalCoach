@@ -1,0 +1,140 @@
+<p-dialog
+  id="licence_dialog"
+  class="custom_dialog"
+  [modal]="true"
+  [header]="''"
+  [(visible)]="visible"
+  styleClass=""
+  maskStyleClass="purple_mask"
+  (onHide)="closeDialog()"
+>
+  <ng-template pTemplate="header">
+    <div class="d-flex header_content p-dialog-title">
+      <span class="ml-2"></span>
+    </div>
+  </ng-template>
+
+  <p
+    class="mb-2"
+    innerHTML=" {{
+      'welcome_to_fisical'
+        | translate
+          : {
+              package_name:
+                activesubscription?.package_price?.subpackage?.code
+                | packageNamePipe
+            }
+    }}"
+  ></p>
+
+  <div class="mt-4">
+    <strong>{{ "home.available_licences" | translate }}</strong>
+  </div>
+
+  <div class="row justify-content-center align-items-center mt-2">
+    <p-table
+      [value]="licences"
+      *ngIf="!loading"
+      [scrollable]="true"
+      scrollHeight="400px"
+    >
+      <ng-template pTemplate="header">
+        <tr class="text-center">
+          <th class="text-center" [width]="'15%'"></th>
+          <th class="text-center" [width]="'50%'">
+            {{ "profile.invitado" | translate }}
+          </th>
+
+          <th class="text-center" [width]="'35%'">
+            {{ "LBL_ACTIONS" | translate }}
+          </th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-licence let-i="rowIndex">
+        <tr>
+          <td [width]="'15%'">
+            <strong>
+              {{ i + 1 }}
+            </strong>
+          </td>
+          <td [width]="'50%'">
+            <input
+              type="email"
+              pInputText
+              class="form-control"
+              placeholder="{{ 'invite_members.email' | translate }}"
+              (change)="inputChange(i)"
+              [(ngModel)]="licenceList[i].value"
+              (ngModelChange)="inputChange(i)"
+              autocomplete="none"
+            />
+          </td>
+          <td [width]="'35%'">
+            <button
+              class="btn btn-primary submit-button"
+              [disabled]="!licenceList[i].isValid"
+              (click)="submit(i)"
+              *ngIf="!loadingInvitation"
+            >
+              {{ "invite_members.invite" | translate }}
+            </button>
+
+            <button
+              class="btn btn-primary submit-button"
+              [disabled]="loadingInvitation"
+              *ngIf="loadingInvitation"
+            >
+              {{ "LBL_SENDING" | translate }}
+            </button>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+
+    <p-table [value]="[2]" *ngIf="loading" selectionMode="single">
+      <ng-template pTemplate="header">
+        <tr class="text-center">
+          <th class="text-center" [width]="'15%'"></th>
+          <th class="text-center" [width]="'50%'">Invitado</th>
+
+          <th class="text-center" [width]="'35%'">
+            {{ "LBL_ACTIONS" | translate }}
+          </th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-licence let-i="rowIndex">
+        <tr>
+          <td [width]="'15%'">
+            <p-skeleton width="4rem"></p-skeleton>
+          </td>
+          <td [width]="'50%'">
+            <p-skeleton width="18rem"></p-skeleton>
+          </td>
+          <td [width]="'35%'" class="text-center">
+            <p-skeleton width="12rem"></p-skeleton>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+
+  <div class="row mt-2">
+    <div class="col-12 mb-2 mt-1 d-flex align-items-center">
+      <p-checkbox
+        name="showDialogAgain"
+        [(ngModel)]="showAgain"
+        [binary]="true"
+        inputId="sf"
+      ></p-checkbox>
+      <label for="sf" class="mb-0 ml-2"
+        ><strong>{{ "LBL_DONT_SHOW_AGAIN" | translate }}</strong></label
+      >
+    </div>
+
+    <div class="text-center my-3 mt-3 col-12">
+      <button class="btn btn-primary close-btn" (click)="close()">
+        {{ "LBL_CERRAR" | translate }}
+      </button>
+    </div>
+  </div>
+</p-dialog>

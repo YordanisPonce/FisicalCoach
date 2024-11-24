@@ -1,0 +1,164 @@
+<p-dialog
+[(visible)]="visible"
+[modal]="true"
+header="{{ 'teachers.new_teacher' | translate }}"
+id="dialog_config_member"
+class="custom_dialog"
+maskStyleClass="purple_mask"
+(onHide)="closeDialog()"
+>
+<div id="dialog_config_member_container" class="dialog_container">
+    <form [formGroup]="newMemberForm" id="idFormMember" name="nomForm" >
+        <div class="step_content" *ngIf="step==1">
+            <div class="row">
+              <!-- name -->
+              <div class="mb-3 col-12">
+                <label for="name">{{'MEMBERS.LBL_NOMBRE'| translate}}</label>
+                <input 
+                class="form-control" 
+                id="name" 
+                [placeholder]="('LBL_ESCRIBEAQI'| translate)"
+                formControlName="name"
+                sin-numeros-reactive
+                aria-label="Default" 
+                aria-describedby="inputGroup-sizing-default"
+                [ngClass]="{'ng-invalid ng-dirty is-invalid':((f.name.invalid && (f.name.dirty || f.name.touched)) || (f.name.invalid && submitted))}"
+                >
+                <div *ngIf="f.name?.errors" class="invalid-feedback">
+                  {{ 'MEMBERS.LBL_NOMBRE' | translate}} {{ 'LBL_REQUERIDO' | translate}}
+                </div>
+              </div>
+              <!-- email -->
+              <div class="mb-3 col-12">
+                <label for="name">{{'MEMBERS.LBL_EMAIL'| translate}}</label>
+                <input 
+                class="form-control" 
+                id="name"
+                type="email" 
+                [placeholder]="('LBL_ESCRIBEAQI'| translate)"
+                formControlName="email"
+                aria-label="Default" 
+                aria-describedby="inputGroup-sizing-default"
+                [ngClass]="{'ng-invalid ng-dirty is-invalid':((f.email.invalid && (f.email.dirty || f.email.touched)) || (f.email.invalid && submitted))}"
+                >
+                <div *ngIf="f.email?.errors" class="invalid-feedback">
+                  {{ 'MEMBERS.LBL_EMAIL' | translate}} {{ 'LBL_REQUERIDO' | translate}}
+                </div>
+              </div>
+              <!-- area -->
+              <div class="mb-3 col-12">
+                <label for="job_area">{{'MEMBERS.LBL_AREA'| translate}}</label>
+                <p-dropdown 
+                [filter]="true" 
+                [options]="listJobArea" 
+                aria-describedby="inputGroup-sizing-default" 
+                [styleClass]="'w-100 form-control'"
+                [ngClass]="{'ng-invalid ng-dirty is-invalid':((f.teacher_area_id.invalid && (f.teacher_area_id.dirty || f.teacher_area_id.touched)) || (f.teacher_area_id.invalid && submitted))}" 
+                formControlName="teacher_area_id" 
+                id="job_area" 
+                placeholder="{{'LBL_SELECCIONE'| translate}}"
+                optionValue="id"
+                optionLabel="name"
+                (onChange)="setResponsabilityItems()"
+                ></p-dropdown>
+                <div *ngIf="f.teacher_area_id?.errors" class="invalid-feedback">
+                  {{ 'MEMBERS.LBL_AREA' | translate}} {{ 'LBL_REQUERIDO' | translate}}
+                </div>
+              </div>
+              
+              <!-- cargo/responsabilidad -->
+              <div class="mb-3 col-12">
+                <label for="job">{{'MEMBERS.LBL_CARGORESPOSABILIDAD'| translate}}</label>
+                <!-- <p-dropdown 
+                [filter]="true" 
+                [options]="responsabilityItems" 
+                aria-describedby="inputGroup-sizing-default" 
+                [styleClass]="'w-100 form-control'"
+                placeholder="{{'LBL_SELECCIONE'| translate}}"
+                optionLabel="name"
+                *ngIf="responsabilityItems!=null"
+                [ngModelOptions]="{ standalone: true }"
+                [(ngModel)]="selectedResponsability" 
+                (onChange)="setResponsabilityValue()"
+                ></p-dropdown> -->
+          
+                <input class="form-control mt-3" id="job"
+                [placeholder]="('LBL_ESCRIBIR' | translate)+' '+('MEMBERS.LBL_CARGORESPOSABILIDAD'| translate).toLowerCase()+'...'"
+                formControlName="responsibility"
+                sin-numeros-reactive
+                aria-label="Default" aria-describedby="inputGroup-sizing-default"
+                >
+                <div *ngIf="f.responsibility?.errors" class="invalid-feedback">
+                  {{ 'MEMBERS.LBL_CARGORESPOSABILIDAD' | translate}} {{ 'LBL_REQUERIDO' | translate}}
+                </div>
+              </div>
+          
+              <!-- sexo -->
+              <div class="mb-3 col-12">
+                <label for="gender">{{'MEMBERS.LBL_SEXO'| translate}}</label>
+                <p-dropdown 
+                [filter]="false" 
+                [options]="listGender" 
+                aria-describedby="inputGroup-sizing-default" 
+                [styleClass]="'w-100 form-control'"
+                [ngClass]="{'ng-invalid ng-dirty is-invalid':((f.gender_id.invalid && (f.gender_id.dirty || f.gender_id.touched)) || (f.gender_id.invalid && submitted))}" 
+                formControlName="gender_id" 
+                id="gender" 
+                placeholder="{{'LBL_SELECCIONE'| translate}}"
+                ></p-dropdown>
+                <div *ngIf="f.gender_id?.errors" class="invalid-feedback">
+                  {{ 'MEMBERS.LBL_SEXO' | translate}} {{ 'LBL_REQUERIDO' | translate}}
+                </div>
+              </div>
+            </div>
+        </div>
+        <div class="step_content" *ngIf="step==2">
+            <div class="row">
+                <div class="col-12">
+                <div class="text-center step_content">
+                    <input #file (change)="fileUpload($event, 'image_1')" accept="image/*"
+                            hidden id="filedatag1" type="file">
+                    <img (click)="file.click()" *ngIf="imagenPreview&&imagenPreview.url"
+                        [src]="imagenPreview.url" style="cursor: pointer;" width="200px"  class="mb-5"><br>
+                    <img alt="" (click)="file.click()" style="cursor: pointer" class="mb-5" src="{{imageUrl+'images/teachers/teachers.svg'}}"
+                        width="150px" *ngIf="!imagenPreview && !imagen">
+                    <button (click)="file.click()" class="btn btn-block btn-primary rounded-pill w-75 m-auto">{{'CLUB.BTN_UPLOADIMAGE' | translate}}</button>
+                </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div >
+        <ul class="step_markers">
+          <li>
+            <span class="step_marker" (click)="step= 1" [ngClass]="{'active' : step==1}"></span>
+          </li>
+          <li>
+            <span class="step_marker" [ngClass]="{'active' : step==2}"></span>
+          </li>
+        </ul>
+    </div>
+</div>
+  <ng-template pTemplate="footer">
+    <div class="footer_btns">
+      <button 
+      class="btn back_btn" 
+      type="button"
+      (click)="(step>1) ? step=step-1 : closeDialog()"
+      [disabled]="loading==true"
+      >{{'LBL_ATRAS'| translate}}</button>
+      <button 
+      class="btn next_btn" 
+      type="submit"
+      (click)="(step<2) ? validateStep() : onSubmit()"
+      [disabled]="loading==true"
+      >{{'LBL_SIGUIENTE'|translate}}</button>
+      <button 
+      class="btn btn-block advance_btn mt-3" 
+      type="button"
+      [disabled]="loading==true"
+      (click)="advancedMember.emit(true);closeDialog()"
+      >{{'LBL_DATOSAVANZADOS'| translate}}</button>
+    </div>
+  </ng-template>
+</p-dialog>

@@ -1,0 +1,77 @@
+<div class="row">
+  <div class="col-12 col-xl-8">
+    <div id="slider_packages" class="card mb-4">
+      <div class="p-4 p-md-5">
+        <p-carousel [value]="packages">
+          <ng-template let-package pTemplate="item">
+            <div class="title font-weight-600 mb-3">{{package.title}}</div>
+            <p class="text mb-0">{{package.text}}</p>
+          </ng-template>
+        </p-carousel>            
+        <button pButton type="button" label="Ver paquetes" class="p-button-outlined p-button-rounded" style="color: white"></button>
+      </div>
+    </div>
+    <!-- <div class="card box-shadow mb-3">
+      <div class="card-body p-4 p-md-5">
+        <div class="font-weight-600 mb-4">Últimos hilos - Comunidad</div>
+        <p-scrollPanel [style]="{width: '100%', height: '400px'}">
+          <div class="d-flex mb-5" *ngFor="let number of [0,1]">
+            
+            <span>
+              <img width="140px" src="https://cdn.vuetifyjs.com/images/john.jpg" class="rounded-circle img-fluid principalImg" />
+            </span>
+            
+            <div class="ml-3">
+              <div class="d-flex mb-1">
+                <span>Juan Boyle</span>
+                <span class="mx-2 text-secondary">@Juanchope</span>
+                <span class="text-secondary">4 Horas</span>
+              </div>
+              <p>Lorem ipum dlor sic amen insectus how the Works hookers the land lorem psumd lodr sercn merdor for mordor sadicus colocticus módicos jodermodeckers, mamarocs concordia la coricti penumbriado</p>
+              <div class="row">
+                <div class="col-md-6">
+                  <img src="https://cdn.vuetifyjs.com/images/cards/server-room.jpg" alt="" class="img-fluid">
+                </div>
+                <div class="col-md-6">
+                  <img src="https://cdn.vuetifyjs.com/images/cards/server-room.jpg" alt="" class="img-fluid">
+                </div>
+              </div>
+            </div>
+          </div>
+        </p-scrollPanel>
+      </div>
+    </div> -->
+    <div class="card box-shadow">
+      <div class="card-body p-5">
+        <div class="font-weight-600 mb-4 d-flex">
+          <span>Partidos recientes - General</span>
+          <span class="ml-auto">Ver todas</span>
+        </div>
+        <div class="border">
+          <p-tabView>
+            <p-tabPanel *ngFor="let item of games; let i = index" [selected]="i == 0">
+              <ng-template pTemplate="header">
+                <!-- <img width="15px" src="assets/img/icons/house.svg" class="img-fluid principalImg mr-2" /> -->
+                <span class="border p-2 rounded-circle sidebar-item-img">
+                  <img  src="assets/img/icons/dumbbell.svg" class="img-fluid principalImg" />
+                  <!-- <p-avatar image="assets/img/icons/dumbbell.svg"></p-avatar> -->
+                </span>
+                <span class="ml-3">
+                  {{item.club}}
+                </span>
+              </ng-template>
+              <games-component></games-component>
+              <!-- {{item.club}} -->
+            </p-tabPanel>
+          </p-tabView>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 col-xl-4">
+    <activity-component></activity-component>
+  </div>
+  
+</div>
+

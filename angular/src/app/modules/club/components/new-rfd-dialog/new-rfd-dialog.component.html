@@ -1,0 +1,139 @@
+<p-dialog
+  id="new_rfd_dialog"
+  class="custom_dialog"
+  [modal]="true"
+  [header]="''"
+  [(visible)]="showModal"
+  styleClass=""
+  maskStyleClass="purple_mask"
+  (onHide)="closeDialog()"
+>
+  <ng-template pTemplate="header">
+    <div class="d-flex header_content p-dialog-title">
+      <span *ngIf="step == 1" class="ml-2">{{
+        "RFD.LBL_PROFILE_INJURY" | translate
+      }}</span>
+      <span *ngIf="step == 2" class="ml-2">{{
+        "RFD.LBL_MOMENT_AND_CAUSE" | translate
+      }}</span>
+      <span *ngIf="step == 3" class="ml-2">{{
+        "RFD.LBL_SURGERY" | translate
+      }}</span>
+      <span *ngIf="step == 4" class="ml-2">{{
+        "RFD.LBL_COMPLEMENTARY_TEST" | translate
+      }}</span>
+    </div>
+  </ng-template>
+  <div class="row justify-content-md-center">
+    <div class="col-md-12 col-sm-12 col-lg-12">
+      <app-injury-profile
+        *ngIf="step === 1"
+        #componenteInjuryProfile
+        id="componenteInjuryProfile"
+        [formData]="formDataProfile"
+        (next)="formDataProfile = $event"
+        [detalle]="detalle"
+        [prognosis]="prognosis"
+        [resetForm]="resetForm"
+        [rfdData]="rfdData"
+      ></app-injury-profile>
+
+      <app-moment-and-cause
+        *ngIf="step === 2"
+        #componenteInjuryCause
+        id="componenteInjuryCause"
+        (next)="setDataSetp($event, 1)"
+        [formData]="formDataCause"
+        [detalle]="detalle"
+        [resetForm]="resetForm"
+        [listInjuryExtrinsicFactors]="listInjuryExtrinsicFactors"
+        [listInjuryIntrinsicFactors]="listInjuryIntrinsicFactors"
+        [listInjurySituationTypes]="listInjurySituationTypes"
+        [listMechanismsInjury]="listMechanismsInjury"
+      ></app-moment-and-cause>
+
+      <app-surgery
+        *ngIf="step === 3"
+        #componenteInjurySurgery
+        id="componenteInjurySurgery"
+        (next)="formDataSurgery = $event"
+        [formData]="formDataSurgery"
+        [detalle]="detalle"
+        [resetForm]="resetForm"
+      ></app-surgery>
+      <app-addional-info
+        *ngIf="step === 4"
+        #componenteAddionalInfo
+        id="componentAddionalInfo"
+        [formData]="formDataClinical"
+        (next)="formDataClinical = $event"
+        [detalle]="detalle"
+        [resetForm]="resetForm"
+      ></app-addional-info>
+    </div>
+  </div>
+  <div id="new_rfd_dialog_container" class="dialog_container">
+    <div>
+      <ul class="step_markers full_markers">
+        <li>
+          <span class="step_marker" [ngClass]="{ active: step == 1 }"></span>
+        </li>
+        <li>
+          <span class="step_marker" [ngClass]="{ active: step == 2 }"></span>
+        </li>
+        <li>
+          <span class="step_marker" [ngClass]="{ active: step == 3 }"></span>
+        </li>
+        <li>
+          <span class="step_marker" [ngClass]="{ active: step == 4 }"></span>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <p-footer>
+    <div class="footer_btns">
+      <button class="btn back_btn" (click)="getBack()">
+        {{ "LBL_ATRAS" | translate }}
+      </button>
+      <button
+        class="btn next_btn ml-2"
+        *ngIf="!detalle && !loading && !rfdData"
+        (click)="handleNext()"
+      >
+        {{
+          step === 4
+            ? ("LBL_GUARDAR" | translate)
+            : ("LBL_SIGUIENTE" | translate)
+        }}
+      </button>
+      <button
+        class="btn next_btn ml-2"
+        *ngIf="detalle && !loading && !rfdData"
+        (click)="handleNext()"
+      >
+        {{
+          step === 4
+            ? ("LBL_GUARDAR" | translate)
+            : ("LBL_SIGUIENTE" | translate)
+        }}
+      </button>
+
+      <button
+        class="btn next_btn ml-2"
+        *ngIf="rfdData && step < 4"
+        (click)="handleNext()"
+      >
+        {{ "LBL_SIGUIENTE" | translate }}
+      </button>
+
+      <button
+        class="btn next_btn ml-2"
+        *ngIf="loading"
+        disabled
+        (click)="handleNext()"
+      >
+        {{ "LBL_LOADING" | translate }}
+      </button>
+    </div>
+  </p-footer>
+</p-dialog>

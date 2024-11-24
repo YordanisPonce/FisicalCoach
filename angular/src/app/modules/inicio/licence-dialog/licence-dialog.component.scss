@@ -1,0 +1,66 @@
+:host ::ng-deep #licence_dialog {
+  .p-dialog {
+    width: 700px;
+
+    .p-dialog-content {
+      border-bottom-left-radius: 11px;
+      border-bottom-right-radius: 11px; 
+    }
+  }
+  label {
+    font-size: 0.9rem;
+  }
+
+  input {
+    height: 45px;
+  }
+  .tooltip_info {
+    padding: 0.1rem 0.55rem;
+    background: black;
+    border-radius: 50%;
+    color: white;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-left: 0.5rem;
+  }
+
+  .p-datatable .p-datatable-tbody > tr > td {
+    border: unset !important;
+  }
+}
+
+.submit-button {
+  width: 170px;
+  height: 45px;
+}
+
+.close-btn {
+  width: 140px;
+  height: 45px;
+}
+
+@media (min-width: 1200px) {
+  :host ::ng-deep {
+    #licence_dialog {
+      .p-dialog {
+        .p-dialog-header {
+          padding: 1.3rem 3.5rem;
+        }
+        .p-dialog-content {
+          padding: 0 4.5rem 2rem 4.5rem;
+        }
+        .p-dialog-footer {
+          padding: 1.5rem 4.5rem;
+        }
+      }
+    }
+  }
+}
+@media (min-width: 1200px) {
+  :host ::ng-deep {
+    #licence_dialog {
+      .p-dialog {
+      }
+    }
+  }
+}

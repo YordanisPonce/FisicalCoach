@@ -1,0 +1,346 @@
+.separator {
+  display: flex;
+  align-items: center;
+
+  * {
+    flex: 1;
+  }
+
+  .line {
+    border-bottom: 1px solid #050c44;
+    opacity: 0.13;
+  }
+
+  .title {
+    text-align: center;
+    font-weight: 600;
+    color: #050c44;
+  }
+}
+
+.suscription_level {
+  display: flex;
+  flex-direction: column;
+  border-radius: 16px;
+  cursor: pointer;
+  width: 350px;
+  box-shadow: 0 3px 28px #0000001c;
+
+  .suscription_level_content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 16px 16px 0 0;
+    padding: 40px 30px;
+    border-bottom: 1px solid lightgray;
+    width: 100%;
+    height: 178px;
+  }
+
+  .suscription {
+    color: rgba($color: #050c44, $alpha: 0.79);
+    font-weight: 600;
+    margin: 0.25rem 0;
+  }
+
+  .renewal {
+    color: rgba($color: #050c44, $alpha: 0.43);
+    font-weight: 500;
+  }
+}
+.sport_plan_2 {
+  width: 100%;
+  padding: 1.5rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.sport_plan {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding: 1.5rem;
+
+  .icon {
+    width: 125px;
+    height: 125px;
+    border-radius: 50%;
+    border: 1px solid #050c44;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    img {
+      width: 60px;
+    }
+  }
+
+  .title {
+    color: #000000;
+    font-weight: 700;
+    text-align: center;
+  }
+
+  .description {
+    color: rgba($color: #050717, $alpha: 0.61);
+    font-weight: 600;
+    text-align: center;
+    line-height: 2;
+  }
+
+  .actualizar_pack_btn {
+    height: 55px;
+    border-radius: 13px;
+    background-color: #024cac;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: white;
+    width: 100%;
+  }
+}
+
+.logo {
+  width: 112px;
+  height: 112px;
+  align-items: center;
+  text-align: center;
+  line-height: 8.5em;
+  color: #0065e9;
+}
+
+.suscription_selector {
+  background-color: white;
+  border-radius: 29px;
+  padding: 0;
+  display: flex;
+  text-align: center;
+  max-width: 300px;
+  margin: 2rem auto;
+  border: 1px solid #70707033;
+
+  .select {
+    height: 55px;
+    color: #050c44;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border-radius: 29px;
+    flex: 1;
+    line-height: 55px;
+    cursor: pointer;
+
+    &.selectTwo {
+      background-color: #050c44;
+      color: white;
+    }
+  }
+}
+
+.pack {
+  box-shadow: 0px 3px 28px #0000001c;
+  border-radius: 16px;
+  background: white;
+  height: 100% !important;
+  width: 100%;
+  max-width: 350px;
+  margin: 0 auto;
+
+  .pack_caption {
+    font-size: 0.85rem;
+    color: rgba($color: #050c44, $alpha: 0.37);
+    font-weight: 600;
+  }
+
+  .pack_header {
+    padding: 3rem;
+    border-bottom: 1px solid rgba($color: #050c44, $alpha: 0.11);
+
+    .pack_title {
+      font-weight: 600;
+      text-transform: uppercase;
+      margin-bottom: 0;
+      text-align: center;
+      font-size: 1.5rem;
+    }
+
+    .pack_price {
+      text-align: center;
+      font-size: 1.3rem;
+      font-weight: 700;
+    }
+
+    .pack_icon {
+      margin: 1.5rem auto 1rem auto;
+      text-align: center;
+    }
+  }
+
+  .pack_action {
+    padding: 1.5rem;
+
+    button {
+      border-radius: 13px;
+      color: #024cac;
+      font-size: 0.9rem;
+      font-weight: 600;
+      border: 1px solid #024cac;
+      height: 55px;
+    }
+  }
+}
+
+.table_labels {
+  padding-right: 8px;
+  margin-top: 81px;
+}
+
+.labels {
+  width: 100%;
+  background-color: lightgray;
+  padding: 5px;
+  border: 1px solid #cccaca;
+  height: 31px;
+  text-transform: uppercase;
+  font-weight: bold;
+  color: #050c44;
+  font-size: 13px;
+}
+
+:host ::ng-deep {
+  .specs {
+    padding-top: 130px;
+
+    table {
+      background-color: rgba($color: #050c44, $alpha: 0.02);
+
+      tr {
+        td {
+          font-size: 0.83rem;
+          font-weight: 600;
+          color: #050c44;
+          height: 20px;
+          text-transform: uppercase;
+          line-height: 20px;
+          padding: 15px;
+          border-top: 0;
+          border-bottom: 1px solid rgba($color: #050c44, $alpha: 0.12);
+        }
+      }
+    }
+  }
+
+  .suscription_pack {
+    box-shadow: 0px 0px 6px #00000017;
+    border: 1px solid #050c441f;
+    border-radius: 13px;
+
+    table {
+      margin-bottom: 0;
+      border-bottom: 1px solid rgba($color: #050c44, $alpha: 0.12);
+    }
+
+    th {
+      border-top: 0;
+      // background-color: salmon;
+      border-top-left-radius: 13px;
+      border-top-right-radius: 13px;
+      padding: 0px 20px;
+      border-bottom: 1px solid rgba($color: #050c44, $alpha: 0.12);
+
+      .suscription_pack_header {
+        height: 80px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+
+        .suscription_pack_caption {
+          font-size: 0.9rem;
+          color: rgba($color: #050c44, $alpha: 0.71);
+          margin-bottom: 10px;
+          font-weight: 600;
+        }
+
+        .suscription_pack_name {
+          text-transform: uppercase;
+          font-weight: bold;
+          font-size: 0.9rem;
+          color: #050c44;
+        }
+      }
+    }
+
+    tr {
+      td {
+        text-align: center;
+        color: #024cac;
+        font-weight: 600;
+        font-size: 0.9rem;
+        height: 20px;
+        line-height: 20px;
+        padding: 5px;
+        border-top: 0;
+        border-bottom: 1px solid rgba($color: #050c44, $alpha: 0.12);
+      }
+    }
+
+    .suscription_pack_footer {
+      padding: 1.5rem;
+
+      h6 {
+        margin-bottom: 1.5rem;
+        font-weight: 600;
+        color: #050c44;
+      }
+
+      button {
+        border: 1px solid #024cac;
+        border-radius: 5px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: #024cac;
+        height: 50px;
+      }
+    }
+  }
+}
+
+.p-button {
+  color: #ffffff;
+  background: #014cac;
+  border: 1px solid #014cac;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s,
+    box-shadow 0.2s;
+  border-radius: 3px;
+}
+
+.p-button:enabled:hover {
+  background: #014cac;
+  color: #ffffff;
+  border-color: #014cac;
+}
+
+.p-button:enabled:active {
+  background: #014cac;
+  color: #ffffff;
+  border-color: #014cac;
+}
+
+.not_content {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 500px;
+}
+.p-button {
+  height: 55px;
+  border-radius: 13px;
+}
+.icon_info {
+  display: flex;
+  justify-content: end;
+  margin-right: 5px;
+  margin-top: 5px;
+}

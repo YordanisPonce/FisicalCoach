@@ -1,0 +1,109 @@
+<form
+  (ngSubmit)="onSubmit()"
+  *ngIf="formulario"
+  [formGroup]="formulario"
+  id="idFormMember"
+  name="nomForm"
+>
+  <div class="row">
+    <!-- pronostico de lesion -->
+    <div class="mb-3 col-6">
+      <label>{{ "INJURY.LBL_FORECAST" | translate }}</label>
+      <input
+        aria-describedby="inputGroup-sizing-default"
+        aria-label="Default"
+        class="form-control"
+        formControlName="injury_forecast"
+        placeholder="{{ 'LBL_ESCRIBEAQI' | translate }}"
+      />
+    </div>
+
+    <!-- alta medica -->
+    <div class="mb-3 col-6">
+      <label>{{ "INJURY.LBL_HIGH_MEDICAL" | translate }}</label>
+      <p-calendar
+        [firstDayOfWeek]="1"
+        [minDate]="minDate"
+        [monthNavigator]="true"
+        [readonlyInput]="true"
+        [style]="{ overflow: 'visible' }"
+        [yearNavigator]="true"
+        [yearRange]="yearRange"
+        class="p-calendar form-control"
+        dateFormat="dd/mm/yy"
+        formControlName="medically_discharged_at"
+        inputId="range"
+        placeholder="{{ 'INJURY.ALTAMEDICA' | translate }}"
+      ></p-calendar>
+    </div>
+
+      <!-- dias de baja -->
+      <div class="mb-3 col-6">
+        <label>{{ "INJURY.LBL_LEAVING_DAYS" | translate }}</label>
+        <input
+          aria-describedby="inputGroup-sizing-default"
+          aria-label="Default"
+          class="form-control"
+          formControlName="days_off"
+          min="0"
+          placeholder="{{ 'INJURY.DIASBAJA' | translate }}"
+          type="number"
+        />
+      </div>
+
+    <!-- alta deportiva -->
+    <div class="mb-3 col-6">
+      <label>{{ "INJURY.LBL_HIGH_SPORTS" | translate }}</label>
+      <p-calendar
+        [firstDayOfWeek]="1"
+        [minDate]="minDate"
+        [monthNavigator]="true"
+        [readonlyInput]="true"
+        [style]="{ overflow: 'visible' }"
+        [yearNavigator]="true"
+        [yearRange]="yearRange"
+        class="p-calendar form-control"
+        dateFormat="dd/mm/yy"
+        formControlName="sportly_discharged_at"
+        inputId="range"
+        placeholder=" {{ 'INJURY.ALTADEPORTIVA' | translate }}"
+      ></p-calendar>
+    </div>
+   
+
+    <!-- partidos no jugados -->
+    <div class="mb-3 col-6">
+      <label>{{ "INJURY.LBL_MATCH_NOT_PLAYED" | translate }}</label>
+      <input
+        aria-describedby="inputGroup-sizing-default"
+        aria-label="Default"
+        class="form-control"
+        formControlName="matches_off"
+        min="0"
+        placeholder="{{ 'INJURY.PARTIDOSNOJUGADOS' | translate }}"
+        type="number"
+      />
+    </div>
+
+  
+
+     <!-- alta competitiva -->
+     <div class="mb-3 col-6">
+      <label>{{ "INJURY.LBL_HIGH_COMPETITIVE" | translate }}</label>
+      <p-calendar
+        [firstDayOfWeek]="1"
+        [minDate]="minDate"
+        [monthNavigator]="true"
+        [readonlyInput]="true"
+        [style]="{ overflow: 'visible' }"
+        [yearNavigator]="true"
+        [yearRange]="yearRange"
+        class="p-calendar form-control"
+        dateFormat="dd/mm/yy"
+        formControlName="competitively_discharged_at"
+        inputId="range"
+        placeholder="{{ 'INJURY.ALTACOMPETITIVA' | translate }}"
+      ></p-calendar>
+    </div>
+  </div>
+</form>

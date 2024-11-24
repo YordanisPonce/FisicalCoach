@@ -1,0 +1,287 @@
+.btn-custom {
+    font-size: 15px;
+    padding: 13px 80px;
+    width: 100%;
+    min-width: 200px;
+    margin: 0 2%;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .footer_btns {
+    margin: 0 2%;
+    border-top: 1px solid lightgray;
+    padding-top: 25px;
+  }
+  
+  label {
+    font-size: 1.0rem;
+    color: #050c44;
+    font-weight: 600;
+    margin-top: 20px;
+  }
+  
+  .form-control {
+    padding: 1.7rem .75rem;
+  }
+  
+  .image {
+    border: 3px solid #050c4463;
+    width: 110px;
+    border-radius: 50%;
+    height: 110px;
+    margin: 2rem auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+  
+  .image i {
+    color: #050c4463;
+    font-size: 3rem;
+    margin-left: 3px; 
+  }
+  
+  .image img:not([src=""]) {
+    width: 115px;
+    height: 115px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  
+  .fototypes {
+    font-size: 15px;
+    color: #05e9c6;
+    font-weight: 500;
+    text-align: center;
+  }
+  
+  .centrar-contenido {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+  
+  .form-group {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid lightgray;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    position: relative;
+  }
+  
+  .form-group::after {
+    content: "";
+    position: absolute;
+    left: 55%;
+    top: -0.625em;
+    bottom: 0;
+    width: 0.0625em;
+    background-color: lightgray;
+  }
+  
+  .form-group label {
+    flex: 1;
+    order: 1;
+  }
+  
+  .form-group input[type="checkbox"] {
+    flex: 1;
+    order: 2;
+  }
+  
+  .form-group input[type="number"] {
+    flex: 2;
+    order: 3;
+    max-width: 3.125em;
+    border: 0.0625em solid lightgray;
+    border-radius: 0.3125em;
+  }
+  
+  .form-group input[type="number"]:focus {
+    border-color: gray;
+  }
+  
+  .p-dialog .p-dialog-footer {
+    border-radius: 0 0 15px 15px !important;
+  }
+  
+  .image-icon {
+    position: relative;
+    left: 20%;
+    transform: translateX(-50%);
+  }
+  
+  .error-message {
+    color: #F44336;
+  }
+  
+  .table_labels {
+    padding-right: 8px;
+    margin-top: 81px;
+  }
+  
+  .labels {
+    width: 100%;
+    background-color: #d3d3d30a;
+    padding: 5px;
+    border: 1px solid #e6e4e4c2;
+    height: 31px;
+    text-transform: uppercase;
+    font-weight: bold;
+    color: #050c44;
+    font-size: 13px;
+  }
+  
+  :host ::ng-deep .specs {
+    padding-top: 130px;
+  }
+  
+  :host ::ng-deep .p-dialog .row:last-child {
+    margin-bottom: 13px;
+  }
+  
+  :host ::ng-deep .suscription_pack {
+    box-shadow: 0px 0px 6px #00000017;
+    border: 1px solid #050c441f;
+    border-radius: 13px;
+  }
+  
+  :host ::ng-deep .suscription_pack table {
+    margin-bottom: 0;
+    border-bottom: 1px solid rgba($color: #050c44, $alpha: 0.12);
+  }
+  
+  :host ::ng-deep .suscription_pack th {
+    border-top: 0;
+    border-top-left-radius: 13px;
+    border-top-right-radius: 13px;
+    padding: 0px 20px;
+    border-bottom: 1px solid rgba($color: #050c44, $alpha: 0.12);
+  }
+  
+  :host ::ng-deep .suscription_pack .suscription_pack_header {
+    height: 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  :host ::ng-deep .suscription_pack .suscription_pack_caption {
+    font-size: 0.9rem;
+    color: rgba($color: #050c44, $alpha: 0.71);
+    margin-bottom: 10px;
+    font-weight: 600;
+  }
+  
+  :host ::ng-deep .suscription_pack .suscription_pack_name {
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 0.9rem;
+    color: #050c44;
+  }
+  
+  :host ::ng-deep .suscription_pack tr td {
+    text-align: center;
+    color: #024cac;
+    font-weight: 600;
+    font-size: 0.9rem;
+    height: 10px;
+    line-height: 20px;
+    padding: 5px;
+    border-top: 0;
+    border-bottom: 1px solid rgba($color: #050c44, $alpha: 0.12);
+  }
+  
+  :host ::ng-deep .suscription_pack tr td input,
+  :host ::ng-deep .suscription_pack tr td select {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #024cac;
+    text-transform: uppercase;
+  }
+  
+  :host ::ng-deep .suscription_pack .suscription_pack_footer {
+    padding: 1.5rem;
+  }
+  
+  :host ::ng-deep .suscription_pack .suscription_pack_footer h6 {
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+    color: #050c44;
+  }
+  
+  :host ::ng-deep .suscription_pack .suscription_pack_footer button {
+    border: 1px solid #024cac;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #024cac;
+    height: 50px;
+  }
+  
+  :host ::ng-deep .p-dialog .p-dialog-footer button {
+    margin: 0 0.5rem 0 0;
+    width: 200px;
+    border-radius: 13px;
+    height: 55px;
+  }
+  
+  .p-button {
+    color: #ffffff;
+    background: #014cac;
+    border: 1px solid #014cac;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
+  }
+  
+  :host ::ng-deep .p-button.p-button-outlined {
+    color: #014cac;
+    background: #ffffff;
+    border: 1px solid #014cac;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
+  }
+  .mobile-table {
+    display: none;
+  }
+  
+  @media (max-width: 600px) {
+    .footer_btns .btn-custom {
+      padding: 10px 20px; /* Ajusta estos valores a lo que necesites */
+      font-size: 14px; /* Ajusta este valor a lo que necesites */
+    }
+    .desktop-table {
+      display: none;
+    }
+  
+    .mobile-table {
+      display: block;
+    }
+    .flex-container {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+    }
+  
+    .flex-item {
+      margin: 3px;
+    }
+  
+    .flex-item:last-child {
+      margin-left: 5px;
+    }
+
+    
+  }
+  

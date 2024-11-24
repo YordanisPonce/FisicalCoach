@@ -1,0 +1,31 @@
+<div
+  class="d-none d-md-flex align-items-center px-3 px-sm-5 my-3"
+  style="height: 80px; margin-top: -20px"
+>
+  <img width="160px" class="mr-3" src="assets/img/icons/logoblack.svg" />
+  <!-- <div class="ml-auto">
+    <select
+      (change)="cambiar($event)"
+      [(ngModel)]="idioma"
+      name="idioma"
+      id="idiomaselect"
+      class="botone custom-select text-center header_btn"
+    >
+      <option value="es" selected>{{ "LBL_SPANISH" | translate }}</option>
+      <option value="en">{{ "LBL_ENGLISH" | translate }}</option>
+    </select>
+  </div> -->
+</div>
+
+<div
+  class="row justify-content-center pb-4 d-none d-xl-flex mt-5"
+  *ngIf="!verifyAccount"
+>
+  <div class="col-12 p-3 text-center mt-5">
+    <i class="fa fa-spin fa-spinner fa-4x"></i>
+  </div>
+  <div class="col-12 text-center">
+    <h5>{{ "registerPlank.verifyInvitation" | translate }}</h5>
+  </div>
+</div>
+ 

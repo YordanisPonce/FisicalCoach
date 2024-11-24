@@ -1,0 +1,79 @@
+<form
+  (ngSubmit)="onSubmit()"
+  id="idFormMember"
+  name="nomForm"
+  [formGroup]="formulario"
+  *ngIf="formulario"
+>
+  <div class="row">
+    <!-- situacion de lesion -->
+    <div class="mb-3 col-md-6">
+      <label>{{ "INJURY.LBL_SITUATION" | translate }}</label>
+      <p-dropdown
+        [filter]="true"
+        [options]="listInjurySituationTypes"
+        aria-describedby="inputGroup-sizing-default"
+        formControlName="injury_situation_id"
+        [styleClass]="'w-100 form-control'"
+        id="situation"
+        placeholder="{{ 'LBL_SELECCIONE' | translate }}"
+      ></p-dropdown>
+    </div>
+
+    <!-- desencadenante -->
+    <div class="mb-3 col-md-6">
+      <label>{{
+        "INJURY.LBL_ACONTECIMIENTO_DESENCADENANTE" | translate
+      }}</label>
+      <p-dropdown
+        [filter]="true"
+        [options]="listJobArea"
+        aria-describedby="inputGroup-sizing-default"
+        [styleClass]="'w-100 form-control'"
+        formControlName="is_triggered_by_contact"
+        id="triggering_event"
+        placeholder="{{ 'LBL_SELECCIONE' | translate }}"
+      ></p-dropdown>
+    </div>
+
+    <!-- mecanismo de lesion -->
+    <div class="mb-3 col-md-6">
+      <label for="job_area">{{ "INJURY.LBL_MECHANISM" | translate }}</label>
+      <p-dropdown
+        [filter]="true"
+        [options]="listMechanismsInjury"
+        aria-describedby="inputGroup-sizing-default"
+        formControlName="mechanism_injury_id"
+        [styleClass]="'w-100 form-control'"
+        id="job_area"
+        placeholder="{{ 'LBL_SELECCIONE' | translate }}"
+      ></p-dropdown>
+    </div>
+
+    <!-- factores intrinsecos -->
+    <div class="mb-3 col-md-6">
+      <label>{{ "INJURY.LBL_INTRINSIC_FACTORS" | translate }}</label>
+      <p-multiSelect
+        [filter]="true"
+        [options]="listInjuryIntrinsicFactors"
+        formControlName="injury_intrinsic_factor"
+        [styleClass]="'w-100 form-control'"
+        placeholder="{{ 'LBL_SELECCIONE' | translate }}"
+      ></p-multiSelect>
+    </div>
+
+    <!-- factores extrinsicos -->
+    <div class="mb-4 col-md-6 offset-6">
+      <label for="gender">{{
+        "INJURY.LBL_EXTRINCAL_FACTORS" | translate
+      }}</label>
+      <p-multiSelect
+        [filter]="true"
+        [options]="listInjuryExtrinsicFactors"
+        formControlName="injury_extrinsic_factor"
+        [styleClass]="'w-100 form-control'"
+        placeholder="{{ 'LBL_SELECCIONE' | translate }}"
+      ></p-multiSelect>
+    </div>
+  </div>
+</form>

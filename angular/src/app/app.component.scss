@@ -1,0 +1,35 @@
+:host ::ng-deep #add_space_dialog {
+  .p-dialog{
+    max-width: 600px;
+  }
+  .p-dialog-content {
+    border-bottom-left-radius: 11px;
+    border-bottom-right-radius: 11px;
+    overflow: unset !important;
+  }
+  .p-dialog-footer {
+    .footer_btns {
+      .shrink_btn {
+        flex: 0 0 200px !important;
+      }
+    }
+  }
+}
+
+@media (min-width: 576px) {
+  :host ::ng-deep .notifications_sidebar.p-sidebar {
+    width: 420px !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  :host ::ng-deep #add_space_dialog {
+    .p-dialog-footer {
+      .footer_btns {
+        .shrink_btn {
+          flex: 0 0 200px !important;
+        }
+      }
+    }
+  }
+}

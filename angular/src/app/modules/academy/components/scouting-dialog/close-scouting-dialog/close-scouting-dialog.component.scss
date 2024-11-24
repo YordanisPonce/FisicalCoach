@@ -1,0 +1,40 @@
+:host ::ng-deep #scouting-confirm-dialog {
+  .p-dialog-header {
+    justify-content: flex-end !important;
+  }
+
+  .p-inputtext {
+    padding: unset !important;
+    border: unset !important;
+  }
+}
+
+.scouting {
+  text-align: center;
+  padding: 0 30px 20px 30px;
+
+  .main-image {
+    img {
+      width: 194px;
+      height: 254px;
+    }
+
+    margin-bottom: 20px;
+  }
+  .title {
+    letter-spacing: 0px;
+    color: #050c44;
+    opacity: 1;
+    margin-bottom: 30px;
+  }
+  .sub-title {
+    letter-spacing: 0px;
+    color: #000000;
+    opacity: 0.74;
+  }
+
+  .input-label {
+    color: #050c44;
+    opacity: 0.74;
+  }
+}

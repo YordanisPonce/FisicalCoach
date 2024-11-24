@@ -1,0 +1,233 @@
+<p-dialog
+  id="new_tab_dialog"
+  class="custom_dialog"
+  [(visible)]="visible"
+  styleClass="fullscreenDialog"
+  maskStyleClass=""
+  (onHide)="closeDialog()"
+>
+  <ng-template pTemplate="header">
+    <div class="d-flex flex-column header_content">
+      <img src="/assets/img/logo_panel.svg" alt="" />
+      <!-- <div class="title">{{'PLAYERS.LBL_DATOSJUGADOR'| translate}}</div> -->
+      <!-- <div class="subtitle">{{'PLAYERS.LBL_INFOJUGADOR'| translate}}</div> -->
+    </div>
+  </ng-template>
+  <div id="new_tab_dialog_container" class="dialog_container">
+    <div class="d-flex">
+      <i
+        class="pi pi-angle-left text-primary back_btn"
+        (click)="step > 1 ? (step = step - 1) : ''"
+      ></i>
+      <h6 class="font-weight-bold mb-5">
+        {{ "physiotherapy.new_tab" | translate }}
+      </h6>
+    </div>
+    <form action="" [formGroup]="newFileForm" (ngSubmit)="onSubmit()">
+      <div class="step_content" *ngIf="step == 1">
+        <!-- <form action=""> -->
+        <div class="row">
+          <div class="col-12 mb-4">
+            <!-- titulo de la ficha -->
+            <label for="names">{{ "physiotherapy.title" | translate }} *</label>
+            <input
+              class="form-control"
+              id="names"
+              placeholder="{{ 'LBL_ESCRIBEAQI' | translate }}"
+              aria-label="Default"
+              aria-describedby="inputGroup-sizing-default"
+              formControlName="title"
+              [ngClass]="{
+                'ng-invalid ng-dirty is-invalid':
+                  f.title.invalid && (f.title.dirty || f.title.touched)
+              }"
+            />
+            <div class="invalid-feedback" *ngIf="f.title?.errors">
+              {{ "physiotherapy.title" | translate }}
+              {{ "LBL_REQUERIDO" | translate }}
+            </div>
+          </div>
+
+          <!-- nombre del especialista -->
+          <div class="col-12 mb-4">
+            <label for="names"
+              >{{ "physiotherapy.specialist_name" | translate }} *</label
+            >
+            <div>
+              <p-dropdown
+                [options]="staffList"
+                optionLabel="full_name"
+                [styleClass]="'w-100 form-control'"
+                formControlName="team_staff_id"
+                [filter]="true"
+                [ngClass]="{
+                  'ng-invalid ng-dirty is-invalid':
+                    f.team_staff_id.invalid &&
+                    (f.team_staff_id.dirty || f.team_staff_id.touched)
+                }"
+                placeholder="{{ 'LBL_SELECCIONE' | translate }}"
+              ></p-dropdown>
+              <div class="invalid-feedback" *ngIf="f.title?.errors">
+                {{ "physiotherapy.specialist_name" | translate }}
+                {{ "LBL_REQUERIDO" | translate }}
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- </form> -->
+      </div>
+      <div class="step_content" *ngIf="step == 2">
+        <div class="row">
+          <div class="mb-4 col-12">
+            <label for="">{{ "physiotherapy.anammesis" | translate }}</label>
+            <textarea
+              class="form-control"
+              name="anamnesis"
+              id="anamnesis"
+              cols="30"
+              rows="5"
+              placeholder="{{ 'LBL_ESCRIBEAQI' | translate }}"
+              formControlName="anamnesis"
+            ></textarea>
+          </div>
+          <div class="mb-4 col-12">
+            <label for=""
+              >{{ "physiotherapy.goal_of_treatment" | translate }} *</label
+            >
+            <textarea
+              class="form-control"
+              name="medication_objective"
+              id="medication_objective"
+              cols="30"
+              rows="5"
+              placeholder="{{ 'LBL_ESCRIBEAQI' | translate }}"
+              [ngClass]="{
+                'ng-invalid ng-dirty is-invalid':
+                  f.medication_objective.invalid &&
+                  (f.medication_objective.dirty ||
+                    f.medication_objective.touched)
+              }"
+              formControlName="medication_objective"
+            ></textarea>
+            <div
+              class="invalid-feedback"
+              *ngIf="f.medication_objective?.errors"
+            >
+              {{ "physiotherapy.goal_of_treatment" | translate }}
+              {{ "LBL_REQUERIDO" | translate }}
+            </div>
+          </div>
+          <div class="mb-4 col-12">
+            <label for="">{{
+              "physiotherapy.taking_medication" | translate
+            }}</label>
+            <div class="d-flex align-items-center">
+              <p-radioButton
+                name="has_medication"
+                formControlName="has_medication"
+                [value]="true"
+                label="{{ 'LBL_YES' | translate }}"
+                class="mr-3"
+              ></p-radioButton>
+              <p-radioButton
+                name="has_medication"
+                formControlName="has_medication"
+                [value]="false"
+                label="{{ 'LBL_NO' | translate }}"
+              ></p-radioButton>
+            </div>
+          </div>
+          <div
+            class="col-12 mb-4"
+            *ngIf="newFileForm.get('has_medication')?.value"
+          >
+            <label for="names">{{
+              "nutrition.specify_medication" | translate
+            }}</label>
+            <input
+              class="form-control"
+              id="names"
+              placeholder="{{ 'LBL_ESCRIBEAQI' | translate }}"
+              aria-label="Default"
+              aria-describedby="inputGroup-sizing-default"
+              formControlName="medication"
+              [required]="newFileForm.get('has_medication')?.value"
+            />
+          </div>
+        </div>
+      </div>
+      <div class="step_content" *ngIf="step == 3">
+        <div class="row">
+          <div class="col-12 mb-4">
+            <label for="names"
+              >{{ "physiotherapy.injuries" | translate }}
+            </label>
+            <div>
+              <p-dropdown
+                [options]="playerInjuries"
+                optionLabel="name"
+                [styleClass]="'w-100 form-control'"
+                formControlName="player_injury_id"
+                placeholder="{{
+                  'physiotherapy.noInjuryAssociated' | translate
+                }}"
+              ></p-dropdown>
+              <div class="text-right">
+                <button
+                  class="btn btn-link"
+                  (click)="ShowInjuryModal = true"
+                  type="button"
+                >
+                  {{ "physiotherapy.add_injury" | translate }}
+                </button>
+              </div>
+            </div>
+          </div>
+          <!-- <div class="mb-4 col-12">
+          </div> -->
+          <div class="mb-4 col-12">
+            <label for="">{{ "physiotherapy.observations" | translate }}</label>
+            <textarea
+              name=""
+              id=""
+              cols="30"
+              rows="10"
+              class="form-control"
+              placeholder="{{ 'LBL_ESCRIBEAQI' | translate }}"
+              formControlName="observation"
+            ></textarea>
+          </div>
+        </div>
+      </div>
+      <div>
+        <button
+          type="button"
+          class="btn back_btn btn-block"
+          [ngClass]="{ shrink_btn: step == 2 }"
+          (click)="step > 1 ? (step = step - 1) : closeDialog()"
+        >
+          {{ "competition.competition_dialog.back_button" | translate }}
+        </button>
+
+        <button
+          type="button"
+          class="btn next_btn btn-block"
+          (click)="step === 3 ? onSubmit() : validateStep()"
+          [disabled]="loading"
+        >
+          {{
+            step === 3
+              ? ("BTN_FINALIZAR" | translate)
+              : ("LBL_SIGUIENTE" | translate)
+          }}
+        </button>
+      </div>
+    </form>
+  </div>
+</p-dialog>
+<app-new-injuries
+  [showModal]="ShowInjuryModal"
+  *ngIf="ShowInjuryModal"
+  (dismiss)="closeInjuryModal($event)"
+  [physiotherapyPlayer]="player_id[0]"
+></app-new-injuries>

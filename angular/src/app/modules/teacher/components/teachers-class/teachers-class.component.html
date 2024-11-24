@@ -1,0 +1,69 @@
+<p-table
+  #dt
+  [value]="staff"
+  [paginator]="true"
+  [rows]="10"
+  [loading]="loadingStaff"
+  [showLoader]="false"
+  [globalFilterFields]="['full_name']"
+  class="p-datatable-responsive"
+>
+  <ng-template pTemplate="header">
+    <tr>
+      <th style="width: 250px">{{ "MEMBERS.LBL_NOMBRE" | translate }}</th>
+      <th class="text-center">{{ "MEMBERS.LBL_CARGO" | translate }}</th>
+      <th class="text-center">{{ "LBL_ACTIONS" | translate }}</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-person>
+    <tr>
+      <td>
+        <div class="d-flex align-items-center">
+          <img
+            width="25px"
+            height="25px"
+            src="/assets/img/{{
+              person.gender || person.gender === 'female'
+                ? 'chica.png'
+                : 'chico.png'
+            }}"
+            class="rounded-circle principalImg"
+          />
+          <strong class="ml-4">{{ person?.teacher.name }}</strong>
+        </div>
+      </td>
+      <td class="text-center">
+        {{ person?.teacher.position_staff?.name || "N/A" }}
+      </td>
+      <td class="text-center">
+        <button class="btn" (click)="view.emit(person)">
+          <img src="assets/img/icons/ver.svg" class="" />
+        </button>
+        <!-- <button class="btn" (click)="edit.emit(person)">
+          <img src="assets/img/icons/lapiz.svg" class="" />
+        </button> -->
+        <button class="btn" (click)="remove.emit(person)">
+          <img src="assets/img/icons/eliminar.svg" class="" />
+        </button>
+      </td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="emptymessage">
+    <tr>
+      <td colspan="3" style="text-align: center">
+        {{ "LBL_SINREGISTROS" | translate }}
+      </td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="loadingbody" let-columns>
+    <tr *ngFor="let i of [1, 2, 3, 4, 5]">
+      <td><p-skeleton width="100%" height="1rem"></p-skeleton></td>
+      <td><p-skeleton width="100%" height="1rem"></p-skeleton></td>
+      <td class="d-flex justify-content-around">
+        <p-skeleton width="20px" height="1rem"></p-skeleton>
+        <p-skeleton width="20px" height="1rem"></p-skeleton>
+        <p-skeleton width="20px" height="1rem"></p-skeleton>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>

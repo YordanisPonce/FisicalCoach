@@ -1,0 +1,206 @@
+<div class="contenedor overflow-auto">
+  <div class="container p-5">
+    <div class="row">
+      <div class="col text-right">
+        <a
+          (click)="back()"
+          class="btn"
+          pTooltip="{{ 'LBL_CERRAR' | translate }}"
+          routerLink=""
+          >X</a
+        >
+      </div>
+    </div>
+    <div class="row">
+      <div class="card mb-3 mx-auto" style="max-width: 540px">
+        <div class="row no-gutters">
+          <div class="col-sm-4 text-center">
+            <div class="icono border rounded-circle w-75">
+              <img
+                [src]="
+                  role === 'teacher'
+                    ? 'https://testing-cdn.fisicalcoach.com/resources/images/menu/teacher/class.svg'
+                    : 'https://testing-cdn.fisicalcoach.com/resources/images/menu/sports_blue.svg'
+                "
+                alt=""
+                width="105px"
+                height="100px"
+              />
+            </div>
+          </div>
+
+          <div class="col-sm-8">
+            <div class="card-body">
+              <h5 class="card-title mt-2">
+                {{ subscription?.package_price?.subpackage?.name }}
+              </h5>
+              <p class="card-text justi">
+                {{ "profile.subscription_msg_info" | translate }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row my-3">
+      <div class="col-12">
+        <p-divider align="center"
+          ><h5 class="interval">
+            {{ "profile.subscription_your_level" | translate }}
+          </h5></p-divider
+        >
+      </div>
+      <div class="suscription_selector col-12 offset-lg-3">
+        <div
+          (click)="time = false; type = 'year'; check()"
+          [ngClass]="{ selectTwo: !time }"
+          class="select"
+          pTooltip=" {{ 'registerPlank.anual' | translate }}"
+          tooltipPosition="top"
+        >
+          {{ "registerPlank.anual" | translate }}
+        </div>
+        <div
+          (click)="time = true; type = 'month'; check()"
+          [ngClass]="{ selectTwo: time }"
+          class="select"
+          pTooltip="{{ 'registerPlank.mes' | translate }}"
+          tooltipPosition="top"
+        >
+          {{ "registerPlank.mes" | translate }}
+        </div>
+      </div>
+    </div>
+    <div class="row my-3">
+      <div
+        *ngIf="loadingPackages"
+        class="col"
+        style="display: flex; justify-content: center"
+      >
+        <i class="spinner-grow spinner-grow-sm" style="font-size: 2rem"></i>
+      </div>
+      <div *ngFor="let subpackage of subpackages; index as i" class="col">
+        <div
+          [ngClass]="{ pack_selected: defaultSubpackage === subpackage.code }"
+          class="pack"
+        >
+          <div
+            (click)="viewDetail(subpackage)"
+            class="pack_header"
+            pTooltip="{{ 'profile.verdetalle' | translate }}"
+            style="display: flex; flex-direction: column; align-items: center"
+            tooltipPosition="top"
+          >
+            <img
+              [src]="getIcons(subpackage.code)"
+              width="50"
+              style="margin-bottom: 15px"
+            />
+            <h6 class="pack_title">{{ subpackage?.name }}</h6>
+            <div *ngIf="type === 'year'" class="pack_price">
+              {{ yearValue(subpackage) }} €
+            </div>
+            <div *ngIf="type === 'month'" class="pack_price">
+              {{ monthValue(subpackage) }} €
+            </div>
+            <p class="card-text text-center mt-2">
+              <small
+                >{{ "profile.subscription_renovation" | translate }} :
+                {{ subscription.trial_ends_at | date : "dd/MM/YYYY" }}</small
+              >
+            </p>
+          </div>
+          <div class="pack_action">
+            <button
+              *ngIf="
+                defaultSubpackage === subpackage.code &&
+                newSubscription?.id !== subpackage.id
+              "
+              [disabled]="showAlert"
+              class="btn btn-block selectDefault"
+              pTooltip="{{ 'profile.subscription_possession' | translate }}"
+              tooltipPosition="top"
+            >
+              <span>{{ "profile.subscription_possession" | translate }}</span>
+            </button>
+            <button
+              (click)="selectSubpackage(subpackage)"
+              *ngIf="
+                defaultSubpackage !== subpackage.code &&
+                newSubscription?.id !== subpackage.id
+              "
+              [disabled]="showAlert"
+              class="btn btn-block"
+              pTooltip="{{ 'profile.subscription_update_plan' | translate }}"
+              tooltipPosition="top"
+            >
+              <span>{{ "profile.subscription_update_plan" | translate }}</span>
+            </button>
+            <div *ngIf="showAlert && newSubscription?.id === subpackage.id">
+              <p class="text-center mt-3">
+                <span>{{
+                  "profile.subscription_are_you_sure" | translate
+                }}</span>
+              </p>
+              <div
+                class="d-flex justify-content-center align-items-center mt-3"
+              >
+                <button
+                  (click)="updateSubscriptionPackage(subpackage)"
+                  class="btn btn-block mt-0 mx-2"
+                  pTooltip="{{ 'profile.subscription_update' | translate }}"
+                  tooltipPosition="top"
+                >
+                  <span>{{ "profile.subscription_update" | translate }}</span>
+                </button>
+                <button
+                  (click)="cancel()"
+                  class="btn btn-block mt-0 mx-2"
+                  pTooltip="{{ 'profile.subscription_cancel' | translate }}"
+                  tooltipPosition="top"
+                >
+                  <span>{{ "profile.subscription_cancel" | translate }}</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<app-subpackege-detail
+  *ngIf="selectedPackage"
+  [(view)]="viewDetailSubpackage"
+  [selectedPackage]="selectedPackage"
+></app-subpackege-detail>
+<app-confirm-update-subscription
+  *ngIf="displayModalUpdate"
+  [(display)]="displayModalUpdate"
+  [currentSubscription]="subscription"
+  [intervalType]="type"
+  [newSubscription]="newSubscription"
+></app-confirm-update-subscription>
+
+<app-downgrade-plan-dialog
+  *ngIf="showDowngradePlanDialog && role === 'sport'"
+  [visible]="showDowngradePlanDialog"
+  [currentPackage]="currentPackage.subpackage_name"
+  [packageDetails]="currentPackage"
+  [selectedPackage]="newSubscription"
+   [intervalType]="type"
+  [packageAttributes]="selectedAttributes"
+  (close)="showDowngradePlanDialog = false; cancel()"
+>
+</app-downgrade-plan-dialog>
+
+<app-downgrade-plan-teacher-dialog
+  *ngIf="showDowngradePlanDialog && role === 'teacher'"
+  [visible]="showDowngradePlanDialog"
+  [currentPackage]="currentPackage.subpackage_name"
+  [selectedPackage]="newSubscription"
+   [intervalType]="type"
+  [packageAttributes]="selectedAttributes"
+  (close)="showDowngradePlanDialog = false; cancel()"
+>
+</app-downgrade-plan-teacher-dialog>

@@ -1,0 +1,107 @@
+:host ::ng-deep #add_school_dialog {
+  .fototypes{
+    font-size: 15px;
+    color: #05e9c6;
+    font-weight: 500;
+  }
+  .periods_table{
+    border: 1px solid #ced4da;
+    border-radius: 10px;
+  }
+  overflow: unset !important;
+  .p-dialog-content {
+    overflow: unset !important;
+  }
+
+  .p-calendar {
+    border-radius: 5px !important;
+  }
+}
+
+.next_btn {
+  background: #024cac;
+  color: white;
+  flex: 1;
+}
+
+.footer_btns {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+
+  button {
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  .next_btn {
+    background: #024cac;
+    color: white;
+    flex: 1;
+  }
+
+  .back_btn {
+    border: 1px solid #050c4433;
+    flex: 1;
+  }
+
+  .advance_btn {
+    flex: 1 1 100%;
+    background-color: #26262610;
+    color: #050c4455;
+    font-weight: 600;
+  }
+}
+
+.footer_btns {
+  // .shrink_btn {
+  //   flex: 0 0 200px !important;
+  // }
+  button {
+    margin-right: 5px;
+  }
+}
+
+.academic_year_title {
+  color: #050c4455;
+  font-weight: 600;
+}
+
+.added_periods {
+  width: 100%;
+  border: 1px solid #050c4445;
+  border-radius: 9px;
+}
+
+.wrap_periods {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.delete_period {
+  width: 25px;
+  height: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  background: #f0f1f4;
+  margin-left: 12px;
+  cursor: pointer;
+}
+.delete_period_text {
+  color: #e0e2e8;
+}
+
+.period {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  width: max-content;
+  height: 31px;
+  border: 1px solid #050c4426;
+  border-radius: 27px;
+  padding-right: 16px;
+  padding-left: 16px;
+  margin: 0 14px 15px 0;
+}

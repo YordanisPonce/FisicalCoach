@@ -1,0 +1,552 @@
+<div class="row">
+  <router-outlet></router-outlet>
+  <div class="col-12">
+    <div class="card box-shadow">
+      <div class="card-body p-0">
+        <div class="players_header view_header">
+          <h6 class="font-weight-600 mb-0 mr-4 text-main view_header_title">
+            {{ "LBL_STUDENTS_LIST" | translate }}
+          </h6>
+          <div #sorting class="position-relative" id="sorting">
+            <button
+              (click)="sortPanel.toggle($event, sorting)"
+              class="mr-3"
+              id="sorting_btn"
+              label=" "
+              pButton
+              type="text"
+            >
+              <div class="mr-2 filter_label">
+                {{ "PLAYERS.LBL_FILTRAR" | translate }}:
+              </div>
+              <div>
+                {{ "PLAYERS.LBL_ORDENALFABETICO" | translate }}
+              </div>
+            </button>
+            <p-overlayPanel #sortPanel>
+              <ng-template pTemplate>
+                <div class="sorting_content">
+                  <p>{{ "PLAYERS.LBL_FILTROACTIVO" | translate }}</p>
+                  {{ "PLAYERS." | translate }}
+                  <div *ngFor="let i of [1, 2, 3, 4, 5]" class="option">
+                    <span>{{ "PLAYERS.LBL_ORDENALFABETICO" | translate }}</span>
+                    <span></span>
+                  </div>
+                </div>
+              </ng-template>
+            </p-overlayPanel>
+          </div>
+          <div class="p-input-icon-left d-md-inline buscador">
+            <i class="pi pi-search"></i>
+            <input
+              (input)="searchAlumn($event)"
+              pInputText
+              placeholder="{{ 'PLAYERS.LBL_BUSCAR' | translate }}"
+              type="text"
+            />
+          </div>
+          <div class="header_buttons">
+            <button
+              (click)="newAlumn()"
+              [disabled]="loadingList"
+              class="btn add_player_btn action"
+              pButton
+            >
+              <span class="d-sm-inline mr-2">{{
+                "alumns.add_alumn" | translate
+              }}</span>
+              <i class="fa fa-plus text-white"></i>
+            </button>
+          </div>
+        </div>
+        <div class="p-3">
+          <ng-container *ngIf="alumns && alumns.length > 0; else noalumns">
+            <p-carousel
+              [numVisible]="3"
+              [responsiveOptions]="responsiveOptions"
+              [value]="alumns"
+              styleClass="custom_carousel"
+            >
+              <ng-template let-alumn pTemplate="item">
+                <div class="card player">
+                  <div class="card-body p-0 m-1">
+                    <div class="player_content">
+                      <div class="player_info">
+                        <div class="player_info_content">
+                          <h5 class="font-weight-600 mb-3">
+                            {{ alumn.alumn?.full_name }}
+                          </h5>
+                          <div
+                            class="d-flex align-items-center mb-3"
+                            pTooltip="{{ 'new_alumn.list_number' | translate }}"
+                          >
+                            <div class="player_number">
+                              <div>
+                                <img
+                                  alt="alumn"
+                                  src="https://testing-cdn.fisicalcoach.com/resources/images/menu/teacher/alumn.svg"
+                                  width="20px"
+                                />
+                              </div>
+                              <span class="number ml-2 font-weight-600">
+                                {{ alumn.alumn?.list_number }}
+                              </span>
+                            </div>
+                          </div>
+                          <div class="d-flex align-items-center">
+                            <div class="player_number">
+                              <div class="player_shirt_icon">
+                                <img
+                                  alt=""
+                                  src="{{
+                                    imgUrl + 'images/icons/laterality_blue.svg'
+                                  }}"
+                                  width="30px"
+                                />
+                              </div>
+                              <span class="number ml-2 font-weight-600">
+                                {{
+                                  getLateralityName(alumn.alumn?.laterality?.id)
+                                }}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                        <div
+                          *ngIf="alumn.alumn?.image !== null; else elseBlock"
+                          class="player_avatar"
+                          style="background-image: url({{
+                            alumn?.alumn.image.full_url
+                          }});"
+                        ></div>
+                        <ng-template #elseBlock class="player_avatar">
+                          <img
+                            alt=""
+                            src="{{
+                              alumn.alumn.gender.code === 'female'
+                                ? girlAlumnImage
+                                : boyAlumnImage
+                            }}"
+                            width="115px"
+                          />
+                        </ng-template>
+                      </div>
+                      <div class="player_resume">
+                        <div class="stat">
+                          <span class="stat_value">{{ alumn.absences }}</span>
+                          <span class="stat_name">{{
+                            "alumns.assistance" | translate
+                          }}</span>
+                        </div>
+                        <div class="stat">
+                          <span class="stat_value">{{
+                            alumn.total_tutorships
+                          }}</span>
+                          <span class="stat_name">{{
+                            "alumns.tutors" | translate
+                          }}</span>
+                        </div>
+                        <div class="stat">
+                          <span class="stat_value">{{
+                            alumn.total_evaluations
+                          }}</span>
+                          <span class="stat_name">{{
+                            "alumns.evaluations" | translate
+                          }}</span>
+                        </div>
+                        <div class="stat">
+                          <span class="stat_value">{{
+                            alumn.evaluations_average
+                          }}</span>
+                          <span class="stat_name">{{
+                            "alumns.average" | translate
+                          }}</span>
+                        </div>
+                      </div>
+                      <div class="player_actions">
+                        <button class="btn test_btn" routerLink="/club/test">
+                          {{ "PLAYERS.LBL_HACERTEST" | translate }}
+                        </button>
+                        <button
+                          [routerLink]="'profile/' + alumn.alumn.id"
+                          class="btn profile_btn action"
+                          pButton
+                        >
+                          {{ "PLAYERS.LBL_VERPERFIL" | translate }}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
+            </p-carousel>
+            <p-table
+              [alwaysShowPaginator]="false"
+              [loading]="loading"
+              [paginator]="true"
+              [rows]="10"
+              [showLoader]="false"
+              [value]="alumns"
+              class="p-datatable-responsive"
+              selectionMode="single"
+            >
+              <ng-template pTemplate="header">
+                <tr class="text-center">
+                  <th pSortableColumn="alumn.full_name">
+                    {{ "alumns.name" | translate }}
+                    <p-sortIcon field="alumn.full_name"></p-sortIcon>
+                  </th>
+                  <th class="text-center" pSortableColumn="absences">
+                    {{ "alumns.assistance" | translate }}
+                    <p-sortIcon field="absences"></p-sortIcon>
+                  </th>
+                  <th class="text-center" pSortableColumn="total_tutorships">
+                    {{ "alumns.tutors" | translate }}
+                    <p-sortIcon field="total_tutorships"></p-sortIcon>
+                  </th>
+                  <th class="text-center" pSortableColumn="total_evaluations">
+                    {{ "alumns.evaluations" | translate }}
+                    <p-sortIcon field="total_evaluations"></p-sortIcon>
+                  </th>
+                  <th class="text-center" pSortableColumn="evaluations_average">
+                    {{ "alumns.average" | translate }}
+                    <p-sortIcon field="evaluations_average"></p-sortIcon>
+                  </th>
+
+                  <th class="text-center" style="width: 210px">
+                    {{ "alumns.actions" | translate }}
+                  </th>
+                </tr>
+              </ng-template>
+              <ng-template let-alumn pTemplate="body">
+                <tr class="colum-responsive">
+                  <td>
+                    <span class="p-column-title">{{
+                      "alumns.name" | translate
+                    }}</span>
+                    <div class="d-flex align-items-center margint_resp">
+                      <div
+                        [style.backgroundImage]="
+                          'url(' +
+                          (alumn.alumn.image !== null
+                            ? alumn.alumn.image.full_url
+                            : alumn.alumn.gender.code === 'female'
+                            ? girlAlumnImage
+                            : boyAlumnImage) +
+                          ')'
+                        "
+                        class="avatar_image rounded-circle"
+                      ></div>
+                      <strong class="ml-2">{{ alumn.alumn.full_name }}</strong>
+                    </div>
+                  </td>
+                  <td class="text-center">
+                    <span class="p-column-title">{{
+                      "alumns.assistance" | translate
+                    }}</span>
+                    <div>
+                      {{ alumn.absences }}
+                    </div>
+                  </td>
+                  <td class="text-center">
+                    <span class="p-column-title">{{
+                      "alumns.tutors" | translate
+                    }}</span>
+                    <div>
+                      {{ alumn.total_tutorships }}
+                    </div>
+                  </td>
+                  <td class="text-center">
+                    <span class="p-column-title">{{
+                      "alumns.evaluations" | translate
+                    }}</span>
+                    <div>
+                      {{ alumn.total_evaluations }}
+                    </div>
+                  </td>
+                  <td class="text-center">
+                    <span class="p-column-title">{{
+                      "alumns.average" | translate
+                    }}</span>
+                    <div>
+                      {{ alumn.evaluations_average }}
+                    </div>
+                  </td>
+                  <td class="text-center actions center_resp w-column-full">
+                    <button
+                      [routerLink]="'profile/' + alumn.alumn.id"
+                      class="btn"
+                      pTooltip="{{ 'LBL_DETAILS' | translate }}"
+                    >
+                      <img class="" src="assets/img/icons/ver.svg" />
+                    </button>
+                    <button
+                      [routerLink]="
+                        'profile/' + alumn.alumn.id + '/information'
+                      "
+                      class="btn"
+                      pTooltip="{{ 'LBL_EDIT' | translate }}"
+                    >
+                      <img class="" src="assets/img/icons/lapiz.svg" />
+                    </button>
+                    <button
+                      class="btn"
+                      pTooltip="{{ 'PLAYERS.LBL_HACERTEST' | translate }}"
+                      routerLink="/club/test"
+                    >
+                      <img class="" src="assets/img/icons/cronografo.svg" />
+                    </button>
+                    <button
+                      (click)="confirm(alumn.alumn.id)"
+                      class="btn"
+                      pTooltip="{{ 'LBL_DELETE' | translate }}"
+                    >
+                      <img class="" src="assets/img/icons/eliminar.svg" />
+                    </button>
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </ng-container>
+          <ng-container>
+            <ng-template #noalumns>
+              <div style="width: 100%; text-align: center">
+                <p class="nodata">{{ "nodata.sinalumnos" | translate }}</p>
+              </div>
+            </ng-template>
+          </ng-container>
+          <ng-container>
+            <!-- skeletons loaders -->
+            <div *ngIf="!alumns" class="row mx-0">
+              <p-carousel
+                [numVisible]="3"
+                [responsiveOptions]="responsiveOptions"
+                [value]="[1, 2, 3, 4, 5, 6]"
+                class="w-100"
+                styleClass="custom_carousel"
+              >
+                <ng-template let-player pTemplate="item">
+                  <div class="card player">
+                    <div class="card-body p-0 m-1">
+                      <div class="player_content">
+                        <div class="player_info">
+                          <div class="player_info_content d-block flex-grow-1">
+                            <p-skeleton
+                              height="1rem"
+                              styleClass="m-auto"
+                              width="100%"
+                            ></p-skeleton>
+                            <div class="d-flex align-items-center"></div>
+                          </div>
+                          <div class="player_avatar">
+                            <p-skeleton
+                              shape="circle"
+                              size="6rem"
+                              styleClass="mb-2 mr-4"
+                            ></p-skeleton>
+                          </div>
+                        </div>
+                        <div class="player_resume">
+                          <div class="stat">
+                            <p-skeleton
+                              height="1rem"
+                              styleClass="m-auto"
+                              width="100%"
+                            ></p-skeleton>
+                            <span class="stat_name">{{
+                              "alumns.assistance" | translate
+                            }}</span>
+                          </div>
+                          <div class="stat">
+                            <p-skeleton
+                              height="1rem"
+                              styleClass="m-auto"
+                              width="100%"
+                            ></p-skeleton>
+                            <span class="stat_name">{{
+                              "alumns.tutors" | translate
+                            }}</span>
+                          </div>
+                          <div class="stat">
+                            <p-skeleton
+                              height="1rem"
+                              styleClass="m-auto"
+                              width="100%"
+                            ></p-skeleton>
+                            <span class="stat_name">{{
+                              "alumns.evaluations" | translate
+                            }}</span>
+                          </div>
+                          <div class="stat">
+                            <p-skeleton
+                              height="1rem"
+                              styleClass="m-auto"
+                              width="100%"
+                            ></p-skeleton>
+                            <span class="stat_name">{{
+                              "alumns.average" | translate
+                            }}</span>
+                          </div>
+                        </div>
+                        <div class="player_actions">
+                          <div class="skeleton_btn">
+                            <p-skeleton
+                              height="45px"
+                              styleClass="mb-3"
+                              width="100%"
+                            ></p-skeleton>
+                          </div>
+                          <div class="skeleton_btn">
+                            <p-skeleton
+                              height="45px"
+                              styleClass="m-auto"
+                              width="100%"
+                            ></p-skeleton>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </ng-template>
+              </p-carousel>
+              <!-- table loader -->
+              <p-table
+                [value]="[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]"
+                class="p-datatable-responsive"
+                [rows]="10"
+                [showLoader]="false"
+                selectionMode="single"
+              >
+                <ng-template pTemplate="header">
+                  <tr class="text-center">
+                    <th>{{ "alumns.name" | translate }}</th>
+                    <th class="text-center">
+                      {{ "alumns.assistance" | translate }}
+                    </th>
+                    <th class="text-center">
+                      {{ "alumns.evaluations" | translate }}
+                    </th>
+                    <th class="text-center">
+                      {{ "alumns.tutors" | translate }}
+                    </th>
+                    <th class="text-center">
+                      {{ "alumns.average" | translate }}
+                    </th>
+                    <th class="text-center" style="width: 120px">
+                      {{ "alumns.actions" | translate }}
+                    </th>
+                  </tr>
+                </ng-template>
+                <ng-template let-player pTemplate="body">
+                  <tr>
+                    <td>
+                      <span class="p-column-title">{{
+                        "alumns.name" | translate
+                      }}</span>
+                      <div class="">
+                        <p-skeleton height="1rem" width="100%"></p-skeleton>
+                      </div>
+                    </td>
+                    <td class="text-center">
+                      <span class="p-column-title">{{
+                        "alumns.assistance" | translate
+                      }}</span>
+                      <p-skeleton
+                        height="1rem"
+                        styleClass=""
+                        width="100%"
+                      ></p-skeleton>
+                    </td>
+                    <td class="text-center">
+                      <span class="p-column-title">{{
+                        "alumns.evaluations" | translate
+                      }}</span>
+                      <p-skeleton
+                        height="1rem"
+                        styleClass=""
+                        width="100%"
+                      ></p-skeleton>
+                    </td>
+                    <td class="text-center">
+                      <span class="p-column-title">{{
+                        "alumns.tutors" | translate
+                      }}</span>
+                      <p-skeleton
+                        height="1rem"
+                        styleClass=""
+                        width="100%"
+                      ></p-skeleton>
+                    </td>
+                    <td class="text-center">
+                      <span class="p-column-title">{{
+                        "alumns.average" | translate
+                      }}</span>
+                      <p-skeleton
+                        height="1rem"
+                        styleClass=""
+                        width="100%"
+                      ></p-skeleton>
+                    </td>
+                    <td class="text-center actions">
+                      <span class="p-column-title">{{
+                        "alumns.actions" | translate
+                      }}</span>
+                      <p-skeleton
+                        height="1rem"
+                        styleClass=""
+                        width="100%"
+                      ></p-skeleton>
+                    </td>
+                  </tr>
+                </ng-template>
+              </p-table>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-create-player-dialog
+  (close)="hanledClosed($event)"
+  *ngIf="!loadingList && createPlayerDialog"
+  [listAcneaeTypes]="listAcneaeTypes"
+  [listCountriesAll]="listCountries"
+  [listCourses]="listCourses"
+  [listGenderIdentity]="listGenderIdentity"
+  [listGenders]="listGenders"
+  [listKinships]="listKinships"
+  [listLaterality]="listLaterality"
+  [listPositions]="listPositions"
+  [listSports]="listSports"
+  [visible]="createPlayerDialog"
+></app-create-player-dialog>
+
+<p-confirmDialog
+  #cd
+  [style]="{ width: '50vw' }"
+  class="custom_dialog"
+  maskStyleClass="purple_mask"
+>
+  <ng-template pTemplate="footer">
+    <div class="footer_btns">
+      <button
+        (click)="cd.reject()"
+        class="back_btn"
+        icon="pi pi-times"
+        label="{{ 'LBL_NO' | translate }}"
+        pButton
+        type="button"
+      ></button>
+      <button
+        (click)="cd.accept()"
+        class="next_btn"
+        icon="pi pi-check"
+        label="{{ 'LBL_YES' | translate }}"
+        pButton
+        type="button"
+      ></button>
+    </div>
+  </ng-template>
+</p-confirmDialog>

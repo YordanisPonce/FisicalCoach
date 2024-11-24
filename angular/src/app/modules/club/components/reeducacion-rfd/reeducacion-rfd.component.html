@@ -1,0 +1,537 @@
+<div class="row">
+  <div class="col-lg-8">
+    <div class="row mb-3">
+      <div class="col-lg-5">
+        <div class="card soft-shadow">
+          <div class="card-body p-0">
+            <div class="player_resume">
+              <div class="player_avatar_wrapper">
+                <span class="icon_left" routerLink="/club/rfd-injuries"
+                  ><i class="fas fa-chevron-left"></i>
+                </span>
+
+                <div class="player_avatar">
+                  <img
+                    src="{{ player_rfd.injury.entity | avatarPipe }}"
+                    width="100"
+                    height="100"
+                    class="mr-2 rounded-circle"
+                    *ngIf="player_rfd?.injury?.entity"
+                  />
+                  <div class="player_name" *ngIf="!loadingPhases">
+                    <div class="name">
+                      {{ player_rfd?.injury?.entity?.full_name }}
+                    </div>
+                    <div class="age">
+                      {{ player_rfd?.injury?.entity?.age }}
+                      {{ "RFD.years" | translate }}
+                    </div>
+                  </div>
+                  <div class="player_name" *ngIf="loadingPhases">
+                    <div class="name">
+                      <p-skeleton width="8rem" styleClass="mb-3"></p-skeleton>
+                    </div>
+                    <div class="age">
+                      <p-skeleton width="5rem" styleClass="mb-2"></p-skeleton>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-12 mt-2 card soft-shadow">
+          <div class="card-body p-0">
+            <div class="injury_resume d-flex" *ngIf="!loadingPhases">
+              <div class="injury_description">
+                <h5 class="title d-flex align-items-center">
+                  <span
+                    [pTooltip]="
+                      calculateDiff(player_rfd?.injury?.injury_date) +
+                      ('days' | translate)
+                    "
+                  >
+                    {{ "RFD.date" | translate }}:
+                    {{
+                      " " + player_rfd?.injury?.injury_date
+                        | date : "dd/MM/YYYY"
+                    }}
+                  </span>
+                  <i
+                    class="pi pi-eye ml-2"
+                    style="font-size: 1.3rem"
+                    role="button"
+                    (click)="showRfdInfoModal = true"
+                    *ngIf="!loadingPhases"
+                  ></i>
+                </h5>
+
+                <h5 class="title d-flex align-items-center">
+                  {{ "RFD.injury" | translate }}:
+                  {{ player_rfd?.injury?.type?.name }}
+
+                  <img
+                    *ngIf="player_rfd?.injury?.type_spec?.image"
+                    src="{{ player_rfd?.injury?.type_spec?.image?.full_url }}"
+                    alt="injury"
+                    width="20px"
+                    class="ml-2"
+                  />
+                </h5>
+
+                <div class="d-flex flex-column justify-content-around mt-3">
+                  <div
+                    class="d-inline-block injury_label mb-3"
+                    *ngIf="player_rfd?.injury?.severity"
+                  >
+                    {{ "RFD.severity" | translate }}:
+                    {{ player_rfd?.injury?.severity?.name }}
+                  </div>
+                  <div class="d-inline-block injury_label">
+                    {{ "RFD.type" | translate }}:
+                    {{ player_rfd?.injury?.type_spec?.name }}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="injury_resume d-flex" *ngIf="loadingPhases">
+              <div class="injury_icon"></div>
+              <div class="injury_description">
+                <h5 class="title">
+                  <p-skeleton width="3rem" styleClass="mb-3"></p-skeleton>
+                </h5>
+                <p class="description">
+                  <p-skeleton width="18rem" styleClass="mb-3"></p-skeleton>
+                  <p-skeleton width="18rem" styleClass="mb-3"></p-skeleton>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pt-4 col-lg-7 card soft-shadow">
+        <div>
+          <div *ngIf="!loadingPhases">
+            <h6 class="mb-3 text-main font-weight-600">
+              {{ "RFD.psychologycEvolution" | translate }}
+            </h6>
+            <div class="injurie_progress_h mb-2 mt-3">
+              <p-knob
+                [(ngModel)]="psychological.percentage_complete"
+                [strokeWidth]="8"
+                [size]="150"
+                [valueColor]="
+                  getPercentageColor(psychological.percentage_complete, true)
+                "
+                [disabled]="true"
+                [valueTemplate]="psychological.percentage_complete + '%'"
+                (click)="
+                  !validatePhase(psychological.phase_passed, 0) &&
+                    getPhaseDetailsForTest(psychological.code, psychological, 0)
+                "
+                class="p-knob-pointer"
+              ></p-knob>
+              <div class="ml-3">
+                <p class="text psychological">
+                  {{
+                    "RFD." +
+                      getPsychologicalPhaseLevel(
+                        psychological.percentage_complete
+                      ) | translate
+                  }}
+                </p>
+              </div>
+            </div>
+
+            <div class="text-center w-100">
+              <button
+                class="btn btn-primary"
+                (click)="
+                  getPhaseDetailsForTest(psychological.code, psychological, 0)
+                "
+              >
+                <span *ngIf="!player_rfd.closed">
+                  {{ "RFD.conductAQuestionnarie" | translate }}
+                </span>
+
+                <span *ngIf="player_rfd.closed">
+                  {{ "RFD.seeSummary" | translate }}
+                </span>
+              </button>
+            </div>
+          </div>
+
+          <div class="row" *ngIf="loadingPhases">
+            <div class="col-lg-12 mb-5 mt-4" *ngFor="let i of [1]">
+              <div>
+                <div class="">
+                  <div class="ml-1 mb-3">
+                    <p-skeleton width="10rem" styleClass="mb-3"></p-skeleton>
+                  </div>
+                  <div class="d-flex align-items-center mt-4">
+                    <p-skeleton
+                      shape="circle"
+                      width="6rem"
+                      height="6rem"
+                      styleClass="mb-3"
+                    ></p-skeleton>
+
+                    <div class="ml-4">
+                      <p-skeleton width="24rem" styleClass="mb-4"></p-skeleton>
+                      <p-skeleton width="24rem" styleClass="mb-3"></p-skeleton>
+                      <p-skeleton width="24rem" styleClass="mb-3"></p-skeleton>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <div class="card soft-shadow">
+          <div class="card-body">
+            <!-- primera fila de progress basr -->
+
+            <div class="row" *ngIf="!loadingPhases">
+              <div class="col-12 my-2">
+                <h4 class="text-center">
+                  {{ "RFD.reeducationTitle" | translate }}
+                </h4>
+              </div>
+              <div
+                class="col-lg-4 mb-5 mt-4"
+                *ngFor="let detail of player_rfd?.phase_details; index as i"
+              >
+                <div>
+                  <div class="injurie_progress">
+                    <div class="title">
+                      {{ i + 1 }}.
+                      {{
+                        detail?.phase?.name[0].toUpperCase() +
+                          detail?.phase?.name?.slice(1).toLowerCase()
+                      }}
+                    </div>
+                    <p-knob
+                      [(ngModel)]="detail.percentage_complete"
+                      [strokeWidth]="8"
+                      [size]="150"
+                      [valueColor]="
+                        getPercentageColor(detail.percentage_complete)
+                      "
+                      [disabled]="true"
+                      [valueTemplate]="
+                        parsePercentaje(detail.percentage_complete) + '%'
+                      "
+                      class="p-knob-pointer"
+                      (click)="
+                        !validatePhase(detail.phase_passed, i) &&
+                          getPhaseDetailsForTest(detail.code, detail, i + 1)
+                      "
+                    ></p-knob>
+                    <div class="mt-3">
+                      <span
+                        [style]="
+                          'color:' +
+                          getPhaseLevel(detail.percentage_complete).color +
+                          ';'
+                        "
+                        >{{
+                          "RFD." +
+                            getPhaseLevel(detail.percentage_complete).text
+                            | translate
+                        }}</span
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-lg-4 mb-5 mt-4">
+                <div>
+                  <div class="injurie_progress">
+                    <div class="title">
+                      % {{ "RFD.total_of_test" | translate }}
+                    </div>
+                    <p-knob
+                      [(ngModel)]="player_rfd.percentage_complete"
+                      [strokeWidth]="8"
+                      [size]="150"
+                      [valueColor]="
+                        getPercentageColor(player_rfd.percentage_complete)
+                      "
+                      [disabled]="true"
+                      [valueTemplate]="player_rfd.percentage_complete + '%'"
+                    ></p-knob>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row" *ngIf="loadingPhases">
+              <div
+                class="col-lg-4 mb-5 mt-4"
+                *ngFor="let i of [1, 2, 3, 4, 5, 6]"
+              >
+                <div>
+                  <div class="injurie_progress">
+                    <div class="title">
+                      <p-skeleton width="6rem" styleClass="mb-3"></p-skeleton>
+                    </div>
+                    <p-skeleton
+                      shape="circle"
+                      width="6rem"
+                      height="6rem"
+                      styleClass="mb-3"
+                    ></p-skeleton>
+                    <div class="mt-3">
+                      <p-skeleton width="8rem" styleClass="mb-3"></p-skeleton>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <button
+              class="btn btn-primary btn-block mt-5"
+              (click)="closeRFD(rdf_code)"
+              [disabled]="!AllphasesPassed"
+              *ngIf="!player_rfd?.closed"
+            >
+              <span>{{ "RFD.close_rfd" | translate }}</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-4">
+    <div class="card box-shadow">
+      <div class="card-body">
+        <!-- <div> -->
+        <p-calendar
+          [(ngModel)]="selectedDates"
+          [firstDayOfWeek]="1"
+          [inline]="true"
+          (onSelect)="calendarDay($event)"
+          [selectionMode]="'multiple'"
+          class="daily-work-calendar"
+        ></p-calendar>
+
+        <!-- </div> -->
+
+        <div class="py-5 border-top border-bottom">
+          <h6 class="mb-5 text-main font-weight-600">
+            {{ "RFD.phases" | translate }}
+          </h6>
+          <div class="stages">
+            <!-- <div class="timeline_bar"></div> -->
+
+            <div *ngIf="!loadingPhases">
+              <!-- completed -->
+              <div
+                class="step completed"
+                *ngFor="let detail of player_rfd?.phase_details; let i = index"
+              >
+                <div class="v-stepper">
+                  <div class="line"></div>
+                  <div class="stage">
+                    <div class="stage_label">
+                      <div class="stage_icon">
+                        <img
+                          src="{{
+                            resources +
+                              '/rfd_injuries' +
+                              getPhaseLevel(detail.percentage_complete).icon
+                          }}"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="content">
+                  <div class="timeline">
+                    <div class="stage">
+                      <div
+                        class="stage_name"
+                        [ngClass]="{
+                          evaluate: !validatePhase(detail.phase_passed, i)
+                        }"
+                      >
+                        <span>
+                          {{ i + 1 }}.
+                          {{
+                            detail?.phase?.name[0].toUpperCase() +
+                              detail?.phase?.name.slice(1).toLowerCase()
+                          }}
+                        </span>
+                      </div>
+                      <button
+                        class="btn stage_action"
+                        (click)="
+                          getPhaseDetailsForTest(detail.code, detail, i + 1)
+                        "
+                        [disabled]="validatePhase(detail.phase_passed, i)"
+                      >
+                        <i class="pi pi-angle-right"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div *ngIf="loadingPhases">
+              <!-- completed -->
+              <div
+                class="step completed"
+                *ngFor="let detail of [1, 2, 3]; let i = index"
+              >
+                <div class="v-stepper">
+                  <div class=""></div>
+                  <div class="">
+                    <div class="stage_label">
+                      <p-skeleton
+                        shape="circle"
+                        width="3rem"
+                        height="3rem"
+                        styleClass="mb-3"
+                      ></p-skeleton>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="content">
+                  <div class="timeline">
+                    <div class="stage">
+                      <div class="stage_name">
+                        <p-skeleton width="8rem" styleClass="mb-3"></p-skeleton>
+                      </div>
+
+                      <p-skeleton width="8rem" styleClass="mb-3"></p-skeleton>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="injurie_progress discharged_dates" *ngIf="player_rfd">
+          <p
+            *ngIf="player_rfd.injury.medically_discharged_at"
+            class="medical-date mt-2"
+          >
+            <img
+              class="mr-1"
+              src="{{ resources + '/rfd_injuries/medically-discharged.png' }}"
+              width="40px"
+              alt="medically_discharged_at"
+            />
+            <span> {{ "RFD.medically_discharged_at" | translate }}: </span>
+
+            <span class="date">
+              {{
+                player_rfd.injury.medically_discharged_at | date : "dd/MM/YYY"
+              }}
+            </span>
+          </p>
+
+          <p
+            *ngIf="player_rfd.injury.sportly_discharged_at"
+            class="medical-date"
+          >
+            <img
+              class="mr-1"
+              src="{{ resources + '/rfd_injuries/sportly-discharged.png' }}"
+              width="40px"
+              alt="sportly_discharged_at"
+            />
+            <span> {{ "RFD.sportly_discharged_at" | translate }}: </span>
+
+            <span class="date">
+              {{ player_rfd.injury.sportly_discharged_at | date : "dd/MM/YYY" }}
+            </span>
+          </p>
+
+          <p
+            *ngIf="player_rfd.injury.competitively_discharged_at"
+            class="medical-date"
+          >
+            <img
+              class="mr-1"
+              src="{{
+                resources + '/rfd_injuries/competitively-discharged.png'
+              }}"
+              width="40px"
+              alt="competitively_discharged_at"
+            />
+            <span> {{ "RFD.competitively_discharged_at" | translate }}: </span>
+
+            <span class="date">
+              {{
+                player_rfd.injury.competitively_discharged_at
+                  | date : "dd/MM/YYY"
+              }}
+            </span>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-new-rfd-dialog
+  [rfdData]="player_rfd"
+  [showModal]="showRfdInfoModal"
+  [selectedPlayer]="player_rfd.injury.entity"
+  (dismiss)="showRfdInfoModal = false"
+  *ngIf="showRfdInfoModal"
+></app-new-rfd-dialog>
+
+<evolucion-psicologica-dialog
+  [visible]="evolucionPsicologica"
+  (close)="evolucionPsicologica = false"
+></evolucion-psicologica-dialog>
+<stage-dialog
+  [visible]="stageProgress"
+  [phaseDetail]="phase"
+  [phaseIndex]="phaseIndex"
+  [loadingClosedPhase]="loadingPhase"
+  (closePhase)="loadingPhase = $event"
+  (close)="closeDialog()"
+  (refreshPhases)="refreshInjuryPhases()"
+  *ngIf="stageProgress"
+></stage-dialog>
+
+<app-finish-rfd-dialog
+  [visible]="closeRfdDialog"
+  [criterias]="criterias"
+  [rdf_code]="rdf_code"
+  (close)="closeDialog()"
+  *ngIf="closeRfdDialog"
+></app-finish-rfd-dialog>
+
+<phase-details-dialog
+  [visible]="phaseDetails"
+  (close)="(phaseDetails)"
+></phase-details-dialog>
+
+<app-daily-work-modal
+  [visible]="dailyWorkModal"
+  [rfd_id]="player_rfd.id"
+  [dailyWorkDay]="dailyWorkDay"
+  [dailyWork]="selectedDailyWork"
+  *ngIf="dailyWorkModal"
+  (close)="closeDialog()"
+  (refreshCalendar)="refreshCalendar()"
+>
+</app-daily-work-modal>

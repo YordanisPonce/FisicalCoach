@@ -1,0 +1,24 @@
+<form (ngSubmit)="onSubmit()" id="idFormMember" name="nomForm" *ngIf="formulario" [formGroup]="formulario">
+  <div class="row">
+    <div class="mb-3 col-12">
+      <label>{{'INJURY.LBL_TEST_CLINICAL'| translate}}</label>
+      <p-multiSelect 
+      [options]="listClinicalTestTypes" 
+      formControlName="clinical_test_types" 
+      optionLabel="name"
+      optionValue="id"
+      [styleClass]="'w-100 form-control'"
+      display="chip"
+      ></p-multiSelect>
+    </div>
+    <div class="mb-3 col-12">
+      <label>{{'INJURY.LBL_ADDITIONAL_INFO'| translate}}</label>
+      <textarea 
+      pInputTextarea 
+      formControlName="detailed_diagnose" 
+      class="form-control"
+      placeholder="{{ 'LBL_ESCRIBEAQI' | translate }}"
+      ></textarea>
+    </div>
+  </div>
+</form>

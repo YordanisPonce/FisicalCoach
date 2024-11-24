@@ -1,0 +1,706 @@
+<p-dialog
+  id="evolucion_psicologica_dialog"
+  class="custom_dialog"
+  [modal]="true"
+  [(visible)]="visible"
+  styleClass="fullscreenDialog"
+  maskStyleClass=""
+  (onHide)="closeDialog()"
+>
+  <ng-template pTemplate="header">
+    <div class="d-flex header_content">
+      <img src="/assets/img/logo_panel.svg" alt="logo" />
+    </div>
+  </ng-template>
+  <div
+    id="evolucion_psicologica_dialog_container"
+    class="dialog_container wide"
+  >
+    <div class="step_content">
+      <div>
+        <div>
+          <div class="questions">
+            <div class="text-center">
+              <h4 class="mb-3" style="margin-top: 8rem">
+                <strong>{{ getStepTitle(step, true) }}</strong>
+              </h4>
+
+              <h5 class="font-weight-500">
+                <span *ngIf="this.locale === 'es'">
+                  {{ "donwgrade_plan.title" | translate }}</span
+                >
+
+                <span *ngIf="this.locale === 'en' && showData">
+                  {{
+                    "donwgrade_plan.title"
+                      | translate
+                        : {
+                            stepTitle: getStepTitle(
+                              step,
+                              false
+                            ).toLocaleLowerCase()
+                          }
+                  }}</span
+                >
+                <strong>{{
+                  "donwgrade_plan.current_package"
+                    | translate : { currentPackage }
+                }}</strong>
+                {{ "donwgrade_plan.to" | translate }}
+                <strong>{{
+                  "donwgrade_plan.selectedPackage"
+                    | translate : { selectedPackage: selectedPackage.name }
+                }}</strong>
+                <span *ngIf="showData">
+                  {{
+                    "donwgrade_plan.final_description"
+                      | translate
+                        : {
+                            stepTitleOne: getStepTitle(
+                              step,
+                              true,
+                              false
+                            ).toLocaleLowerCase(),
+                          
+                          }
+                  }}
+                </span>
+              </h5>
+
+              <h6 *ngIf="planData.sport[currentCode] && showData" class="mt-2">
+                {{ getStepTitleByCode(step) }}
+                {{ planData.sport[currentCode].length }} /
+                {{ getStepTotal() }}
+              </h6>
+
+              <h6 *ngIf="!showData" class="my-4">
+                {{ "LBL_SINREGISTROS" | translate }}
+              </h6>
+            </div>
+
+            <div
+              class="d-flex justify-content-between mt-3 mb-2"
+              *ngIf="showData"
+            >
+              <button class="btn btn-primary p-2" (click)="selectAllIds('')">
+                {{ "donwgrade_plan.select_all" | translate }}
+              </button>
+
+              <button
+                class="btn btn-primary p-2"
+                (click)="selectAllIds('recent')"
+              >
+                {{ "donwgrade_plan.select_first" | translate }}
+              </button>
+
+              <button
+                class="btn btn-primary p-2"
+                (click)="selectAllIds('latest')"
+              >
+                {{ "donwgrade_plan.select_latest" | translate }}
+              </button>
+            </div>
+
+            <p-scrollPanel
+              class="question"
+              [style]="{ width: '100%', height: '400px' }"
+              *ngIf="showData"
+            >
+              <!-- teams -->
+              <div *ngIf="teamList.clubs.length > 0 && step === 0">
+                <div
+                  class="my-5"
+                  *ngFor="let item of teamList.clubs; index as i"
+                >
+                  <h6 class="d-flex align-items-center mb-2">
+                    <span>{{ item.name }}</span>
+                  </h6>
+                  <div class="options row">
+                    <div
+                      *ngFor="let team of item.teams; index as i"
+                      class="option-content col-12 col-md-6"
+                    >
+                      <p-checkbox
+                        label="{{ team.name + ' - ' + team.category }}"
+                        [(ngModel)]="selectedTeams"
+                        [value]="team.id"
+                        (onChange)="
+                          handleSelectAttributesData('teams', team.id)
+                        "
+                      ></p-checkbox>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- players -->
+
+              <div *ngIf="playerList.clubs.length > 0 && step === 1">
+                <div
+                  class="my-5"
+                  *ngFor="let item of playerList.clubs; index as i"
+                >
+                  <h6 class="d-flex align-items-center mb-2">
+                    <span>{{ item.name }}</span>
+                  </h6>
+
+                  <div *ngFor="let team of item.teams; index as i">
+                    <div *ngIf="team.players.length > 0">
+                      <h6 class="d-flex align-items-center mb-3 mt-2 ml-2">
+                        <span>{{ team.name }}</span>
+                      </h6>
+
+                      <div class="options row">
+                        <div
+                          *ngFor="let player of team.players; index as i"
+                          class="option-content col-12 col-md-6"
+                        >
+                          <p-checkbox
+                            label="{{
+                              player.full_name + ' - ' + player.alias
+                            }}"
+                            [value]="player.id"
+                            [(ngModel)]="selectedPlayer"
+                            (onChange)="
+                              handleSelectAttributesData('players', player.id)
+                            "
+                          ></p-checkbox>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- matches -->
+
+              <div *ngIf="competitionList.clubs.length > 0 && step === 2">
+                <div
+                  class="my-5"
+                  *ngFor="let item of competitionList.clubs; index as i"
+                >
+                  <h6 class="d-flex align-items-center mb-2">
+                    <span>{{ item.name }}</span>
+                  </h6>
+
+                  <div *ngFor="let team of item.teams; index as i">
+                    <div *ngIf="team.competitions.length > 0">
+                      <h6 class="d-flex align-items-center mb-3 mt-2 ml-4">
+                        <span>{{ team.name }}</span>
+                      </h6>
+
+                      <div
+                        *ngFor="
+                          let competition of team.competitions;
+                          index as i
+                        "
+                      >
+                        <h6
+                          class="d-flex align-items-center mb-3 mt-2 ml-2"
+                          *ngIf="competition.matches.length > 0"
+                        >
+                          <span>{{ competition.name }}</span>
+                        </h6>
+
+                        <div class="options row">
+                          <div
+                            class="option-content col-12 col-md-6"
+                            *ngFor="
+                              let match of competition.matches;
+                              index as i
+                            "
+                          >
+                            <p-checkbox
+                              label="{{ match.start_at }}"
+                              [value]="match.id"
+                              [(ngModel)]="selectedCompetition"
+                              (onChange)="
+                                handleSelectAttributesData('matches', match.id)
+                              "
+                            ></p-checkbox>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- sessions -->
+
+              <div *ngIf="sessionList.clubs.length > 0 && step === 3">
+                <div
+                  class="my-5"
+                  *ngFor="let item of sessionList.clubs; index as i"
+                >
+                  <h6 class="d-flex align-items-center mb-2">
+                    <span>{{ item.name }}</span>
+                  </h6>
+
+                  <div *ngFor="let team of item.teams; index as i">
+                    <div>
+                      <h6 class="d-flex align-items-center mb-3 mt-2 ml-2">
+                        <span>{{ team.name }}</span>
+                      </h6>
+
+                      <div class="options row">
+                        <div
+                          *ngFor="
+                            let session of team.exercise_sessions;
+                            index as i
+                          "
+                          class="option-content col-12 col-md-6"
+                        >
+                          <p-checkbox
+                            label="{{ session.title + ' - ' + session.author }}"
+                            [value]="session.id"
+                            [(ngModel)]="selectedSession"
+                            (onChange)="
+                              handleSelectAttributesData(
+                                'training_sessions',
+                                session.id
+                              )
+                            "
+                          ></p-checkbox>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- test -->
+
+              <div *ngIf="testList.clubs.length > 0 && step === 4">
+                <div
+                  class="my-5"
+                  *ngFor="let item of testList.clubs; index as i"
+                >
+                  <h6 class="d-flex align-items-center mb-2">
+                    <span>{{ item.name }}</span>
+                  </h6>
+
+                  <div *ngFor="let team of item.teams; index as i">
+                    <div *ngIf="team.players.length > 0">
+                      <div>
+                        <h6 class="d-flex align-items-center mb-3 mt-2 ml-2">
+                          <span>{{ team.name }}</span>
+                        </h6>
+
+                        <div *ngFor="let player of team.players; index as i">
+                          <div *ngIf="player.tests.length > 0">
+                            <h6
+                              class="d-flex align-items-center mb-3 mt-2 ml-4"
+                            >
+                              <span>{{ player.full_name }}</span>
+                            </h6>
+
+                            <div class="options row">
+                              <div
+                                *ngFor="let test of player.tests; index as i"
+                                class="option-content col-12 col-md-6"
+                              >
+                                <p-checkbox
+                                  label="{{ test.date_application }}"
+                                  [value]="test.id"
+                                  [(ngModel)]="selectedTest"
+                                  (onChange)="
+                                    handleSelectAttributesData('tests', test.id)
+                                  "
+                                ></p-checkbox>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- injuryPreventionList -->
+
+              <div *ngIf="injuryPreventionList.clubs.length > 0 && step === 5">
+                <div
+                  class="my-5"
+                  *ngFor="let item of injuryPreventionList.clubs; index as i"
+                >
+                  <h6 class="d-flex align-items-center mb-2">
+                    <span>{{ item.name }}</span>
+                  </h6>
+
+                  <div *ngFor="let team of item.teams; index as i">
+                    <div *ngIf="team.players.length > 0">
+                      <div>
+                        <h6 class="d-flex align-items-center mb-3 mt-2 ml-2">
+                          <span>{{ team.name }}</span>
+                        </h6>
+
+                        <div *ngFor="let player of team.players; index as i">
+                          <div *ngIf="player.injuries_prevention.length > 0">
+                            <h6
+                              class="d-flex align-items-center mb-3 mt-2 ml-4"
+                            >
+                              <span>{{ player.full_name }}</span>
+                            </h6>
+
+                            <div class="options row">
+                              <div
+                                *ngFor="
+                                  let injuryPrevention of player.injuries_prevention;
+                                  index as i
+                                "
+                                class="option-content col-12 col-md-6"
+                              >
+                                <p-checkbox
+                                  label="{{ injuryPrevention.title }}"
+                                  [value]="injuryPrevention.id"
+                                  [(ngModel)]="selectedInjuryPrevention"
+                                  (onChange)="
+                                    handleSelectAttributesData(
+                                      'injury_prevention',
+                                      injuryPrevention.id
+                                    )
+                                  "
+                                ></p-checkbox>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- rfd -->
+
+              <div *ngIf="rfdList.clubs.length > 0 && step === 6">
+                <div
+                  class="my-5"
+                  *ngFor="let item of rfdList.clubs; index as i"
+                >
+                  <h6 class="d-flex align-items-center mb-2">
+                    <span>{{ item.name }}</span>
+                  </h6>
+
+                  <div *ngFor="let team of item.teams; index as i">
+                    <div *ngIf="team.players.length > 0">
+                      <div>
+                        <h6 class="d-flex align-items-center mb-3 mt-2 ml-2">
+                          <span>{{ team.name }}</span>
+                        </h6>
+
+                        <div *ngFor="let player of team.players; index as i">
+                          <div *ngIf="player.injuries_rfd.length > 0">
+                            <h6
+                              class="d-flex align-items-center mb-3 mt-2 ml-4"
+                            >
+                              <span>{{ player.full_name }}</span>
+                            </h6>
+
+                            <div class="options row">
+                              <div
+                                *ngFor="
+                                  let rfd of player.injuries_rfd;
+                                  index as i
+                                "
+                                class="option-content col-12 col-md-6"
+                              >
+                                <p-checkbox
+                                  label="{{
+                                    rfd.closed
+                                      ? 'Finalizado'
+                                      : 'No finalizado' +
+                                        ' ' +
+                                        rfd.percentage_complete +
+                                        '%'
+                                  }}"
+                                  [value]="rfd.id"
+                                  [(ngModel)]="selectedRfd"
+                                  (onChange)="
+                                    handleSelectAttributesData(
+                                      'rfd_injuries',
+                                      rfd.id
+                                    )
+                                  "
+                                ></p-checkbox>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- physiotherapy -->
+
+              <div *ngIf="physiotherapyList.clubs.length > 0 && step === 7">
+                <div
+                  class="my-5"
+                  *ngFor="let item of physiotherapyList.clubs; index as i"
+                >
+                  <h6 class="d-flex align-items-center mb-2">
+                    <span>{{ item.name }}</span>
+                  </h6>
+
+                  <div *ngFor="let team of item.teams; index as i">
+                    <div *ngIf="team.players.length > 0">
+                      <div>
+                        <h6 class="d-flex align-items-center mb-3 mt-2 ml-2">
+                          <span>{{ team.name }}</span>
+                        </h6>
+
+                        <div *ngFor="let player of team.players; index as i">
+                          <div *ngIf="player.files_fisiotherapy?.length > 0">
+                            <h6
+                              class="d-flex align-items-center mb-3 mt-2 ml-4"
+                            >
+                              <span>{{ player.full_name }}</span>
+                            </h6>
+
+                            <div class="options row">
+                              <div
+                                *ngFor="
+                                  let file of player.files_fisiotherapy;
+                                  index as i
+                                "
+                                class="option-content col-12 col-md-6"
+                              >
+                                <p-checkbox
+                                  label="{{ file.title }}"
+                                  [value]="file.id"
+                                  [(ngModel)]="selectedPhysiotherapy"
+                                  (onChange)="
+                                    handleSelectAttributesData(
+                                      'fisiotherapy',
+                                      file.id
+                                    )
+                                  "
+                                ></p-checkbox>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- effort recovery -->
+
+              <div *ngIf="effortRecoveryList.clubs.length > 0 && step === 8">
+                <div
+                  class="my-5"
+                  *ngFor="let item of effortRecoveryList.clubs; index as i"
+                >
+                  <h6 class="d-flex align-items-center mb-2">
+                    <span>{{ item.name }}</span>
+                  </h6>
+
+                  <div *ngFor="let team of item.teams; index as i">
+                    <div *ngIf="team.players.length > 0">
+                      <div>
+                        <h6 class="d-flex align-items-center mb-3 mt-2 ml-2">
+                          <span>{{ team.name }}</span>
+                        </h6>
+
+                        <div *ngFor="let player of team.players; index as i">
+                          <div *ngIf="player.tests?.length > 0">
+                            <h6
+                              class="d-flex align-items-center mb-3 mt-2 ml-4"
+                            >
+                              <span>{{ player.full_name }}</span>
+                            </h6>
+
+                            <div class="options row">
+                              <div
+                                *ngFor="let test of player.tests; index as i"
+                                class="option-content col-12 col-md-6"
+                              >
+                                <p-checkbox
+                                  label="{{
+                                    test.created_at | date : 'dd/MM/YYYY'
+                                  }}"
+                                  [value]="test.id"
+                                  [(ngModel)]="selectedRecoveryExtension"
+                                  (onChange)="
+                                    handleSelectAttributesData(
+                                      'recovery_exertion',
+                                      test.id
+                                    )
+                                  "
+                                ></p-checkbox>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- nutrition -->
+
+              <div *ngIf="nutritionList.clubs.length > 0 && step === 9">
+                <div
+                  class="my-5"
+                  *ngFor="let item of nutritionList.clubs; index as i"
+                >
+                  <h6 class="d-flex align-items-center mb-2">
+                    <span>{{ item.name }}</span>
+                  </h6>
+
+                  <div *ngFor="let team of item.teams; index as i">
+                    <div *ngIf="team.players.length > 0">
+                      <div>
+                        <h6 class="d-flex align-items-center mb-3 mt-2 ml-2">
+                          <span>{{ team.name }}</span>
+                        </h6>
+
+                        <div *ngFor="let player of team.players; index as i">
+                          <div *ngIf="player.tests?.length > 0">
+                            <div class="options row">
+                              <div
+                                *ngFor="let sheet of player.tests; index as i"
+                                class="option-content col-12 col-md-6"
+                              >
+                                <p-checkbox
+                                  label="{{
+                                    sheet.player_name +
+                                      ' (' +
+                                      sheet.player_height +
+                                      ') ' +
+                                      ' (' +
+                                      sheet.player_age +
+                                      ')'
+                                  }}"
+                                  [value]="sheet.id"
+                                  [(ngModel)]="selectedNutrition"
+                                  (onChange)="
+                                    handleSelectAttributesData(
+                                      'nutrition',
+                                      sheet.id
+                                    )
+                                  "
+                                ></p-checkbox>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- psycilogy -->
+
+              <div *ngIf="psychologyList.clubs.length > 0 && step === 10">
+                <div
+                  class="my-5"
+                  *ngFor="let item of psychologyList.clubs; index as i"
+                >
+                  <h6 class="d-flex align-items-center mb-2">
+                    <span>{{ item.name }}</span>
+                  </h6>
+
+                  <div *ngFor="let team of item.teams; index as i">
+                    <div *ngIf="team.players.length > 0">
+                      <div>
+                        <h6 class="d-flex align-items-center mb-3 mt-2 ml-2">
+                          <span>{{ team.name }}</span>
+                        </h6>
+
+                        <div *ngFor="let player of team.players; index as i">
+                          <div *ngIf="player.tests?.length > 0">
+                            <div class="options row">
+                              <div
+                                *ngFor="let report of player.tests; index as i"
+                                class="option-content col-12 col-md-6"
+                              >
+                                <p-checkbox
+                                  label="{{
+                                    report.player_name + ' ' + report.date
+                                  }}"
+                                  [value]="report.id"
+                                  [(ngModel)]="selectedPsychology"
+                                  (onChange)="
+                                    handleSelectAttributesData(
+                                      'psychology_reports',
+                                      report.id
+                                    )
+                                  "
+                                ></p-checkbox>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </p-scrollPanel>
+
+            <div class="questions_nav">
+              <button class="btn back_btn_progress" (click)="handleSteps(true)">
+                <i class="pi pi-arrow-left"></i>
+              </button>
+              <div class="questions_bar">
+                <p-progressBar
+                  [value]="((step + 1) * 100) / 11"
+                  [showValue]="false"
+                ></p-progressBar>
+              </div>
+              <button
+                class="btn btn-primary next_question_btn"
+                (click)="handleSteps()"
+                [disabled]="handleSubmitValidation() && showData"
+              >
+                <i class="pi pi-arrow-right" *ngIf="!loading"></i>
+                <i
+                  class="pi pi-spin pi-spinner"
+                  *ngIf="loading || loadingSubmit"
+                ></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</p-dialog>
+
+<p-confirmDialog
+  #cd
+  [style]="{ width: '50vw' }"
+  class="custom_dialog"
+  maskStyleClass="purple_mask"
+>
+  <!-- <ng-template pTemplate="header">
+      <h3>{{ 'LBL_CONFIRM_DIALOG' | translate}}</h3>
+  </ng-template> -->
+  <ng-template pTemplate="footer">
+    <div class="footer_btns">
+      <button
+        (click)="cd.reject()"
+        label="{{ 'LBL_NO' | translate }}"
+        pButton
+        type="button"
+        class="back_btn"
+      ></button>
+      <button
+        (click)="cd.accept()"
+        class="next_btn"
+        label="{{ 'LBL_YES' | translate }}"
+        pButton
+        type="button"
+      ></button>
+    </div>
+  </ng-template>
+</p-confirmDialog>

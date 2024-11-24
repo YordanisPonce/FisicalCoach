@@ -1,0 +1,90 @@
+:host ::ng-deep #add_space_dialog,
+:host ::ng-deep #crear_exersice_dialog {
+  .p-dialog {
+    max-width: 1006px;
+    background-color: white;
+  }
+  .p-dialog-header {
+    max-width: 841px;
+    margin-left: 103.5px;
+    margin-right: 64px;
+    padding-left: 0;
+    padding-right: 0;
+    width: 100%;
+    padding-top: 40px;
+  }
+  .p-dialog-content {
+    overflow: unset;
+    padding-top: unset;
+    max-width: 841px;
+    max-height: 650;
+    overflow: auto;
+    margin-left: 92px;
+    margin-right: 72px;
+    display: unset;
+    padding-bottom: 0;
+    @media screen and (max-width:500px){
+      margin-left: 0;
+      margin-right: 0;
+    }
+  }
+  .p-dialog-mask {
+    height: 100vh;
+  }
+}
+.select_diet {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  @media screen and (max-width: 500px){
+    flex-direction: column;
+  }
+
+  label {
+    font-size: 19px !important;
+  }
+
+  input {
+    max-width: 446px;
+  }
+}
+.diet_container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  @media screen and (max-width: 500px) {
+    justify-content: space-evenly;
+  }
+}
+.diet {
+  flex-wrap: wrap;
+  width: max-content;
+  border: 1px solid #050c4426;
+  border-radius: 27px;
+  padding: 14px 42px;
+  margin-bottom: 26px;
+  cursor: pointer;
+  @media screen and (max-width:500px){
+    span{
+      font-size: 0.75rem;
+    }
+  }
+}
+.selected {
+  background-color: #050c44;
+
+  span {
+    color: #fff !important;
+  }
+}
+.deselected {
+  background-color: #fff;
+
+  span {
+    color: #050C44 !important;
+  }
+}
+.next_btn {
+  max-width: 209px;
+  height: 62px;
+}

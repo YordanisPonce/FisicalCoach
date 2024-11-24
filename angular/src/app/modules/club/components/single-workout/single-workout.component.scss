@@ -1,0 +1,152 @@
+:host ::ng-deep {
+  .workout_number {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    background-color: #050c44;
+    border-radius: 50%;
+    //top: -5px;
+    //left: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    border: 3px solid white;
+    font-weight: 600;
+    z-index: 1;
+  }
+  .workout {
+    border: 1px solid #050c4421;
+    border-radius: 17px;
+    overflow: hidden;
+    position: relative;
+    margin: 1rem 0;
+    max-width: 375px;
+    min-width: 320px;
+
+    .workout_img {
+      position: relative;
+
+      .exercise-order {
+        position: absolute;
+        width: 30px;
+        height: 30px;
+        top: 10px;
+        left: 10px;
+        background-color: #050c44;
+        border: 1px solid #fff;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #fff;
+      }
+    }
+
+    .workout_sport_name {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 0;
+      color: #6c757d;
+    }
+
+    &.selected {
+      box-shadow: 0 0px 8px #00e9c5;
+    }
+
+    &.pointer {
+      cursor: pointer;
+    }
+
+    .max-height {
+      width: 100%;
+      min-width: 350px;
+      max-height: 202px !important;
+    }
+
+    .workout_header {
+      display: flex;
+      // font-weight: 600;
+      padding: 1rem 2rem;
+      color: #050c44;
+      .workout_author {
+        margin-bottom: 1rem;
+        opacity: 0.3;
+        font-weight: 600;
+      }
+      .workout_name {
+        font-weight: 700;
+        margin-bottom: 0;
+      }
+      .pointer {
+        cursor: pointer;
+      }
+    }
+    .workout_icons {
+      padding: 1rem 1rem 1rem 2rem;
+      justify-content: space-between;
+      display: flex;
+      border-top: 1px solid rgba($color: #050c44, $alpha: 0.12);
+      border-bottom: 1px solid rgba($color: #050c44, $alpha: 0.12);
+
+      img {
+        margin-right: 14px;
+        width: 22.25px;
+        height: 20px;
+      }
+    }
+    .workout_content {
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid rgba($color: #050c44, $alpha: 0.12);
+      .p-rating {
+        margin: 0.5rem 0;
+        .p-rating-icon {
+          color: #00e9c5;
+          font-size: 1rem;
+          // margin-left: .75rem;
+        }
+      }
+      .description {
+        color: #000000;
+        opacity: 0.58;
+        font-size: 0.9rem;
+        font-weight: 500;
+        line-height: 2;
+        margin-bottom: 0;
+
+        display: -webkit-box;
+        max-width: auto;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+
+        &.auto-height {
+          margin-top: 10px;
+          height: 80px;
+        }
+      }
+    }
+    .workout_footer {
+      display: flex;
+      padding-top: 0.75rem;
+      padding-bottom: 0.75rem;
+      justify-content: space-between;
+      button {
+        color: #050c44;
+        flex: 0 48%;
+        font-size: 0.9rem;
+        padding: 0.75rem;
+      }
+      button:nth-child(3) {
+        font-weight: 700;
+      }
+      button:nth-child(5) {
+        font-weight: 700;
+      }
+      .separator {
+        border-right: 2px solid rgba($color: #050c44, $alpha: 0.16);
+        // border-left: 1px solid rgba($color: #050C44, $alpha: .16);
+      }
+    }
+  }
+}

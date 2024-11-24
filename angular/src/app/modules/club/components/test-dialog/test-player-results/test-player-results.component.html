@@ -1,0 +1,426 @@
+<div
+  *ngIf="
+    checkTestType(resultList) === 'object' &&
+    resultType !== 'qualitative' &&
+    resultType != 'average_symmetric'
+  "
+  class="mt-3"
+>
+  <div class="d-flex">
+    <ul *ngIf="resultType === 'new_score'">
+      <li>
+        {{ "test.previousWorstScore" | translate }}:
+        <span style="color: '#F92F28'">
+          {{ resultList.previous_worst_score + " " + selectedMeassure }}
+        </span>
+      </li>
+      <li>
+        {{ "test.previousBestScore" | translate }}:
+        <span style="color: '#00E9C5'">
+          {{ resultList.previous_best_score + " " + selectedMeassure }}
+        </span>
+      </li>
+    </ul>
+
+    <ul *ngIf="resultType === 'new_score'" class="ml-4">
+      <ng-container *ngIf="results.chart">
+        <li *ngIf="results.chart.Distancia">
+          {{ "test.distance" | translate }}
+          {{ results.chart.Distancia + " (m)" }}
+        </li>
+        <li *ngIf="results.chart.Velocidad">
+          {{ "test.velocity" | translate }}
+          {{ results.chart.Velocidad + " (km/h)" }}
+        </li>
+      </ng-container>
+
+      <ng-container *ngIf="formula.length > 0">
+        <li>
+          <span class="float text-wrapper" id="menu-share">
+            <span class="text"> {{ "test.vo2max" | translate }}</span>
+            <label class="label-container">
+              <label class="label-text">
+                {{ formula[0].description }}
+              </label>
+            </label>
+          </span>
+
+          <span class="float text-wrapper" id="menu-share">
+            <span class="text">
+              ({{
+                formula[0].result + " " + formula[0].unit.abbreviation
+              }})</span
+            >
+            <label class="label-container">
+              <label class="label-text">
+                {{ formula[0].formula }}
+              </label>
+            </label>
+          </span>
+        </li>
+      </ng-container>
+    </ul>
+  </div>
+
+  <table class="table">
+    <tr>
+      <th [width]="40"></th>
+
+      <th [width]="40">{{ "test.lastTest" | translate }}</th>
+
+      <th [width]="40">{{ "test.currentTest" | translate }}</th>
+      <th [width]="40">{{ "test.difference" | translate }}</th>
+    </tr>
+    <tr>
+      <td class="text-bold text-left">
+        {{ "test." + resultType | translate }}
+        <span *ngIf="selectedMeassure">{{ selectedMeassure }}</span>
+      </td>
+
+      <td>{{ resultList.previous_result }}</td>
+      <td>{{ resultList.result }}</td>
+
+      <td
+        [ngClass]="{ 'text-danger': resultList.diference < 0 }"
+        class="text-success"
+        *ngIf="resultType === 'new_score'"
+      >
+        {{ resultList.diff }}
+      </td>
+
+      <td
+        [ngClass]="{ 'text-danger': resultList.diference < 0 }"
+        class="text-success"
+        *ngIf="resultType !== 'new_score' && resultType !== 'average_symmetric'"
+      >
+        {{
+          resultList.diference > 0
+            ? "+" + resultList.diference
+            : resultList.diference
+        }}
+      </td>
+    </tr>
+  </table>
+
+  <div class="mt-5">
+    <p-chart
+      type="bar"
+      [data]="basicData"
+      [responsive]="true"
+      [options]="basicOptions"
+    ></p-chart>
+  </div>
+</div>
+
+<div
+  *ngIf="checkTestType(resultList) === 'array' && resultType !== 'qualitative'"
+  class="mt-3"
+>
+  <table
+    class="table"
+    *ngIf="
+      resultType !== 'symmetric_difference' &&
+      resultType !== 'average_symmetric'
+    "
+  >
+    <tr>
+      <th [width]="'40%'"></th>
+      <th>{{ "test.lastTest" | translate }}</th>
+
+      <th>{{ "test.currentTest" | translate }}</th>
+      <th>{{ "test.difference" | translate }}</th>
+    </tr>
+
+    <tr *ngFor="let result of resultList; let i = index">
+      <td class="text-bold text-left">
+        {{
+          (result.answer_name || result.question) +
+            " (" +
+            result.unit?.abbreviation +
+            ")"
+        }}
+      </td>
+      <td>{{ result.previous_answer_value }}</td>
+      <td>{{ result.answer_value }}</td>
+      <td [ngClass]="{ 'text-danger': result.diff < 0 }" class="text-success">
+        {{ result.diff > 0 ? "+" + result.diff : result.diff }}
+      </td>
+    </tr>
+  </table>
+
+  <table class="table" *ngIf="resultType === 'symmetric_difference'">
+    <tr>
+      <th [width]="'40%'"></th>
+      <th>{{ "test.left" | translate }}</th>
+
+      <th>{{ "test.right" | translate }}</th>
+      <th>{{ "test.difference" | translate }}</th>
+    </tr>
+
+    <tr *ngFor="let result of resultList; let i = index">
+      <td class="text-bold text-left">
+        {{ result.name }}
+      </td>
+      <td>{{ result.left }}</td>
+      <td>{{ result.righ }}</td>
+      <td [ngClass]="{ 'text-danger': result.diff < 0 }" class="text-success">
+        {{ result.diff > 0 ? "+" + result.diff : result.diff }}
+      </td>
+    </tr>
+  </table>
+
+  <div class="mt-5">
+    <p-chart type="bar" [data]="basicData" [options]="basicOptions"></p-chart>
+  </div>
+</div>
+
+<div *ngIf="resultType === 'qualitative'" class="mt-3">
+  <h5 class="title mt-3">
+    <ul class="qualitative-title">
+      <li>{{ "test.previous" | translate }}</li>
+    </ul>
+  </h5>
+  <table class="table">
+    <tr *ngIf="resultList.previous_result?.length > 0">
+      <th [width]="50" *ngFor="let result of resultList.previous_result">
+        {{ result.question }}
+      </th>
+    </tr>
+
+    <tr *ngIf="resultList.previous_result?.length === 0">
+      <th [width]="50" *ngFor="let result of resultList.result">
+        {{ result.question }}
+      </th>
+    </tr>
+
+    <tr *ngIf="resultList.previous_result?.length > 0">
+      <td
+        *ngFor="let result of resultList.previous_result; let i = index"
+        class="text-bold text-left"
+      >
+        <span [style]="{ color: result.color, 'margin-right': '10px' }">
+          {{ result.response }}
+        </span>
+
+        <img
+          [src]="result.image?.full_url"
+          [alt]="result.question"
+          width="40"
+          height="40"
+        />
+      </td>
+    </tr>
+
+    <tr *ngIf="resultList.previous_result?.length === 0">
+      <td
+        class="text-bold text-left"
+        *ngFor="let result of resultList.result; let i = index"
+      >
+        N/A
+      </td>
+    </tr>
+  </table>
+
+  <h5 class="mt-5 title">
+    <ul class="qualitative-title">
+      <li>{{ "test.current" | translate }}</li>
+    </ul>
+  </h5>
+  <table class="table">
+    <tr>
+      <th [width]="50" *ngFor="let result of resultList.result">
+        {{ result.question }}
+      </th>
+    </tr>
+
+    <tr>
+      <td
+        *ngFor="let result of resultList.result; let i = index"
+        class="text-bold text-left"
+      >
+        <div class="d-flex align-items-center">
+          <span [style]="{ color: result.color, 'margin-right': '10px' }">
+            {{ result.response }}
+          </span>
+
+          <img
+            [src]="result.image?.full_url"
+            [alt]="result.question"
+            width="40"
+            height="40"
+          />
+        </div>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<div *ngIf="resultType === 'average_symmetric'" class="mt-3">
+  <h5 class="title mt-3">
+    <ul class="qualitative-title" *ngIf="resultList.previous_result">
+      <li>{{ "test.previous" | translate }}</li>
+    </ul>
+  </h5>
+  <table class="table" *ngIf="resultList.previous_result">
+    <tr>
+      <th [width]="50">{{ "test.leg_left" | translate }}</th>
+      <th [width]="50">{{ "test.leg_right" | translate }}</th>
+    </tr>
+
+    <tr>
+      <td class="text-bold text-left">
+        <span [style]="{ 'margin-right': '10px' }">
+          {{ resultList.previous_result["best_left"] || "N/A" }}
+        </span>
+      </td>
+
+      <td class="text-bold text-left">
+        <span [style]="{ 'margin-right': '10px' }">
+          {{ resultList.previous_result["best_right"] || "N/A" }}
+        </span>
+      </td>
+    </tr>
+  </table>
+
+  <h5 class="title mt-3">
+    <ul class="qualitative-title" *ngIf="resultList.result">
+      <li>{{ "test.current" | translate }}</li>
+    </ul>
+  </h5>
+  <table class="table" *ngIf="resultList.result">
+    <tr>
+      <th [width]="50">{{ "test.leg_left" | translate }}</th>
+      <th [width]="50">{{ "test.leg_right" | translate }}</th>
+    </tr>
+
+    <tr>
+      <td class="text-bold text-left">
+        <span [style]="{ 'margin-right': '10px' }">
+          {{ resultList.result["best_left"] }}
+        </span>
+      </td>
+
+      <td class="text-bold text-left">
+        <span [style]="{ 'margin-right': '10px' }">
+          {{ resultList.result["best_right"] }}
+        </span>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<p-accordion
+  [expandIcon]="'pi pi-plus'"
+  [collapseIcon]="'pi pi-minus'"
+  class="detail-accordeon"
+  *ngIf="
+    configuationQuestions.length > 0 ||
+    nonConfiguationQuestions.length > 0 ||
+    (results?.average !== 'N/A' && results?.average)
+  "
+>
+  <p-accordionTab header="{{ 'table_icons.seeDetails' | translate }}">
+    <ul class="ml-4">
+      <p-template *ngFor="let question of nonConfiguationQuestions">
+        <div *ngIf="resultType === 'average_item'">
+          <strong
+            *ngIf="
+              question.question_responses?.question_test?.question
+                ?.question_category
+            "
+          >
+            {{
+              question.question_responses?.question_test?.question
+                ?.question_category?.name
+            }}
+          </strong>
+          <div></div>
+          <strong class="ml-3">- {{ question.question }}:</strong>
+          {{ question.response + " " }}
+          <span
+            *ngIf="
+              question.question_responses?.question_test?.question?.unit?.code
+            "
+            >({{
+              question.question_responses?.question_test?.question?.unit
+                ?.abbreviation
+            }})</span
+          >
+        </div>
+
+        <div *ngIf="resultType !== 'average_item'">
+          <strong>{{ question.question }}:</strong>
+          {{ question.response + " " }}
+          <span
+            *ngIf="
+              question.question_responses?.question_test?.question?.unit?.code
+            "
+            >({{
+              question.question_responses?.question_test?.question?.unit
+                ?.abbreviation
+            }})</span
+          >
+        </div>
+      </p-template>
+      <div></div>
+      <span *ngIf="results?.average !== 'N/A' && results?.average">
+        <strong>{{ "test.average" | translate }}:</strong>
+        {{ results?.average + " " + selectedMeassure }}
+      </span>
+
+      <li *ngFor="let question of configuationQuestions">
+        <strong>{{ question.question }}:</strong>
+        {{ question.response + " " }}
+      </li>
+
+      <li *ngIf="resultType === 'average_symmetric'">
+        <strong>{{ "test.avergage_left" | translate }}:</strong>
+        {{ resultList.result["left"] + " " }}
+      </li>
+
+      <li *ngIf="resultType === 'average_symmetric'">
+        <strong>{{ "test.avergage_right" | translate }}:</strong>
+        {{ resultList.result["right"] + " " }}
+      </li>
+    </ul>
+  </p-accordionTab>
+</p-accordion>
+
+<p-dialog
+  id="test_results"
+  class="custom_dialog"
+  [modal]="true"
+  [(visible)]="new_best_score"
+  styleClass=""
+  [showHeader]="false"
+  maskStyleClass="purple_mask"
+>
+  <div class="result-wrapper">
+    <div class="d-flex justify-content-center align-items-center flex-column">
+      <div>
+        <img
+          src="{{ resources + '/rfd_injuries/good_work.svg' }}"
+          class="result_image"
+        />
+      </div>
+
+      <p class="title mt-3">
+        {{ "test.youReachedTheBestScore" | translate }}
+      </p>
+
+      <p class="title mt-2">
+        Resultado: {{ resultList.result + " " + selectedMeassure }}
+      </p>
+    </div>
+
+    <div class="text-center">
+      <button
+        class="btn close-btn mt-4"
+        type="button"
+        (click)="new_best_score = false"
+      >
+        {{ "LBL_CERRAR" | translate }}
+      </button>
+    </div>
+  </div>
+</p-dialog>

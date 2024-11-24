@@ -1,0 +1,19 @@
+.label-link {
+  color: #004dff;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+:host ::ng-deep .p-calendar .p-inputtext {
+  border: 1px solid #ced4da !important;
+  height: 40px !important;
+  border-radius: 10px;
+}
+
+:host ::ng-deep .p-calendar {
+  width: 100%;
+}
+
+.radio-w {
+  width: 200px !important;
+}

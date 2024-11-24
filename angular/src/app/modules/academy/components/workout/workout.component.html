@@ -1,0 +1,275 @@
+<div
+  class="card box-shadow"
+  appUserPermission
+  [method]="[
+    'team_exercise_store',
+    'team_exercise_update',
+    'team_exercise_delete'
+  ]"
+  (showItem)="handlePermission($event)"
+>
+  <div class="card-body p-0">
+    <div class="row">
+      <div class="col-12">
+        <div class="workout_header view_header">
+          <div class="filters">
+            <div class="search-filter">
+              <div class="d-flex align-items-center">
+                <h6
+                  class="font-weight-600 mb-0 mr-4 text-main view_header_title"
+                >
+                  {{ "exercise.my_exercises" | translate }}
+                </h6>
+
+                <div class="p-input-icon-left d-md-inline buscador">
+                  <i class="pi pi-search"></i>
+                  <input
+                    type="text"
+                    pInputText
+                    placeholder="{{ 'LBL_SEARCH' | translate }}"
+                    (input)="filter($event)"
+                  />
+                </div>
+              </div>
+
+              <div class="header_buttons create-btn-section-responsive">
+                <button
+                  class="btn new_workout_btn responsive-btn action"
+                  (click)="newExercise()"
+                  *ngIf="showPermission.store"
+                  pButton
+                >
+                  <span class="d-sm-inline mr-2">{{
+                    "exercise.new_exercise" | translate
+                  }}</span>
+                  <i class="fa fa-plus text-white"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="sort-input">
+              <p-treeSelect
+                [(ngModel)]="selectedFilter"
+                (ngModelChange)="handleSelectFilter()"
+                [options]="filterOptions"
+                placeholder="{{ 'LBL_FILTRAR' | translate }}"
+              ></p-treeSelect>
+
+              <div *ngIf="this.selectedFilter?.code">
+                <button
+                  class="btn see_all_btn"
+                  (click)="
+                    listadoEjercicios = allExercises; selectedFilter = null
+                  "
+                  pTooltip="{{ 'seeAll' | translate }}"
+                >
+                  <i class="pi pi-times"></i>
+                </button>
+              </div>
+
+              <app-order-button
+                [list]="listadoEjercicios"
+                (convertedList)="handleOrderFilter($event)"
+                class="d-flex"
+              >
+              </app-order-button>
+            </div>
+          </div>
+
+          <div class="header_buttons create-btn-section">
+            <button
+              class="btn new_workout_btn responsive-btn action"
+              (click)="newExercise()"
+              *ngIf="showPermission.store"
+              pButton
+            >
+              <span class="d-sm-inline mr-2">{{
+                "exercise.new_exercise" | translate
+              }}</span>
+              <i class="fa fa-plus text-white"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="col-12">
+        <div
+          class="workouts_container"
+          *ngIf="loading == false && listadoEjercicios.length > 0"
+        >
+          <div *ngFor="let item of listadoEjercicios">
+            <div class="px-3 my-3 resp_f">
+              <app-single-workout
+                [ejercicio]="item"
+                [team]="team"
+                [ratingIcons]="ratingIcons"
+                [isWorkoutPage]="true"
+                (detalle)="verDetalle($event)"
+                (updateExercise)="updateExercise($event)"
+                (deleteExercise)="deleteExercise($event)"
+                (openModel)="open3DIframe($event)"
+              ></app-single-workout>
+            </div>
+          </div>
+        </div>
+        <div
+          *ngIf="!loading && listadoEjercicios.length === 0"
+          class="text-center nodatatext py-5"
+        >
+          <span>
+            {{ "nodata.sinejercicio" | translate }}
+          </span>
+        </div>
+        <div class="workouts_container" *ngIf="loading">
+          <div *ngFor="let workout of [1, 2, 3, 4, 5, 6]">
+            <div class="workout_skeleton">
+              <p-skeleton width="100%" height="150px"></p-skeleton>
+              <div class="d-flex p-3">
+                <div class="flex-grow-1">
+                  <p-skeleton
+                    width="40%"
+                    height="1rem"
+                    styleClass="my-1"
+                  ></p-skeleton>
+                  <p-skeleton
+                    width="65%"
+                    height="1rem"
+                    styleClass="my-1"
+                  ></p-skeleton>
+                  <p-skeleton
+                    width="40%"
+                    height="1rem"
+                    styleClass="my-1"
+                  ></p-skeleton>
+                </div>
+              </div>
+              <div class="p-3 border-top border-bottom d-flex">
+                <p-skeleton
+                  width="50%"
+                  height="1rem"
+                  styleClass="m-auto"
+                  class="flex-grow-1"
+                ></p-skeleton>
+                <p-skeleton
+                  width="50%"
+                  height="1rem"
+                  styleClass="m-auto"
+                  class="flex-grow-1"
+                ></p-skeleton>
+                <p-skeleton
+                  width="50%"
+                  height="1rem"
+                  styleClass="m-auto"
+                  class="flex-grow-1"
+                ></p-skeleton>
+                <p-skeleton
+                  width="50%"
+                  height="1rem"
+                  styleClass="m-auto"
+                  class="flex-grow-1"
+                ></p-skeleton>
+              </div>
+              <div class="p-3">
+                <p-skeleton
+                  width="90%"
+                  height="1rem"
+                  styleClass="my-1"
+                ></p-skeleton>
+                <p-skeleton
+                  width="80%"
+                  height="1rem"
+                  styleClass="my-1"
+                ></p-skeleton>
+                <p-skeleton
+                  width="75%"
+                  height="1rem"
+                  styleClass="my-1"
+                ></p-skeleton>
+                <p-skeleton
+                  width="50%"
+                  height="1rem"
+                  styleClass="my-1"
+                ></p-skeleton>
+              </div>
+              <div class="d-flex p-3 border-top">
+                <div class="flex-grow-1">
+                  <p-skeleton
+                    width="50%"
+                    height="1rem"
+                    styleClass="m-auto"
+                  ></p-skeleton>
+                </div>
+                <div class="flex-grow-1">
+                  <p-skeleton
+                    width="50%"
+                    height="1rem"
+                    styleClass="m-auto"
+                  ></p-skeleton>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<app-create-workout-dialog
+  [visible]="showCreate"
+  *ngIf="showCreate"
+  [team]="team"
+  [sportList]="sportList"
+  (dismiss)="open3DIframe($event)"
+  (close)="closeDialog()"
+>
+</app-create-workout-dialog>
+
+<app-new-workout-dialog
+  *ngIf="showIFrame"
+  [visible]="showIFrame"
+  (dismiss)="cerrarModalIframe($event)"
+  (close)="close3DModal($event)"
+  [urlTeam]="urlIframe"
+  [exerciseCreated]="exerciseCreated"
+>
+</app-new-workout-dialog>
+
+<app-save-changes-dialog [visible]="showSaveChanges" *ngIf="showSaveChanges">
+</app-save-changes-dialog>
+
+<app-save-workout-dialog
+  *ngIf="showUpdate"
+  [visible]="showUpdate"
+  [step]="updateCurrentStep"
+  [ratingIcons]="ratingIcons"
+  [ejercicio]="ejercicio"
+  [exerciseCreated]="exerciseCreated"
+  (dismiss)="cerrarModalUpdate()"
+  (refreshExercises)="refreshData()"
+  (openModel)="open3DIframe($event)"
+></app-save-workout-dialog>
+
+<p-confirmDialog
+  #cd
+  [style]="{ width: '50vw' }"
+  class="custom_dialog"
+  maskStyleClass="purple_mask"
+  [closable]="false"
+>
+  <ng-template pTemplate="footer">
+    <div class="footer_btns">
+      <button
+        type="button"
+        pButton
+        label="{{ 'LBL_NO' | translate }}"
+        (click)="cd.reject()"
+      ></button>
+      <button
+        class="next_btn"
+        type="button"
+        pButton
+        label="{{ 'LBL_YES' | translate }}"
+        (click)="cd.accept()"
+      ></button>
+    </div>
+  </ng-template>
+</p-confirmDialog>

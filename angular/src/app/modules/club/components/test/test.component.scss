@@ -1,0 +1,140 @@
+:host ::ng-deep .test_header {
+  display: flex;
+  align-items: center;
+  // margin-bottom: 2rem;
+  padding: 1.5rem 2.5rem;
+  width: 100%;
+  // padding: 1rem 0rem;
+  .make_test_btn {
+    color: white;
+    font-weight: 500;
+    padding: 11px;
+    margin-left: 6px;
+    border-radius: 8px;
+    // flex: 1 1 100%;
+    @media (max-width: 501px) {
+      margin-left: 0px;
+      width: 330px;
+      margin-right: 1rem;
+    }
+  }
+}
+
+:host ::ng-deep .p-datatable {
+  border: 0;
+  .p-checkbox .p-checkbox-box.p-highlight {
+    border-color: #024cac;
+    background: #024cac;
+  }
+  .p-datatable-thead > tr > th {
+    border-width: 1px 0 1px 0;
+    padding: 2rem 1rem;
+    font-weight: 600;
+
+    // background-color: rgba($color: #050C44, $alpha: .03) !important;
+  }
+  .p-datatable .p-datatable-tbody > tr {
+    border-bottom: 1px solid;
+    .actions_column {
+      .test_btn {
+        border: 1px solid #050c44;
+        border-radius: 11px;
+        display: flex;
+        align-items: center;
+      }
+    }
+  }
+  .p-datatable-tbody > tr > td {
+    // border: 1px solid;
+    padding: 1rem 1rem;
+    font-size: 0.9rem;
+    color: #050c4475;
+    font-weight: 600;
+    background: #050c4401;
+    .test_btn {
+      border: 1px solid rgba($color: #050c44, $alpha: 0.39);
+      border-radius: 11px;
+      display: flex;
+      align-items: center;
+      font-size: 0.9rem;
+      padding: 0.5rem 1.5rem;
+      color: rgba($color: #050c44, $alpha: 0.74);
+    }
+  }
+  // .p-datatable-footer{
+  //     background: transparent;
+  //     border-width: 1px 0 0 0;
+  // }
+}
+
+:host ::ng-deep #dialog_config_member {
+  // .p-dialog-header-icons{
+  //   margin-left: auto;
+  //   margin-right: 8px;
+  // }
+  .p-dialog {
+    border-radius: 25px !important;
+  }
+  .p-dialog-header {
+    border-top-left-radius: 25px !important;
+    border-top-right-radius: 25px !important;
+  }
+  // .p-dialog-header{
+  //   border-top-left-radius: 38px !important;
+  //   border-top-right-radius: 38px !important;
+  // }
+  .p-dialog-content {
+    border-bottom-right-radius: 11px;
+    border-bottom-left-radius: 11px;
+  }
+}
+
+:host ::ng-deep .fullscreen_dialog {
+  width: 100vw;
+  height: 100vh;
+  max-height: 100%;
+  top: 0;
+  #new_team_dialog_container {
+    img {
+      flex: 0;
+      align-self: start;
+    }
+    .dialog_title {
+      color: #050c44;
+      font-weight: bold;
+    }
+    label {
+      color: #050c44;
+    }
+    input {
+      border-radius: 29px;
+      height: 57px;
+      padding: 0 2rem;
+    }
+    .next_btn {
+      background-color: #0065e9;
+      color: white;
+      height: 40px;
+      font-weight: 600;
+      border-radius: 32px;
+    }
+  }
+  .p-dialog-content {
+    flex: 1;
+  }
+}
+
+@media (min-width: 576px) {
+  .make_test_btn {
+    margin-left: auto;
+  }
+}
+
+@media (min-width: 1200px) {
+  .players_header {
+    .add_player_btn {
+      padding: 0.5rem 2rem;
+      height: 45px;
+    }
+  }
+}

@@ -1,0 +1,73 @@
+:host ::ng-deep {
+  .p-dropdown {
+    width: 250px !important;
+
+    span {
+      border: none !important;
+    }
+  }
+
+  .p-multiselect {
+    width: 250px !important;
+    height: 45px;
+    border-radius: 9px;
+
+    .p-multiselect-label.p-placeholder {
+      color: #6c757d;
+    }
+
+    .p-multiselect-label {
+      color: rgba(5, 12, 68, 0.39);
+    }
+  }
+
+  .dropdown {
+    .buscador .p-inputtext {
+      border: none !important;
+    }
+  }
+  .label-text {
+    color: #6c757d;
+    font-weight: 600;
+    font-size: 1rem;
+  }
+
+  .btn-all {
+    padding: 11px;
+    width: 180px;
+    margin-top: 2rem;
+  }
+}
+.cardcolumn {
+  display: flex;
+  flex-direction: column;
+}
+.inputArea {
+  @media (max-width: 1024px) {
+    width: 100%;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+}
+.p_width {
+  @media (min-width: 1024px) {
+    flex: 0 0 33.333333%;
+    max-width: 100%;
+  }
+}
+.d_width {
+  @media (min-width: 576px) {
+    flex: 0 0 30%;
+    max-width: 100%;
+  }
+}
+.just {
+  justify-content: center;
+}
+.searchExerciseInput {
+  @media (max-width: 550px) {
+    margin-bottom: 1rem;
+  }
+}

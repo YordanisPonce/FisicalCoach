@@ -1,0 +1,124 @@
+:host ::ng-deep {
+  .rfd_header {
+    display: flex;
+    align-items: center;
+    // margin-bottom: 2rem;
+    padding: 1.5rem 2.5rem;
+    width: 100%;
+    // padding: 1rem 0rem;
+    .make_test_btn {
+ 
+      color: white;
+      font-weight: 500;
+      padding: 11px;
+      margin-left: auto;
+      border-radius: 8px;
+      // flex: 1 1 100%;
+      @media(max-width:501px){
+        margin-left: 0%;
+        margin-top: 1rem;
+        width: 330px;
+      }
+    }
+    .mr_4{
+      margin-right: 1.5rem;
+      @media(max-width:501px){
+        margin-right: 0;
+      }
+    }
+  }
+
+  .p-datatable {
+    border: 0;
+    .p-checkbox .p-checkbox-box.p-highlight {
+      border-color: #024cac;
+      background: #024cac;
+    }
+    .p-datatable-thead > tr > th {
+      border-width: 1px 0 1px 0;
+      padding: 2rem 1rem;
+      font-weight: 600;
+      color: #050c44 !important;
+      // background-color: rgba($color: #050c44, $alpha: 0.03) !important;
+    }
+    .p-datatable .p-datatable-tbody > tr {
+      border-bottom: 1px solid;
+    }
+    .p-datatable-tbody > tr > td {
+      // border: 1px solid;
+      padding: 1rem 1rem;
+      font-size: 0.9rem;
+      color: #050c4475;
+      font-weight: 600;
+      background: #050c4401;
+      .actions_column {
+        button {
+          img {
+            max-width: 15px;
+          }
+        }
+      }
+
+      .check {
+        color: #00e9c5;
+        font-size: 24px;
+
+        &.closed {
+          color: #8b8fa8;
+        }
+      }
+      .circle {
+        color: #ff4a4a;
+        font-size: 24px;
+      }
+    }
+    // .p-datatable-footer{
+    //     background: transparent;
+    //     border-width: 1px 0 0 0;
+    // }
+  }
+  .p-calendar {
+    border-radius: 6px !important;
+  }
+
+  .p-dialog .p-dialog-content {
+    overflow: visible;
+  }
+
+  .p-dropdown {
+    border-radius: 6px !important;
+    height: 45px !important;
+    width: 100%;
+    padding-top: 3px;
+  }
+
+  .footer_btns {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+
+    button {
+      padding: 0.75rem 1rem;
+      margin: 0 6px;
+      font-size: 0.9rem;
+    }
+
+    .next_btn {
+      background: #024cac;
+      color: white;
+      flex: 1;
+    }
+
+    .back_btn {
+      border: 1px solid #050c4433;
+      flex: 1;
+    }
+  }
+
+  @media (max-width: 1440px) {
+    th {
+      min-width: 200px !important;
+    }
+  }
+}
+

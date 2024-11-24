@@ -1,0 +1,32 @@
+:host ::ng-deep {
+  .p-inputnumber {
+    width: 100% !important;
+    span {
+      width: 100% !important;
+    }
+  }
+}
+
+.player_profile {
+  border: 1px solid #050c4430;
+  padding: 1rem;
+  border-radius: 5px;
+}
+.player_image {
+  max-width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 1px solid #050c4426;
+}
+.player_personal_data_form_container {
+  padding-left: 8px;
+}
+.pointer {
+  cursor: pointer;
+  color: inherit;
+
+  &:hover {
+    text-decoration: none;
+  }
+}

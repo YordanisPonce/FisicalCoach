@@ -1,0 +1,88 @@
+<div class="wrapper">
+  <p-table *ngIf="!loading" [value]="invoicesList" selectionMode="single">
+    <ng-template pTemplate="header">
+      <tr class="text-center">
+        <th  class="text-left space_billing">
+          {{ "invoices.no_invoice" | translate }}
+        </th>
+        <th  class="text-center space_billing">
+          <strong>{{ "invoices.description" | translate }}</strong>
+        </th>
+        <th  class="text-center space_billing">
+          <strong>{{ "invoices.date" | translate }}</strong>
+        </th>
+        <th  class="text-center space_billing">
+          <strong> {{ "invoices.amount" | translate }} </strong>
+        </th>
+        <th  class="text-center space_billing">
+          <strong> {{ "invoices.status" | translate }} </strong>
+        </th>
+        <th  class="text-center space_billing">
+          <strong> {{ "invoices.download" | translate }} </strong>
+        </th>
+      </tr>
+    </ng-template>
+    <ng-template let-i="rowIndex" let-item pTemplate="body">
+      <tr>
+        <td >
+          <strong> {{ item.invoice_number}}</strong>
+        </td>
+        <td  class="text-center">
+          <span>{{item.description}}</span>
+        </td>
+        <td  class="text-center">
+          <span>{{item.created_at|date:'dd/MM/YYYY'}}</span>
+        </td>
+        <td  class="text-center">
+          <span>{{item.total}}</span>
+        </td>
+        <td  class="text-center">
+          <span>{{item.status}}</span>
+        </td>
+        <td  class="text-center">
+          <button pButton  type="button" icon="pi pi-download" (click)="download(item)"
+                  class="p-button-rounded p-button-text" [loading]="downloading"></button>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage" let-columns>
+      <tr>
+        <td colspan="5" style="text-align: center">
+          <span class="nodata"> {{ "profile.sinfacturas" | translate }}</span>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+  <p-table *ngIf="loading" [value]="[2]" selectionMode="single">
+    <ng-template pTemplate="header">
+      <tr class="text-center">
+        <th [width]="'15%'" class="text-center"></th>
+        <th [width]="'50%'" class="text-center">
+          {{ "profile.invitado" | translate }}
+        </th>
+        <th [width]="'30%'" class="text-center">
+          <strong>{{ "profile.estado" | translate }}</strong>
+        </th>
+        <th [width]="'35%'" class="text-center">
+          {{ "LBL_ACTIONS" | translate }}
+        </th>
+      </tr>
+    </ng-template>
+    <ng-template let-i="rowIndex" let-licence pTemplate="body">
+      <tr>
+        <td [width]="'15%'">
+          <p-skeleton width="4rem"></p-skeleton>
+        </td>
+        <td [width]="'50%'">
+          <p-skeleton width="18rem"></p-skeleton>
+        </td>
+        <td [width]="'20%'">
+          <p-skeleton width="10rem"></p-skeleton>
+        </td>
+        <td [width]="'35%'" class="text-center">
+          <p-skeleton width="12rem"></p-skeleton>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

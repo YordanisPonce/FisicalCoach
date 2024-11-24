@@ -1,0 +1,142 @@
+<form (ngSubmit)="onSubmit()" [formGroup]="formMember" id="idFormMember" name="nomForm">
+  <div [ngClass]="{'': getScreenWidth()>=768}" class="row">
+    <!-- pais -->
+    <div class="mb-3 col-6">
+      <label for="country">{{'MEMBERS.LBL_PAIS'| translate}}</label>
+      <p-dropdown 
+      [filter]="true" 
+      [options]="listCountry" 
+      [styleClass]="'w-100 form-control'"
+      aria-describedby="inputGroup-sizing-default"
+      class="control-custom" 
+      [disabled]="view"
+      formControlName="country_id" 
+      id="country" 
+      (onChange)="handleCities($event)"
+      [ngClass]="{'ng-invalid ng-dirty is-invalid':((f.country_id.invalid && (f.country_id.dirty || f.country_id.touched)) || (f.country_id.invalid && submitted))}"
+      placeholder="{{'LBL_SELECCIONE'| translate}}"
+      ></p-dropdown>
+      <div
+      *ngIf="f.country_id?.errors"
+      class="invalid-feedback"
+      >
+        {{ 'MEMBERS.LBL_AREA' | translate}} {{ 'LBL_REQUERIDO' | translate}}
+      </div>
+    </div>
+    <!-- estado -->
+    <div class="mb-3 col-6">
+      <label for="state">{{'MEMBERS.LBL_ESTADO'| translate}} *</label>
+      <p-dropdown 
+      [filter]="true" 
+      [options]="listProviencies" 
+      [styleClass]="'w-100 form-control'"
+      aria-describedby="inputGroup-sizing-default"
+      [ngClass]="{'ng-invalid ng-dirty is-invalid':((f.province_id.invalid && (f.province_id.dirty || f.province_id.touched)) || (f.province_id.invalid && submitted))}"
+      class="control-custom" 
+      [disabled]="view"
+      formControlName="province_id" 
+      id="state"
+      placeholder="{{'LBL_SELECCIONE'| translate}}"
+      ></p-dropdown>
+      <div
+      *ngIf="f.province_id?.errors"
+      class="invalid-feedback"
+      >
+        {{ 'MEMBERS.LBL_ESTADO' | translate}} {{ 'LBL_REQUERIDO' | translate}}
+      </div>
+    </div>
+    <!-- ciudad -->
+    <div class="mb-3 col-6">
+      <label for="city">{{'MEMBERS.LBL_CIUDAD'| translate}}</label>
+      <input [placeholder]="('LBL_ESCRIBIR' | translate)+' '+('MEMBERS.LBL_CIUDAD'| translate).toLowerCase()+'...'" aria-describedby="inputGroup-sizing-default"
+              aria-label="Default"
+              [ngClass]="{'ng-invalid ng-dirty': submitted && f.city.invalid}"
+              class="form-control" [readOnly]="view"
+              formControlName="city" id="city">
+      <div *ngIf="submitted && f.city.invalid" class="form-text text-danger">
+        {{ 'MEMBERS.LBL_AREA' | translate}} {{ 'LBL_REQUERIDO' | translate}}
+      </div>
+    </div>
+    <!-- calle -->
+    <div class="mb-3 col-6">
+      <label for="street">{{'MEMBERS.LBL_CALLE'| translate}}</label>
+      <input 
+      [placeholder]="('LBL_ESCRIBIR' | translate)+' '+('MEMBERS.LBL_CALLE'| translate).toLowerCase()+'...'" aria-describedby="inputGroup-sizing-default"
+      aria-label="Default"
+      class="form-control" 
+      [readOnly]="view"
+      [ngClass]="{'ng-invalid ng-dirty': submitted && f.street.invalid}"
+      formControlName="street" 
+      id="street">
+      <div *ngIf="submitted && f.street.invalid" class="form-text text-danger">
+        {{ 'MEMBERS.LBL_CALLE' | translate}} {{ 'LBL_REQUERIDO' | translate}}
+      </div>
+    </div>
+    <!-- codigo postal -->
+    <div class="mb-3 col-6">
+      <label for="postal_code">{{'MEMBERS.LBL_CODIGOPOSTAL'| translate}}</label>
+      <input 
+      [placeholder]="('LBL_ESCRIBIR' | translate)+' '+('MEMBERS.LBL_CODIGOPOSTAL'| translate).toLowerCase()+'...'" 
+      aria-describedby="inputGroup-sizing-default"
+      aria-label="Default"
+      class="form-control" 
+      [readOnly]="view"
+      [ngClass]="{'ng-invalid ng-dirty': submitted && f.postal_code.invalid}"
+      formControlName="postal_code" 
+      id="postal_code">
+      <div *ngIf="submitted && f.postal_code.invalid" class="form-text text-danger">
+        {{ 'MEMBERS.LBL_CODIGOPOSTAL' | translate}} {{ 'LBL_REQUERIDO' | translate}}
+      </div>
+    </div>
+    <!-- movil -->
+    <div class="mb-3 col-6">
+      <label for="mobile_phone">{{'MEMBERS.LBL_MOVIL'| translate}}</label>
+      <p-chips 
+      [addOnBlur]="true" 
+      formControlName="mobile_phone" 
+      id="mobile_phone" 
+      placeholder="+12345678"         
+      [ngClass]="{'ng-invalid ng-dirty': submitted && f.mobile_phone.invalid}"         
+      separator="," 
+      type="number" 
+      [disabled]="view"
+      (keyup)="validateMobile($event)" (onBlur)="maskPhoneCode($event)"
+      ></p-chips>
+      <div *ngIf="submitted && f.mobile_phone.invalid" class="form-text text-danger">
+        {{ 'MEMBERS.LBL_MOVIL' | translate}} {{ 'LBL_REQUERIDO' | translate}}
+      </div>
+    </div>
+    <!-- email -->
+    <div class="mb-3 col-12">
+      <label for="email">{{'MEMBERS.LBL_EMAIL'| translate}} *</label>
+      <input
+      [ngClass]="{'ng-invalid ng-dirty is-invalid':((f.email.invalid && (f.email.dirty || f.email.touched)) || (f.email.invalid && submitted))}" 
+      [placeholder]="('LBL_ESCRIBIR' | translate)+' '+('MEMBERS.LBL_EMAIL'| translate).toLowerCase()+'...'" 
+      aria-describedby="inputGroup-sizing-default"
+      aria-label="Default"
+      class="form-control" 
+      type="email" 
+      [readOnly]="view"
+      formControlName="email" 
+      id="email"
+      >
+      <div
+      *ngIf="f.email?.errors"
+      class="invalid-feedback"
+      >
+        {{ 'MEMBERS.LBL_EMAIL' | translate}} {{ 'LBL_REQUERIDO' | translate}}
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-4">
+    <div class="col-6 col-md-3 offset-md-6">
+      <button class="btn back_btn btn-block" type="button" (click)="back()">{{'LBL_ATRAS'| translate}}</button>
+    </div>
+    <div class="col-6 col-md-3">
+      
+      <button class="btn next_btn btn-block" (click)="view ? nextstep.emit(true) : onSubmit()">{{'LBL_SIGUIENTE'|translate}}</button>
+    </div>
+  </div>
+</form>
+

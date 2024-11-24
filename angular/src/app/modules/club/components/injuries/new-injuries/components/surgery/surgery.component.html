@@ -1,0 +1,56 @@
+<form
+  (ngSubmit)="onSubmit()"
+  id="idFormMember"
+  name="nomForm"
+  *ngIf="formulario"
+  [formGroup]="formulario"
+>
+  <div class="row">
+    <div class="mb-3 col-6">
+      <label>{{ "INJURY.LBL_SURGERY_DATE" | translate }}</label>
+      <p-calendar
+        [readonlyInput]="true"
+        [monthNavigator]="true"
+        [yearNavigator]="true"
+        [yearRange]="yearRange"
+        [minDate]="minDate"
+        [style]="{ overflow: 'visible' }"
+        class="p-calendar form-control"
+        dateFormat="dd/mm/yy"
+        inputId="range"
+        formControlName="surgery_date"
+        placeholder="{{ 'INJURY.LBL_SURGERY_DATE' | translate  }}"
+        [firstDayOfWeek]="1"
+      ></p-calendar>
+    </div>
+    <div class="mb-3 col-6">
+      <label>{{ "INJURY.LBL_MEDICAL_CENTER" | translate }}</label>
+      <input
+        aria-describedby="inputGroup-sizing-default"
+        aria-label="Default"
+        type="text"
+        formControlName="medical_center_name"
+        class="form-control"
+        placeholder="{{ 'LBL_ESCRIBEAQI' | translate }}"
+      />
+    </div>
+
+    <div class="mb-3 col-6">
+      <label>{{ "INJURY.LBL_SURGEON" | translate }}</label>
+      <input
+        aria-describedby="inputGroup-sizing-default"
+        aria-label="Default"
+        type="text"
+        formControlName="surgeon_name"
+        class="form-control"
+        placeholder="{{ 'LBL_ESCRIBEAQI' | translate }}"
+      />
+    </div>
+    <div class="mb-3 col-6">
+      <label>{{ "INJURY.LBL_ADDITIONAL_INFO" | translate }}</label>
+      <textarea formControlName="surgery_extra_info" style="border-radius: 8px; min-height: 45px;"
+                class="form-control" rows="1"
+                placeholder="{{ 'LBL_ESCRIBEAQI' | translate }}"></textarea>
+    </div>
+  </div>
+</form>

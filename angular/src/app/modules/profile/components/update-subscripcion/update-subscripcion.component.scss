@@ -1,0 +1,156 @@
+* {
+  font-family: "Montserrat", "Regular";
+}
+
+.next_btn{
+  background: #024CAC;
+  height: 45px;
+  // height: 60px;
+  color: white;
+  border-radius: 8px;
+}
+
+.contenedor {
+  width: 100%;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  background-color: white;
+}
+
+.icono {
+  padding: 1em;
+  color: #0065e9;
+}
+
+.card {
+  border: none !important;
+}
+
+.interval {
+  font-weight: bold;
+  font-size: small;
+}
+
+.bordes {
+  border: 1px solid lightgrey !important;
+}
+
+.selectDefault {
+  border: 1px solid #024cac !important;
+}
+
+.selected {
+  border: 1px solid #00e9c5 !important;
+}
+
+.card-footer {
+  display: none !important;
+
+  &.selected {
+    color: #fff;
+    background-color: #00e9c5 !important;
+  }
+}
+
+.selectFotter {
+  display: block !important;
+  background-color: #0065e9 !important;
+  color: white;
+}
+
+.suscription_selector {
+  background-color: white;
+  border-radius: 29px;
+  padding: 0;
+  display: flex;
+  text-align: center;
+  max-width: 300px;
+  margin: 2rem auto;
+  border: 1px solid #70707033;
+
+  .select {
+    height: 55px;
+    color: #050c44;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border-radius: 29px;
+    flex: 1;
+    line-height: 55px;
+    cursor: pointer;
+
+    &.selectTwo {
+      background-color: #050c44;
+      color: white;
+    }
+  }
+}
+.pack_selected{
+  box-shadow: 0 0 10px #19e0bf !important;
+}
+.pack {
+  box-shadow: 0px 3px 28px #0000001c;
+  border-radius: 16px;
+  background: white;
+  height: auto;
+  width: 100%;
+  max-width: 350px;
+  margin: 0 auto;
+
+  .pack_caption {
+    font-size: 0.85rem;
+    color: rgba($color: #050c44, $alpha: 0.37);
+    font-weight: 600;
+  }
+
+  .pack_header {
+    padding: 3rem;
+    border-bottom: 1px solid rgba($color: #050c44, $alpha: 0.11);
+    cursor: pointer;
+
+    .pack_title {
+      font-weight: 600;
+      text-transform: uppercase;
+      margin-bottom: 0;
+      text-align: center;
+      font-size: 1.2rem;
+    }
+
+    .pack_price {
+      text-align: center;
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+
+    .pack_icon {
+      margin: 1.5rem auto 1rem auto;
+      text-align: center;
+    }
+  }
+
+  .pack_action {
+    padding: 1.5rem;
+
+    button {
+      border-radius: 13px;
+      color: #024cac;
+      font-size: 0.9rem;
+      font-weight: 600;
+      border: 1px solid #024cac;
+      height: 55px;
+    }
+
+    .selectDefault {
+      background-color: #024cac !important;
+      color: #fff !important;
+    }
+  }
+}
+
+:host ::ng-deep {
+  .p-tooltip {
+    z-index: 999999 !important;
+  }
+}

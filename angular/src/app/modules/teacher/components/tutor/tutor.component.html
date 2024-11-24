@@ -1,0 +1,255 @@
+<div class="card box-shadow">
+  <div class="card-body p-0">
+    <div class="row">
+      <div class="col-12">
+        <div class="nutrition_header view_header p-4">
+          <h6 class="font-weight-600 mb-0 mr-4 text-main view_header_title">
+            {{ "LBL_STUDENTS_LIST" | translate }}
+          </h6>
+          <div #sorting class="position-relative" id="sorting">
+            <button class="" id="sorting_btn" label=" " pButton type="text">
+              <span class="mr-2 filter_label">{{
+                "nutrition.filter.title" | translate
+              }}</span>
+              <span>{{ "nutrition.filter.alphabetic" | translate }}</span>
+            </button>
+            <p-overlayPanel #sortPanel>
+              <ng-template pTemplate>
+                <div class="sorting_content">
+                  <div *ngFor="let i of [1]" class="option">
+                    <span>{{ "nutrition.filter.alphabetic" | translate }}</span>
+                  </div>
+                </div>
+              </ng-template>
+            </p-overlayPanel>
+          </div>
+          <span class="buscador p-input-icon-left d-md-inline">
+            <i class="pi pi-search"></i>
+            <input
+              (input)="searchAlumn($event)"
+              pInputText
+              placeholder="{{ 'nutrition.search_player' | translate }}"
+              type="text"
+              type="text"
+            />
+          </span>
+          <div class="header_buttons">
+            <button
+              (click)="newTutorshipDialog = true"
+              [disabled]="selectedStudent.length == 0"
+              class="btn action"
+              pButton
+            >
+              <span class="d-sm-inline mr-2">{{
+                "tutor.create_new_tutorship" | translate
+              }}</span>
+              <i class="fa fa-plus text-white"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="col-12">
+        <p-table
+          [(selection)]="selectedStudent"
+          [alwaysShowPaginator]="false"
+          [loading]="loading"
+          [paginator]="true"
+          [rows]="10"
+          [showLoader]="false"
+          [value]="students"
+          class="p-datatable-responsive"
+          selectionMode="single"
+        >
+          <ng-template pTemplate="header">
+            <tr class="text-center">
+              <th style="width: 3rem; min-width: 3rem !important">
+                <!-- <p-tableHeaderCheckbox></p-tableHeaderCheckbox> -->
+              </th>
+              <th class="text-left pl-5" pSortableColumn="full_name">
+                {{ "tutor.name" | translate }}
+                <p-sortIcon field="full_name"></p-sortIcon>
+              </th>
+              <th class="text-center" pSortableColumn="tutorshitData.reason">
+                {{ "tutor.tutorshipNumber" | translate }}
+                <p-sortIcon field="tutorshitData.reason"></p-sortIcon>
+              </th>
+
+              <th class="text-center" pSortableColumn="tutorshitData.date">
+                {{ "tutor.tutorshipDate" | translate }}
+                <p-sortIcon field="tutorshitData.date"></p-sortIcon>
+              </th>
+              <th class="text-center" pSortableColumn="tutorshipType.name">
+                {{ "tutor.tutorshipType" | translate }}
+                <p-sortIcon field="tutorshipType.name"></p-sortIcon>
+              </th>
+              <th class="text-center">{{ "LBL_ACTIONS" | translate }}</th>
+            </tr>
+          </ng-template>
+
+          <ng-template let-i="rowIndex" let-student pTemplate="body">
+            <tr class="colum-responsive">
+              <td class="checbox-w">
+                <p-tableCheckbox
+                  (click)="onRowSelect(student, i)"
+                  [value]="student"
+                ></p-tableCheckbox>
+              </td>
+
+              <td class="tutorship">
+                <div
+                  class="text-center d-flex justify-content-start align-items-center"
+                >
+                  <div
+                    [style.backgroundImage]="
+                      'url(' +
+                      (student.image != null
+                        ? student.image.full_url
+                        : student.gender.code === 'female'
+                        ? girlAlumnImage
+                        : boyAlumnImage) +
+                      ')'
+                    "
+                    class="avatar_image avatar_40 rounded-circle mr-2"
+                  ></div>
+                  <div>
+                    <strong>{{ student.full_name }}</strong>
+                  </div>
+                </div>
+              </td>
+
+              <td class="text-center tutorship">
+                <span class="p-column-title">{{
+                  "tutor.tutorshipNumber" | translate
+                }}</span>
+
+                <div>
+                  <span>
+                    {{
+                      student.tutorships.length > 0
+                        ? student.tutorships[0].reason
+                        : "N/A"
+                    }}
+                  </span>
+                </div>
+              </td>
+
+              <td class="checbox-w d-sm-none"></td>
+
+              <td class="text-center tutorship">
+                <span class="p-column-title">{{
+                  "tutor.tutorshipDate" | translate
+                }}</span>
+                <span class="mr-3">
+                  {{
+                    student.tutorships.length > 0
+                      ? (student.tutorships[0].date | date : "d/M/y")
+                      : "N/A"
+                  }}
+                </span>
+              </td>
+
+              <td class="text-center tutorship">
+                <span class="p-column-title">{{
+                  "tutor.tutorshipType" | translate
+                }}</span>
+                {{
+                  student.tutorships.length > 0
+                    ? student.tutorships[0].tutorship_type.name
+                    : "N/A"
+                }}
+              </td>
+
+              <td class="d-flex actions w-column-full">
+                <button
+                  [disabled]="student.tutorships.length === 0"
+                  class="btn view_btn"
+                  pTooltip="{{ 'LBL_DETAILS' | translate }}"
+                  routerLink="/teacher/tutor/detalles/{{
+                    student.tutorships[0]?.id
+                  }}"
+                >
+                  <!-- <img src="/assets/img/icons/ver.svg" alt="" /> -->
+                  <img src="{{ urlImages + 'images/menu/ver.svg' }}" />
+                </button>
+                <!-- <button class="btn" [disabled]="(student.tutorships.length === 0 )" (click)="download(student.tutorships[0]?.id)">
+                  <i class="pi pi-print"></i>
+                </button> -->
+                <button
+                  [disabled]="student.tutorships.length === 0"
+                  class="btn"
+                  pTooltip="{{ 'LBL_HISTORIAL' | translate }}"
+                  routerLink="/teacher/tutor/record/{{
+                    student.tutorships[0]?.alumn_id
+                  }}"
+                >
+                  <img alt="" src="/assets/img/icons/book-icon.svg" />
+                </button>
+                <!-- nueva tutoria -->
+                <button
+                  (click)="loadTutorship(student)"
+                  class="btn"
+                  pTooltip="{{ 'tutor.create_new_tutorship' | translate }}"
+                >
+                  <i class="pi pi-plus"></i>
+                </button>
+                <!-- editar tutoria -->
+                <button
+                  (click)="loadTutorship(student, true)"
+                  [disabled]="student.tutorships.length === 0"
+                  class="btn"
+                  pTooltip="{{ 'LBL_EDIT' | translate }}"
+                >
+                  <!-- <img src="assets/img/icons/lapiz.svg" class="" /> -->
+                  <img src="{{ urlImages + 'images/menu/edit.svg' }}" />
+                </button>
+                <!-- <button class="btn" (click)="deleteTutorship(student.tutorships[0].id)" [disabled]="(student.tutorships.length === 0 )">
+                  <img src="assets/img/icons/eliminar.svg" class="" />
+                </button> -->
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="6" style="text-align: center">
+                <p class="nodata">
+                  {{ "nodata.sintutoria" | translate }}
+                </p>
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template let-columns pTemplate="loadingbody">
+            <tr *ngFor="let i of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]">
+              <td></td>
+              <td>
+                <p-skeleton height="1rem" width="100%"></p-skeleton>
+              </td>
+              <td>
+                <p-skeleton height="1rem" width="100%"></p-skeleton>
+              </td>
+              <td>
+                <p-skeleton height="1rem" width="100%"></p-skeleton>
+              </td>
+              <td>
+                <p-skeleton height="1rem" width="100%"></p-skeleton>
+              </td>
+              <td class="d-flex justify-content-around">
+                <p-skeleton height="1rem" width="20px"></p-skeleton>
+                <p-skeleton height="1rem" width="20px"></p-skeleton>
+                <p-skeleton height="1rem" width="20px"></p-skeleton>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
+  </div>
+</div>
+<new-tutorship-dialog
+  (actionExecuted)="
+    getStudentsList(); editingTutorship = false; selectedStudent = []
+  "
+  (close)="newTutorshipDialog = editingTutorship = false; selectedStudent = []"
+  [editingTutorship]="editingTutorship"
+  [student]="selectedStudent.length > 0 ? selectedStudent[0] : []"
+  [visible]="newTutorshipDialog"
+></new-tutorship-dialog>

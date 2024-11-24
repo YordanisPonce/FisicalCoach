@@ -1,0 +1,264 @@
+:host ::ng-deep #create_player_dialog {
+  .fototypes {
+    font-size: 14px;
+    color: #05e9c6;
+    font-weight: 500;
+  }
+  &.advanced_dialog {
+    .p-dialog {
+      min-height: 100%;
+      max-height: 100%;
+      min-width: 100%;
+      max-width: 100%;
+      padding: 1rem 1, 5rem 1rem 1rem !important;
+      .p-dialog-header {
+        border-top-right-radius: 0px;
+        border-top-left-radius: 0px;
+        padding-bottom: 0;
+        .header_content {
+          padding: 2rem 0;
+          flex: 1;
+          border-bottom: 1px solid #050c4417;
+          font-family: "Montserrat", sans-serif;
+          .title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+          }
+          .subtitle {
+            color: #050717;
+            opacity: 0.84;
+            font-weight: 600;
+          }
+        }
+      }
+      .p-dialog-content {
+        .step_content {
+          padding-right: 25px;
+        }
+        display: flex;
+        padding-bottom: 0;
+        flex: 1;
+        font-family: "Montserrat", sans-serif;
+        .back_btn {
+          height: 45px;
+          border: 1px solid #050c4433;
+          flex: 1;
+          color: rgba($color: #050c44, $alpha: 0.44);
+          border-radius: 8px;
+        }
+        .next_btn {
+          background: #024cac;
+          height: 45px;
+          color: white;
+          border-radius: 8px;
+        }
+        .dialog_container {
+          flex: 1;
+          .timeline_steps {
+            position: relative;
+            .timeline_step {
+              display: flex;
+              align-items: center;
+              position: relative;
+              .timeline_step_titles {
+                text-align: right;
+                color: #000000;
+                font-size: 0.95rem;
+                .title {
+                  font-weight: 700;
+                }
+              }
+              .timeline_step_icon {
+                width: 50px;
+                height: 50px;
+                background-color: #f6f6f6;
+                border-radius: 50%;
+                margin: auto;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 1;
+                img {
+                  width: 50px;
+                }
+              }
+            }
+          }
+          .advanced_steps_container {
+            padding: 1.5rem;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            .advanced_steps_content {
+              font-size: 0.9rem;
+              flex: 1;
+            }
+            .btn_add_agent {
+              padding: 1rem;
+              text-align: left;
+              font-size: 0.9rem;
+              font-weight: 300 !important;
+              border-radius: 29px;
+            }
+          }
+        }
+      }
+      .p-dialog-footer {
+        border-bottom-right-radius: 0px;
+        border-bottom-left-radius: 0px;
+      }
+      .p-radiobutton-label {
+        font-size: 0.9rem;
+        margin-bottom: 0;
+        color: #050c44 !important;
+      }
+    }
+    .p-scrollpanel-content {
+      padding: 8px;
+    }
+  }
+  .p-dialog {
+    @media screen and (max-width: 415px) {
+      margin: 5%;
+    }
+    //   min-width: 360px;
+    max-width: 450px;
+    &.advanced_dialog {
+      max-width: 100%;
+    }
+    .player_image {
+      border: 1px solid #024cac;
+      height: 150px;
+      width: 150px;
+      margin: auto;
+      border-radius: 50%;
+      display: flex;
+      cursor: pointer;
+      .icon_image i {
+        font-size: 63px;
+      }
+    }
+  }
+}
+label {
+  font-size: 0.9rem;
+}
+
+@media (min-width: 1200px) {
+  :host ::ng-deep #create_player_dialog {
+    &.advanced_dialog {
+      .p-dialog {
+        .p-dialog-content {
+          display: flex;
+          flex: 1;
+          .back_btn {
+            height: 55px;
+          }
+          .next_btn {
+            height: 55px;
+          }
+          .dialog_container {
+            padding-left: 2rem;
+            padding-right: 2rem;
+            flex: 1;
+            .timeline_steps {
+              border-right: 1px solid #050c4417;
+              height: 100%;
+              padding: 1.5rem 0 2.5rem;
+              .timeline_steps_container {
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                position: relative;
+                .timeline_step {
+                  display: flex;
+                  align-items: center;
+                  .timeline_step_titles {
+                    margin-left: auto;
+                    .title {
+                    }
+                  }
+                  .timeline_step_icon {
+                    background-color: #f6f6f6;
+                    border-radius: 50%;
+                    margin: 0 1rem;
+                    width: 75px;
+                    height: 75px;
+                    img {
+                      width: 75px;
+                    }
+                  }
+                  .timeline_step_selector {
+                    border: 1px solid #050c4417;
+                    border-radius: 50%;
+                    // padding: .5rem;
+                    width: 18px;
+                    height: 18px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    // padding: 3px;
+                    position: absolute;
+                    right: -9px;
+                    background-color: white;
+                    .center {
+                      width: 10px;
+                      height: 10px;
+                      // background-color: black;
+                      border-radius: 50%;
+                      &.active {
+                        background-color: black;
+                      }
+                    }
+                  }
+                }
+                .timeline_steps_line {
+                  border: 1px solid #00e9c5;
+                  height: 100%;
+                  position: absolute;
+                  right: calc(1rem + 37.5px);
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+@media (min-width: 1200px) {
+  :host ::ng-deep #create_player_dialog {
+    &.advanced_dialog {
+      .p-dialog {
+        .p-dialog-header {
+          padding-left: 5rem;
+        }
+        .p-dialog-content {
+          .dialog_container {
+            padding-left: 4rem;
+            padding-right: 4rem;
+            .timeline_steps {
+              .timeline_steps_container {
+                .timeline_step {
+                  .timeline_step_icon {
+                    margin: 0 2.5rem;
+                  }
+                }
+                .timeline_steps_line {
+                  right: calc(2.5rem + 37.5px);
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// .advance_btn{
+//   background-color: #024CAC !important;
+//   color: #FFF !important;
+// }

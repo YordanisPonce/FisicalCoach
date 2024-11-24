@@ -1,0 +1,18 @@
+.p-datepicker table td {
+  padding: 0px !important;
+}
+.p-datepicker table td > span {
+  width: 1.7rem !important;
+  height: 1.7rem !important;
+  border-radius: 65%;
+  transition: box-shadow 0.2s;
+  border: 1px solid transparent;
+}
+.p-datepicker table td.p-datepicker-today > span {
+  background: #0277bc !important;
+  color: #fdfeff !important;
+  border-color: transparent;
+}
+.p-datepicker .p-datepicker-header {
+  padding: 0.3rem !important;
+}

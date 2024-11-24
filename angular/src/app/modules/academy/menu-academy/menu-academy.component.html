@@ -1,0 +1,308 @@
+<div *ngIf="club" class="secondary_sidebar_active" id="secondary-sidebar">
+  <div *ngIf="club" class="sidebar-header">
+    <a
+      (click)="op.toggle($event)"
+      class="d-flex list-group-item list-group-item-action font-weight-500 sidebar-item py-4 align-items-center"
+    >
+      <span
+        class="border p-2 fisical-border rounded-circle sidebar-item-img text-center"
+        style="height: 45px"
+      >
+        <p-avatar
+          *ngIf="club && club.image && !club.image.id"
+          image="{{ club.image.full_url }}"
+          shape="circle"
+        ></p-avatar>
+        <p-avatar
+          *ngIf="club && club.image && club.image.id"
+          image="{{ club.image.full_url }}"
+          shape="circle"
+        ></p-avatar>
+        <p-avatar
+          *ngIf="!club || !club.image"
+          image="{{ urlBase + 'images/menu/shield.png' }}"
+          shape="circle"
+        ></p-avatar>
+      </span>
+      <div
+        class="ml-3 sidebar-item-text font-weight-600"
+        style="word-break: break-all"
+      >
+        {{ club.name }}
+
+        <div class="d-flex">
+          <small *ngIf="!isTeacher" class="d-block fisical-text">
+            {{ club.users_count }}</small
+          >
+          <small class="fisical-text ml-1">{{
+            "academySidebar.guests" | translate
+          }}</small>
+        </div>
+      </div>
+    </a>
+    <p-overlayPanel #op>
+      <ng-template pTemplate="content">
+        <div id="academy_options">
+          <a
+            class="sidebar-item d-flex flex-column px-4 suscription_item font-weight-normal main-bg"
+          >
+            <h6 class="font-weight-600 my-3 suscription_item_title">
+              {{ "academySidebar.my_suscription" | translate }}
+            </h6>
+            <div class="d-flex">
+              <div class="pb-3">
+                <p class="text-white">
+                  {{ "academySidebar.youCurrently" | translate }}
+                  <strong>
+                    {{
+                      "academySidebar.package"
+                        | translate : { package: userSubscription }
+                    }}
+                  </strong>
+                </p>
+                <span
+                  class="ver_planes text-white"
+                  routerLink="/profile/update-subscription/{{ role }}"
+                >
+                  {{ "academySidebar.seeAllPlans" | translate }}</span
+                >
+              </div>
+              <div
+                class="suscription_img_container border align-self-center rounded-circle p-3"
+              >
+                <img
+                  *ngIf="isTeacher"
+                  [src]="urlBase + 'images/icons/teacher_white.svg'"
+                  alt="equipment"
+                  width="45"
+                  height="45"
+                />
+                <img
+                  *ngIf="isSport"
+                  [src]="urlBase + 'images/icons/sport_white.svg'"
+                  alt="equipment"
+                  width="45"
+                  height="45"
+                />
+              </div>
+            </div>
+          </a>
+          <li
+            *ngIf="!isTeacher"
+            class="px-4 secondary-sidebar-item"
+            routerLink="/academy/members/invitations"
+          >
+            {{ "academySidebar.invite_members" | translate }}
+          </li>
+          <li
+            *ngIf="isTeacher"
+            [routerLink]="'/academy/academic-years/' + club.id"
+            class="px-4 secondary-sidebar-item"
+          >
+            {{ "academySidebar.academicyears" | translate }}
+          </li>
+          <li
+            (click)="editar(club)"
+            class="px-4 secondary-sidebar-item border-1"
+          >
+            <label *ngIf="!editLoading">
+              {{
+                "academySidebar." +
+                  (isTeacher ? "edit_school_center" : "edit_club") | translate
+              }}
+            </label>
+            <i
+              *ngIf="editLoading"
+              class="pi pi-spin pi-spinner"
+              style="font-size: 2rem"
+            ></i>
+          </li>
+          <li
+            (click)="showAlert(true)"
+            *ngIf="!isAlertOpen"
+            class="px-4 secondary-sidebar-item"
+          >
+            <div>
+              <label *ngIf="!deleteLoading">{{
+                "academySidebar." +
+                  (isTeacher ? "delete_school_center" : "delete_club")
+                  | translate
+              }}</label>
+            </div>
+          </li>
+          <li *ngIf="isAlertOpen" class="px-4 secondary-sidebar-item">
+            <div *ngIf="!deleteLoading">
+              <label>{{ "academySidebar.are_you_sure" | translate }}</label>
+
+              <button (click)="delete(club)" class="mx-3 btn btn-primary">
+                {{ "LBL_YES" | translate }}
+              </button>
+
+              <button (click)="showAlert(false)" class="btn btn-primary">
+                {{ "LBL_NO" | translate }}
+              </button>
+            </div>
+
+            <div *ngIf="deleteLoading">
+              <i class="pi pi-spin pi-spinner" style="font-size: 1rem"></i>
+              <span class="ml-3">{{ "LBL_DELETING" | translate }}</span>
+            </div>
+          </li>
+          <li (click)="salir()" class="px-4 secondary-sidebar-item">
+            {{ "academySidebar.exit" | translate }} {{ club.name }}
+          </li>
+        </div>
+      </ng-template>
+    </p-overlayPanel>
+  </div>
+
+  <div *ngIf="club" id="secondary-sidebar-content_c">
+    <a
+      (click)="navegar(item)"
+      *ngFor="let item of secondarySidebarMenu"
+      [ngClass]="{ 'selected-path-bg': pathSelected === item.code }"
+      class="d-flex list-group-item list-group-item-action sidebar-item align-items-center selected-path-bg"
+    >
+      <span class="p-2 rounded-circle sidebar-item-img">
+        <img alt="academy" src="assets/img/icons/{{ item.image }}" width="22" height="22" />
+      </span>
+      <div class="ml-3 sidebar-item-text">
+        {{ "academy_options." + item.code | translate }}
+      </div>
+    </a>
+  </div>
+  <div *ngIf="!club" class="no-club" id="secondary-sidebar-content">
+    <div>
+      <span> {{ "academySidebar.noClubs" | translate }}</span>
+    </div>
+    <a
+      (click)="addSpace()"
+      class="d-flex align-items-center justify-content-center mt-2 list-group-item list-group-item-action sidebar-item border-0"
+      pTooltip="{{ 'sidebar.add_space' | translate }}"
+      tooltipPosition="right"
+    >
+      <span
+        class="sidebar-item-img rounded-circle d-flex align-items-center justify-content-center bg-transparent"
+      >
+        <img
+          alt="add-club"
+          src="assets/img/icons/{{ 'add_space.svg' }}"
+          width="30px"
+        />
+      </span>
+      <div class="ml-3 sidebar-item-text">
+        <small class="d-block">{{
+          (isTeacher ? "sidebar.add_class" : "sidebar.add_space") | translate
+        }}</small>
+      </div>
+    </a>
+  </div>
+
+  <div *ngIf="club" id="secondary-sidebar-teams">
+    <p-scrollPanel [style]="{ height: 'inherit' }" class="p-0">
+      <div *ngIf="cargandoEquipos" class="p-4" style="text-align: center">
+        <div
+          *ngFor="let i of [1, 2, 3]"
+          class="d-flex align-items-center py-2 mb-3"
+        >
+          <p-skeleton shape="circle" size="25px" styleClass="mr-3"></p-skeleton>
+          <div class="flex-grow-1">
+            <p-skeleton
+              height="15px"
+              shape="rectangle"
+              width="90%"
+            ></p-skeleton>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="(!isTeacher || role === null) && !cargandoEquipos">
+        <a
+          (click)="viewTeam($event, team)"
+          *ngFor="let team of teams"
+          class="d-flex list-group-item list-group-item-action sidebar-item align-items-center"
+        >
+          <p-avatar
+            *ngIf="team.image?.full_url"
+            class="team-image"
+            image="{{ team.image.full_url }}"
+          ></p-avatar>
+          <span
+            *ngIf="!team.image?.full_url"
+            [ngStyle]="{ 'background-color': team.color }"
+            class="item_badge"
+          >
+          </span>
+          <div class="px-3 sidebar-item-text">
+            {{ team.name }}
+          </div>
+          <span class="sidebar-item-arrow ml-auto">
+            <img alt="arrow" src="assets/img/icons/down-arrow.svg" />
+          </span>
+        </a>
+      </div>
+
+      <div *ngIf="!isSport && !cargandoEquipos">
+        <a
+          (click)="viewTeam($event, class)"
+          *ngFor="let class of classes"
+          class="d-flex list-group-item list-group-item-action sidebar-item align-items-center"
+        >
+          <p-avatar
+            *ngIf="class.image?.full_url"
+            class="team-image"
+            image="{{ class.image.full_url }}"
+          ></p-avatar>
+          <span
+            *ngIf="class.image == null"
+            [ngStyle]="{ 'background-color': class.color }"
+            class="item_badge"
+          >
+          </span>
+
+          <div class="px-3 sidebar-item-text">
+            {{ class.name }}
+          </div>
+          <span class="sidebar-item-arrow ml-auto">
+            <img alt="arrow" src="assets/img/icons/down-arrow.svg" />
+          </span>
+        </a>
+      </div>
+    </p-scrollPanel>
+  </div>
+  <div *ngIf="club" class="px-3 mt-auto mb-4 mb-md-0">
+    <button (click)="nuevoEquipo()" class="btn new_team_btn btn-block" pButton>
+      <span class="plus pr-2">+</span>
+      <span class="mx-2">
+        {{
+          "academySidebar." + (isTeacher ? "create_class" : "create_team")
+            | translate
+        }}</span
+      >
+      <div>
+        <img class="group-image-hover" src="assets/img/icons/group-green.svg" />
+        <img class="group-image" src="assets/img/icons/group_dark.svg" />
+      </div>
+    </button>
+  </div>
+  <div class="sidebar-footer d-none d-md-flex justify-content-center py-4">
+    <img alt="logo" class="principalImg" src="assets/img/logo_panel.svg" />
+  </div>
+</div>
+<p-overlayPanel #team_sidebar styleClass="team_sidebar">
+  <ng-template pTemplate>
+    <app-menu-club
+      (dismiss)="team_sidebar.hide()"
+      id="menu_club"
+    ></app-menu-club>
+  </ng-template>
+</p-overlayPanel>
+<app-my-suscription-dialog
+  (close)="suscriptionDialog = false"
+  *ngIf="suscriptionDialog"
+  [visible]="suscriptionDialog"
+></app-my-suscription-dialog>
+<app-add-club
+  *ngIf="editClub && (isSport || !role)"
+  [(visible)]="editClub"
+  [club]="selectedClub"
+></app-add-club>

@@ -1,0 +1,87 @@
+:host ::ng-deep {
+  .p-dropdown {
+    height: 45px;
+    border-radius: 9px;
+  }
+
+  .p-dropdown.p-dropdown-clearable .p-dropdown-label {
+    padding-top: 11px !important;
+  }
+  #editar_perfil_btn {
+    background-color: #024cac;
+    color: white;
+    font-size: 0.9rem;
+    height: 40px;
+    border-radius: 4px;
+    padding: 0 2rem;
+  }
+
+  .p-dialog {
+    p {
+      margin-bottom: 0;
+    }
+  }
+
+  .p-dialog-content {
+    overflow-y: visible;
+  }
+}
+
+@media (min-width: 1200px) {
+  :host ::ng-deep {
+    .p-dialog {
+      max-width: 900px;
+      .p-dialog-header {
+        padding-left: 4rem;
+        padding-right: 4rem;
+      }
+
+      .p-dialog-content {
+        padding: 2rem 4rem !important;
+      }
+
+      .p-dialog-footer {
+        padding-left: 4rem;
+        padding-right: 4rem;
+      }
+    }
+  }
+}
+
+:host ::ng-deep {
+  .p-dialog {
+    .p-checkbox-label {
+      margin-bottom: 0;
+    }
+
+    .p-checkbox:not(.p-checkbox-disabled) .p-checkbox-box:hover {
+      border-color: #007bff !important;
+    }
+
+    .p-checkbox:not(.p-checkbox-disabled) .p-checkbox-box.p-focus {
+      box-shadow: 0 0 0.2rem #007bff !important;
+      border-color: #007bff !important;
+    }
+
+    .p-checkbox .p-checkbox-box.p-highlight {
+      border-color: #007bff !important;
+      background: #007bff !important;
+    }
+
+    .p-radiobutton .p-radiobutton-box.p-highlight {
+      border-color: #007bff !important;
+      background: #007bff !important;
+    }
+
+    .p-radiobutton .p-radiobutton-box:not(.p-disabled):not(.p-highlight):hover {
+      border-color: #007bff !important;
+    }
+  }
+}
+.county_selector {
+  font-size: 23px;
+  padding-right: 5px;
+  padding-bottom: 0;
+  margin: 0;
+  margin-bottom: -5px;
+}

@@ -1,0 +1,198 @@
+<div class="row">
+    <div class="col-12">
+      <div class="card box-shadow">
+        <div class="card-body p-0">
+          <div class="teachers_header view_header">
+            <h6 class="font-weight-600 mb-0 mr-4 text-main view_header_title">
+              {{ "teachers.teachers_list" | translate }}
+            </h6>
+            <div #sorting class="position-relative" id="sorting">
+              <!-- boton de ordenar -->
+              <button
+                (click)="sortPanel.toggle($event, sorting)"
+                class=""
+                id="sorting_btn"
+                label=" "
+                pButton
+                type="text"
+              >
+                <div class="mr-md-2 filter_label">
+                  <span class="d-none d-md-block"> Filtrar por: </span>
+                  <i class="pi pi-sliders-h d-md-none"></i>
+                </div>
+                <div>
+                  {{ typeFilter }}
+                </div>
+              </button>
+              <p-overlayPanel #sortPanel>
+                <ng-template pTemplate>
+                  <div class="sorting_content">
+                    <div
+                      (click)="typeFilter = 'desc'; loadListMember()"
+                      class="option"
+                    >
+                      <span>Orden alfabético descendente</span>
+                      <span></span>
+                    </div>
+                    <div
+                      (click)="typeFilter = 'asc'; loadListMember()"
+                      class="option"
+                    >
+                      <span>Orden alfabético ascendente</span>
+                      <span></span>
+                    </div>
+                  </div>
+                </ng-template>
+              </p-overlayPanel>
+            </div>
+            <div class="p-input-icon-left d-md-inline buscador">
+              <i class="pi pi-search"></i>
+              <input
+                [(ngModel)]="filter"
+                pInputText
+                [placeholder]="'LBL_SEARCH' | translate"
+                type="text"
+                id="filter"
+                name="filter"
+                (input)="dt.filterGlobal(filter, 'contains')"
+              />
+            </div>
+            <div class="header_buttons">
+              <button
+                (click)="handleQuickCreate()"
+                class="btn add_player_btn action"
+              >
+                <span class="d-none d-md-inline">{{
+                  "teachers.new_teacher" | translate
+                }}</span>
+                <i class="fa fa-plus text-white"></i>
+              </button>
+            </div>
+          </div>
+          <p-table
+            #dt
+            [value]="teachers"
+            [paginator]="true"
+            [rows]="10"
+            [loading]="loading"
+            [showLoader]="false"
+            [globalFilterFields]="['name']"
+            class="p-datatable-responsive"
+          >
+            <ng-template pTemplate="header">
+              <tr class="text-center">
+                <!-- <th style="width: 10%"></th> -->
+                <th class="text-center" pSortableColumn="name">
+                  {{ "MEMBERS.LBL_NOMBRE" | translate }}
+                </th>
+                <th class="text-center">
+                  {{ "MEMBERS.LBL_AREA" | translate }}
+                </th>
+                <th class="text-center">{{ "MEMBERS.LBL_CARGO" | translate }}</th>
+                <th class="text-center">{{ "LBL_ACTIONS" | translate }}</th>
+              </tr>
+            </ng-template>
+            <ng-template let-teacher pTemplate="body">
+              <tr>
+                <td>
+                  <div
+                  class="text-center d-flex justify-content-start align-items-center"
+                  >
+                    <div
+                    class="avatar_image rounded-circle mr-2"
+                    [style.backgroundImage]="'url('+(teacher.image!=null ? teacher.image.full_url : teacher.gender.code === 'female' ? urlBase+'images/teachers/profesora.svg' : urlBase+'images/teachers/profesor.svg')+')'"
+                    ></div>
+                    <strong class="">{{ teacher.name }}</strong>
+                  </div>
+                </td>
+                <td class="text-center">{{ teacher.area?.name }}</td>
+                <td class="text-center">{{ teacher.responsibility||'N/A' }}</td>
+                <td class="text-center actions">
+                  <button (click)="handleView(teacher.id)" class="view_btn btn" pTooltip="{{'LBL_DETAILS' | translate}}">
+                    <!-- <img src="assets/img/icons/ver.svg" class="" /> -->
+                    <img src="{{urlBase+'images/menu/ver.svg'}}" />
+                  </button>
+                  <button (click)="handleEdit(teacher.id)" class="edit_btn btn" pTooltip="{{'LBL_EDIT' | translate}}">
+                    <!-- <img src="assets/img/icons/lapiz.svg" class="" /> -->
+                    <img src="{{urlBase+'images/menu/edit.svg'}}" />
+                  </button>
+                  <button (click)="confirm(teacher)" class="delete_btn btn" pTooltip="{{'LBL_DELETE' | translate}}">
+                    <img src="{{urlBase+'images/menu/delete.svg'}}"/>
+                  </button>
+                </td>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+              <tr>
+                <td colspan="4" style="text-align: center">
+                  {{ "LBL_SINREGISTROS" | translate }}
+                </td>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="loadingbody" let-columns>
+              <tr *ngFor="let i of [1,2,3,4,5,6,7,8,9,10]">
+                <td><p-skeleton width="100%" height="1rem"></p-skeleton></td>
+                <td><p-skeleton width="100%" height="1rem"></p-skeleton></td>
+                <td><p-skeleton width="100%" height="1rem"></p-skeleton></td>
+                <td class="d-flex justify-content-around">
+                  <p-skeleton width="20px" height="1rem"></p-skeleton>
+                  <p-skeleton width="20px" height="1rem"></p-skeleton>
+                  <p-skeleton width="20px" height="1rem"></p-skeleton>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <new-teacher
+  [visible]="newTeacherDialog"
+  (close)="newTeacherDialog = false"
+  [listGender]="listGender"
+  [listJobArea]="listJobArea"
+  (created)="loadListMember()"
+  (advancedMember)="advancedTeacherDialog = true;viewMember = false"
+  >
+  </new-teacher>
+  
+  <p-dialog
+    [(visible)]="advancedTeacherDialog"
+    class="custom_dialog"
+    [modal]="false"
+    id="new_advanced_member_dialog"
+    styleClass="fullscreenDialog"
+    [resizable]="false"
+    (onHide)="dataBasic=undefined"
+  >
+    <ng-template pTemplate="header">
+      <div class="d-flex flex-column header_content">
+        <h5 class="title">Añadir profesores del centro escolar</h5>
+        <div class="subtitle">
+          Por favor ingrese los datos
+        </div>
+      </div>
+    </ng-template>
+    <app-steps-members
+      (save)="advancedTeacherDialog = false; loadListMember()"
+      *ngIf="advancedTeacherDialog"
+      [data]="dataBasic"
+      [listGender]="listGender"
+      [listJobArea]="listJobArea"
+      [view]="viewMember"
+      [member]="'teacher'"
+    ></app-steps-members>
+  </p-dialog>
+  
+  <p-confirmDialog #cd [style]="{width: '50vw'}" class="custom_dialog" maskStyleClass="purple_mask">
+    <!-- <ng-template pTemplate="header">
+        <h3>{{ 'LBL_CONFIRM_DIALOG' | translate}}</h3>
+    </ng-template> -->
+    <ng-template pTemplate="footer">
+      <div class="footer_btns">
+        <button type="button" pButton icon="pi pi-times" label="{{ 'LBL_NO' | translate}}" (click)="cd.reject()"></button>
+        <button class="next_btn" type="button" pButton icon="pi pi-check" label="{{ 'LBL_YES' | translate}}" (click)="cd.accept()"></button>
+      </div>
+    </ng-template>
+  </p-confirmDialog>

@@ -1,0 +1,241 @@
+<div class="player_family_data_form_container" style="margin: 2px">
+  <form
+    (ngSubmit)="onSubmit()"
+    [formGroup]="formFamilyData"
+    id="player_family_data_form"
+    name="nomFormFamilyData"
+  >
+    <div class="row pb-2">
+      <!-- estado civil padres -->
+      <div class="col-12 col-md-12 my-3">
+        <label class="d-block">{{
+          "PLAYERS.LBL_ESTADOCIVILPADRES" | translate
+        }}</label>
+        <p-radioButton
+          *ngFor="let item of listCivilStatus"
+          [label]="item.label"
+          [value]="item.value"
+          class="mr-3"
+          formControlName="parents_marital_status_id"
+          name="parents_marital_status_id"
+        ></p-radioButton>
+      </div>
+      <!-- nombre padre -->
+      <div class="mb-3 col-12 col-md-6 my-3">
+        <label class="" for="father_full_name">{{
+          "PLAYERS.LBL_NOMBREPADRE" | translate
+        }}</label>
+        <input
+          aria-describedby="inputGroup-sizing-default"
+          aria-label="Default"
+          class="form-control"
+          formControlName="father_full_name"
+          id="father_full_name"
+          placeholder="{{ 'LBL_ESCRIBEAQI' | translate }}"
+          type="text"
+        />
+      </div>
+      <!-- movil padre -->
+      <div class="mb-3 col-12 col-md-6 my-3">
+        <label class="">{{ "PLAYERS.LBL_TELEFONOPADRE" | translate }}</label>
+        <p-chips
+          [addOnBlur]="true"
+          formControlName="father_phone"
+          pKeyFilter="num"
+          placeholder="+12345678"
+          separator=","
+        ></p-chips>
+      </div>
+      <div class="mb-3 col-12 col-md-6 my-3">
+        <label class="">{{ "PLAYERS.LBL_MOVILPADRE" | translate }}</label>
+        <p-chips
+          [addOnBlur]="true"
+          formControlName="father_mobile_phone"
+          pKeyFilter="num"
+          placeholder="+12345678"
+          separator=","
+        ></p-chips>
+      </div>
+      <!-- email padre -->
+      <div class="mb-3 col-12 col-md-6 my-3">
+        <label class="" for="father_email">{{
+          "PLAYERS.LBL_EMAILPADRE" | translate
+        }}</label>
+        <input
+          aria-describedby="inputGroup-sizing-default"
+          aria-label="Default"
+          class="form-control"
+          formControlName="father_email"
+          id="father_email"
+          placeholder="{{ 'LBL_ESCRIBEAQI' | translate }}"
+          type="text"
+        />
+        <div
+          *ngIf="submitted && f.father_email.invalid"
+          class="form-text text-danger"
+        >
+          {{ "PLAYERS.LBL_EMAILPADRE" | translate }}
+          {{ "LBL_REQUERIDO" | translate }}
+        </div>
+      </div>
+      <!-- nombre madre -->
+      <div class="mb-3 col-12 col-md-6 my-3">
+        <label class="" for="mother_full_name">{{
+          "PLAYERS.LBL_NOMBREMADRE" | translate
+        }}</label>
+        <input
+          aria-describedby="inputGroup-sizing-default"
+          aria-label="Default"
+          class="form-control"
+          formControlName="mother_full_name"
+          id="mother_full_name"
+          placeholder="{{ 'LBL_ESCRIBEAQI' | translate }}"
+          type="text"
+        />
+      </div>
+      <div class="mb-3 col-12 col-md-6 my-3">
+        <label class="">{{ "PLAYERS.LBL_TELEFONOMADRE" | translate }}</label>
+        <p-chips
+          [addOnBlur]="true"
+          formControlName="mother_phone"
+          pKeyFilter="num"
+          placeholder="+12345678"
+          separator=","
+        ></p-chips>
+      </div>
+      <div class="mb-3 col-12 col-md-6 my-3">
+        <label class="">{{ "PLAYERS.LBL_MOVILMADRE" | translate }}</label>
+        <p-chips
+          [addOnBlur]="true"
+          formControlName="mother_mobile_phone"
+          pKeyFilter="num"
+          placeholder="+12345678"
+          separator=","
+        ></p-chips>
+      </div>
+      <!-- email madre -->
+      <div class="mb-3 col-6 my-3">
+        <label class="" for="email_mother">{{
+          "PLAYERS.LBL_EMAILMADRE" | translate
+        }}</label>
+        <input
+          aria-describedby="inputGroup-sizing-default"
+          aria-label="Default"
+          class="form-control"
+          formControlName="mother_email"
+          id="email_mother"
+          placeholder="{{ 'LBL_ESCRIBEAQI' | translate }}"
+          type="text"
+        />
+        <div
+          *ngIf="submitted && f.mother_email.invalid"
+          class="form-text text-danger"
+        >
+          {{ "PLAYERS.LBL_EMAILMADRE" | translate }}
+          {{ "LBL_REQUERIDO" | translate }}
+        </div>
+      </div>
+      <hr class="w-100" />
+
+      <!-- pais -->
+      <div class="mb-3 col-12 col-md-6 my-3">
+        <label class="" for="country_1">{{
+          "PLAYERS.LBL_PAIS" | translate
+        }}</label>
+        <p-dropdown
+          (onChange)="handleCity($event, 1)"
+          [filter]="true"
+          [options]="listCountries"
+          [styleClass]="'w-100 form-control'"
+          aria-describedby="inputGroup-sizing-default"
+          formControlName="family_address_country_id"
+          id="country_1"
+          placeholder="{{ 'LBL_SELECCIONE' | translate }}"
+        ></p-dropdown>
+      </div>
+
+      <!-- provincia -->
+      <div class="mb-3 col-12 col-md-6 my-3">
+        <label class="" for="province">{{
+          "MEMBERS.LBL_ESTADO" | translate
+        }}</label>
+        <p-dropdown
+          [filter]="true"
+          [options]="listCities1"
+          [styleClass]="'w-100 form-control'"
+          aria-describedby="inputGroup-sizing-default"
+          formControlName="family_address_province_id"
+          id="province"
+          placeholder="{{ 'LBL_SELECCIONE' | translate }}"
+        ></p-dropdown>
+      </div>
+
+      <!-- ciudad -->
+      <div class="mb-3 col-12 col-md-6 my-3">
+        <label class="" for="city">{{
+          "PLAYERS.LBL_CIUDAD" | translate
+        }}</label>
+        <input
+          aria-describedby="inputGroup-sizing-default"
+          aria-label="Default"
+          class="form-control"
+          formControlName="family_address_city"
+          id="city"
+          placeholder="{{ 'LBL_ESCRIBEAQI' | translate }}"
+          type="text"
+        />
+      </div>
+
+      <!-- codigo postal -->
+      <div class="mb-3 col-12 col-md-6 my-3">
+        <label for="family_address_zipcode">{{
+          "MEMBERS.LBL_CODIGOPOSTAL" | translate
+        }}</label>
+        <input
+          [placeholder]="
+            ('LBL_ESCRIBIR' | translate) +
+            ' ' +
+            ('MEMBERS.LBL_CODIGOPOSTAL' | translate).toLowerCase() +
+            '...'
+          "
+          aria-describedby="inputGroup-sizing-default"
+          aria-label="Default"
+          class="form-control"
+          formControlName="family_address_postal_code"
+          id="family_address_zipcode"
+          pKeyFilter="alphanum"
+          type="text"
+        />
+      </div>
+
+      <!-- direccion -->
+      <div class="mb-3 col-12 col-md-6 my-3">
+        <label class="" for="address_1">{{
+          "PLAYERS.LBL_ADDRESS1" | translate
+        }}</label>
+        <input
+          aria-describedby="inputGroup-sizing-default"
+          aria-label="Default"
+          class="form-control"
+          formControlName="family_address_street"
+          id="address_1"
+          placeholder="{{ 'LBL_ESCRIBEAQI' | translate }}"
+          type="text"
+        />
+      </div>
+    </div>
+    <div *ngIf="playerFamilyData.id" class="row">
+      <div class="col-12">
+        <button
+          [loading]="saving"
+          class="btn btn-primary btn-block py-2 save_btn"
+          label=" {{ 'PLAYERS.BTN_GUARDAR' | translate }}"
+          pButton
+          pTooltip="{{ 'PLAYERS.BTN_GUARDAR' | translate }}"
+          tooltipPosition="top"
+          type="submit"
+        ></button>
+      </div>
+    </div>
+  </form>
+</div>

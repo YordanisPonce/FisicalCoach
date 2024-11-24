@@ -1,0 +1,21 @@
+<div class="card flex justify-content-center">
+  <p-sidebar [(visible)]="sidebarVisible" class="sidebarMenu">
+    <app-sidebar-menu
+      *ngIf="!!team"
+      (closeSidebar)="sidebarVisible = $event"
+    ></app-sidebar-menu>
+  </p-sidebar>
+</div>
+
+<div class="menu_team">
+  <app-sidebar-menu *ngIf="!!team"></app-sidebar-menu>
+</div>
+<div class="navbar_team" [ngClass]="{ noTeam: !team }">
+  <div class="container-fluid p-0">
+    <app-navbar (openSidebar)="sidebarVisible = $event"></app-navbar>
+
+    <div class="mb-5">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>

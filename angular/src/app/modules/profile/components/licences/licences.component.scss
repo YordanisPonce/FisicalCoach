@@ -1,0 +1,32 @@
+.wrapper {
+  min-height: 500px;
+
+  label {
+    font-size: 0.9rem;
+  }
+
+  input {
+    height: 45px;
+  }
+  .submit-button {
+    width: 170px;
+    height: 45px;
+  }
+
+  .delete-licence-button {
+    width: 220px;
+    height: 45px;
+  }
+
+  .close-btn {
+    width: 140px;
+    height: 45px;
+  }
+}
+.licence-input {
+  width: 100px;
+}
+
+p {
+  font-weight: 600 !important;
+}

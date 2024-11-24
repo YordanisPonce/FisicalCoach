@@ -1,0 +1,391 @@
+<p-dialog
+  id="materiales_dialog"
+  [modal]="true"
+  [(visible)]="visible"
+  styleClass=""
+  maskStyleClass="purple_mask"
+  (onHide)="closeDialog()"
+  [ngClass]="{ 'dialog-width': showGroupList }"
+>
+  <ng-template pTemplate="header">
+    <div
+      class="d-flex flex-column flex-sm-row w-100 justify-content-between"
+      *ngIf="!showGroupList"
+    >
+      <div class="header-text">
+        <span>
+          {{ "training_session.workoutGroups" | translate
+          }}{{ showDetails ? ":" : "" }}
+        </span>
+        <strong *ngIf="showDetails"> {{ groupName }} </strong>
+      </div>
+
+      <div
+        *ngIf="isSessionPage"
+        class="d-none d-sm-block text-center text-sm-right"
+      >
+        <button
+          class="btn btn-primary btn-see-group text-center"
+          (click)="showGroupList = true"
+          *ngIf="!showPlayers"
+        >
+          <span class="text-button d-flex align-items-center">
+            <i class="pi pi-eye mr-2"></i>
+            {{ "training_session.seeGroups" | translate }}
+          </span>
+        </button>
+
+        <button
+          class="btn btn-primary btn-group text-center"
+          (click)="getPlayers()"
+          *ngIf="!showPlayers"
+        >
+          <span class="text-button">
+            {{ "training_session.createGroup" | translate }} +
+          </span>
+        </button>
+
+        <button
+          class="btn btn-primary btn-group text-center"
+          (click)="editPlayers()"
+          *ngIf="showPlayers && showDetails && !showEdit"
+        >
+          <span class="text-button">
+            {{ "training_session.editGroup" | translate }}
+          </span>
+        </button>
+      </div>
+    </div>
+
+    <div
+      class="d-flex flex-column flex-sm-row w-100 justify-content-between"
+      *ngIf="showGroupList"
+    >
+      <div class="header-text">
+        <span>
+          {{ "training_session.workoutGroups" | translate }}
+        </span>
+      </div>
+    </div>
+  </ng-template>
+
+  <div class="dialog_container" *ngIf="!showGroupList">
+    <div
+      *ngIf="isSessionPage"
+      class="d-block d-sm-none text-center text-sm-right"
+    >
+      <button
+        class="btn btn-primary btn-group text-center"
+        (click)="getPlayers()"
+        *ngIf="!showPlayers"
+      >
+        <span class="text-button">
+          {{ "training_session.createGroup" | translate }} +
+        </span>
+      </button>
+    </div>
+
+    <div
+      class="row"
+      *ngIf="
+        !loading && workoutGroups.length > 0 && !showDetails && !showPlayers
+      "
+    >
+      <div
+        class="col-12 col-md-6 col-lg-4 mt-4"
+        *ngFor="let group of workoutGroups"
+      >
+        <div
+          class="workout-container"
+          [ngStyle]="{ 'box-shadow': getBoxColor(group.color) }"
+        >
+          <div>
+            <span>{{ group.name }}</span>
+          </div>
+
+          <div class="mt-1">
+            <button
+              class="btn"
+              (click)="
+                showWorkoutPlayers(
+                  group.players || group.alumns,
+                  group.name,
+                  group.color,
+                  group.code
+                )
+              "
+            >
+              {{ "training_session.access" | translate }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="row"
+      *ngIf="!loading && workoutGroups.length === 0 && !showPlayers"
+    >
+      <div class="col-12 text-center">
+        <p>{{ "training_session.no_groups" | translate }}</p>
+      </div>
+    </div>
+
+    <div class="row" *ngIf="showPlayers">
+      <div
+        class="col-6 col-sm-6 mb-2"
+        style="padding-left: 23px"
+        *ngIf="!showDetails || showEdit"
+      >
+        <label for="name">{{
+          "training_session.group_name" | translate
+        }}</label>
+        <input
+          type="text"
+          name="name"
+          id="name"
+          (keyup)="setGroupName($event)"
+          pInputText
+          class="form-control"
+          value="{{ groupName }}"
+        />
+      </div>
+      <div
+        class="col-6 col-sm-6 mb-2"
+        style="padding-left: 23px"
+        *ngIf="!showDetails || showEdit"
+      >
+        <label for="name">{{
+          "training_session.select_color" | translate
+        }}</label>
+        <div class="colors">
+          <button
+            (click)="setColor(color, false)"
+            *ngFor="let color of colors"
+            [ngStyle]="{ 'background-color': color }"
+            class="color btn"
+          ></button>
+          <button
+            *ngIf="customColor != ''"
+            [style.background]="customColor"
+            class="color custom_color btn"
+          ></button>
+          <button
+            (colorPickerChange)="setColor($event, true)"
+            [(colorPicker)]="color"
+            class="color btn"
+            style="
+              background-image: url(assets/img/icons/color.png);
+              background-size: cover;
+            "
+          ></button>
+        </div>
+        <div class="selected_color text-main my-3 w-50">
+          {{ selectedColor }}
+        </div>
+      </div>
+      <div class="col-12 mt-3">
+        <label for="name" style="padding-left: 11px">{{
+          (role === "sport"
+            ? "training_session.players"
+            : "training_session.alumns"
+          ) | translate
+        }}</label>
+        <p-selectButton
+          [options]="players"
+          [(ngModel)]="selectedPlayers"
+          optionValue="id"
+          [multiple]="true"
+          [disabled]="showDetails && !showEdit"
+        >
+          <ng-template let-item pTemplate>
+            <div
+              class="action_content"
+              [ngClass]="{ active: selectedPlayers.includes(item.id) }"
+            >
+              <img
+                src="{{ item | avatarPipe }}"
+                alt="player"
+                width="25px"
+                height="25px"
+                class="mr-2"
+                style="border-radius: 50%"
+              />
+              <span class="action_name">{{ item.full_name }}</span>
+            </div>
+          </ng-template>
+        </p-selectButton>
+      </div>
+
+      <div class="col-12 mt-3" *ngIf="allPlayers.length > 0 && showEdit">
+        <label for="name" style="padding-left: 11px">{{
+          (role === "sport"
+            ? "training_session.assignPlayers"
+            : "training_session.assignAlumns"
+          ) | translate
+        }}</label>
+        <p-selectButton
+          [options]="allPlayers"
+          [(ngModel)]="selectedPlayers"
+          optionValue="id"
+          [multiple]="true"
+          [disabled]="showDetails && !showEdit"
+        >
+          <ng-template let-item pTemplate>
+            <div
+              class="action_content"
+              [ngClass]="{ active: selectedPlayers.includes(item.id) }"
+            >
+              <img
+                src="{{ item | avatarPipe }}"
+                alt="player"
+                width="25px"
+                height="25px"
+                class="mr-2"
+                style="border-radius: 50%"
+              />
+              <span class="action_name">{{ item.full_name }}</span>
+            </div>
+          </ng-template>
+        </p-selectButton>
+      </div>
+
+      <div
+        class="col-12 text-center mt-3"
+        *ngIf="allPlayers.length === 0 && showEdit"
+      >
+        <label for="name" style="padding-left: 11px">{{
+          (role === "sport"
+            ? "training_session.noPlayers"
+            : "training_session.noAlumns"
+          ) | translate
+        }}</label>
+      </div>
+    </div>
+
+    <div class="row" *ngIf="loading">
+      <div
+        class="col-12 col-md-6 col-lg-4 col-4"
+        *ngFor="let item of [1, 2, 3]"
+      >
+        <div class="workout-container">
+          <div>
+            <p-skeleton shape="rectangle" width="60px"></p-skeleton>
+          </div>
+
+          <div class="mt-3">
+            <p-skeleton shape="rectangle" width="40px"></p-skeleton>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="dialog_container" *ngIf="showGroupList">
+    <p-accordion
+      [expandIcon]="'pi pi-plus'"
+      [collapseIcon]="'pi pi-minus'"
+      class="detail-accordeon"
+      *ngFor="let group of groupList"
+    >
+      <p-accordionTab [selected]="true">
+        <ng-template pTemplate="header">
+          <div class="flex align-items-center">
+            <span class="vertical-align-middle">{{ group?.name }}</span>
+          </div>
+        </ng-template>
+
+        <ng-template pTemplate="content" *ngIf="group.players">
+          <ul class="ml-1">
+            <li
+              *ngFor="let player of group.players"
+              class="mb-3 d-flex align-items-center"
+              [ngStyle]="{ content: '', color: group.color }"
+            >
+              <img
+                src="{{ player | avatarPipe }}"
+                alt="player"
+                width="25px"
+                height="25px"
+                class="mr-2"
+                style="border-radius: 50%"
+              />
+              <strong style="color: #495057">{{ player.full_name }}</strong>
+            </li>
+          </ul>
+        </ng-template>
+
+        <ng-template pTemplate="content" *ngIf="group.alumns">
+          <ul class="ml-1">
+            <li
+              *ngFor="let player of group.alumns"
+              class="mb-3 d-flex align-items-center"
+              [ngStyle]="{ content: '', color: group.color }"
+            >
+              <img
+                src="{{ player | avatarPipe }}"
+                alt="player"
+                width="25px"
+                height="25px"
+                class="mr-2"
+                style="border-radius: 50%"
+              />
+              <strong style="color: #495057">{{ player.full_name }}</strong>
+            </li>
+          </ul>
+        </ng-template>
+      </p-accordionTab>
+    </p-accordion>
+  </div>
+
+  <p-footer *ngIf="showGroupList || !showPlayers">
+    <div class="footer_btns">
+      <button
+        class="back_btn btn"
+        (click)="showGroupList ? closePlayers() : closeDialog()"
+      >
+        {{ "LBL_ATRAS" | translate }}
+      </button>
+    </div>
+  </p-footer>
+
+  <p-footer>
+    <div class="footer_btns" *ngIf="showPlayers">
+      <button class="back_btn btn" (click)="closePlayers()">
+        {{ "LBL_ATRAS" | translate }}
+      </button>
+      <button
+        class="btn btn_primary add_btn"
+        (click)="createWorkoutGroup()"
+        [disabled]="selectedPlayers.length === 0 || !groupName"
+        *ngIf="!isSending && !showDetails"
+      >
+        {{ "LBL_CREATE" | translate }}
+      </button>
+
+      <button
+        class="btn btn_primary add_btn"
+        (click)="createWorkoutGroup()"
+        [disabled]="!groupName"
+        *ngIf="!isSending && showDetails && showEdit"
+      >
+        {{ "LBL_EDIT" | translate }}
+      </button>
+
+      <button
+        class="btn btn_primary add_btn"
+        [disabled]="isSending && !showEdit"
+        *ngIf="isSending && !showEdit"
+      >
+        {{ "LBL_CREATING" | translate }}
+      </button>
+
+      <button
+        class="btn btn_primary add_btn"
+        [disabled]="isSending && showEdit"
+        *ngIf="isSending && showEdit"
+      >
+        {{ "LBL_EDITING" | translate }}
+      </button>
+    </div>
+  </p-footer>
+</p-dialog>

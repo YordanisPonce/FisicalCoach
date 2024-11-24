@@ -1,0 +1,461 @@
+<div class="row">
+  <div class="col-12">
+    <div class="card box-shadow">
+      <div class="card-body p-0">
+        <div class="effort_recovery_record_header view_header">
+          <span class="icon_left" routerLink="/club/effort-recovery">
+            <i class="fas fa-chevron-left"></i>
+          </span>
+          <h6 class="font-weight-600 mb-0 mr-4 text-main view_header_title">
+            {{ "effort_recovery_record.recovery_programs_record" | translate }}
+          </h6>
+        </div>
+        <div class="effort_recovery_record_content">
+          <!-- jugador -->
+          <div class="row">
+            <div class="col-12">
+              <div class="program_player">
+                <div class="my-3 col-12">
+                  <div
+                    class="program_player_action text-lg-right pr-0"
+                    *ngIf="recoveryPrograms"
+                  >
+                    <i
+                      class="fa fa-download fa-1x"
+                      pTooltip="{{ 'LBL_PRINT_ALL' | translate }}"
+                      *ngIf="!loading"
+                      tooltipPosition="top"
+                      (click)="
+                        printRecoveryPrograms(recoveryPrograms.player.id)
+                      "
+                      role="button"
+                    ></i>
+
+                    <i
+                      *ngIf="loading"
+                      class="fa fa-spinner fa-1x"
+                      role="button"
+                    ></i>
+                  </div>
+                  <div class="d-flex">
+                    <div>
+                      <p-skeleton
+                        shape="circle"
+                        size="110px"
+                        styleClass="mb-2"
+                        *ngIf="!recoveryPrograms"
+                      ></p-skeleton>
+                      <div class="image" *ngIf="recoveryPrograms">
+                        <img
+                          width="110px"
+                          height="110px"
+                          src="{{ recoveryPrograms.player | avatarPipe }}"
+                          class="rounded-circle"
+                        />
+                      </div>
+                    </div>
+                    <div class="my-2 my-lg-0">
+                      <div
+                        class="program_player_title text-main font-weight-600 mb-2"
+                        *ngIf="recoveryPrograms"
+                      >
+                        {{ recoveryPrograms.player.full_name }}
+                      </div>
+                      <p-skeleton
+                        shape="rectangle"
+                        height="15px"
+                        width="150px"
+                        styleClass="mb-2"
+                        *ngIf="!recoveryPrograms"
+                      ></p-skeleton>
+                      <div class="club" *ngIf="recoveryPrograms">
+                        {{ recoveryPrograms.player.alias }}
+                      </div>
+                      <div class="d-flex text-center">
+                        <div class="program_player_info mr-4">
+                          <div class="program_player_info_title text-left">
+                            <span>{{ "PLAYERS.LBL_ALTURA" | translate }}</span>
+                          </div>
+                          <div class="player_profile_info_desc">
+                            <span
+                              >{{
+                                recoveryPrograms?.player.height
+                                  ? (recoveryPrograms?.player.height
+                                    | number : "1.0-0")
+                                  : "-"
+                              }}
+                              cm</span
+                            >
+                          </div>
+                        </div>
+                        <div class="program_player_info">
+                          <div class="program_player_info_title">
+                            <span>{{ "PLAYERS.LBL_PESO" | translate }}</span>
+                          </div>
+                          <div class="player_profile_info_desc">
+                            <span
+                              >{{
+                                recoveryPrograms?.player.weight
+                                  ? (recoveryPrograms?.player.weight
+                                    | number : "1.0-1")
+                                  : "-"
+                              }}
+                              kg</span
+                            >
+                          </div>
+                        </div>
+                        <div class="program_player_info ml-4">
+                          <div class="program_player_info_title text-center">
+                            <span>{{ "PSYCHOLOGY.LBL_AGE" | translate }}</span>
+                          </div>
+                          <div class="player_profile_info_desc">
+                            <span>
+                              {{
+                                recoveryPrograms?.player.age
+                                  ? recoveryPrograms?.player.age
+                                  : "-"
+                              }}
+                              {{ "LBL_YEARS" | translate }}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- listado de lesiones -->
+          <div class="row no-gutters">
+            <div class="col-12">
+              <ng-container *ngIf="recoveryPrograms?.efforts.length > 0">
+                <p-carousel
+                  [numScroll]="1"
+                  [numVisible]="1"
+                  [value]="recoveryPrograms.efforts"
+                >
+                  <ng-template let-test pTemplate="item">
+                    <div class="program">
+                      <div class="program_details pr-0">
+                        <div class="row">
+                          <div class="col-12 mb-3 text-right">
+                            <!-- imprimir -->
+                            <button
+                              (click)="printRecoveryProgram(test.id)"
+                              [disabled]="loading"
+                              class="btn action_btn"
+                              pTooltip="{{ 'LBL_PRINT' | translate }}"
+                              tooltipPosition="top"
+                            >
+                              <i class="fa fa-download fa-1x"></i>
+                            </button>
+                            <!-- evaluar -->
+                            <button
+                              (click)="editProgram(test)"
+                              [disabled]="loading"
+                              class="btn action_btn"
+                              pTooltip="{{
+                                'injury_prevention.strategy_injury_prevention'
+                                  | translate
+                              }}"
+                              tooltipPosition="top"
+                            >
+                              <img
+                                src="{{ urlImages + 'images/menu/edit.svg' }}"
+                                width="15px"
+                              />
+                            </button>
+                            <!-- eliminar -->
+                            <button
+                              (click)="
+                                deleteRecoveryProgram(
+                                  recoveryPrograms.player.id,
+                                  test.id
+                                )
+                              "
+                              class="btn action_btn"
+                              pTooltip="{{ 'LBL_DELETE' | translate }}"
+                              tooltipPosition="top"
+                            >
+                              <img
+                                src="{{ urlImages + 'images/menu/delete.svg' }}"
+                                width="15px"
+                              />
+                              <!-- <img src="assets/img/icons/eliminar.svg" class=""/> -->
+                            </button>
+                          </div>
+                          <div class="col-12 col-lg-4">
+                            <h6>
+                              {{
+                                "effort_recovery_record.start_date" | translate
+                              }}
+                            </h6>
+                            <p>{{ test.created_at | transformTimestamp }}</p>
+                          </div>
+                          <div class="col-12 col-lg-4">
+                            <h6>
+                              {{ "effort_recovery.sleepiness" | translate }}
+                            </h6>
+                            <p>
+                              {{
+                                test.latest_questionnaire_history?.answers[0]
+                                  .name || "N/A"
+                              }}
+                            </p>
+                          </div>
+                          <div class="col-12 col-lg-4">
+                            <h6>
+                              {{ "effort_recovery.stress" | translate }}
+                            </h6>
+                            <p>
+                              {{
+                                test.latest_questionnaire_history?.answers[1]
+                                  .name || "N/A"
+                              }}
+                            </p>
+                          </div>
+                          <div class="col-12 col-lg-4">
+                            <h6>
+                              {{ "effort_recovery.fatigue" | translate }}
+                            </h6>
+                            <p>
+                              {{
+                                test.latest_questionnaire_history?.answers[2]
+                                  .name || "N/A"
+                              }}
+                            </p>
+                          </div>
+                          <div class="col-12 col-lg-4">
+                            <h6>
+                              {{ "effort_recovery.doms" | translate }}
+                            </h6>
+                            <p>
+                              {{
+                                test.latest_questionnaire_history?.answers[3]
+                                  .name || "N/A"
+                              }}
+                            </p>
+                          </div>
+                          <div class="col-12 col-lg-4">
+                            <h6>
+                              {{ "effort_recovery.courage" | translate }}
+                            </h6>
+                            <p>
+                              {{
+                                test.latest_questionnaire_history?.answers[4]
+                                  .name || "N/A"
+                              }}
+                            </p>
+                          </div>
+                          <!-- use strategies -->
+                          <div class="col-sm-6 col-lg-4">
+                            <h6>
+                              {{
+                                "effort_recovery_record.use_strategies"
+                                  | translate
+                              }}
+                            </h6>
+                            <span
+                              class="player_info_text"
+                              *ngIf="recoveryPrograms"
+                            >
+                              {{
+                                test.has_strategy
+                                  ? ("LBL_YES" | translate)
+                                  : ("LBL_NO" | translate)
+                              }}
+                            </span>
+                            <p-skeleton
+                              shape="rectangle"
+                              height="15px"
+                              width="50%"
+                              styleClass="mb-2"
+                              *ngIf="!recoveryPrograms"
+                            ></p-skeleton>
+                          </div>
+                          <!-- strategy types -->
+                          <div class="col-sm-6 col-lg-4">
+                            <h6>
+                              {{
+                                "effort_recovery_details.strategies_type"
+                                  | translate
+                              }}
+                            </h6>
+
+                            <div
+                              *ngIf="test.strategies.length > 0; else elseBlock"
+                            >
+                              <span
+                                class="strategy"
+                                *ngFor="
+                                  let strategy of test.strategies;
+                                  index as i
+                                "
+                                >{{ strategy.name
+                                }}<i *ngIf="i < test.strategies.length - 1"
+                                  >,
+                                </i></span
+                              >
+                            </div>
+                            <ng-template #elseBlock>N/A</ng-template>
+
+                            <p-skeleton
+                              shape="rectangle"
+                              height="15px"
+                              width="50%"
+                              styleClass="mb-2"
+                              *ngIf="!recoveryPrograms"
+                            ></p-skeleton>
+                          </div>
+                          <div class="col-12 col-lg-4">
+                            <h6>
+                              {{ "effort_recovery.status" | translate }}
+                            </h6>
+                            <img
+                              *ngIf="
+                                test.latest_questionnaire_history
+                                  ?.calculated_status &&
+                                  test.latest_questionnaire_history
+                                    .calculated_status != 'N/A';
+                                else elseBlockStatus
+                              "
+                              alt=""
+                              pTooltip="{{
+                                getBatteryToolTip(
+                                  test.latest_questionnaire_history
+                                    .calculated_status
+                                )
+                              }}"
+                              src="{{
+                                urlImages +
+                                  'images/batteries/' +
+                                  test.latest_questionnaire_history
+                                    .calculated_status +
+                                  '.svg'
+                              }}"
+                              width="35px"
+                            />
+                            <ng-template #elseBlockStatus>N/A</ng-template>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </ng-template>
+                </p-carousel>
+              </ng-container>
+              <ng-container *ngIf="recoveryPrograms?.efforts.length <= 0">
+                <div class="row my-3">
+                  <div class="col-12 text-center">
+                    <h6 class="sindatos">
+                      {{ "LBL_SINREGISTROS" | translate }}
+                    </h6>
+                  </div>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+          <!-- skelectons listado de lesiones -->
+          <div class="row no-gutters" *ngIf="!recoveryPrograms">
+            <div class="col-12">
+              <p-carousel
+                [value]="loadingItems"
+                [numVisible]="1"
+                [numScroll]="1"
+              >
+                <ng-template let-program pTemplate="item">
+                  <div class="program">
+                    <div class="program_details pr-0">
+                      <div class="row">
+                        <div class="col-12 col-lg-4">
+                          <h6>
+                            {{
+                              "effort_recovery_record.start_date" | translate
+                            }}
+                          </h6>
+                          <p-skeleton
+                            shape="rectangle"
+                            height="15px"
+                            width="50%"
+                            styleClass="mb-2"
+                          ></p-skeleton>
+                        </div>
+                        <div class="col-12 col-lg-4">
+                          <h6>
+                            {{ "effort_recovery.sleepiness" | translate }}
+                          </h6>
+                          <p-skeleton
+                            shape="rectangle"
+                            height="15px"
+                            width="50%"
+                            styleClass="mb-2"
+                          ></p-skeleton>
+                        </div>
+                        <div class="col-12 col-lg-4">
+                          <h6>
+                            {{ "effort_recovery.stress" | translate }}
+                          </h6>
+                          <p-skeleton
+                            shape="rectangle"
+                            height="15px"
+                            width="75%"
+                            styleClass="mb-2"
+                          ></p-skeleton>
+                        </div>
+                        <div class="col-12 col-lg-4">
+                          <h6>
+                            {{ "effort_recovery.fatigue" | translate }}
+                          </h6>
+                          <p-skeleton
+                            shape="rectangle"
+                            height="15px"
+                            width="25%"
+                            styleClass="mb-2"
+                          ></p-skeleton>
+                        </div>
+                        <div class="col-12 col-lg-4">
+                          <h6>
+                            {{ "effort_recovery.doms" | translate }}
+                          </h6>
+                          <p-skeleton
+                            shape="rectangle"
+                            height="15px"
+                            width="25%"
+                            styleClass="mb-2"
+                          ></p-skeleton>
+                        </div>
+                        <div class="col-12 col-lg-4">
+                          <h6>
+                            {{ "effort_recovery.courage" | translate }}
+                          </h6>
+                          <p-skeleton
+                            shape="rectangle"
+                            height="15px"
+                            width="25%"
+                            styleClass="mb-2"
+                          ></p-skeleton>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </ng-template>
+              </p-carousel>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<effort-questions-dialog
+  *ngIf="newQuestions"
+  [visible]="newQuestions"
+  (close)="newQuestions = false"
+  [teamId]="getTeamId()"
+  [playerId]="recoveryPrograms?.player.id"
+  [recoveryProgram]="programId"
+  [editingProgram]="program"
+  (created)="refreshListPrograms()"
+>
+</effort-questions-dialog>

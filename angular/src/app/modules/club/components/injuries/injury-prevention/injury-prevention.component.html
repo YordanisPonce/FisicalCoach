@@ -1,0 +1,373 @@
+<div
+  class="row"
+  appUserPermission
+  [method]="['team_injury_prevention_store', 'team_injury_prevention_read']"
+  (showItem)="handlePermission($event)"
+>
+  <div class="col-12">
+    <div class="card box-shadow">
+      <div class="card-body p-0">
+        <div class="injury_prevention_header view_header">
+          <div class="filters">
+            <div class="search-filter">
+              <div class="d-flex align-items-center mb-2 mb-sm-0">
+                <h6
+                  class="font-weight-600 mb-0 mr-4 text-main view_header_title"
+                >
+                  {{ "LBL_PLAYERS" | translate }}
+                </h6>
+
+                <div class="p-input-icon-left d-md-inline buscador">
+                  <i class="pi pi-search"></i>
+                  <input
+                    (input)="searchPlayer($event)"
+                    pInputText
+                    placeholder="{{ 'LBL_SEARCH' | translate }}"
+                    type="text"
+                  />
+                </div>
+              </div>
+
+              <div class="header_buttons h_btn create-btn-section-responsive">
+                <button
+                  (click)="riskCalculator = true"
+                  [disabled]="
+                    injuryRiskId == null || selectedPlayer.length == 0
+                  "
+                  class="btn btn-main risk_btn action"
+                >
+                  <span class="d-sm-inline mr-2">
+                    {{ "injury_prevention.risk" | translate }}
+                  </span>
+                  <!-- <i class="fa fa-plus text-white"></i> -->
+                  <img
+                    alt=""
+                    src="/assets/img/icons/calculator-white.svg"
+                    width="15px"
+                  />
+                </button>
+                <button
+                  (click)="newProgram = true"
+                  [disabled]="selectedPlayer.length == 0"
+                  class="btn new_program_btn btn-primary action mb-2 mb-sm-0"
+                  *ngIf="showPermission.store"
+                  pButton
+                >
+                  <span class="d-sm-inline mr-2">{{
+                    "injury_prevention.new_program" | translate
+                  }}</span>
+                  <i class="fa fa-plus text-white"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="sort-input">
+              <p-treeSelect
+                [(ngModel)]="selectedFilter"
+                (ngModelChange)="handleSelectFilter()"
+                [options]="filterOptions"
+                placeholder="{{ 'LBL_FILTRAR' | translate }}"
+              ></p-treeSelect>
+
+              <div *ngIf="this.selectedFilter?.code">
+                <button
+                  class="btn see_all_btn"
+                  (click)="
+                    injuryPreventionList = players; selectedFilter = null
+                  "
+                  pTooltip="{{ 'seeAll' | translate }}"
+                >
+                  <i class="pi pi-times"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="header_buttons h_btn create-btn-section">
+            <button
+              (click)="riskCalculator = true"
+              [disabled]="injuryRiskId == null || selectedPlayer.length == 0"
+              class="btn btn-main risk_btn action"
+            >
+              <span class="d-sm-inline mr-2">
+                {{ "injury_prevention.risk" | translate }}
+              </span>
+              <!-- <i class="fa fa-plus text-white"></i> -->
+              <img
+                alt=""
+                src="/assets/img/icons/calculator-white.svg"
+                width="15px"
+              />
+            </button>
+            <button
+              (click)="newProgram = true"
+              [disabled]="selectedPlayer.length == 0"
+              class="btn new_program_btn btn-primary action"
+              *ngIf="showPermission.store"
+              pButton
+            >
+              <span class="d-sm-inline mr-2">{{
+                "injury_prevention.new_program" | translate
+              }}</span>
+              <i class="fa fa-plus text-white"></i>
+            </button>
+          </div>
+        </div>
+        <p-table
+          [(selection)]="selectedPlayer"
+          [loading]="loading"
+          [paginator]="true"
+          [rows]="10"
+          [showLoader]="false"
+          [value]="injuryPreventionList"
+          class="p-datatable-responsive"
+          dataKey="index"
+          selectionMode="single"
+        >
+          <ng-template pTemplate="header">
+            <tr class="text-left">
+              <th style="width: 3rem; min-width: 3rem !important;"></th>
+              <th class="text-left pl-5" pSortableColumn="full_name">
+                {{ "injury_prevention.name" | translate }}
+                <p-sortIcon field="full_name"></p-sortIcon>
+              </th>
+              <th class="text-center" pSortableColumn="rank.name">
+                {{ "injury_prevention.injury_risk_profile" | translate }}
+                <p-sortIcon field="rank.name"></p-sortIcon>
+              </th>
+              <th class="text-center">
+                {{ "injury_prevention.preventive_program" | translate }}
+              </th>
+              <th class="text-center" pSortableColumn="title">
+                {{ "injury_prevention.program_title" | translate }}
+                <p-sortIcon field="title"></p-sortIcon>
+              </th>
+              <th class="text-center" pSortableColumn="created_at">
+                {{ "injury_prevention.date" | translate }}
+                <p-sortIcon field="created_at"></p-sortIcon>
+              </th>
+              <th class="text-center" pSortableColumn="days">
+                {{ "injury_prevention.days" | translate }}
+                <p-sortIcon field="days"></p-sortIcon>
+              </th>
+              <th class="text-center">{{ "LBL_ACTIONS" | translate }}</th>
+            </tr>
+          </ng-template>
+          <ng-template let-i="rowIndex" let-player pTemplate="body">
+            <tr class="colum-responsive">
+              <td class="checbox-w">
+                <p-tableCheckbox
+                  (click)="onRowSelect(player, i)"
+                  [value]="player"
+                ></p-tableCheckbox>
+              </td>
+              <td class="">
+              
+                <div
+                  class="text-center d-flex justify-content-start align-items-center"
+                >
+                  <div>
+                    <img
+                      alt="Avatar"
+                      class="mr-2 rounded-circle"
+                      src="{{ playerImage(player) }}"
+                      width="25px"
+                      height="25px"
+                    />
+                  </div>
+                  <div>
+                    <span>{{ player.full_name || "N/a" }}</span>
+                  </div>
+                </div>
+              </td>
+              <td class="text-center">
+                <span class="p-column-title">{{
+                  "injury_prevention.injury_risk_profile" | translate
+                }}</span>
+                <span *ngIf="player.point != null && player.rank">
+                  <span [ngStyle]="{ color: player.rank.color }" class="mr-2">{{
+                    player.rank.name
+                  }}</span>
+                </span>
+                <span *ngIf="player.point == null"> N/A </span>
+              </td>
+
+              <td class="checbox-w d-sm-none"></td>
+              <td class="text-center">
+                <span class="p-column-title">{{
+                  "injury_prevention.preventive_program" | translate
+                }}</span>
+                <i
+                  *ngIf="player.is_finished === true"
+                  class="fas fa-check check injury_check_icon"
+                  pTooltip="{{ 'injury_prevention.finished' | translate }}"
+                ></i>
+                <i
+                  *ngIf="player.is_finished === false"
+                  class="fas fa-check check injury_check_icon text-aqua"
+                  pTooltip="{{ 'injury_prevention.active' | translate }}"
+                ></i>
+
+                <i
+                  *ngIf="player.is_finished === null"
+                  class="far fa-times-circle circle"
+                  pTooltip="{{ 'injury_prevention.not_started' | translate }}"
+                ></i>
+              </td>
+              <td class="text-center">
+                <div>
+                  <span class="p-column-title">{{
+                    "injury_prevention.program_title" | translate
+                  }}</span>
+                </div>
+                <div>
+                  {{ player.title || "N/A" }}
+                </div>
+              </td>
+              <td class="checbox-w d-sm-none"></td>
+              <td class="text-center">
+                <div>
+                  <span class="p-column-title">{{
+                    "injury_prevention.date" | translate
+                  }}</span>
+                </div>
+                <div>
+                  {{ (player.created_at | transformTimestamp) || "N/A" }}
+                </div>
+              </td>
+              <td class="text-center">
+                <div>
+                  <span class="p-column-title">{{
+                    "injury_prevention.days" | translate
+                  }}</span>
+                </div>
+                <div>
+                  {{ player.days || "N/A" }}
+                </div>
+              </td>
+              <td class="actions_column w-column-full center-items">
+                <div class="d-flex justify-content-center">
+                  <button
+                    [disabled]="player.injury_prevention_id == null"
+                    [routerLink]="[
+                      '/club/injury-prevention/detalles',
+                      player.team_id,
+                      player.player_id,
+                      player.injury_prevention_id
+                    ]"
+                    class="btn"
+                    pTooltip="{{ 'injury_prevention.details' | translate }}"
+                    *ngIf="showPermission.read"
+                    tooltipPosition="left"
+                  >
+                    <img class="" src="/assets/img/icons/ver.svg" />
+                  </button>
+                  <button
+                    [disabled]="player.injury_prevention_id == null"
+                    [routerLink]="[
+                      '/club/injury-prevention/record',
+                      player.team_id,
+                      player.player_id
+                    ]"
+                    class="btn"
+                    pTooltip="{{
+                      'injury_prevention.injury_record' | translate
+                    }}"
+                    tooltipPosition="left"
+                  >
+                    <img class="" src="/assets/img/icons/book-icon.svg" />
+                  </button>
+                  <button
+                    (click)="evaluateProgram(player)"
+                    [disabled]="
+                      player.injury_prevention_id == null ||
+                      (player.injury_prevention_id !== null &&
+                        player.is_finished == true)
+                    "
+                    class="btn"
+                    pTooltip="{{
+                      'injury_prevention.strategy_injury_prevention' | translate
+                    }}"
+                    tooltipPosition="left"
+                  >
+                    <img class="" src="/assets/img/icons/done-all.svg" />
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template let-columns pTemplate="emptymessage">
+            <tr>
+              <td colspan="7" style="text-align: center">
+                {{ "nodata.sinprograma" | translate }}
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template let-columns pTemplate="loadingbody">
+            <tr *ngFor="let i of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]">
+              <td>
+                <p-skeleton height="1rem" width="100%"></p-skeleton>
+              </td>
+              <td>
+                <p-skeleton height="1rem" width="100%"></p-skeleton>
+              </td>
+              <td>
+                <p-skeleton height="1rem" width="100%"></p-skeleton>
+              </td>
+              <td>
+                <p-skeleton height="1rem" width="100%"></p-skeleton>
+              </td>
+              <td>
+                <p-skeleton height="1rem" width="100%"></p-skeleton>
+              </td>
+              <td>
+                <p-skeleton height="1rem" width="100%"></p-skeleton>
+              </td>
+              <td>
+                <p-skeleton height="1rem" width="100%"></p-skeleton>
+              </td>
+              <td class="d-flex justify-content-around">
+                <p-skeleton height="1rem" width="20px"></p-skeleton>
+                <p-skeleton height="1rem" width="20px"></p-skeleton>
+                <p-skeleton height="1rem" width="20px"></p-skeleton>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
+  </div>
+</div>
+<new-program-dialog
+  (close)="newProgram = false"
+  (createdProgram)="refreshListPrograms()"
+  [selectedPlayer]="selectedPlayer[0]"
+  [visible]="newProgram"
+>
+</new-program-dialog>
+
+<strategy-prevention-dialog
+  (close)="strategyPrevention = false"
+  (evaluated)="showEvaluationResult($event)"
+  [evaluatingProgram]="evaluatingProgram"
+  [visible]="strategyPrevention"
+></strategy-prevention-dialog>
+
+<risk-calculator
+  (calculated)="refreshListPrograms()"
+  (close)="riskCalculator = false"
+  [entityId]="injuryRiskId"
+  [visible]="riskCalculator"
+></risk-calculator>
+
+<medal-dialog
+  (close)="medalDialog = false"
+  [msg]="
+    (evaluationResult
+      ? 'strategy_prevention.success_program'
+      : 'strategy_prevention.failed_program') | translate
+  "
+  [success]="evaluationResult"
+  [title]="'injury_prevention.preventive_program_result' | translate"
+  [visible]="medalDialog"
+></medal-dialog>

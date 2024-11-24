@@ -1,0 +1,55 @@
+<div class="card soft-shadow">
+  <div class="card-body p-0">
+    <div class="row">
+      <div class="col-12">
+        <div class="view_header">
+          <h6 class="font-weight-600 mb-0">
+            {{ "competition_calendar.title" | translate }}
+          </h6>
+          <span class="p-input-icon-left d-none d-md-inline ml-4">
+            <p-dropdown
+              [options]="competitions"
+              optionLabel="name"
+              [showClear]="true"
+              [disabled]="loading"
+              placeholder="{{
+                loading
+                  ? ('competition_calendar.loading' | translate)
+                  : ('competition_calendar.select_competition' | translate)
+              }}"
+              (onChange)="searchMatches($event)"
+            >
+              <ng-template pTemplate="selectedCompetition">
+                <div
+                  class="country-item country-item-value"
+                  *ngIf="selectedCompetition"
+                >
+                  <!-- <img src="assets/showcase/images/demo/flag/flag_placeholder.png" [class]="'flag flag-' + selectedCountry.code.toLowerCase()" /> -->
+                  <div>{{ selectedCompetition.name }}</div>
+                </div>
+              </ng-template>
+              <ng-template let-competition pTemplate="item">
+                <div class="country-item">
+                  <!-- <img src="assets/showcase/images/demo/flag/flag_placeholder.png" [class]="'flag flag-' + country.code.toLowerCase()" /> -->
+                  <div>{{ competition.name }}</div>
+                </div>
+              </ng-template>
+            </p-dropdown>
+          </span>
+        </div>
+      </div>
+      <div class="col-12">
+        <!-- <div class="row px-3 px-md-5">
+                </div> -->
+        <full-calendar [options]="calendarOptions"></full-calendar>
+        <!-- <p-fullCalendar [events]="events" [options]="options"></p-fullCalendar> -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-competition-match-modal
+  [visible]="openMatchModal"
+  [match]="selectedMatch"
+  (close)="openMatchModal = $event"
+></app-competition-match-modal>

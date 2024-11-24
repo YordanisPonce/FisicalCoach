@@ -1,0 +1,59 @@
+<p-dialog
+  class="dialog"
+  [modal]="true"
+  id="scouting-confirm-dialog"
+  [(visible)]="visible"
+  styleClass=""
+  maskStyleClass="purple_mask"
+  (onHide)="close.emit(true)"
+  header=" "
+>
+  <div class="col-12 mb-4 text-center mt-3">
+    <label class="mb-4">{{ "ratingExercise.title" | translate }}</label>
+
+    <div class="row w-100 d-flex justify-content-center auto-height">
+      <div class="col-4 my-3" *ngFor="let value of ratingIcons; index as i">
+        <span [style]="{ 'margin-left': '-15px' }">{{ i }}</span>
+        <button
+          class="btn rpe-btn"
+          type="button"
+          [ngClass]="{ selected: value.value === ratingValue }"
+          pTooltip="{{
+            i + ' - ' + ('ratingExercise.' + value.text | translate)
+          }}"
+          (click)="ratingValue = value.value"
+        >
+          <img
+            src="{{ resources + '/face/' + value.icon }}"
+            alt=""
+            width="35px"
+          />
+        </button>
+
+        <div>
+          {{ "ratingExercise." + value.text | translate }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p-footer>
+    <div class="footer_btns">
+      <button
+        class="btn back_btn shrink_btn"
+        type="button"
+        (click)="close.emit(true)"
+      >
+        {{ "LBL_ATRAS" | translate }}
+      </button>
+
+      <button
+        class="btn next_btn shrink_btn"
+        (click)="save()"
+        [disabled]="!ratingValue"
+      >
+        {{ "LBL_GUARDAR" | translate }}
+      </button>
+    </div>
+  </p-footer>
+</p-dialog>

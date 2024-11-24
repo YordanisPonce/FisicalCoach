@@ -1,0 +1,136 @@
+<p-dialog
+  id="evolucion_psicologica_dialog"
+  class="custom_dialog"
+  [modal]="true"
+  [(visible)]="visible"
+  *ngIf="visible"
+  styleClass="fullscreenDialog"
+  maskStyleClass=""
+  (onHide)="closeDialog()"
+>
+  <ng-template pTemplate="header">
+    <div class="d-flex header_content">
+      <img src="/assets/img/logo_panel.svg" alt="" />
+    </div>
+  </ng-template>
+  <div
+    id="evolucion_psicologica_dialog_container"
+    class="dialog_container"
+    [ngClass]="{ wide: step != 1 }"
+  >
+    <form>
+      <div class="step_content split_content" *ngIf="step == 1">
+        <div class="intro_image text-center p-4">
+          <img src="/assets/img/evolucion_psicologica.svg" alt="" />
+        </div>
+        <div class="intro">
+          <h5 class="title">Evolución psicológica</h5>
+          <p class="text">
+            Cuestionario para determinar la evolución psicológica del jugador y
+            determinar así de esta manera si el mismo es apto de forma
+            psicológica para volver a entrenar y competir con el equipo.
+          </p>
+          <div class="text-center nav_btns">
+            <button class="btn back_btn" (click)="step = 2">
+              {{ "LBL_ATRAS" | translate }}
+            </button>
+            <button class="btn next_btn" (click)="step = 2">
+              Iniciar prueba
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="step_content" *ngIf="step == 2">
+        <div class="questions">
+          <div class="question" *ngIf="currentQuestion == 1">
+            <div>
+              <div class="text-center">
+                <h5 class="font-weight-500 mb-4">
+                  ¿Cómo valoras la progresión experimentada en el proceso de
+                  readaptación de lesión?
+                </h5>
+                <small class="my-4 font-weight-600 subtitle"
+                  >SELECCIONA 1 SOLA OPCION</small
+                >
+              </div>
+              <div class="options my-5">
+                <p-checkbox
+                  *ngFor="let i of options"
+                  [ngClass]="{ selected: i.selected == true }"
+                  name="groupname"
+                  value="{{ i.value }}"
+                  [(ngModel)]="selectedValues"
+                  label="{{ i.label }}"
+                  (onChange)="i.selected = !i.selected"
+                ></p-checkbox>
+              </div>
+            </div>
+            <!-- {{i}}
+                  {{step}} -->
+          </div>
+          <div class="question" *ngIf="currentQuestion == 2">
+            <div>
+              <div class="text-center">
+                <h5 class="font-weight-500 mb-4">
+                  ¿Cómo se encuentra anímicamente?
+                </h5>
+                <small class="my-4 font-weight-600 subtitle"
+                  >SELECCIONA 1 SOLA OPCION</small
+                >
+              </div>
+              <div class="options my-5">
+                <p-checkbox
+                  *ngFor="let i of options"
+                  [ngClass]="{ selected: i.selected == true }"
+                  name="groupname"
+                  value="{{ i.value }}"
+                  [(ngModel)]="selectedValues"
+                  label="{{ i.label }}"
+                  (onChange)="i.selected = !i.selected"
+                ></p-checkbox>
+              </div>
+            </div>
+            <!-- {{i}}
+                  {{step}} -->
+          </div>
+          <div class="questions_nav">
+            <button
+              class="btn back_btn"
+              (click)="currentQuestion = currentQuestion - 1"
+            >
+              <i class="pi pi-arrow-left"></i>
+            </button>
+            <div class="questions_bar">
+              <p-progressBar
+                [value]="valueBar"
+                [showValue]="false"
+              ></p-progressBar>
+            </div>
+            <button
+              class="btn btn-primary next_question_btn"
+              (click)="
+                currentQuestion < 2
+                  ? (currentQuestion = currentQuestion + 1)
+                  : ''
+              "
+            >
+              <span>{{
+                currentQuestion == 2
+                  ? ("finish_test" | translate)
+                  : ("next_question" | translate)
+              }}</span>
+              <i class="pi pi-arrow-right"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- <div class="text-center" [ngClass]="{'shrink_btn' : step==2}" *ngIf="[1,2].includes(step)">
+        <button class="btn back_btn" (click)="(step>1) ? step=step-1 : ''" *ngIf="step>=2">Atras</button>
+        <button class="btn next_btn"
+                (click)="(step<3) ? step=step+1 : ''">{{step < 3 ? 'Siguiente' : 'Finalizar programa preventivo'}}</button>
+      </div> -->
+    </form>
+  </div>
+</p-dialog>

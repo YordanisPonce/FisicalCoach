@@ -1,0 +1,208 @@
+<p-dialog
+  (onHide)="closeDialog()"
+  [(visible)]="showModal"
+  [header]="
+    _indicator?.id
+      ? ('new_indicator.edit_indicator' | translate)
+      : ('new_indicator.add_indicator' | translate)
+  "
+  [modal]="true"
+  class="custom_dialog"
+  id="new_indicator_dialog"
+  maskStyleClass="purple_mask"
+  styleClass=""
+>
+  <div class="dialog_container" id="new_indicator_dialog_container">
+    <form [formGroup]="newIndicatorForm" *ngIf="newIndicatorForm">
+      <div *ngIf="step == 1" class="step_content">
+        <div class="row">
+          <div class="col-12 mb-4">
+            <label>{{ "new_indicator.indicator_name" | translate }} *</label>
+            <input
+              [ngClass]="{
+                'ng-invalid ng-dirty is-invalid':
+                  newIndicatorControls.name.invalid &&
+                  (newIndicatorControls.name.dirty ||
+                    newIndicatorControls.name.touched)
+              }"
+              aria-describedby="inputGroup-sizing-default"
+              aria-label="Default"
+              class="form-control input-rounded"
+              formControlName="name"
+              placeholder="{{ 'LBL_TYPE_HERE' | translate }}"
+            />
+            <div
+              *ngIf="newIndicatorControls.name?.errors"
+              class="invalid-feedback"
+            >
+              {{ "validations.required_field" | translate }}
+            </div>
+          </div>
+          <div class="col-12 mb-4">
+            <label
+              >{{ "new_indicator.indicator_percentage" | translate }} *</label
+            >
+            <div class="input-group mb-2">
+              <div class="input-group-prepend">
+                <div class="input-group-text">%</div>
+              </div>
+              <input
+                [ngClass]="{
+                  'ng-invalid ng-dirty is-invalid':
+                    newIndicatorControls.percentage.invalid &&
+                    (newIndicatorControls.percentage.dirty ||
+                      newIndicatorControls.percentage.touched)
+                }"
+                class="form-control"
+                formControlName="percentage"
+                max="100"
+                maxlength="3"
+                min="1"
+                placeholder="{{ 'qualification.porcentage' | translate }}"
+                type="number"
+              />
+              <div
+                *ngIf="newIndicatorControls.percentage?.errors?.required"
+                class="invalid-feedback"
+              >
+                {{ "validations.required_field" | translate }}
+              </div>
+              <div
+                *ngIf="newIndicatorControls.percentage?.errors?.max"
+                class="invalid-feedback"
+              >
+                {{
+                  "validations.max_value"
+                    | translate
+                      : {
+                          value:
+                            newIndicatorControls.percentage?.errors?.max.max
+                        }
+                }}
+              </div>
+            </div>
+          </div>
+          <div class="col-12 mb-4">
+            <label>{{ "new_indicator.competences" | translate }} *</label>
+            {{ selectedCompetitions }}
+            <div>
+              <p-selectButton
+                (onChange)="setFormCompetences()"
+                [(ngModel)]="selectedCompetences"
+                [multiple]="true"
+                [ngModelOptions]="{ standalone: true }"
+                [options]="competences"
+                [styleClass]="
+                  newIndicatorControls.competences.invalid &&
+                  (newIndicatorControls.competences.dirty ||
+                    newIndicatorControls.competences.touched)
+                    ? 'border-danger'
+                    : ''
+                "
+                optionLabel="acronym"
+                optionValue="id"
+              >
+                <ng-template let-item pTemplate>
+                  <img
+                    alt=""
+                    class="mr-2"
+                    src="{{ urlBase + item.url }}"
+                    width="25px"
+                  />
+                  <span pTooltip="{{ item.name }}">{{ item.acronym }}</span>
+                </ng-template>
+              </p-selectButton>
+            </div>
+          </div>
+          <div class="col-12">
+            <label>{{ "new_indicator.evaluation_criteria" | translate }}</label>
+            <input
+              aria-describedby="inputGroup-sizing-default"
+              aria-label="Default"
+              class="form-control input-rounded"
+              formControlName="evaluation_criteria"
+              placeholder="{{ 'LBL_TYPE_HERE' | translate }}"
+            />
+          </div>
+        </div>
+      </div>
+      <div *ngIf="step == 2" class="step_content">
+        <div class="row">
+          <div class="col-12 mb-4">
+            <label>{{ "new_indicator.not_enough" | translate }}</label>
+            <input
+              aria-describedby="inputGroup-sizing-default"
+              aria-label="Default"
+              class="form-control input-rounded"
+              formControlName="insufficient_caption"
+              placeholder="{{ 'LBL_TYPE_HERE' | translate }}"
+            />
+          </div>
+          <div class="col-12 mb-4">
+            <label>{{ "new_indicator.enough" | translate }}</label>
+            <input
+              aria-describedby="inputGroup-sizing-default"
+              aria-label="Default"
+              class="form-control input-rounded"
+              formControlName="sufficient_caption"
+              placeholder="{{ 'LBL_TYPE_HERE' | translate }}"
+            />
+          </div>
+          <div class="col-12 mb-4">
+            <label>{{ "new_indicator.remarkable" | translate }}</label>
+            <input
+              aria-describedby="inputGroup-sizing-default"
+              aria-label="Default"
+              class="form-control input-rounded"
+              formControlName="remarkable_caption"
+              placeholder="{{ 'LBL_TYPE_HERE' | translate }}"
+            />
+          </div>
+          <div class="col-12">
+            <label>{{ "new_indicator.outstanding" | translate }}</label>
+            <input
+              aria-describedby="inputGroup-sizing-default"
+              aria-label="Default"
+              class="form-control input-rounded"
+              formControlName="outstanding_caption"
+              placeholder="{{ 'LBL_TYPE_HERE' | translate }}"
+            />
+          </div>
+        </div>
+      </div>
+    </form>
+    <div>
+      <ul class="step_markers full_markers">
+        <li>
+          <span
+            (click)="step = 1"
+            [ngClass]="{ active: step == 1 }"
+            class="step_marker"
+          ></span>
+        </li>
+        <li>
+          <span [ngClass]="{ active: step == 2 }" class="step_marker"></span>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <p-footer>
+    <div class="footer_btns">
+      <button
+        (click)="step > 1 ? (step = step - 1) : closeDialog()"
+        [ngClass]="{ shrink_btn: step == 2 }"
+        class="btn back_btn"
+      >
+        {{ "LBL_ATRAS" | translate }}
+      </button>
+      <button
+        (click)="step < 2 ? validateStep() : onSubmit()"
+        [disabled]="loading == true"
+        [ngClass]="{ shrink_btn: step == 2 }"
+        class="btn next_btn"
+      >
+        {{ step == 2 ? "Finalizar" : ("LBL_SIGUIENTE" | translate) }}
+      </button>
+    </div>
+  </p-footer>
+</p-dialog>

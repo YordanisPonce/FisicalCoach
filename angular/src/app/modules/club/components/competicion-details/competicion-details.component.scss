@@ -1,0 +1,172 @@
+:host ::ng-deep .competicion_header {
+  display: flex;
+  align-items: center;
+  width: 100%;
+
+  @media screen and (max-width: 540px) {
+    flex-wrap: wrap;
+  }
+  .mch {
+    display: flex;
+    @media screen and (max-width: 508px) {
+      margin-bottom: 1rem;
+    }
+  }
+
+  .competition-range {
+    margin: 0 auto;
+    @media screen and (max-width: 540px) {
+    }
+
+    .range-separator {
+      width: 30px;
+      text-align: center;
+    }
+
+    .range-block {
+      width: 100px;
+      text-align: center;
+    }
+  }
+  // padding: 1rem 0rem;
+  .new_game_btn {
+    color: white;
+    font-weight: 500;
+    height: 45px;
+    margin-left: auto;
+    @media screen and (max-width: 685px) {
+      font-size: small;
+    }
+    @media screen and (max-width: 540px) {
+      margin-left: auto;
+      margin-right: auto;
+    }
+    @media screen and (max-width: 458px) {
+      margin-top: 1rem;
+    }
+    @media (max-width: 501px) {
+      width: 330px !important;
+    }
+
+    &:hover {
+      i {
+        color: #01e9c5 !important;
+      }
+    }
+    // flex: 1 1 100%;
+  }
+  #sorting {
+    #sorting_btn {
+      background-color: transparent;
+      color: #050c44;
+      font-weight: 600;
+      border-radius: 9px;
+      border: 1px solid #050c4410;
+      height: 45px;
+      font-size: 0.9rem;
+      .filter_label {
+        opacity: 0.39;
+      }
+    }
+    .p-overlaypanel {
+      top: auto !important;
+      left: auto !important;
+      min-width: 300px;
+      // max-width: 500px;
+      width: 375px;
+      box-shadow: none;
+      border: 1px solid #050c4429;
+      border-radius: 0;
+      .p-overlaypanel-content {
+        padding: 1.5rem;
+      }
+      .sorting_content {
+        color: #050c44;
+        font-weight: 600;
+        .option {
+          padding: 1rem 0;
+        }
+      }
+    }
+    .p-overlaypanel::before,
+    .p-overlaypanel::after {
+      display: none !important;
+    }
+  }
+  input {
+    // margin:0;
+    height: 45px;
+    font-weight: 500;
+    border-radius: 9px;
+    border: 1px solid #050c4410;
+  }
+}
+
+.color {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin: 0 auto;
+  color: transparent;
+}
+
+.truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 160px;
+
+  @media (max-width: 600px) {
+    width: 80px;
+  }
+}
+
+:host ::ng-deep .p-datatable {
+  // border: 1px solid #050C4429;
+  .p-datatable-thead > tr > th {
+    // border-width: 1px 0 1px 0;
+    padding: 1.5rem 1rem;
+    text-align: center;
+    font-weight: 600;
+  }
+  .p-datatable .p-datatable-tbody > tr {
+    border-bottom: 1px solid;
+  }
+  .p-datatable-tbody > tr > td {
+    // border: 1px solid;
+    padding: 2.5rem 1rem;
+    font-size: 0.9rem;
+    color: #050c4475;
+    font-weight: 600;
+    .live_label {
+      background-color: #ff606008;
+      color: #ff6060;
+      font-size: 0.75rem;
+      padding: 0.5rem 1rem;
+      font-weight: 400;
+      border-radius: 6px;
+    }
+  }
+  // .p-datatable-footer{
+  //     background: transparent;
+  //     border-width: 1px 0 0 0;
+  // }
+}
+
+.no-matches {
+  text-align: center;
+  margin: 30px;
+
+  span {
+    font-size: 1.25rem;
+    font-weight: 500;
+  }
+}
+
+@media (min-width: 1024px) {
+  :host ::ng-deep .competicion_header {
+    .new_game_btn {
+      width: 200px;
+    }
+  }
+}

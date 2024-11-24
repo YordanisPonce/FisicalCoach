@@ -1,0 +1,81 @@
+<p-dialog
+  id="close_rfd_dialog"
+  class="custom_dialog"
+  styleClass="fullscreenDialog"
+  [modal]="true"
+  [(visible)]="visible"
+  maskStyleClass=""
+  (onHide)="closeDialog()"
+>
+  <ng-template pTemplate="header">
+    <div class="d-flex header_content">
+      <img src="/assets/img/logo_panel.svg" alt="" />
+    </div>
+  </ng-template>
+  <div
+    id="close_rfd_container"
+    class="dialog_container"
+    [ngClass]="{ wide: step != 1 }"
+  >
+    <div class="step_content">
+      <ng-template pTemplate="header">
+        <div class="d-flex header_content">
+          <img src="/assets/img/logo_panel.svg" alt="" />
+        </div>
+      </ng-template>
+      <div id="close_rfd_container" class="dialog_container wide">
+        <form>
+          <div class="step_content">
+            <div>
+              <div class="questions">
+                <div class="question">
+                  <div>
+                    <div class="text-center">
+                      <h5 class="font-weight-500 mb-4">
+                        {{ "RFD.criterias" | translate }}
+                      </h5>
+                    </div>
+
+                    <div class="options my-5">
+                      <p-checkbox
+                        *ngFor="let criteria of criterias; index as i"
+                        [name]="criteria.name"
+                        value="{{ criteria.id }}"
+                        label="{{ criteria.name }}"
+                        [ngClass]="{
+                          selected: answers[criteria.code]?.id === criteria.id
+                        }"
+                        [(ngModel)]="
+                          multipleResponseList[step - 1][i]?.id &&
+                          multipleResponseList[step - 1][i].id
+                        "
+                        (ngModelChange)="
+                          handleSelectedAnswer(
+                            criteria.code,
+                            criteria.id,
+                            !criteria.pivot.value,
+                            i
+                          )
+                        "
+                      ></p-checkbox>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="d-flex justify-content-around align-items-center">
+                  <button
+                    class="btn btn-primary close-btn"
+                    (click)="submit()"
+                    [disabled]="!checkValidation() || loading"
+                  >
+                    <span>{{ "RFD.close_rfd" | translate }}</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</p-dialog>

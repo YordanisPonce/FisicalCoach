@@ -1,0 +1,66 @@
+<p-dialog
+  id="rubrics_list_dialog"
+  class="custom_dialog"
+  [modal]="true"
+  [(visible)]="visible"
+  maskStyleClass="purple_mask"
+  (onHide)="closeDialog()"
+  [header]="'rubrics_list.your_rubrics_list' | translate"
+>
+  <!-- <ng-template pTemplate="header">
+      <div>
+        <h6>{{"rubrics_list.your_rubrics_list" | translate}}</h6>
+        <p>{{"rubrics_list.review_rubrics" | translate}}.</p>
+      </div>
+    </ng-template> -->
+  <div id="rubrics_list_dialog_container" class="dialog_container">
+    <div class="d-flex justify-content-end mb-3">
+      <button
+        class="btn btn-link"
+        (click)="associateRubricToClass()"
+        [disabled]="selectedRubric == null"
+      >
+        {{ "new_rubric.associate_rubric_new_class" | translate }}
+      </button>
+    </div>
+    <div class="rubrics_list">
+      <p-selectButton
+        [options]="rubrics"
+        [(ngModel)]="selectedRubric"
+        optionLabel="name"
+        (click)="setRubricToExport(selectedRubric)"
+      >
+        <ng-template let-item pTemplate>
+          <div class="rubric">
+            <div class="rubric_name">
+              <span class="icon">
+                <img src="/assets/img/icons/ver_blue.svg" alt="" />
+              </span>
+              {{ item.name }}
+            </div>
+            <!-- <span class="icon">
+                        <img src="/assets/img/icons/ver_blue.svg" alt="">
+                    </span> -->
+          </div>
+        </ng-template>
+      </p-selectButton>
+      <p class="p-4 text-center" *ngIf="rubrics.length === 0">
+        {{ "rubrics_list.no_rubrics" | translate }}
+      </p>
+    </div>
+  </div>
+  <ng-template pTemplate="footer">
+    <div class="footer_btns">
+      <button class="back_btn btn" (click)="closeDialog()">
+        {{ "LBL_ATRAS" | translate }}
+      </button>
+      <button
+        class="next_btn btn"
+        [disabled]="selectedRubric == null"
+        (click)="edit()"
+      >
+        {{ "rubrics_list.edit_rubric" | translate }}
+      </button>
+    </div>
+  </ng-template>
+</p-dialog>

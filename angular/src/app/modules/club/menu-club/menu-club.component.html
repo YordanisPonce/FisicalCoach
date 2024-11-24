@@ -1,0 +1,78 @@
+<div class="team_sidebar">
+  <div class="team_sidebar_items mb-0">
+    <a
+      (click)="clickItem()"
+      [ngClass]="{ 'main-bg': isAcademyPath }"
+      class="team_sidebar_header"
+      routerLink="{{
+        this.role !== 'teacher' ? '/club/home' : '/teacher/home'
+      }}"
+    >
+      <div class="sidebar-item-img" style="flex: 0 0 45px; height: 45px">
+        <!-- <p-avatar *ngIf="team.image && !team.image.id"   image="{{team.image.url}}" shape="circle"></p-avatar> -->
+        <p-avatar
+          *ngIf="team.image && team.image; else showColor"
+          image="{{ team.image.full_url }}"
+          shape="circle"
+          styleClass="large"
+        ></p-avatar>
+
+        <ng-template #showColor>
+          <div
+            *ngIf="team?.color"
+            [style]="'background-color:' + team.color"
+            class="color"
+          ></div>
+        </ng-template>
+      </div>
+      <div
+        [ngClass]="{ 'main-text': !isAcademyPath, 'text-white': isAcademyPath }"
+        class="ml-3 sidebar-item-text font-weight-600"
+      >
+        <span>{{ team?.name }}</span>
+        <div
+          *ngIf="role !== 'teacher'"
+          style="display: flex; justify-content: space-between"
+        >
+          <small class="d-block"
+            >{{ team?.staff_count }}
+            {{ "academySidebar.guests" | translate }}
+          </small>
+          <small style="margin-left: 15px">
+            {{ "registerPlank.sport" | translate }} ({{
+              team?.sport?.name
+            }})</small
+          >
+        </div>
+      </div>
+    </a>
+    <!-- <li (click)="clickItem()" *ngFor="let option of teamOptions" [ngClass]="{'border-bottom': option.hr}" [routerLink]="'/club/'+option.route" class="team_sidebar_item"> -->
+    <div class="sidebar_items_container">
+      <p-scrollPanel [style]="{ width: '100%', height: 'inherit' }" class="p-0">
+        <ul class="mb-0">
+          <li
+            (mousedown)="handlRedirectMenuOption($event, option)"
+            *ngFor="let option of teamOptions"
+            class="team_sidebar_item"
+            [ngClass]="{ 'selected-path-bg': path.includes(option.route) }"
+          >
+            <div
+              class="d-flex align-items-center"
+              [ngClass]="{ 'selected-path': path.includes(option.route) }"
+            >
+              <span class="mr-3">
+                <img
+                  loading="lazy"
+                  src="{{ urlBase + 'images/menu' + option.icon }}"
+                  alt="{{ option.name | translate }}"
+                  class="team-text"
+                  width="22px"
+              /></span>
+              {{ "nav_bar." + option.name | translate }}
+            </div>
+          </li>
+        </ul>
+      </p-scrollPanel>
+    </div>
+  </div>
+</div>

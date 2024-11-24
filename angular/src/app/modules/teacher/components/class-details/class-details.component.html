@@ -1,0 +1,418 @@
+<div class="row">
+  <div class="col-12">
+    <div class="card box-shadow">
+      <div class="card-body">
+        <div class="row">
+          <!-- descripcion superior con imagen -->
+          <div class="col-12 mb-5">
+            <div class="border d-flex flex-column flex-md-row">
+              <div class="descripcion_equipo order-1 order-md-0 p-4">
+                <div
+                  class="d-flex flex-column flex-md-row align-items-center text-center text-sm-left"
+                >
+                  <img
+                    *ngIf="
+                      !loadingSport && class.image != null;
+                      else classColor
+                    "
+                    [src]="class.image.full_url"
+                    class="img-fluid team-image"
+                  />
+                  <ng-template #classColor>
+                    <div
+                      *ngIf="class?.color"
+                      [style]="'background-color:' + class.color"
+                      class="color"
+                    ></div>
+                  </ng-template>
+                  <div
+                    *ngIf="!loadingSport && class"
+                    class="d-flex flex-column ml-md-4"
+                  >
+                    <span *ngIf="class" class="font-weight-600">{{
+                      class.name || ""
+                    }}</span>
+
+                    <div>
+                      <div class="d-flex flex-column active-year my-1">
+                        <strong
+                          *ngIf="
+                            checkActiveAcademicYear(
+                              class?.active_academic_years
+                            );
+                            else noActive
+                          "
+                          class="title"
+                        >
+                          {{
+                            "school.academic_year.academic_year_active"
+                              | translate
+                          }}
+                        </strong>
+
+                        <ng-template #noActive>
+                          <span class="title">
+                            {{
+                              "school.academic_year.no_year_actvie" | translate
+                            }}
+                          </span>
+                        </ng-template>
+                        <span
+                          *ngIf="
+                            checkActiveAcademicYear(
+                              class?.active_academic_years
+                            )
+                          "
+                        >
+                          {{
+                            checkActiveAcademicYear(
+                              class?.active_academic_years
+                            )
+                          }}
+                        </span>
+                      </div>
+
+                      <div class="d-flex flex-column active-year my-1">
+                        <strong
+                          *ngIf="
+                            checkActiveAcademicPeriod(
+                              class?.active_academic_years.academic_periods
+                            );
+                            else noPeriod
+                          "
+                          class="title"
+                        >
+                          {{ "school.academic_year.period_active" | translate }}
+                        </strong>
+
+                        <ng-template #noPeriod>
+                          <span class="title">
+                            {{
+                              "school.academic_year.no_period_active"
+                                | translate
+                            }}
+                          </span>
+                        </ng-template>
+
+                        <span
+                          *ngIf="
+                            checkActiveAcademicPeriod(
+                              class?.active_academic_years.academic_periods
+                            )
+                          "
+                        >
+                          {{
+                            checkActiveAcademicPeriod(
+                              class?.active_academic_years.academic_periods
+                            )
+                          }}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div class="d-flex mt-1">
+                      <button
+                        (click)="selectedClass = true"
+                        *ngIf="class"
+                        class="mr-1"
+                      >
+                        <img
+                          src="{{ urlBase + 'images/menu/edit.svg' }}"
+                          width="16px"
+                        />
+                      </button>
+                      <button (click)="confirm()" *ngIf="class">
+                        <img
+                          src="{{ urlBase + 'images/menu/delete.svg' }}"
+                          width="16px"
+                        />
+                      </button>
+                    </div>
+                  </div>
+                  <div
+                    *ngIf="loadingSport"
+                    class="d-flex justify-content-around align-items-center ml-2 mr-5"
+                    style="
+                      text-align: center;
+                      width: 100%;
+                      margin: 25px 0;
+                      min-width: 250px;
+                    "
+                  >
+                    <div>
+                      <p-skeleton
+                        shape="circle"
+                        size="6rem"
+                        styleClass="mb-2 mr-4"
+                      ></p-skeleton>
+                    </div>
+                    <div>
+                      <p-skeleton styleClass="mb-3"></p-skeleton>
+                      <p-skeleton styleClass="mb-3" width="10rem"></p-skeleton>
+                      <p-skeleton styleClass="mb-2" width="10rem"></p-skeleton>
+                    </div>
+                  </div>
+                </div>
+                <!-- <small
+                    >Espacio de trabajo de equipo SUB 15 de academia Liga F,
+                    sentando sentando a la misma en la liga.</small
+                  > -->
+              </div>
+              <div class="portada_equipo" style="display: flex">
+                <div
+                  style="width: 100%; display: flex; justify-content: center"
+                >
+                  <img
+                    [src]="backgroundImage"
+                    style="max-height: 210px; width: inherit"
+                  />
+                </div>
+                <div style="position: absolute; right: 0px">
+                  <button
+                    (click)="openCropperDialog = true"
+                    [disabled]="loadingCover"
+                  >
+                    {{ "team.change_cover" | translate }}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="ranking_goleadores border">
+              <ul>
+                <li class="ranking_header">
+                  {{
+                    (role !== "teacher"
+                      ? "team.player_ranking"
+                      : "LBL_STUDENTS_LIST"
+                    ) | translate
+                  }}
+                </li>
+              </ul>
+              <ul class="ranking-list">
+                <li *ngIf="loadingAlumns">
+                  <div
+                    class="d-flex align-items-center"
+                    style="text-align: center; width: 100%; margin: 25px 0"
+                  >
+                    <div>
+                      <p-skeleton
+                        shape="circle"
+                        size="5rem"
+                        styleClass="mr-3"
+                      ></p-skeleton>
+                    </div>
+                    <div style="flex: 1">
+                      <p-skeleton styleClass="mb-3" width="100%"></p-skeleton>
+                      <p-skeleton width="75%"></p-skeleton>
+                    </div>
+                  </div>
+                </li>
+                <li
+                  *ngIf="!loadingAlumns && alumns.length == 0"
+                  class="justify-content-center"
+                >
+                  {{ "LBL_SINREGISTROS" | translate }}
+                </li>
+                <li *ngFor="let item of alumns; index as i">
+                  <div
+                    *ngIf="alumns.length > 0 && !loadingAlumns"
+                    class="d-flex align-items-center"
+                  >
+                    <span>{{ i }}</span>
+                    <!-- <span class="goleader_img ml-3">
+                      <img
+                        class="rounded-circle img-fluid"
+                        [src]="
+                          item.image
+                            ? item.image.url
+                            : '../../../../../assets/img/chico.png'
+                        "
+                        width="50px"
+                      />
+                    </span> -->
+                    <div
+                      [style.backgroundImage]="
+                        'url(' +
+                        (item.image != null
+                          ? item.image.full_url
+                          : item.gender.code === 'female'
+                          ? girlAlumnImage
+                          : boyAlumnImage) +
+                        ')'
+                      "
+                      class="avatar_image avatar_40 rounded-circle mx-2"
+                    ></div>
+                    <div class="goleador_info">
+                      <span class="font-weight-600">{{ item.full_name }}</span>
+                      <span>{{ item.position?.name }}</span>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-md-8">
+            <div class="card">
+              <div class="card-body p-0">
+                <div class="info_tables">
+                  <div class="d-xl-flex">
+                    <ul
+                      class="nav nav-tabs flex-grow-1"
+                      id="myTab"
+                      role="tablist"
+                    >
+                      <li
+                        *ngFor="let tab of tabs; index as i"
+                        class="nav-item"
+                        role="presentation"
+                      >
+                        <a
+                          (click)="selectedTab = i"
+                          [ngClass]="{ active: i == 0 }"
+                          aria-controls="partidos_recientes"
+                          aria-selected="true"
+                          class="nav-link h-100"
+                          data-toggle="tab"
+                          href="#{{ replaceSpaces(normalizeString(tab.name)) }}"
+                          id="{{
+                            replaceSpaces(normalizeString(tab.name))
+                          }}_tab"
+                          role="tab"
+                          >{{ "team." + tab.code | translate }}</a
+                        >
+                      </li>
+                      <!-- <li class="nav-item" role="presentation">
+                          <a class="nav-link" id="cuerpo_tecnico_tab" data-toggle="tab" href="#cuerpo_tecnico" role="tab" aria-controls="cuerpo_tecnico" aria-selected="false">Cuerpo Técnico</a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                          <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Jugadores</a>
+                        </li> -->
+                      <li
+                        *ngIf="role !== 'teacher'"
+                        class="ml-md-auto mr-md-3 nav-item text-center info_table_btns py-3"
+                      >
+                        <button *ngIf="selectedTab == 1" class="btn">
+                          {{ "team.new_staff" | translate }}
+                        </button>
+                        <button
+                          *ngIf="selectedTab == 2"
+                          class="btn"
+                          routerLink="/club/players"
+                        >
+                          {{ "team.go_to_players" | translate }}
+                        </button>
+                      </li>
+                    </ul>
+                    <div
+                      *ngIf="role == 'teacher' && selectedTab === 1"
+                      class="ml-md-auto nav-item text-center info_table_btns py-3 px-lg-2 px-xl-3"
+                    >
+                      <button
+                        (click)="assingTeacher()"
+                        class="btn action assing-teacher-btn"
+                        pButton
+                      >
+                        <span class="mr-1">{{
+                          "teachers.assing_teacher" | translate
+                        }}</span>
+                        <i class="fa fa-plus text-white"></i>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="tab-content" id="myTabContent">
+                    <div
+                      aria-labelledby="evaluaciones_recientes_tab"
+                      class="tab-pane fade show active"
+                      id="evaluaciones_recientes"
+                      role="tabpanel"
+                    >
+                      <recent-evaluations
+                        [evaluations]="recentEvaluations"
+                        [loading]="loadingEvaluations"
+                      ></recent-evaluations>
+                    </div>
+
+                    <div
+                      aria-labelledby="cuerpo_tecnico_tab"
+                      class="tab-pane fade"
+                      id="cuerpo_tecnico"
+                      role="tabpanel"
+                    >
+                      <div
+                        *ngIf="loadingTeachersClass"
+                        style="text-align: center; width: 100%; margin: 25px 0"
+                      >
+                        <i
+                          class="pi pi-spin pi-spinner"
+                          style="font-size: 1.5rem"
+                        ></i>
+                      </div>
+                      <teachers-class
+                        (remove)="handleDelete($event)"
+                        *ngIf="!loadingTeachersClass"
+                        [staff]="teachersClass"
+                      ></teachers-class>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-add-classroom
+  (close)="selectedClass = false"
+  (resetClass)="resetClass($event)"
+  *ngIf="role === 'teacher'"
+  [selectedClass]="class"
+  [visible]="selectedClass"
+></app-add-classroom>
+
+<p-confirmDialog
+  #cd
+  [style]="{ width: '50vw' }"
+  class="custom_dialog"
+  maskStyleClass="purple_mask"
+>
+  <ng-template pTemplate="footer">
+    <div class="footer_btns">
+      <button
+        (click)="cd.reject()"
+        class="back_btn"
+        icon="pi pi-times"
+        label="{{ 'LBL_NO' | translate }}"
+        pButton
+        type="button"
+      ></button>
+      <button
+        (click)="cd.accept()"
+        class="next_btn"
+        icon="pi pi-check"
+        label="{{ 'LBL_YES' | translate }}"
+        pButton
+        type="button"
+      ></button>
+    </div>
+  </ng-template>
+</p-confirmDialog>
+
+<app-assing-teacher
+  (close)="assingTeacherDialog = false"
+  (saved)="getTeachersClass()"
+  [visible]="assingTeacherDialog"
+></app-assing-teacher>
+
+<app-image-cropper
+  *ngIf="openCropperDialog"
+  [coverDialog]="openCropperDialog"
+  (sendImage)="getImage($event)"
+  (close)="openCropperDialog = false"
+>
+</app-image-cropper>

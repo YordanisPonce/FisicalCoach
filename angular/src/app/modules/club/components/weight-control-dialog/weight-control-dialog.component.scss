@@ -1,0 +1,89 @@
+:host ::ng-deep {
+  .p-dialog {
+    #weight_control_dialog_container {
+      width: 450px;
+      margin-left: 50px;
+      // margin: 0 auto;
+      .current_player {
+        border: 1px solid #050c4421;
+        border-radius: 9px;
+        padding: 1.5rem;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        button {
+          border-radius: 50%;
+          background-color: rgba($color: #000000, $alpha: 0.04);
+          color: #024cac;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          width: 35px;
+          height: 35px;
+        }
+        .player {
+          align-items: center;
+          .player_image {
+            height: 4.5rem;
+            width: 4.5rem;
+            border-radius: 50%;
+            background-size: cover;
+            background-position: center;
+          }
+          .player_name {
+            color: black;
+            opacity: 0.66;
+            font-weight: 600;
+          }
+        }
+      }
+      .back_btn {
+        flex: 0 50px;
+        cursor: pointer;
+      }
+      .next_btn {
+        background-color: #0065e9;
+        border-radius: 32px;
+        color: white;
+        font-weight: 600;
+        font-size: 0.9rem;
+        padding: 0.65rem;
+      }
+    }
+  }
+}
+
+.control_container {
+  margin-top: 100px;
+  margin-right: 10%;
+  @media screen and (max-width: 690px){
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+  @media screen and (max-width: 470px){
+    flex-direction: inherit;
+  }
+}
+.weight_image {
+  max-width: 400px;
+  max-height: 600px;
+  margin-right: 20px;
+  @media screen and (max-width: 800px){
+    max-width: 350px;
+  }
+  @media screen and (max-width: 690px){
+    max-width: 300px;
+    max-height: 500px;
+    margin-right: 10px;
+  }
+  @media screen and (max-width: 520px){
+    max-width: 300px;
+    max-height: 300px;
+    margin-right: 5px;
+  }
+  @media screen and (max-width: 470px){
+    display: none;
+  }
+}

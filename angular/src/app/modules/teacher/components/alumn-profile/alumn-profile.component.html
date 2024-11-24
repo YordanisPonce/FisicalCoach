@@ -1,0 +1,26 @@
+<div class="row">
+  <div class="col-12">
+    <p-tabMenu
+      *ngIf="items && items.length > 0"
+      [activeItem]="items[activeTab]"
+      [model]="items"
+      routerLinkActive="p-menuitem-link-active"
+    ></p-tabMenu>
+    <img
+      (click)="goToAlumns()"
+      alt=""
+      src="assets/img/icons/shortcut_arrow.svg"
+      style="
+        transform: rotate(180deg);
+        width: 10px;
+        cursor: pointer;
+        position: inherit;
+        z-index: 2 !important;
+      "
+      class="arrow-position"
+    />
+  </div>
+  <div class="col-12 py-3">
+    <router-outlet></router-outlet>
+  </div>
+</div>

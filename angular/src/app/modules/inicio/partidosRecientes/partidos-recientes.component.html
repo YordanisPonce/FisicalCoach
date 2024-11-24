@@ -1,0 +1,30 @@
+<div class="card box-shadow">
+  <div class="card-body">
+    <div class="font-weight-600 mb-4 d-flex">
+      <span>
+        {{ "home.recentMatches" | translate }}
+      </span>
+    </div>
+    <div class="border">
+      <p-tabView [(activeIndex)]="activeIndex">
+        <p-tabPanel *ngFor="let item of clubs; let i = index" [index]="item.id" [scrollable]="true">
+          <ng-template pTemplate="header">
+            <div class="border p-2 rounded-circle fisical-border sidebar-item-img">
+              <img class="principalImg" src="assets/img/isotipo-gris.png"/>
+            </div>
+            <div class="ml-3 text-elipsis">
+              {{ item.name }}
+            </div>
+          </ng-template>
+          <games-component [loadingMatches]="loadingMatches" [matches]="item.recent_matched"></games-component>
+          <div *ngIf="item.recent_matched.length === 0 && !loadingMatches" class="text-center my-3">
+            <p class="nodata">{{ 'nodata.sinpartidos'| translate }}</p>
+          </div>
+        </p-tabPanel>
+      </p-tabView>
+    </div>
+    <p class="nodata" style="text-align: center" *ngIf="!clubs||clubs.length<=0">
+      {{ 'nodata.sinpartidos'| translate }}
+    </p>
+  </div>
+</div>

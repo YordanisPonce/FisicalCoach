@@ -1,0 +1,366 @@
+<p-dialog
+  (onHide)="closeDialog()"
+  [(visible)]="perfilDialog"
+  [modal]="true"
+  [style]="{ overflow: 'visible' }"
+  class="custom_dialog"
+  header="{{ 'profile.editar' | translate }}"
+  id="editar_perfil_dialog"
+  maskStyleClass="purple_mask"
+  position="top"
+  styleClass=""
+>
+  <div class="dialog_container" id="editar_perfil_dialog_container">
+    <p-scrollPanel [style]="{ width: '100%', height: '550px' }">
+      <form [formGroup]="registerForm" class="" id="data_form">
+        <div class="row">
+          <div class="mb-3 col-12 col-md-6">
+            <label for="exampleFormControlInput1"
+              >{{ "register.name" | translate }} *</label
+            >
+            <input
+              aria-describedby="inputGroup-sizing-default"
+              aria-label="Default"
+              class="form-control"
+              formControlName="full_name"
+              maxlength="100"
+              placeholder="{{ 'register.name' | translate }}"
+              type="text"
+            />
+            <div *ngIf="f.full_name.invalid" class="p-error">
+              <small>{{ "profile.validate_fullname" | translate }}</small>
+            </div>
+          </div>
+          <div class="mb-3 col-12 col-md-6">
+            <label for="exampleFormControlInput1"
+              >{{ "register.address" | translate }} *</label
+            >
+            <input
+              aria-describedby="inputGroup-sizing-default"
+              aria-label="Default"
+              class="form-control"
+              formControlName="address"
+              maxlength="100"
+              placeholder="{{ 'register.address' | translate }}"
+              type="text"
+            />
+            <div *ngIf="f.address.invalid" class="p-error">
+              <small>{{ "profile.validate_address" | translate }}</small>
+            </div>
+          </div>
+          <div class="mb-3 col-12 col-md-6">
+            <label for="email">{{ "register.email" | translate }} *</label>
+            <input
+              class="form-control"
+              formControlName="email"
+              id="email"
+              placeholder="name@example.com"
+              type="email"
+            />
+            <div *ngIf="f.email.invalid" class="p-error">
+              <small>{{ "profile.validate_email" | translate }}</small>
+            </div>
+          </div>
+          <div class="mb-3 col-12 col-md-6">
+            <label>{{ "register.country" | translate }} *</label>
+            <p-dropdown
+              (onChange)="refreshProvinces()"
+              [filter]="true"
+              [options]="country"
+              [resetFilterOnHide]="true"
+              [showClear]="true"
+              formControlName="country_id"
+              optionLabel="name"
+              optionValue="id"
+              placeholder="{{ 'register.selectCountry' | translate }}"
+            >
+              <ng-template let-country pTemplate="item">
+                <div class="country-item">
+                  <div>
+                    <label class="county_selector">{{ country.emoji }}</label>
+                    {{ country.name }}
+                  </div>
+                </div>
+              </ng-template>
+            </p-dropdown>
+            <div *ngIf="f.country_id.invalid" class="p-error">
+              <small>{{ "profile.validate_country" | translate }}</small>
+            </div>
+          </div>
+          <div class="mb-3 col-12 col-md-6">
+            <label for="exampleFormControlInput1"
+              >{{ "register.dni" | translate }} *</label
+            >
+            <input
+              aria-describedby="inputGroup-sizing-default"
+              aria-label="Default"
+              class="form-control"
+              formControlName="dni"
+              maxlength="15"
+              placeholder="{{ 'register.dni' | translate }}"
+              type="text"
+            />
+            <div *ngIf="f.dni.invalid" class="p-error">
+              <small>{{ "profile.validate_idcard" | translate }}</small>
+            </div>
+          </div>
+          <div class="mb-3 col-12 col-md-6">
+            <label for="exampleFormControlInput1"
+              >{{ "register.provincia" | translate }} *</label
+            >
+            <p-dropdown
+              [filter]="true"
+              [options]="provinces"
+              [resetFilterOnHide]="true"
+              [showClear]="true"
+              formControlName="province_id"
+              optionLabel="name"
+              optionValue="id"
+              placeholder="{{ 'register.selectProvince' | translate }}"
+            ></p-dropdown>
+            <div *ngIf="f.province_id.invalid" class="p-error">
+              <small>{{ "profile.validate_province" | translate }}</small>
+            </div>
+          </div>
+
+          <div class="mb-3 col-12 col-md-6">
+            <label for="exampleFormControlInput1"
+              >{{ "register.city" | translate }} *</label
+            >
+            <input
+              aria-describedby="inputGroup-sizing-default"
+              aria-label="Default"
+              class="form-control"
+              formControlName="city"
+              maxlength="15"
+              placeholder="{{ 'register.city' | translate }}"
+              type="text"
+            />
+            <div *ngIf="f.city.invalid" class="p-error">
+              <small>{{ "profile.validate_city" | translate }}</small>
+            </div>
+          </div>
+
+          <div class="mb-3 col-12 col-md-6">
+            <label for="exampleFormControlInput1"
+              >{{ "register.zip_code" | translate }} *</label
+            >
+            <input
+              aria-describedby="inputGroup-sizing-default"
+              aria-label="Default"
+              class="form-control"
+              formControlName="zipcode"
+              maxlength="10"
+              placeholder="{{ 'register.zip_code' | translate }}"
+              type="text"
+            />
+            <div *ngIf="f.zipcode.invalid" class="p-error">
+              <small>{{ "profile.validate_zip_code" | translate }}</small>
+            </div>
+          </div>
+          <div class="mb-3 col-12 col-md-6">
+            <label for="exampleFormControlInput1"
+              >{{ "register.phone" | translate }} *</label
+            >
+            <input
+              aria-describedby="inputGroup-sizing-default"
+              aria-label="Default"
+              class="form-control"
+              formControlName="phone"
+              maxlength="20"
+              pKeyFilter="num"
+              placeholder="{{ 'register.phone' | translate }}"
+              type="text"
+            />
+
+            <div *ngIf="f.phone.invalid" class="p-error">
+              <small>{{ "profile.validate_phone" | translate }}</small>
+            </div>
+          </div>
+          <div class="mb-3 col-12 col-md-6">
+            <label for="exampleFormControlInput1"
+              >{{ "register.username" | translate }} *</label
+            >
+            <input
+              aria-describedby="inputGroup-sizing-default"
+              aria-label="Default"
+              class="form-control"
+              formControlName="username"
+              maxlength="30"
+              placeholder="{{ 'register.username' | translate }}"
+              type="text"
+            />
+            <div *ngIf="f.username.invalid" class="p-error">
+              <small>{{ "profile.validate_username" | translate }}</small>
+            </div>
+          </div>
+          <div class="mb-3 col-12 col-md-6">
+            <label for="exampleFormControlInput1"
+              >{{ "register.sex" | translate }} *</label
+            >
+            <p-dropdown
+              [filter]="true"
+              [options]="gender"
+              [resetFilterOnHide]="true"
+              [showClear]="true"
+              formControlName="gender"
+              optionLabel="code"
+              optionValue="id"
+              placeholder="{{ 'register.selectSex' | translate }}"
+            ></p-dropdown>
+            <div *ngIf="f.gender.invalid" class="p-error">
+              <small>{{ "profile.validate_gender" | translate }}</small>
+            </div>
+          </div>
+          <div class="mb-3 col-12 col-md-6">
+            <p-checkbox
+              [binary]="true"
+              formControlName="is_company"
+              label="{{ 'register.is_company' | translate }}"
+            ></p-checkbox>
+          </div>
+          <div class="mb-3 col-12 col-md-6">
+            <label for="exampleFormControlInput1"
+              >{{ "register.identidadgenero" | translate }}
+            </label>
+            <p-dropdown
+              [filter]="true"
+              [options]="genderIdentity"
+              [resetFilterOnHide]="true"
+              [showClear]="true"
+              [style]="{ overflow: 'visible' }"
+              formControlName="gender_identity_id"
+              optionLabel="code"
+              optionValue="id"
+              placeholder="{{ 'register.selectGenero' | translate }}"
+            ></p-dropdown>
+          </div>
+        </div>
+        <div *ngIf="f.is_company.value" class="row">
+          <div class="mb-3 col-12">
+            <label for="exampleFormControlInput1">{{
+              "register.company_name" | translate
+            }}</label>
+            <input
+              aria-describedby="inputGroup-sizing-default"
+              aria-label="Default"
+              class="form-control"
+              formControlName="company_name"
+              maxlength="100"
+              placeholder="{{ 'register.company_name' | translate }}"
+              type="text"
+            />
+          </div>
+          <div class="mb-3 col-12 col-md-6">
+            <label for="exampleFormControlInput1">
+              {{ "register.company_idnumber" | translate }}</label
+            >
+            <input
+              aria-describedby="inputGroup-sizing-default"
+              aria-label="Default"
+              class="form-control"
+              formControlName="company_idnumber"
+              maxlength="20"
+              pKeyFilter="num"
+              placeholder="{{ 'register.company_idnumber' | translate }}"
+              type="text"
+            />
+          </div>
+          <div class="mb-3 col-12 col-md-6">
+            <label for="exampleFormControlInput1">{{
+              "register.company_vat" | translate
+            }}</label>
+            <input
+              class="form-control"
+              formControlName="company_vat"
+              id="exampleFormControlInput1"
+              maxlength="100"
+              pKeyFilter="alphanum"
+              placeholder="{{ 'register.company_vat' | translate }}"
+              type="text"
+            />
+          </div>
+          <div class="mb-3 col-12">
+            <label>{{ "register.company_address" | translate }}</label>
+            <input
+              aria-describedby="inputGroup-sizing-default"
+              aria-label="Default"
+              class="form-control"
+              formControlName="company_address"
+              maxlength="100"
+              placeholder="{{ 'register.company_address' | translate }}"
+              type="text"
+            />
+          </div>
+          <div class="mb-3 col-12 col-md-6">
+            <label>{{ "register.company_city" | translate }}</label>
+            <input
+              aria-describedby="inputGroup-sizing-default"
+              aria-label="Default"
+              class="form-control"
+              formControlName="company_city"
+              maxlength="50"
+              placeholder="{{ 'register.company_city' | translate }}"
+              type="text"
+            />
+          </div>
+          <div class="mb-3 col-12 col-md-6">
+            <label>{{ "register.company_zipcode" | translate }}</label>
+            <input
+              aria-describedby="inputGroup-sizing-default"
+              aria-label="Default"
+              class="form-control"
+              formControlName="company_zipcode"
+              maxlength="10"
+              pKeyFilter="alphanum"
+              placeholder="{{ 'register.company_zipcode' | translate }}"
+              type="text"
+            />
+          </div>
+          <div class="mb-3 col-12 col-md-6">
+            <label>{{ "register.company_phone" | translate }}</label>
+            <input
+              aria-describedby="inputGroup-sizing-default"
+              aria-label="Default"
+              class="form-control"
+              formControlName="company_phone"
+              maxlength="20"
+              pKeyFilter="num"
+              placeholder="{{ 'register.company_phone' | translate }}"
+              type="text"
+            />
+          </div>
+        </div>
+      </form>
+    </p-scrollPanel>
+  </div>
+  <p-footer>
+    <div class="footer_btns">
+      <button
+        (click)="closeDialog()"
+        class="btn back_btn"
+        pTooltip="{{ 'profile.atras' | translate }}"
+        tooltipPosition="top"
+      >
+        {{ "profile.atras" | translate }}
+      </button>
+      <button
+        (click)="send()"
+        *ngIf="!loadingSubmit"
+        class="btn next_btn"
+        pTooltip="{{ 'BTN_CONFIRMAR' | translate }}"
+      >
+        {{ "BTN_CONFIRMAR" | translate }}
+      </button>
+      <button
+        (click)="send()"
+        *ngIf="loadingSubmit"
+        [disabled]="loadingSubmit"
+        class="btn next_btn"
+        pTooltip="{{ 'LBL_GUARDANDO' | translate }}"
+      >
+        {{ "LBL_GUARDANDO" | translate }} <i class="pi pi-spin pi-spinner"></i>
+      </button>
+    </div>
+  </p-footer>
+</p-dialog>

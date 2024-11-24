@@ -1,0 +1,120 @@
+<div class="d-none d-md-flex align-items-center px-3 px-sm-5 my-5">
+  <img
+    class="mr-3"
+    src="https://testing-cdn.fisicalcoach.com/resources/images/logos/logo_inicio.svg"
+    width="200"
+  />
+  <div class="ml-auto">
+    <select
+      (change)="handleLanguage($event)"
+      [(ngModel)]="language"
+      class="botone custom-select text-center header_btn"
+      id="idiomaselect"
+      name="language"
+    >
+      <option selected value="es">{{ "LBL_SPANISH" | translate }}</option>
+      <option value="en">{{ "LBL_ENGLISH" | translate }}</option>
+    </select>
+  </div>
+</div>
+
+<div class="row d-lg-none">
+  <div class="col-12">
+    <div class="suscription">
+      <div class="suscription_header">
+        <div class="text-center d-lg-none mx-auto">
+          {{ "registerPlank.seleccionar" | translate }}
+          <span class="font-weight-bold">{{
+            "registerPlank.subscripcion" | translate
+          }}</span>
+        </div>
+      </div>
+      <div class="suscription_plans">
+        <p-selectButton
+          [(ngModel)]="value"
+          [options]="items.subpackages"
+          optionLabel="icon"
+        >
+          <ng-template let-plan pTemplate>
+            <div class="suscription_plan_content">
+              <img [src]="getIcon(plan.code)" width="35" />
+              <div *ngIf="types === 'month'" class="price">
+                {{ plan.prices[0].month }} $
+              </div>
+              <div *ngIf="types === 'year'" class="price">
+                {{ plan.prices[0].year }} $
+              </div>
+              <div class="name">{{ plan.name }}</div>
+            </div>
+          </ng-template>
+        </p-selectButton>
+      </div>
+      <div class="suscription_description">
+        <span class="font-weight-bold">{{
+          "registerPlank.gold" | translate
+        }}</span>
+        {{ "registerPlank.duplica" | translate }}
+      </div>
+      <div class="suscription_action">
+        <button (click)="ir(value, value.name)" class="btn btn-block">
+          {{ "registerPlank.botoncuatro" | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row no-gutters d-none d-lg-flex p-5">
+  <div class="col-md-5 col-xl-3">
+    <div class="specs">
+      <table class="table">
+        <tbody>
+          <tr *ngFor="let dato of datoOne.attributes" class="">
+            <td>{{ "package_attributes." + dato.code | translate }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="col-md-7 col-xl-9">
+    <div class="row mx-lg-n2">
+      <div
+        (click)="selectid(lista.id)"
+        *ngFor="let lista of items.subpackages"
+        class="col px-2"
+      >
+        <div class="suscription_pack">
+          <table class="table">
+            <thead>
+              <th class="text-center">
+                <div class="suscription_pack_header">
+                  <img [src]="getIcon(lista.code)" width="35" />
+                  <span class="suscription_pack_caption">{{
+                    "registerPlank.packagename" | translate
+                  }}</span>
+                  <span class="suscription_pack_name">{{
+                    "registerPlank." + lista.code | translate
+                  }}</span>
+                </div>
+              </th>
+            </thead>
+            <tbody>
+              <tr *ngFor="let dato of lista.attributes">
+                <td *ngIf="dato.pivot.quantity">{{ dato.pivot.quantity }}</td>
+                <td *ngIf="!dato.pivot.quantity && dato.pivot.available">
+                  <i class="fas fa-check check" style="width: 20px"></i>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="text-center suscription_pack_footer">
+            <h6 *ngIf="types === 'month'">{{ lista.prices[0].month }} €</h6>
+            <h6 *ngIf="types === 'year'">{{ lista.prices[0].year }} €</h6>
+            <button (click)="ir(lista, lista.name)" class="btn btn-block">
+              {{ "registerPlank.botoncuatro" | translate }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

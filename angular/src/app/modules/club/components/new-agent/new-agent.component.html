@@ -1,0 +1,29 @@
+<div class="row">
+
+  <div class="mb-4 col-12 col-sm-6">
+    <form (ngSubmit)="onSubmit()" [formGroup]="formNewAgentPlayer" id="agent_player_form"
+          name="nomFormDataPersonal">
+      <div class="row">
+        <div class="col-md-12 col-sm-12 col-lg-12">
+          <label for="agent_player">{{'PLAYERS.LBL_AGENTE' | translate}}</label>
+          <input aria-describedby="inputGroup-sizing-default" aria-label="Default" class="form-control mb-4"
+                 formControlName="agent_name"
+                 id="agent_player" placeholder="{{'LBL_ESCRIBEAQI' | translate}}">
+          <div *ngIf="submitted && f.agent_name.invalid" class="form-text text-danger">
+            {{ 'PLAYERS.LBL_AGENTE' | translate}} {{ 'LBL_REQUERIDO' | translate}}
+          </div>
+          <button *ngIf="data.id" class="btn btn-primary btn-block btn_add_agent"
+                  pTooltip="{{'PLAYERS.LBL_NEWAGENTE' | translate}}"
+                  tooltipPosition="top"
+                  type="submit">{{'PLAYERS.LBL_NEWAGENTE' | translate}}</button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div *ngIf="agentPlayers.length>0 && !submitted" class="mb-4 col-12 col-sm-6">
+    <ul>
+      <li *ngFor="let item of agentPlayers"> {{item}}</li>
+    </ul>
+  </div>
+</div>

@@ -1,0 +1,180 @@
+<form
+  (ngSubmit)="onSubmit()"
+  id="idFormMember"
+  name="nomForm"
+  *ngIf="formulario"
+  [formGroup]="formulario"
+>
+  <div class="row">
+    <div class="mb-3 col-md-6">
+      <label>{{ "INJURY.LBL_DATE" | translate }} *</label>
+      <p-calendar
+        [readonlyInput]="true"
+        [monthNavigator]="true"
+        [yearNavigator]="true"
+        [yearRange]="yearRange"
+        [maxDate]="maxDate"
+        [style]="{ overflow: 'visible' }"
+        class="p-calendar form-control"
+        dateFormat="dd/mm/yy"
+        inputId="range"
+        formControlName="injury_date"
+        placeholder="{{ 'INJURY.LBL_DATE' | translate }}"
+        [firstDayOfWeek]="1"
+        [ngClass]="{
+          'ng-invalid ng-dirty is-invalid':
+            f.injury_date.invalid &&
+            (f.injury_date.dirty || f.injury_date.touched)
+        }"
+      ></p-calendar>
+      <div class="invalid-feedback" *ngIf="f.injury_date?.errors">
+        {{ "INJURY.LBL_DATE" | translate }} {{ "LBL_REQUERIDO" | translate }}
+      </div>
+    </div>
+    <div class="mb-3 col-md-6">
+      <label>{{ "INJURY.LBL_TYPE" | translate }} *</label>
+      <div class="mb-2 d-sm-inline align-top">
+        <p-radioButton
+          *ngFor="let item of listInjuryTypes"
+          name="injury_type_id"
+          [value]="item.id"
+          [label]="item.name"
+          class="ml-2"
+          formControlName="injury_type_id"
+          (onClick)="cambioTipoLesion(item.id)"
+        ></p-radioButton>
+      </div>
+      <p-dropdown
+        [filter]="true"
+        [options]="listInjuryTypesSpecs"
+        [disabled]="loadingLessionType"
+        aria-describedby="inputGroup-sizing-default"
+        [styleClass]="'w-100 form-control'"
+        optionLabel="name"
+        optionValue="id"
+        id="type"
+        [ngClass]="{
+          'ng-invalid ng-dirty is-invalid':
+            f.injury_type_spec_id.invalid &&
+            (f.injury_type_spec_id.dirty || f.injury_type_spec_id.touched)
+        }"
+        formControlName="injury_type_spec_id"
+        placeholder="{{
+          loadingLessionType
+            ? ('LBL_LOADING' | translate)
+            : ('LBL_SELECCIONE' | translate)
+        }}"
+      ></p-dropdown>
+      <div class="invalid-feedback" *ngIf="f.injury_type_id?.errors">
+        {{ "INJURY.LBL_DATE" | translate }} {{ "LBL_REQUERIDO" | translate }}
+      </div>
+    </div>
+
+    <!-- localizacion -->
+    <div class="mb-3 col-sm-6">
+      <label>{{ "INJURY.LBL_LOCATION" | translate }} *</label>
+      <p-dropdown
+        [filter]="true"
+        [options]="listLocalizaciones"
+        aria-describedby="inputGroup-sizing-default"
+        [styleClass]="'w-100 form-control'"
+        optionLabel="name"
+        optionValue="id"
+        id="situation"
+        formControlName="injury_location_id"
+        [ngClass]="{
+          'ng-invalid ng-dirty is-invalid':
+            f.injury_location_id.invalid &&
+            (f.injury_location_id.dirty || f.injury_location_id.touched)
+        }"
+        placeholder="{{ 'LBL_SELECCIONE' | translate }}"
+      ></p-dropdown>
+      <div class="invalid-feedback" *ngIf="f.injury_location_id?.errors">
+        {{ "INJURY.LBL_LOCATION" | translate }}
+        {{ "LBL_REQUERIDO" | translate }}
+      </div>
+    </div>
+
+    <!-- localizacion detallada -->
+    <div class="mb-3 col-sm-6">
+      <label>{{ "INJURY.LBL_DETAILED_LOCATION" | translate }} </label>
+      <input
+        aria-describedby="inputGroup-sizing-default"
+        aria-label="Default"
+        formControlName="detailed_location"
+        placeholder="{{ 'LBL_ESCRIBEAQI' | translate }}"
+        class="form-control"
+        [ngClass]="{
+          'ng-invalid ng-dirty is-invalid':
+            f.detailed_location.invalid &&
+            (f.detailed_location.dirty || f.detailed_location.touched)
+        }"
+      />
+    </div>
+
+    <!-- lado afectado -->
+    <div class="mb-3 col-sm-6">
+      <label
+        >{{ "INJURY.LBL_AFFECTED_SIDE" | translate }}<br />
+        <p-radioButton
+          *ngFor="let item of listInjuryAffectedSideTypes"
+          name="affected_side_id"
+          [value]="item.id"
+          [label]="item.code"
+          class="mr-3 mt-2"
+          formControlName="affected_side_id"
+        ></p-radioButton>
+      </label>
+    </div>
+
+    <!-- recurrente -->
+    <div class="mb-3 col-sm-6">
+      <label
+        class="d-inline-flex"
+        pTooltip="{{ 'RFD.recidivTooltip' | translate }}"
+        >{{ "INJURY.LBL_RECIDIVE" | translate }}
+        <label class="activity_icon"> ! </label> </label
+      ><br />
+      <p-radioButton
+        *ngFor="let item of listRecaida"
+        name="is_relapse"
+        formControlName="is_relapse"
+        class="mr-3 mt-2"
+        [value]="item.value"
+        label="{{ 'LBL_' + item.label | translate }}"
+      ></p-radioButton>
+    </div>
+
+    <!-- genero -->
+    <div class="mb-5 col-md-6">
+      <label
+        class="d-inline-flex"
+        for="gender"
+        pTooltip="{{ 'RFD.severityTooltip' | translate }}"
+        >{{ "INJURY.LBL_DEGREE_SEVERITY" | translate }} *
+        <label class="activity_icon"> ! </label></label
+      >
+      <p-dropdown
+        [filter]="false"
+        [options]="listInjurySeverities"
+        aria-describedby="inputGroup-sizing-default"
+        [styleClass]="'w-100 form-control'"
+        optionLabel="name"
+        optionValue="id"
+        id="gender"
+        formControlName="injury_severity_id"
+        placeholder="{{ 'LBL_SELECCIONE' | translate }}"
+        [ngClass]="{
+          'ng-invalid ng-dirty is-invalid':
+            f.injury_severity_id.invalid &&
+            (f.injury_severity_id.dirty || f.injury_severity_id.touched)
+        }"
+      ></p-dropdown>
+
+      <div class="invalid-feedback" *ngIf="f.injury_severity_id?.errors">
+        {{ "INJURY.LBL_DEGREE_SEVERITY" | translate }}
+        {{ "LBL_REQUERIDO" | translate }}
+      </div>
+    </div>
+  </div>
+</form>

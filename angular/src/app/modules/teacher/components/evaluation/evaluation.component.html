@@ -1,0 +1,296 @@
+<div class="card box-shadow">
+  <div class="card-body p-0">
+    <div class="row">
+      <div class="col-12">
+        <div class="evaluation_header view_header p-4">
+          <p-selectButton
+            [(ngModel)]="selectedView"
+            [options]="views"
+            optionLabel="name"
+            optionValue="value"
+            (onChange)="resetFilter()"
+            styleClass="mb-2"
+          ></p-selectButton>
+          <span class="buscador p-input-icon-left d-md-inline">
+            <i class="pi pi-search"></i>
+            <input
+              pInputText
+              placeholder="{{ 'LBL_SEARCH' | translate }}..."
+              type="text"
+              [(ngModel)]="inputSearch"
+              (keyup)="search($event)"
+            />
+          </span>
+          <div class="header_buttons flex_column_resp">
+            <button (click)="rubricsListDialog = true" class="btn action" pButton>
+              <span class="d-md-inline mr-2">{{
+                "evaluation.rubrics_list" | translate
+              }}</span>
+              <i class="fa fa-list text-white"></i>
+            </button>
+            <button (click)="newRubricDialog = true" class="btn action mb-2" pButton>
+              <span class="d-md-inline mr-1">{{
+                "evaluation.new_rubric" | translate
+              }}</span>
+              <i class="fa fa-plus text-white"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="col-12">
+        <div *ngIf="selectedView === 'rubrics'">
+          <p-table
+            [alwaysShowPaginator]="false"
+            [loading]="loading"
+            [paginator]="true"
+            [rows]="10"
+            [showLoader]="false"
+            [value]="classroomRubrics"
+            class="p-datatable-responsive"
+          >
+            <ng-template let-rubric pTemplate="body">
+              <tr>
+                <td class="">
+                  <h6 class="title">
+                    <div class="mr-2">
+                      <img
+                        class=""
+                        src="{{
+                          images + 'images/menu/teacher/evaluation_mod.svg'
+                        }}"
+                        width="20px"
+                      />
+                    </div>
+                    {{ rubric.name }}
+                  </h6>
+                  <p class="description">{{ rubric.description }}</p>
+                </td>
+                <td class="text-lg-right actions">
+                  <span class="p-column-title">{{
+                    "LBL_ACTIONS" | translate
+                  }}</span>
+                  <button
+                    (click)="evaluate(rubric)"
+                    class="btn"
+                    pTooltip="{{ 'evaluation.evaluaralumno' | translate }}"
+                    tooltipPosition="top"
+                  >
+                    <img
+                      alt=""
+                      src="{{
+                        images + 'images/menu/teacher/approval_mod.svg'
+                      }}"
+                      width="20px"
+                    />
+                  </button>
+                  <button
+                    (click)="rubricDetails(rubric)"
+                    class="btn view_btn"
+                    pTooltip="{{ 'evaluation.ver' | translate }}"
+                    tooltipPosition="top"
+                  >
+                    <img src="{{ images + 'images/menu/ver.svg' }}" />
+                  </button>
+                  <button (click)="editRubric(rubric)" class="btn">
+                    <img
+                      pTooltip="{{ 'evaluation.editar' | translate }}"
+                      src="{{ images + 'images/menu/edit.svg' }}"
+                      tooltipPosition="top"
+                    />
+                  </button>
+                  <button (click)="confirm(rubric)" class="btn">
+                    <img
+                      pTooltip="{{ 'evaluation.eliminar' | translate }}"
+                      src="{{ images + 'images/menu/delete.svg' }}"
+                      tooltipPosition="top"
+                    />
+                  </button>
+                </td>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+              <tr>
+                <td colspan="6" style="text-align: center">
+                  <p class="nodata">
+                    {{ "nodata.sinrubricas" | translate }}
+                  </p>
+                </td>
+              </tr>
+            </ng-template>
+            <ng-template let-columns pTemplate="loadingbody">
+              <tr *ngFor="let i of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]">
+                <td>
+                  <p-skeleton height="1rem" width="100%"></p-skeleton>
+                </td>
+                <td class="d-flex justify-content-around">
+                  <p-skeleton height="1rem" width="20px"></p-skeleton>
+                  <p-skeleton height="1rem" width="20px"></p-skeleton>
+                  <p-skeleton height="1rem" width="20px"></p-skeleton>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+        <div *ngIf="selectedView === 'students'">
+          <div>
+            <p-table
+              [loading]="loading"
+              [showLoader]="false"
+              [value]="classroomStudents"
+              class="p-datatable-responsive"
+            >
+              <ng-template let-student pTemplate="body">
+                <tr>
+                  <td class="">
+                    <div class="student d-flex align-items-center">
+                      <div *ngIf="student.image != null" class="student_image">
+                        <img
+                          [src]="student.image.full_url"
+                          style="border-radius: 50%"
+                          width="50px"
+                        />
+                      </div>
+                      <div
+                        *ngIf="
+                          student.image === null &&
+                          student.gender.code === 'female'
+                        "
+                        class="student_image"
+                      >
+                        <img
+                          [src]="girlAlumnImage"
+                          style="border-radius: 50%"
+                          width="50"
+                        />
+                      </div>
+                      <span
+                        *ngIf="
+                          student.image === null &&
+                          (student.gender.code === 'male' ||
+                            student.gender.code === 'undefined')
+                        "
+                        class="student_image"
+                      >
+                        <img
+                          [src]="boyAlumnImage"
+                          style="border-radius: 50%"
+                          width="50"
+                        />
+                      </span>
+                      <span class="player_name font-weight-bold">{{
+                        student.full_name
+                      }}</span>
+                    </div>
+                  </td>
+                  <td class="text-sm-right actions">
+                    <span class="p-column-title">
+                      {{ "LBL_ACTIONS" | translate }}</span
+                    >
+                    <button
+                      [routerLink]="[
+                        '/teacher/evaluation/rubrics-by-alumn',
+                        student.id
+                      ]"
+                      class="btn view_btn"
+                      pTooltip="{{ 'evaluation.ver' | translate }}"
+                      tooltipPosition="top"
+                    >
+                      <img src="{{ images + 'images/menu/ver.svg' }}" />
+                    </button>
+                  </td>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="emptymessage">
+                <tr>
+                  <td colspan="3" style="text-align: center">
+                    <p class="nodata">
+                      {{ "nodata.sinevaluaciones" | translate }}
+                    </p>
+                  </td>
+                </tr>
+              </ng-template>
+              <ng-template let-columns pTemplate="loadingbody">
+                <tr *ngFor="let i of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]">
+                  <td>
+                    <p-skeleton height="1rem" width="100%"></p-skeleton>
+                  </td>
+                  <td>
+                    <p-skeleton height="1rem" width="100%"></p-skeleton>
+                  </td>
+                  <td class="">
+                    <p-skeleton height="1rem" width="20px"></p-skeleton>
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<evaluation-dialog
+  (close)="evaluationDialog = $event"
+  [classroomAcademicYear]="getClassroomAcademicYear()"
+  [classroomId]="getClassroomId()"
+  [classroomName]="getClassroomName()"
+  [rubric]="rubric"
+  [visible]="evaluationDialog"
+>
+</evaluation-dialog>
+
+<new-rubric-dialog
+  (close)="
+    newRubricDialog = editingIndicator = editingRubric = details = $event;
+    rubric = null
+  "
+  (rubricsUpdated)="classroomRubricsList()"
+  [classroomAcademicYear]="getClassroomAcademicYear()"
+  [details]="details"
+  [editing]="editingRubric"
+  [refreshIndicators]="refreshIndicators"
+  [rubric]="rubric"
+  [visible]="newRubricDialog"
+>
+</new-rubric-dialog>
+
+<rubrics-list-dialog
+  (associateRubric)="exportRubricDialog = $event"
+  (close)="rubricsListDialog = $event"
+  (editRubric)="editRubric($event)"
+  (exportRubric)="rubric = $event"
+  [rubrics]="classroomRubrics"
+  [visible]="rubricsListDialog"
+>
+</rubrics-list-dialog>
+
+<export-rubric-dialog
+  (close)="exportRubricDialog = $event"
+  [rubric]="rubric"
+  [visible]="exportRubricDialog"
+>
+</export-rubric-dialog>
+
+<p-confirmDialog
+  #cd
+  [style]="{ width: '50vw' }"
+  class="custom_dialog"
+  maskStyleClass="purple_mask"
+>
+  <ng-template pTemplate="footer">
+    <button
+      (click)="cd.reject()"
+      icon="pi pi-times"
+      label="{{ 'LBL_NO' | translate }}"
+      pButton
+      type="button"
+    ></button>
+    <button
+      (click)="cd.accept()"
+      icon="pi pi-check"
+      label="{{ 'LBL_YES' | translate }}"
+      pButton
+      type="button"
+    ></button>
+  </ng-template>
+</p-confirmDialog>

@@ -1,0 +1,215 @@
+<div class="row">
+  <div class="col-12">
+    <div class="card box-shadow">
+      <div class="card-body p-0">
+        <div class="members_header view_header">
+          <h6 class="font-weight-600 mb-0 mr-4 text-main view_header_title">
+            {{ "academicyear.academicyears" | translate }}
+          </h6>
+          <div class="p-input-icon-left d-md-inline buscador">
+            <i class="pi pi-search"></i>
+            <input
+              (input)="dt.filterGlobal(filter, 'contains')"
+              [(ngModel)]="filter"
+              [placeholder]="'LBL_SEARCH' | translate"
+              id="filter"
+              name="filter"
+              pInputText
+              type="text"
+            />
+          </div>
+          <div class="header_buttons">
+            <button
+              (click)="handleQuickCreate()"
+              class="btn add_player_btn action"
+              pTooltip="{{ 'academicyear.newacademicyear' | translate }}"
+              tooltipPosition="top"
+            >
+              <span class="d-none d-md-inline">{{
+                "academicyear.newacademicyear" | translate
+              }}</span>
+              <i class="fa fa-plus text-white"></i>
+            </button>
+          </div>
+        </div>
+        <p-table
+          #dt
+          [globalFilterFields]="['title', 'start_date', 'end_date']"
+          [loading]="loading"
+          [paginator]="true"
+          [rowsPerPageOptions]="[10, 15, 20]"
+          [rows]="10"
+          [showLoader]="false"
+          [value]="academicYears"
+          class="p-datatable-responsive"
+        >
+          <ng-template pTemplate="header">
+            <tr class="text-center">
+              <th class="text-center">
+                {{ "academicyear.title" | translate }}
+              </th>
+              <th class="text-center">
+                {{ "academicyear.startdate" | translate }}
+              </th>
+              <th class="text-center">
+                {{ "academicyear.enddate" | translate }}
+              </th>
+              <th class="text-center">
+                {{ "academicyear.active" | translate }}
+              </th>
+              <th class="text-center">{{ "LBL_ACTIONS" | translate }}</th>
+            </tr>
+          </ng-template>
+          <ng-template let-item pTemplate="body">
+            <tr>
+              <td class="text-center">{{ item.title }}</td>
+              <td class="text-center">{{ item.start_date }}</td>
+              <td class="text-center">{{ item.end_date }}</td>
+              <td class="text-center">
+                <i
+                  *ngIf="saving"
+                  class="pi pi-spin pi-spinner"
+                  style="font-size: 2rem"
+                ></i>
+                <p-inputSwitch
+                  (onChange)="onChangeStatus(item)"
+                  *ngIf="!saving"
+                  [(ngModel)]="item.is_active"
+                  pTooltip="{{
+                    item.is_active
+                      ? ('academicyear.disable' | translate)
+                      : ('academicyear.enable' | translate)
+                  }}"
+                  tooltipPosition="top"
+                >
+                </p-inputSwitch>
+              </td>
+              <td class="text-center actions">
+                <button
+                  (click)="handleView(item)"
+                  class="btn"
+                  pTooltip="{{ 'academicyear.detail' | translate }}"
+                  tooltipPosition="top"
+                >
+                  <img class="" src="assets/img/icons/ver.svg" />
+                </button>
+                <button
+                  (click)="handleEdit(item)"
+                  class="btn"
+                  pTooltip="{{ 'academicyear.edit' | translate }}"
+                  tooltipPosition="top"
+                >
+                  <img class="" src="assets/img/icons/lapiz.svg" />
+                </button>
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="4" style="text-align: center">
+                {{ "LBL_SINREGISTROS" | translate }}
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template let-columns pTemplate="loadingbody">
+            <tr *ngFor="let i of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]">
+              <td>
+                <p-skeleton height="1rem" width="100%"></p-skeleton>
+              </td>
+              <td>
+                <p-skeleton height="1rem" width="100%"></p-skeleton>
+              </td>
+              <td>
+                <p-skeleton height="1rem" width="100%"></p-skeleton>
+              </td>
+              <td class="d-flex justify-content-around">
+                <p-skeleton height="1rem" width="20px"></p-skeleton>
+                <p-skeleton height="1rem" width="20px"></p-skeleton>
+                <p-skeleton height="1rem" width="20px"></p-skeleton>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p-dialog
+  [(visible)]="displayModalAcademicYear"
+  [draggable]="false"
+  [header]="
+    academicYear?.id
+      ? ('academicyear.edit' | translate)
+      : ('academicyear.add' | translate)
+  "
+  [modal]="true"
+  [style]="{ width: '50vw', overflow: 'visible' }"
+  (onHide)="closeModalAcademicYear()"
+  id="dialog_academic_year"
+>
+  <app-add-academic-year
+    #academicyear
+    (saveData)="academicYearData = $event"
+    *ngIf="displayModalAcademicYear"
+    [academicYear]="academicYear"
+    [displayButtons]="false"
+    [viewDetail]="viewDetail"
+    [academicYears]="academicYears"
+  ></app-add-academic-year>
+  <ng-template pTemplate="footer">
+    <div class="footer_btns">
+      <button
+        (click)="closeModalAcademicYear()"
+        class="back_btn btn"
+        pTooltip="{{ 'BTN_CANCELAR' | translate }}"
+        tooltipPosition="top"
+      >
+        {{ "BTN_CANCELAR" | translate }}
+      </button>
+      <button
+        (click)="saveAcademicYear()"
+        *ngIf="!viewDetail"
+        [label]="
+          academicYear?.id
+            ? ('school.academic_year.edit' | translate)
+            : ('school.academic_year.add' | translate)
+        "
+        [loading]="saving"
+        class="btn next_btn"
+        pButton
+        pTooltip="{{ 'school.academic_year.add_year' | translate }}"
+        tooltipPosition="top"
+        type="submit"
+      ></button>
+    </div>
+  </ng-template>
+</p-dialog>
+<p-confirmDialog
+  #cda
+  [style]="{ width: '50vw' }"
+  class="custom_dialog"
+  maskStyleClass="purple_mask"
+  key="academicyear"
+>
+  <ng-template pTemplate="footer">
+    <div>
+      <button
+        (click)="cda.reject()"
+        class="back_btn"
+        icon="pi pi-times"
+        label="{{ 'LBL_NO' | translate }}"
+        pButton
+        type="button"
+      ></button>
+      <button
+        (click)="cda.accept()"
+        class="next_btn"
+        icon="pi pi-check"
+        label="{{ 'LBL_YES' | translate }}"
+        pButton
+        type="button"
+      ></button>
+    </div>
+  </ng-template>
+</p-confirmDialog>

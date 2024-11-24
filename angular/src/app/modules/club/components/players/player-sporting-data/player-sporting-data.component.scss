@@ -1,0 +1,154 @@
+#trayectoria {
+  border: 1px solid #050C4421;
+  border-radius: 8px;
+  padding: 1rem;
+  font-size: .9rem;
+  position: relative;
+
+  .trayectoria_line {
+    width: 2px;
+    height: calc(100% - 165px);
+    position: absolute;
+    background-color: black;
+    top: 42px;
+    left: 18px;
+  }
+
+  .trayectoria_item {
+    display: flex;
+    // align-items: center;
+    // padding: 15px;
+    line-height: 50px;
+    font-weight: 600;
+    color: #050C44;
+
+    .point {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: black;
+      margin: auto 0;
+      margin-right: 10px;
+      cursor: pointer;
+    }
+
+    .image {
+      width: 25px;
+      height: 25px;
+      border-radius: 50px;
+      background-color: blue;
+      margin: auto 0;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      margin-right: 10px;
+    }
+
+    .year {
+      margin-left: auto;
+      color: rgba($color: #050C44, $alpha: .56);
+    }
+  }
+
+  .trayectoria_action {
+    margin-top: 40px;
+  }
+}
+
+#valoraciones {
+  border: 1px solid #050C4421;
+  border-radius: 8px;
+
+  ul {
+    padding: 0;
+    list-style: none;
+    margin-bottom: 0;
+
+    .valoracion {
+      display: flex;
+      justify-content: space-between;
+      padding: 1.5rem 2rem;
+
+      .title {
+        color: #050C44;
+        font-weight: 500;
+      }
+
+      .value {
+        color: #3FEC45;
+        font-weight: 500;
+      }
+    }
+  }
+}
+
+#player_family_data_form {
+  .player_number {
+    border: 1px solid #050C4418;
+    border-radius: 21px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    padding: 1.5rem 1rem;
+
+    .player_shirt {
+      width: 120px;
+      height: 120px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      .number {
+        position: absolute;
+        font-size: 24px;
+        color: #050C44;
+        font-weight: 600;
+      }
+
+      img {
+        max-width: 100%;
+      }
+    }
+
+    button {
+      border: 1px solid #050C4445;
+      border-radius: 30px;
+      font-size: .8rem;
+      color: #050C4463;
+      padding: 1rem 2.5rem;
+    }
+  }
+}
+
+.p-dialog-content {
+  overflow-y: unset !important;
+}
+
+:host ::ng-deep {
+  .custom_dialog {
+    .p-dialog-content {
+      overflow: visible;
+    }
+  }
+}
+
+.p-button-outlined {
+  background-color: transparent;
+  color: #050b44 !important;
+  border: 1px solid;
+}
+
+.trayectoria {
+  border: 1px solid #050C4421;
+  border-radius: 8px;
+  padding: 1rem;
+  font-size: .9rem;
+}
+.nodatatext{
+  color:#050c4475;
+  font-size: 0.9rem;
+  font-weight: 600;
+}

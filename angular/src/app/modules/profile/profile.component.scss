@@ -1,0 +1,140 @@
+:host ::ng-deep {
+  .p-tabmenu .p-tabmenu-nav .p-tabmenuitem.p-highlight .p-menuitem-link {
+    border-color: #04e9c5;
+    color: #04e9c5;
+    background: #050B45;
+  }
+
+  .p-tabmenu
+    .p-tabmenu-nav
+    .p-tabmenuitem
+    .p-menuitem-link:not(.p-disabled):focus {
+    box-shadow: unset;
+  }
+
+  .p-tabmenu .p-tabmenu-nav .p-tabmenuitem .p-menuitem-link {
+    &:hover {
+      border-bottom: solid #04e9c5 !important;
+    }
+  }
+
+  .p-tabmenu .p-tabmenu-nav .p-tabmenuitem {
+    color: #04e9c5;
+  }
+
+  #cover_image {
+    height: 250px;
+    width: 100%;
+    background-position: center;
+    background-size: cover;
+    background-color: #050c44;
+    background-repeat: no-repeat;
+    position: relative;
+  }
+  .button-portada {
+    // z-index:10000;
+    position: absolute;
+    right: 4%;
+    top: 8%;
+  }
+  #user_avatar {
+    width: 150px;
+    height: 150px;
+    background-color: pink;
+    position: absolute;
+    background-position: center;
+    background-size: cover;
+    left: calc(50% - 75px);
+    top: calc(100% - 75px);
+    border-radius: 50%;
+    border: 5px solid white;
+  }
+  .button-avatar {
+    z-index: 5;
+    position: absolute;
+    background-color: white;
+    left: calc(100% - 40px);
+    top: calc(100% - 40px);
+  }
+  #user_name {
+    padding-top: 75px;
+    max-width: 260px;
+    margin: 0 auto;
+    text-align: center;
+    .name {
+      display: block;
+      color: #050c44;
+      font-weight: 600;
+      font-size: 1.2rem;
+    }
+    .suscription_name {
+      color: #050c44;
+      opacity: 0.57;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+  }
+  #profile_nav {
+    width: 100%;
+    display: flex;
+    @media (max-width: 1024px) {
+      width: max-content;
+    }
+  }
+  .p-tabmenu-nav .p-menuitem-text {
+    color: rgba($color: #050c44, $alpha: 0.57);
+  }
+  .p-tabmenu .p-tabmenu-nav .p-tabmenuitem .p-menuitem-link {
+    padding: 1.5rem 1rem;
+  }
+  .profile-width {
+    max-width: 95%;
+    @media (max-width: 1024px) {
+      overflow-x: scroll;
+    }
+  }
+}
+
+:host ::ng-deep {
+  #editar_perfil_btn {
+    background-color: #024cac;
+    color: white;
+    font-size: 0.9rem;
+    height: 40px;
+    border-radius: 4px;
+    padding: 0 2rem;
+  }
+  .p-dialog {
+    p {
+      margin-bottom: 0;
+    }
+  }
+}
+.btn_nav {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+  margin-top: 1rem;
+}
+.details {
+  margin-bottom: 5rem;
+}
+
+@media (min-width: 600px) {
+}
+
+@media (min-width: 1200px) {
+  :host ::ng-deep {
+    #profile_nav {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      edit-profile {
+        // margin-left: auto;
+      }
+    }
+  }
+}
+
+@media (min-width: 1200px) {
+}

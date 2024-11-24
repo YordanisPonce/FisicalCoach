@@ -1,0 +1,32 @@
+<p-dialog (onHide)="closeDialog()" [(visible)]="visible" [modal]="true" class="custom_dialog"
+          id="strategy_prevention_dialog" maskStyleClass="" styleClass="fullscreenDialog">
+  <ng-template pTemplate="header">
+    <div class="d-flex flex-column header_content">
+      <img alt="" src="/assets/img/logo_panel.svg">
+      <!-- <div class="title">{{'PLAYERS.LBL_DATOSJUGADOR'| translate}}</div> -->
+      <!-- <div class="subtitle">{{'PLAYERS.LBL_INFOJUGADOR'| translate}}</div> -->
+    </div>
+  </ng-template>
+  <div class="dialog_container" id="strategy_prevention_dialog_container">
+    <div class="text-center">
+      <h6 class="font-weight-bold mb-4">{{"strategy_prevention.strategy_prevention_evaluation" | translate}}</h6>
+      <small class="my-4 font-weight-600 subtitle">{{"strategy_prevention.select_options" | translate}}</small>
+    </div>
+    <div class="options my-5">
+      <div class="select_all_options">
+        <p-checkbox (onChange)="selectAllAnswers(evaluationQuestions)" [(ngModel)]="selectedAll" [binary]="true"
+                    [ngClass]="{'selected':selectedAll==true}" label="{{'injury_prevention.select_all'|translate}}"
+                    name="groupname">
+        </p-checkbox>
+      </div>
+      <p-checkbox (onChange)="selectAnswer(question)" *ngFor="let question of evaluationQuestions"
+                  [(ngModel)]="selectedQuestions" [ngClass]="{'selected':question.selected==true}"
+                  label="{{question.name}}" name="groupname" value="{{question.id}}">
+      </p-checkbox>
+    </div>
+    <div class="text-center">
+      <button (click)="onSubmit()" [disabled]="loading || this.evaluationAnswers.answers.length==0"
+              class="btn finish_btn">{{ "strategy_prevention.finish_program" | translate }}</button>
+    </div>
+  </div>
+</p-dialog>

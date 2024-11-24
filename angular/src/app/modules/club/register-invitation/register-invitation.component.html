@@ -1,0 +1,11 @@
+<div class="container_invitacion">
+  <div>
+    <i *ngIf="loading" class="fa fa-spin fa-spinner fa-4x" style="color: #01e9c2"></i>
+  </div>
+  <div *ngIf="!loading">
+    <p>
+      {{resp.message}}
+    </p>
+    <button (click)="navegate()" label="go to register" pButton></button>
+  </div>
+</div>

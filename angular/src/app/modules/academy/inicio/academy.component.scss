@@ -1,0 +1,67 @@
+:host ::ng-deep {
+  // .p-carousel {
+  //   width: 100% !important;
+  // }
+  .p-carousel-items-content {
+    .p-carousel-item {
+      // flex: 0 0 26.333333% !important;
+    }
+  }
+
+  .custom_carousel {
+    width: 100%;
+  }
+
+  .carousel-card {
+    width: 350px;
+    @media screen and (max-width: 1560px) {
+      width: 300px;
+      margin: 0 auto !important;
+    }
+  }
+  .my_team {
+    border: 1px solid #050c4426;
+    padding: 1.5rem;
+    font-size: 0.9rem;
+    .team_name {
+      color: #262626;
+      font-weight: 500;
+    }
+    .active-year {
+      font-size: 0.8rem;
+
+      .title {
+        color: #262626;
+        font-weight: 500;
+      }
+    }
+    .coach_name {
+      color: #050c44;
+      font-weight: 500;
+    }
+    .coach_title,
+    .team_description {
+      color: rgba($color: #050c44, $alpha: 0.35);
+      font-weight: 600;
+    }
+    .team_description {
+      line-height: 2;
+    }
+    .view_team_link {
+      font-weight: 500;
+      font-family: "Montserrat", sans-serif;
+    }
+  }
+  .recent_update {
+    font-size: 0.9rem;
+    .coach_title {
+      color: rgba($color: #050c44, $alpha: 0.35);
+    }
+    .time {
+      color: rgba($color: #050c44, $alpha: 0.53);
+    }
+    .description {
+      color: rgba($color: #050c44, $alpha: 0.48);
+    }
+  }
+}

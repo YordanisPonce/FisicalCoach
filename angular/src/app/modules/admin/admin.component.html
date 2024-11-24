@@ -1,0 +1,64 @@
+<div class="content_admin">
+    <app-navbar></app-navbar>
+  
+    <!-- <p-sidebar [(visible)]="sidebarVisible">
+      <app-menu-academy
+        (addEquipo)="nuevoEquipo($event)"
+        [newTeam]="team"
+        id="menu_academy"
+        (closeSidebar)="sidebarVisible = $event"
+      >
+      </app-menu-academy>
+    </p-sidebar> -->
+  
+    <!-- <app-menu-academy
+      (addEquipo)="nuevoEquipo($event)"
+      [newTeam]="team"
+      id="menu_academy"
+      class="academy-wrapper"
+      *ngIf="!sidebarVisible"
+    >
+    </app-menu-academy> -->
+
+    <app-admin-sidebar *ngIf="isAdmin"></app-admin-sidebar>
+    <app-admin-secondary-sidebar *ngIf="isAdmin"></app-admin-secondary-sidebar>
+
+  
+    <div class="container-fluid px-0 bg-content">
+      <!-- <button class="btn sidebar-btn" (click)="sidebarVisible = !sidebarVisible">
+        <i class="pi pi-bars"></i>
+      </button> -->
+  
+      <router-outlet></router-outlet>
+    </div>
+  
+    <!-- <app-nuevo-equipo
+      (close)="newTeamDialog = false"
+      (createdTeam)="team = $event"
+      *ngIf="role === 'sport' && newTeamDialog === true"
+      [visible]="newTeamDialog"
+    ></app-nuevo-equipo>
+    <app-add-classroom
+      (close)="newTeamDialog = false"
+      (school)="team = $event"
+      *ngIf="role === 'teacher' && newTeamDialog === true"
+      [visible]="newTeamDialog"
+    ></app-add-classroom> -->
+</div>
+
+<!-- <div>
+    <div>
+        <app-admin-sidebar *ngIf="isAdmin"></app-admin-sidebar>
+        <app-admin-secondary-sidebar *ngIf="isAdmin"></app-admin-secondary-sidebar>
+    </div>
+
+    <div class="container-fluid px-0 bg-content">
+        <button class="btn sidebar-btn" >
+          <i class="pi pi-bars"></i>
+        </button>
+    
+        <router-outlet></router-outlet>
+      </div>
+</div> -->
+
+

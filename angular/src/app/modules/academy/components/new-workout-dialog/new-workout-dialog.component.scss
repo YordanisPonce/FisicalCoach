@@ -1,0 +1,180 @@
+:host ::ng-deep #new_workout_dialog {
+  .p-dialog.tool_dialog {
+    min-height: 100%;
+    max-height: 100%;
+    min-width: 100%;
+    max-width: 100%;
+    .p-dialog-header {
+      border-top-right-radius: 0px;
+      border-top-left-radius: 0px;
+      background-color: #122a37;
+      display: none !important;
+      .header_content {
+        flex: 1;
+        align-items: center;
+        border-bottom: 1px solid #050c4417;
+        font-family: "Montserrat", sans-serif;
+        .title {
+          font-weight: 500;
+          margin: auto;
+          color: white;
+          opacity: 0.79;
+        }
+      }
+    }
+    .p-dialog-content {
+      display: flex;
+      padding-bottom: 0;
+      flex: 1;
+      font-family: "Montserrat", sans-serif;
+      .dialog_container {
+        flex: 1;
+        // padding-left: 2rem;
+        // padding-right: 2rem;
+      }
+    }
+    .p-dialog-footer {
+      border-bottom-right-radius: 0px;
+      border-bottom-left-radius: 0px;
+      background-color: #122a37;
+    }
+    // label{
+    //     color: #00000061;
+    //     // opacity: .61;
+    //     margin-bottom: 1rem;
+    // }
+    // .p-radiobutton-label{
+    //     font-size: .9rem;
+    //     margin-bottom: 0;
+    //     color: #050C44 !important;
+    // }
+  }
+  .p-sidebar {
+    background-color: #122a37;
+    border-right: 1px solid #707070;
+    box-shadow: unset;
+    padding-top: 2rem;
+    hr {
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .menu {
+      padding: 0;
+      margin: 0;
+      list-style: none;
+      .menu-item {
+        font-family: "Montserrat", sans-serif;
+        padding: 1.5rem 0.5rem;
+        cursor: pointer;
+        color: white;
+        font-size: 0.9rem;
+      }
+    }
+  }
+  .p-dialog .p-dialog-content {
+    padding: 0 !important;
+  }
+}
+label {
+  font-size: 0.9rem;
+}
+@media (min-width: 1200px) {
+  :host ::ng-deep #create_player_dialog {
+    &.advanced_dialog {
+      .p-dialog {
+        .p-dialog-content {
+          display: flex;
+          flex: 1;
+          .dialog_container {
+            padding-left: 2rem;
+            padding-right: 2rem;
+            flex: 1;
+            .timeline_steps {
+              border-right: 1px solid #050c4417;
+              height: 100%;
+              padding: 1.5rem 0 2.5rem;
+              .timeline_steps_container {
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                position: relative;
+                .timeline_step {
+                  display: flex;
+                  align-items: center;
+                  .timeline_step_titles {
+                    margin-left: auto;
+                    .title {
+                    }
+                  }
+                  .timeline_step_icon {
+                    background-color: #f6f6f6;
+                    border-radius: 50%;
+                    margin: 0 1rem;
+                  }
+                  .timeline_step_selector {
+                    border: 1px solid #050c4417;
+                    border-radius: 50%;
+                    // padding: .5rem;
+                    width: 18px;
+                    height: 18px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    // padding: 3px;
+                    position: absolute;
+                    right: -9px;
+                    background-color: white;
+                    .center {
+                      width: 10px;
+                      height: 10px;
+                      // background-color: black;
+                      border-radius: 50%;
+                      &.active {
+                        background-color: black;
+                      }
+                    }
+                  }
+                }
+                .timeline_steps_line {
+                  border: 1px solid #00e9c5;
+                  height: 100%;
+                  position: absolute;
+                  right: calc(1rem + 37.5px);
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+@media (min-width: 1200px) {
+  :host ::ng-deep #create_player_dialog {
+    &.advanced_dialog {
+      .p-dialog {
+        .p-dialog-header {
+          padding-left: 5rem;
+        }
+        .p-dialog-content {
+          .dialog_container {
+            padding-left: 4rem;
+            padding-right: 4rem;
+            .timeline_steps {
+              .timeline_steps_container {
+                .timeline_step {
+                  .timeline_step_icon {
+                    margin: 0 2.5rem;
+                  }
+                }
+                .timeline_steps_line {
+                  right: calc(2.5rem + 37.5px);
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

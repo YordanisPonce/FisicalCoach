@@ -1,0 +1,309 @@
+<p-dialog id="create_player_dialog" [modal]="true" [header]="!advancedDialog ? 'Crear jugador +' : ''" [(visible)]="visible" styleClass="" maskStyleClass="purple_mask" (onHide)="closeDialog()" [ngClass]="{'advanced_dialog': advancedDialog == true}">
+    <ng-template pTemplate="header">
+        <div class="d-flex flex-column header_content" *ngIf="advancedDialog">
+            <div class="title">Datos del Jugador</div>
+            <div class="subtitle">Por favor ingrese los datos del jugador que desee agregar.</div>
+        </div>
+    </ng-template>
+    <div id="create_player_dialog_container" class="dialog_container">
+        <div *ngIf="!advancedDialog; else elseBlock">
+            <div class="step_content" *ngIf="step==1">
+                <div class="row" [ngClass]="{'px-3': getScreenWidth()>=768}">
+                    <div class="mb-4 col-12">
+                        <label for="">Nombre y apellido</label>
+                        <input class="form-control" placeholder="Escribir nombre..." aria-label="Default" aria-describedby="inputGroup-sizing-default">
+                    </div>
+                    <div class="mb-4 col-12">
+                        <label for="">Nombre deportivo (Alias)</label>
+                        <input class="form-control" placeholder="Escribir nombre..." aria-label="Default" aria-describedby="inputGroup-sizing-default">
+                    </div>
+                    <div class="mb-4 col-12">
+                        <label for="">Demarcación</label>
+                        <div>
+                            <p-dropdown [options]="cities" [(ngModel)]="selectedCity" optionLabel="name" [styleClass]="'w-100 form-control'"></p-dropdown>
+                        </div>
+                    </div>
+                    <div class="mb-4 col-12">
+                        <label for="">Dorsal</label>
+                        <input class="form-control" placeholder="Escribir..." aria-label="Default" aria-describedby="inputGroup-sizing-default">
+                    </div>
+                </div>
+            </div>
+            <div class="step_content" *ngIf="step==2">
+                <div class="row" [ngClass]="{'px-3': getScreenWidth()>=768}">
+                    <div class="mb-4 col-12 text-center">
+                        <div class="player_image mb-4">
+                            <!-- si hay una foto cargada -->
+                            <!-- <img src="assets/img/equipo.svg" alt="" class="img-fluid"> -->
+                            <!-- sino -->
+                            <span class="icon_image m-auto">
+                                <i class="pi pi-image"></i>
+                            </span>
+                        </div>
+                        <h6 class="mb-4">Foto del jugador</h6>
+                        <p>Elige la foto del jugador<br>que se mostrara en los datos asignados<br>creados del mismo</p>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="step!=0">
+                <ul class="step_markers full_markers">
+                <li>
+                    <span class="step_marker" [ngClass]="{'active': step == 1}"></span>
+                </li>
+                <li>
+                    <span class="step_marker" [ngClass]="{'active': step == 2}"></span>
+                </li>
+                </ul>
+            </div>
+        </div>
+        <ng-template class="h-100" #elseBlock>
+            <div class="row h-100">
+                <div class="col-md-4">
+                    <div class="timeline_steps">
+                        <div class="timeline_steps_container">
+                            <div class="timeline_step" *ngFor="let item of steps; index as i;">
+                                <div class="timeline_step_titles">
+                                    <div class="title">
+                                        {{item.title}}
+                                    </div>
+                                    <div class="subtitle">
+                                        {{item.subtitle}}
+                                    </div>
+                                </div>
+                                <div class="timeline_step_icon">
+                                    <img src="assets/img/icons/message.svg" alt="">
+
+                                </div>
+                                <div class="timeline_step_selector">
+                                    <div class="center" [ngClass]="{'active': i+1 == step}"></div>
+                                </div>
+                            </div>
+                            <div class="timeline_steps_line"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <div class="advanced_steps_container">
+                        <div class="advanced_steps_content">
+                            <div class="advanced_step_content_head mb-3">
+                                <div>
+                                    <div class="mb-2">Paso {{step}}/{{steps.length}}</div>
+                                    <div class="font-weight-bold mb-2">{{steps[step-1].contentTitle}}</div>
+                                    <div>Por favor rellena todos los campos detalladamente.</div>
+                                </div>
+
+                            </div>
+                            <p-scrollPanel [style]="{width: '100%', height: '300px'}">
+                                <div class="step_content" *ngIf="step==1">
+                                    <div class="row">
+                                        <div class="mb-4 col-12 col-sm-6">
+                                            <label for="">Nombre</label>
+                                            <input class="form-control" placeholder="Escribir nombre aquí..." aria-label="Default" aria-describedby="inputGroup-sizing-default">
+                                        </div>
+                                        <div class="mb-4 col-12 col-sm-6">
+                                            <label for="">Sexo</label>
+                                            <div>
+                                                <p-dropdown [options]="cities" [(ngModel)]="selectedCity" optionLabel="name" [styleClass]="'w-100 form-control'"></p-dropdown>
+                                            </div>
+                                        </div>
+                                        <div class="mb-4 col-12 col-sm-6">
+                                            <label for="">Fecha de nacimiento</label>
+                                            <input class="form-control" placeholder="Escribir nombre..." aria-label="Default" aria-describedby="inputGroup-sizing-default">
+                                        </div>
+                                        <div class="mb-4 col-12 col-sm-6">
+                                            <label for="">Nacionalidad</label>
+                                            <input class="form-control" placeholder="Escribir nombre aquí..." aria-label="Default" aria-describedby="inputGroup-sizing-default">
+                                        </div>
+                                        <div class="mb-4 col-12 col-sm-6">
+                                            <label for="">Altura</label>
+                                            <input class="form-control" placeholder="Escribir altura..." aria-label="Default" aria-describedby="inputGroup-sizing-default">
+                                        </div>
+                                        <div class="mb-4 col-12 col-sm-6">
+                                            <label for="">Peso</label>
+                                            <input class="form-control" placeholder="Escribir peso..." aria-label="Default" aria-describedby="inputGroup-sizing-default">
+                                        </div>
+                                        <div class="mb-4 col-12 col-sm-6">
+                                            <label for="">Frecuencia cardiaca en reposo</label>
+                                            <input class="form-control" placeholder="Escribir..." aria-label="Default" aria-describedby="inputGroup-sizing-default">
+                                        </div>
+                                        <div class="mb-4 col-12 col-sm-6">
+                                            <label for="">Frecuencia cardiaca máxima</label>
+                                            <input class="form-control" placeholder="Escribir..." aria-label="Default" aria-describedby="inputGroup-sizing-default">
+                                        </div>
+                                        <div class="mb-4 col-12 col-sm-6">
+                                            <label for="">IMC</label>
+                                            <input class="form-control" placeholder="Escribir..." aria-label="Default" aria-describedby="inputGroup-sizing-default">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="step_content" *ngIf="step==2">
+                                    <div class="row">
+                                        <div class="mb-4 col-12 col-sm-6">
+                                            <label for="">Nombre deportivo ( Alias )</label>
+                                            <input class="form-control" placeholder="Escribir nombre aquí..." aria-label="Default" aria-describedby="inputGroup-sizing-default">
+                                        </div>
+                                        <div class="mb-4 col-12 col-sm-6">
+                                            <label for="">Dorsal</label>
+                                            <input class="form-control" placeholder="Escribir..." aria-label="Default" aria-describedby="inputGroup-sizing-default">
+                                        </div>
+                                        <div class="mb-4 col-12 col-sm-6">
+                                            <label for="">Demarcación</label>
+                                            <div class="d-flex align-items-center mb-3">
+                                                <p-radioButton name="groupname" value="val1" [(ngModel)]="selectedValue" label="Portero" class="mr-3"></p-radioButton>
+                                                <p-radioButton name="groupname" value="val1" [(ngModel)]="selectedValue" label="Defensa" class=""></p-radioButton>
+                                            </div>
+                                            <div class="d-flex align-items-center">
+                                                <p-radioButton name="groupname" value="val1" [(ngModel)]="selectedValue" label="Centro campista" class="mr-3"></p-radioButton>
+                                                <p-radioButton name="groupname" value="val1" [(ngModel)]="selectedValue" label="Delantero" class=""></p-radioButton>
+                                            </div>
+                                        </div>
+                                        <div class="mb-4 col-12 col-sm-6">
+                                            <label for="">Demarcación especifica</label>
+                                            <div>
+                                                <p-dropdown [options]="cities" [(ngModel)]="selectedCity" optionLabel="name" [styleClass]="'w-100 form-control'"></p-dropdown>
+                                            </div>
+                                        </div>
+                                        <div class="mb-4 col-12">
+                                            <label for="">Lateralidad</label>
+                                            <div class="d-flex align-items-center">
+                                                <p-radioButton name="groupname" value="val1" [(ngModel)]="selectedValue" label="Diestra" class="mr-3"></p-radioButton>
+                                                <p-radioButton name="groupname" value="val1" [(ngModel)]="selectedValue" label="Zurda" class=""></p-radioButton>
+                                                <p-radioButton name="groupname" value="val1" [(ngModel)]="selectedValue" label="Ambidiestra" class=""></p-radioButton>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="step_content" *ngIf="step==3">
+                                    <div class="row">
+                                        <div class="mb-4 col-12 col-sm-6">
+                                            <label for="">Calle</label>
+                                            <input class="form-control" placeholder="Escribir aquí..." aria-label="Default" aria-describedby="inputGroup-sizing-default">
+                                        </div>
+                                        <div class="mb-4 col-12 col-sm-6">
+                                            <label for="">Código postal</label>
+                                            <input class="form-control" placeholder="Escribir aquí..." aria-label="Default" aria-describedby="inputGroup-sizing-default">
+                                        </div>
+                                        <div class="mb-4 col-12 col-sm-6">
+                                            <label for="">Ciudad</label>
+                                            <div>
+                                                <p-dropdown [options]="cities" [(ngModel)]="selectedCity" optionLabel="name" [styleClass]="'w-100 form-control'"></p-dropdown>
+                                            </div>
+                                        </div>
+                                        <div class="mb-4 col-12 col-sm-6">
+                                            <label for="">Estado / Provincia</label>
+                                            <input class="form-control" placeholder="Escribir aquí..." aria-label="Default" aria-describedby="inputGroup-sizing-default">
+                                        </div>
+                                        <div class="mb-4 col-12 col-sm-6">
+                                            <label for="">País</label>
+                                            <div>
+                                                <p-dropdown [options]="cities" [(ngModel)]="selectedCity" optionLabel="name" [styleClass]="'w-100 form-control'"></p-dropdown>
+                                            </div>
+                                        </div>
+                                        <div class="mb-4 col-12 col-sm-6">
+                                            <label for="">Móvil</label>
+                                            <input class="form-control" placeholder="XXXXX" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+                                        </div>
+                                        <div class="mb-4 col-12 col-sm-6">
+                                            <label for="">Teléfono fijo</label>
+                                            <input class="form-control" placeholder="Escribir aquí..." aria-label="Default" aria-describedby="inputGroup-sizing-default">
+                                        </div>
+                                        <div class="mb-4 col-12 col-sm-6">
+                                            <label for="">Correo electrónico</label>
+                                            <input class="form-control" placeholder="Escribir aquí..." aria-label="Default" aria-describedby="inputGroup-sizing-default">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="step_content" *ngIf="step==4">
+                                    <div class="row">
+                                        <div class="mb-4 col-12">
+                                            <label for="">Estado civil de los padres</label>
+                                            <div class="d-flex align-items-center">
+                                                <p-radioButton name="groupname" value="val1" [(ngModel)]="selectedValue" label="Solteros" class="mr-3"></p-radioButton>
+                                                <p-radioButton name="groupname" value="val1" [(ngModel)]="selectedValue" label="Casados" class=""></p-radioButton>
+                                                <p-radioButton name="groupname" value="val1" [(ngModel)]="selectedValue" label="Divorciados" class=""></p-radioButton>
+                                            </div>
+                                        </div>
+                                        <div class="mb-4 col-12 col-sm-6">
+                                            <label for="">Nombre del padre</label>
+                                            <input class="form-control" placeholder="Escribir aquí..." aria-label="Default" aria-describedby="inputGroup-sizing-default">
+                                        </div>
+                                        <div class="mb-4 col-12 col-sm-6">
+                                            <label for="">Móvil del padre</label>
+                                            <input class="form-control" placeholder="Escribir aquí..." aria-label="Default" aria-describedby="inputGroup-sizing-default">
+                                        </div>
+                                        <div class="mb-4 col-12 col-sm-6">
+                                            <label for="">Teléfono fijo del padre</label>
+                                            <input class="form-control" placeholder="Escribir aquí..." aria-label="Default" aria-describedby="inputGroup-sizing-default">
+                                        </div>
+                                        <div class="mb-4 col-12 col-sm-6">
+                                            <label for="">Correo electrónico del padre</label>
+                                            <input class="form-control" placeholder="Escribir aquí..." aria-label="Default" aria-describedby="inputGroup-sizing-default">
+                                        </div>
+                                        <div class="mb-4 col-12 col-sm-6">
+                                            <label for="">Nombre de la madre</label>
+                                            <input class="form-control" placeholder="Escribir aquí..." aria-label="Default" aria-describedby="inputGroup-sizing-default">
+                                        </div>
+                                        <div class="mb-4 col-12 col-sm-6">
+                                            <label for="">Móvil de la madre</label>
+                                            <input class="form-control" placeholder="Escribir aquí..." aria-label="Default" aria-describedby="inputGroup-sizing-default">
+                                        </div>
+                                        <div class="mb-4 col-12 col-sm-6">
+                                            <label for="">Teléfono fijo de la madre</label>
+                                            <input class="form-control" placeholder="Escribir aquí..." aria-label="Default" aria-describedby="inputGroup-sizing-default">
+                                        </div>
+                                        <div class="mb-4 col-12 col-sm-6">
+                                            <label for="">Correo electrónico de la madre</label>
+                                            <input class="form-control" placeholder="Escribir aquí..." aria-label="Default" aria-describedby="inputGroup-sizing-default">
+                                        </div>
+                                        <div class="mb-4 col-12 col-sm-6">
+                                            <label for="">Calle</label>
+                                            <input class="form-control" placeholder="Escribir aquí..." aria-label="Default" aria-describedby="inputGroup-sizing-default">
+                                        </div>
+                                        <div class="mb-4 col-12 col-sm-6">
+                                            <label for="">Código postal</label>
+                                            <input class="form-control" placeholder="Escribir aquí..." aria-label="Default" aria-describedby="inputGroup-sizing-default">
+                                        </div>
+                                        <div class="mb-4 col-12 col-sm-6">
+                                            <label for="">Ciudad</label>
+                                            <input class="form-control" placeholder="Escribir aquí..." aria-label="Default" aria-describedby="inputGroup-sizing-default">
+                                        </div>
+                                        <div class="mb-4 col-12 col-sm-6">
+                                            <label for="">Estado / Provincia</label>
+                                            <input class="form-control" placeholder="Escribir aquí..." aria-label="Default" aria-describedby="inputGroup-sizing-default">
+                                        </div>
+                                        <div class="mb-4 col-12 col-sm-6">
+                                            <label for="">País</label>
+                                            <div>
+                                                <p-dropdown [options]="cities" [(ngModel)]="selectedCity" optionLabel="name" [styleClass]="'w-100 form-control'"></p-dropdown>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="step_content" *ngIf="step==5">
+                                    <div class="row">
+                                        <div class="mb-4 col-12 col-sm-6">
+                                            <label for="">Agente del jugador</label>
+                                            <input class="form-control mb-4" placeholder="Escribir nombre y añadir..." aria-label="Default" aria-describedby="inputGroup-sizing-default">
+                                            <button class="btn btn-primary btn-block btn_add_agent">+ Añadir agente</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </p-scrollPanel>
+                        </div>
+                        <div class="footer_btns">
+                            <button class="btn back_btn" [ngClass]="{'shrink_btn': step == 2}" (click)="(step>1) ? step=step-1 : ''">{{'LBL_ATRAS'|translate}}</button>
+                            <button class="btn btn-primary next_btn" [ngClass]="{'shrink_btn': step == 2}" (click)="(step<steps.length) ? step=step+1 : ''">Siguiente</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ng-template>
+    </div>
+    <p-footer *ngIf="!advancedDialog">
+      <div class="footer_btns">
+        <button class="btn back_btn" [ngClass]="{'shrink_btn': step == 2}" (click)="(step>1) ? step=step-1 : ''">{{'LBL_ATRAS'|translate}}</button>
+        <button class="btn next_btn" [ngClass]="{'shrink_btn': step == 2}" (click)="(step<2) ? step=step+1 : ''">Siguiente</button>
+        <button class="btn advance_btn mt-3" (click)="advancedDialog = true">Datos avanzados</button>
+      </div>
+    </p-footer>
+</p-dialog>

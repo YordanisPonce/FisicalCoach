@@ -1,0 +1,177 @@
+:host ::ng-deep {
+  .p-treeselect {
+    width: 200px;
+  }
+
+  .header_buttons {
+    .new_workout_btn:hover {
+      i {
+        color: #01e9c5 !important;
+      }
+    }
+
+    @media (max-width: 599px) {
+      &.responsive {
+        display: none;
+      }
+    }
+  }
+  .footer_btns {
+    button {
+      flex: 1;
+    }
+  }
+
+  .p-buttonset .p-button {
+    margin: 0;
+    justify-content: center;
+    width: 50px !important;
+  }
+
+  .selected {
+    color: #01e9c5 !important;
+  }
+
+  .p-grid {
+    .p-col {
+      width: 100%;
+      text-align: center !important;
+    }
+  }
+
+  .resp_f {
+    display: flex;
+    justify-content: center;
+  }
+
+  .nodatatext {
+    color: #050c4475;
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+
+  .workout_header {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    // padding: 1rem 0rem;
+    .new_workout_btn {
+      text-align: center;
+
+      color: white;
+      font-weight: 500;
+      height: 45px;
+      margin-left: auto;
+      // flex: 1 1 100%;
+    }
+    #sorting {
+      #sorting_btn {
+        background-color: transparent;
+        color: #050c44;
+        font-weight: 600;
+        border-radius: 9px;
+        border: 1px solid #050c4410;
+        height: 45px;
+        font-size: 0.9rem;
+        .filter_label {
+          opacity: 0.39;
+        }
+      }
+      .p-overlaypanel {
+        top: auto !important;
+        left: auto !important;
+        min-width: 300px;
+        // max-width: 500px;
+        width: 375px;
+        box-shadow: none;
+        border: 1px solid #050c4429;
+        border-radius: 0;
+        .p-overlaypanel-content {
+          padding: 1.5rem;
+        }
+        .sorting_content {
+          color: #050c44;
+          font-weight: 600;
+          .option {
+            padding: 1rem 0;
+          }
+        }
+      }
+      .p-overlaypanel::before,
+      .p-overlaypanel::after {
+        display: none !important;
+      }
+    }
+    input {
+      // margin:0;
+      height: 45px;
+      font-weight: 500;
+      border-radius: 9px;
+      border: 1px solid #050c4410;
+    }
+  }
+
+  .back_btn {
+    height: 45px;
+    border: 1px solid #050c4433;
+    flex: 1;
+    color: rgba($color: #050c44, $alpha: 0.44);
+    border-radius: 8px;
+  }
+  .p-button {
+    background: #024cac;
+    height: 45px;
+    color: white;
+    border-radius: 8px;
+
+    .p-button-icon {
+      display: none;
+    }
+  }
+
+  .workouts_container {
+    padding: 1.5rem 2.5rem;
+
+    @media (max-width: 1024px) {
+      padding: 1.5rem 0.5rem;
+    }
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 10px;
+
+    margin-right: -15px;
+    margin-left: -15px;
+
+    justify-content: center;
+
+    @media (max-width: 1600px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+ 
+
+    @media (max-width: 767px) {
+      grid-template-columns: repeat(1, 1fr);
+    }
+    .workout_skeleton {
+      border: 1px solid #050c4421;
+      border-radius: 17px;
+      overflow: hidden;
+      position: relative;
+      margin: 1rem 0;
+    }
+  }
+}
+
+@media (min-width: 1024px) {
+  :host ::ng-deep .workout_header {
+    .new_workout_btn {
+      width: 200px !important;
+      display: flex;
+      justify-content: center;
+    }
+    .see_all_btn {
+      background-color: transparent;
+      color: #041144;
+    }
+  }
+}

@@ -1,0 +1,188 @@
+<div class="tennis-board-wrappper">
+  <div>
+    <div class="set-wrapper">
+      <div class="team">
+        <div *ngIf="tennisSetTurn === 'own'">
+          <div class="start-match-dot"></div>
+        </div>
+        <div *ngIf="tennisSetTurn === 'rival'">
+          <div class="start-match-dot transparent"></div>
+        </div>
+
+        <div class="text-left">
+          <div
+            class="truncate"
+            *ngFor="
+              let player of getPlayers(
+                'team',
+                matchInfo.players,
+                matchInfo.rivals
+              );
+              index as i
+            "
+            [ngClass]="{
+              'mb-0':
+                i === 1 ||
+                getPlayers('team', matchInfo.players, matchInfo.rivals)
+                  .length === 1
+            }"
+            [pTooltip]="player.player.full_name"
+          >
+            <span>{{ player.player.full_name }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="score-button"
+        role="button"
+        [pTooltip]="
+          'scouting.customActions.' +
+            getActionSlugs(matchInfo.match_situation, 'team') | translate
+        "
+        (click)="
+          !isDisabled &&
+            selectActionFromBoard(
+              getActionSlugs(matchInfo.match_situation, 'team')
+            )
+        "
+      >
+        <span>+</span>
+      </div>
+
+      <div class="total-score" *ngIf="sportCode !== 'badminton'">
+        {{ matchSets(matchInfo.match_situation, "local").total }}
+      </div>
+
+      <div class="d-flex flex-column">
+        <div class="d-flex">
+          <div
+            *ngFor="
+              let set of matchSets(matchInfo.match_situation, 'local').set;
+              index as i
+            "
+            class="score-set"
+          >
+            <div
+              class="start-match-dot"
+              *ngIf="i === matchResults?.score?.current_set"
+            ></div>
+          </div>
+        </div>
+        <div class="d-flex">
+          <div
+            class="score"
+            *ngFor="
+              let set of matchSets(matchInfo.match_situation, 'local').set
+            "
+          >
+            <div>
+              <span>{{ set }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="set-wrapper text">
+      <div class="hide-block-large"></div>
+
+      <div class="hide-block"></div>
+
+      <div class="game-text"  *ngIf="sportCode !== 'badminton'">PUNTOS</div>
+
+      <div class="score-text" *ngFor="let set of ownSet; index as i">
+        <span>SET {{ i + 1 }}</span>
+      </div>
+    </div>
+
+    <div class="set-wrapper">
+      <div class="team" *ngIf="matchInfo.rivals.length > 0; else emptyList">
+        <div *ngIf="tennisSetTurn === 'own'">
+          <div class="start-match-dot transparent"></div>
+        </div>
+        <div *ngIf="tennisSetTurn === 'rival'">
+          <div class="start-match-dot"></div>
+        </div>
+        <div class="text-left">
+          <div
+            class="truncate"
+            *ngFor="
+              let player of getPlayers(
+                'visitor',
+                matchInfo.players,
+                matchInfo.rivals
+              );
+              index as i
+            "
+            [ngClass]="{
+              'mb-0':
+                i === 1 ||
+                getPlayers('visitor', matchInfo.players, matchInfo.rivals)
+                  .length === 1
+            }"
+            [pTooltip]="player.player.full_name"
+          >
+            <span>{{ player.player.full_name }}</span>
+          </div>
+        </div>
+      </div>
+
+      <ng-template #emptyList>
+        <div class="team">
+          <div *ngIf="tennisSetTurn === 'own'">
+            <div class="start-match-dot transparent"></div>
+          </div>
+          <div *ngIf="tennisSetTurn === 'rival'">
+            <div class="start-match-dot"></div>
+          </div>
+
+          <div>
+            <div [ngClass]="{ truncate: start_match !== 'V' }">
+              <span>Rival</span>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+
+      <div
+        class="score-button"
+        role="button"
+        [pTooltip]="
+          'scouting.customActions.' +
+            getActionSlugs(matchInfo.match_situation, 'visitor') | translate
+        "
+        (click)="
+          !isDisabled &&
+            selectActionFromBoard(
+              getActionSlugs(matchInfo.match_situation, 'visitor')
+            )
+        "
+      >
+        <span>+</span>
+      </div>
+
+      <div class="total-score" *ngIf="sportCode !== 'badminton'">
+        {{ matchSets(matchInfo.match_situation, "visitor").total }}
+      </div>
+
+      <div
+        class="score"
+        *ngFor="let set of matchSets(matchInfo.match_situation, 'visitor').set"
+      >
+        <span>{{ set }}</span>
+      </div>
+    </div>
+
+    <div
+      class="mt-5 mb-1 text-center text-white"
+      *ngIf="!!matchResults.score?.winner"
+    >
+      <h6>{{ "scouting.winner" | translate }}</h6>
+
+      <h5 class="mt-2">
+        {{ getWinner(matchResults.score.winner, matchInfo.team.name) }}
+      </h5>
+    </div>
+  </div>
+</div>

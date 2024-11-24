@@ -1,0 +1,156 @@
+:host ::ng-deep {
+  .team_sidebar {
+    .team_sidebar_items {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      .sidebar_items_container {
+        flex: 1;
+        overflow: hidden;
+        ul {
+          list-style: none;
+          padding: 0;
+        }
+        p-scrollpanel {
+          height: 100%;
+        }
+        .team_sidebar_item {
+          font-size: 0.9rem;
+          font-family: "Montserrat", sans-serif !important;
+          padding: 1.5rem;
+          font-weight: 600;
+          color: rgba($color: #050c44, $alpha: 0.93);
+        }
+      }
+
+      .team_sidebar_header {
+        color: #fff !important;
+        display: flex;
+        align-items: center;
+        padding: 1.5rem;
+        text-decoration: none;
+        border-bottom: 1px solid rgba($color: #050c44, $alpha: 0.07);
+        // color: black !important;
+
+        .sidebar-item-img {
+          .p-avatar {
+            &.large {
+              border: 1px solid #fff;
+              width: 45px !important;
+              height: 45px !important;
+            }
+          }
+
+          .color {
+            border: 1px solid #fff;
+            width: 45px !important;
+            height: 45px !important;
+            border-radius: 50% !important;
+          }
+        }
+
+        .team_members {
+          opacity: 0.68;
+          font-size: 0.9rem;
+        }
+      }
+      .team_sidebar_footer {
+        display: flex;
+        align-items: center;
+        height: 75px;
+        line-height: 75px;
+        background-color: #050c44;
+        color: white;
+        padding: 0 1.5rem;
+        .image {
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          background-color: white;
+          margin-right: 1rem;
+        }
+        .name {
+          letter-spacing: 1px;
+          font-size: 0.9rem;
+        }
+        i {
+          font-size: 0.9rem;
+        }
+      }
+      hr {
+        margin-top: 0 !important;
+        margin-bottom: 0 !important;
+      }
+      .sidebar-item-text {
+        color: #050c44;
+        &:hover {
+          color: #fff !important;
+        }
+      }
+
+      .team_sidebar_header:hover {
+        background-color: #050c44 !important;
+
+        span,
+        small {
+          color: #fff !important;
+        }
+        .sidebar-item-text:hover {
+          color: #fff !important;
+        }
+      }
+      .team_sidebar_header:hover,
+      .team_sidebar_item:hover {
+        background-color: #024cac;
+        color: #fff !important;
+        cursor: pointer;
+      }
+    }
+  }
+}
+
+@media (min-width: 576px) {
+}
+@media (min-width: 1024px) {
+  :host ::ng-deep {
+    .team_sidebar {
+      // background-color: blue;
+      left: 360px !important;
+      top: 15px !important;
+      margin: 0;
+      // height: calc(100% - 30px);
+      height: 100%;
+      // max-height: calc(100% - 30px);
+      box-shadow: unset !important;
+      //border: 1px solid #050C4429;
+      border: 0;
+      width: 300px;
+      border-radius: 0;
+      .team_sidebar_items {
+        .sidebar_items_container {
+          .p-scrollpanel-content {
+            padding: 0 0px 18px 0 !important;
+          }
+          .team_sidebar_item {
+            font-weight: 500;
+            color: rgba($color: #000107, $alpha: 0.68);
+          }
+
+          .selected-path-bg {
+            background-color: #0000000f;
+          }
+          .selected-path {
+            color: #050c44 !important;
+          }
+          .team_sidebar_item:hover {
+            background-color: #0000000f;
+            color: #050c44 !important;
+          }
+        }
+        .team_sidebar_footer {
+          display: none;
+        }
+      }
+    }
+  }
+}

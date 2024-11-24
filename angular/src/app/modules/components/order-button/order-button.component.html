@@ -1,0 +1,19 @@
+<p-selectButton
+  [options]="orderOptions"
+  [(ngModel)]="orderBy"
+  (ngModelChange)="convertedList.emit(orderBy)"
+  optionLabel="icon"
+  class="ml-2"
+>
+  <ng-template let-item pTemplate>
+    <div
+      class="d-flex justify-content-center"
+      pTooltip="{{ item.tooltip | translate }}"
+    >
+      <i
+        [class]="item.icon"
+        [ngClass]="{ selected: item.tooltip === orderBy.tooltip }"
+      ></i>
+    </div>
+  </ng-template>
+</p-selectButton>

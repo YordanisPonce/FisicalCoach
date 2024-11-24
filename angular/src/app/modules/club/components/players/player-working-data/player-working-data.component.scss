@@ -1,0 +1,114 @@
+.contrato {
+  border: 1px solid #050C443D;
+  border-radius: 13px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .logo {
+    border-radius: 50%;
+    text-align: center;
+    overflow: hidden;
+  }
+  .logo-current{
+    border-radius: 50%;
+    text-align: center;
+    overflow: hidden;
+    border: 2px solid white;
+  }
+
+  .contrato_resume {
+    text-align: center;
+
+    .name {
+      color: #050C44;
+      font-size: .9rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .date {
+      color: #050C44;
+      opacity: 0.56;
+      font-size: .9rem;
+    }
+  }
+
+  .contrato_action {
+    button {
+      font-size: .9rem;
+      font-weight: 600;
+    }
+  }
+}
+
+.contrato_actual {
+  background-color: #050C44;
+  color: white;
+
+  .days_remaining {
+    font-size: .9rem;
+    margin-bottom: 6px;
+  }
+
+  .name {
+    color: white !important;
+  }
+
+  .date {
+    color: white !important;
+  }
+
+  .contrato_action {
+    button {
+      color: #050C44;
+      background-color: white;
+    }
+  }
+}
+
+.login-btn {
+  width: 100%;
+  text-align: center;
+  background-color: #050C44;
+  color: white !important;
+  border-radius: 32px;
+  font-weight: 600 !important;
+  height: 40px;
+}
+
+@media (min-width: 576px) {
+  .contrato {
+    flex-direction: row;
+
+    .contrato_resume {
+      text-align: left;
+      margin-left: 20px;
+    }
+
+    .contrato_action {
+      margin-left: auto;
+    }
+  }
+}
+
+:host ::ng-deep {
+  .fototypes{
+    font-size: 14px;
+    color: #05e9c6;
+    font-weight: 500;
+  }
+  .rounded {
+    border-radius: 11px;
+
+    .p-dialog-content {
+      border-radius: 0 0 11px 11px;
+      overflow: visible;
+    }
+    .p-inputnumber-input{
+      height: 45px;
+      border-radius: 11px;
+    }
+  }
+}

@@ -1,0 +1,338 @@
+<div
+  class="row"
+  appUserPermission
+  [method]="[
+    'team_injury_rfd_store',
+    'team_injury_rfd_delete',
+    'team_injury_rfd_read'
+  ]"
+  (showItem)="handlePermission($event)"
+>
+  <div class="col-12">
+    <div class="card box-shadow">
+      <div class="card-body p-0">
+        <div class="rfd_header view_header">
+          <h6 class="font-weight-600 mb-2 mb-sm-0 mr-4 text-main">
+            {{ "LBL_PLAYERS" | translate }}
+          </h6>
+          <div class="p-input-icon-left d-none d-md-inline buscador mr-2">
+            <i class="pi pi-search"></i>
+            <input
+              (keyup)="setValue($event)"
+              [(ngModel)]="searchPlayer"
+              pInputText
+              placeholder="{{ 'LBL_SEARCH' | translate }}"
+              type="text"
+              type="text"
+            />
+          </div>
+
+          <p-treeSelect
+            [(ngModel)]="selectedFilter"
+            (ngModelChange)="handleSelectFilter()"
+            [options]="filterOptions"
+            placeholder="{{ 'LBL_FILTRAR' | translate }}"
+          ></p-treeSelect>
+
+          <div *ngIf="this.selectedFilter?.code">
+            <button
+              class="btn see_all_btn"
+              (click)="players = playerList; selectedFilter = null"
+              pTooltip="{{ 'seeAll' | translate }}"
+            >
+              <i class="pi pi-times"></i>
+            </button>
+          </div>
+
+          <button
+            (click)="openRFDDialog = true"
+            [disabled]="selectedPlayer.length === 0"
+            class="btn make_test_btn action"
+            *ngIf="showPermission.store"
+            pButton
+          >
+            <span class="d-sm-inline mr-2">
+              {{ "RFD.new_rfd_program" | translate }}
+              <i class="fa fa-plus text-white"></i>
+            </span>
+          </button>
+        </div>
+
+        <p-table
+          *ngIf="loadingPlayers"
+          [value]="[1, 2]"
+          class="p-datatable-responsive"
+        >
+          <ng-template pTemplate="header">
+            <tr class="text-center">
+              <!-- <th style="width: 10%"></th> -->
+              <th style="width: 3rem !important; min-width: 3rem !important;">
+                <!-- <p-tableHeaderCheckbox></p-tableHeaderCheckbox> -->
+              </th>
+              <th class="text-left">{{ "MEMBERS.LBL_NOMBRE" | translate }}</th>
+              <th class="text-center">
+                {{ "RFD.LBL_ACTIVE_INJURY" | translate }}
+              </th>
+              <th class="text-center">
+                {{ "RFD.LBL_TYPE_INJURY" | translate }}
+              </th>
+              <th class="text-center">
+                {{ "RFD.LBL_DAY_INJURY" | translate }}
+              </th>
+              <th class="text-center">
+                {{ "RFD.LBL_HISTORY_INJURY" | translate }}
+              </th>
+              <th class="text-center">{{ "LBL_ACTIONS" | translate }}</th>
+            </tr>
+          </ng-template>
+          <ng-template let-product pTemplate="body">
+            <tr *ngFor="let i of [1, 2, 3]">
+              <td>
+                <p-skeleton width="7rem"></p-skeleton>
+              </td>
+              <td>
+                <p-skeleton
+                  class="d-flex justify-content-center"
+                  width="7rem"
+                ></p-skeleton>
+              </td>
+              <td>
+                <p-skeleton
+                  class="d-flex justify-content-center"
+                  width="7rem"
+                ></p-skeleton>
+              </td>
+              <td>
+                <p-skeleton
+                  class="d-flex justify-content-center"
+                  width="7rem"
+                ></p-skeleton>
+              </td>
+              <td>
+                <p-skeleton
+                  class="d-flex justify-content-center"
+                  width="7rem"
+                ></p-skeleton>
+              </td>
+              <td>
+                <p-skeleton
+                  class="d-flex justify-content-center"
+                  width="7rem"
+                ></p-skeleton>
+              </td>
+              <td class="d-flex justify-content-center">
+                <p-skeleton width="4rem"></p-skeleton>
+                <p-skeleton width="4rem"></p-skeleton>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+
+        <p-table
+          *ngIf="!loadingPlayers"
+          [(selection)]="selectedPlayer"
+          [paginator]="true"
+          [rows]="10"
+          [value]="players"
+          class="p-datatable-responsive"
+          selectionMode="single"
+        >
+          <ng-template pTemplate="header">
+            <tr class="text-center">
+              <th style="width: 3rem; min-width: 3rem !important;"></th>
+              <th class="text-left" pSortableColumn="full_name">
+                {{ "MEMBERS.LBL_NOMBRE" | translate }}
+                <p-sortIcon field="full_name"></p-sortIcon>
+              </th>
+              <th class="text-center">
+                {{ "RFD.LBL_ACTIVE_INJURY" | translate }}
+              </th>
+              <th class="text-center" pSortableColumn="type_injury">
+                {{ "RFD.LBL_TYPE_INJURY" | translate }}
+                <p-sortIcon field="type_injury"></p-sortIcon>
+              </th>
+              <th class="text-center" pSortableColumn="injury_date">
+                {{ "RFD.LBL_DAY_INJURY" | translate }}
+                <p-sortIcon field="injury_date"></p-sortIcon>
+              </th>
+              <th class="text-center" pSortableColumn="injury_severity">
+                {{ "RFD.LBL_SEVERITY" | translate }}
+                <p-sortIcon field="injury_severity"></p-sortIcon>
+              </th>
+              <th class="text-center">{{ "LBL_ACTIONS" | translate }}</th>
+            </tr>
+          </ng-template>
+          <ng-template let-i="rowIndex" let-player pTemplate="body">
+            <tr class="colum-responsive">
+              <td class="checbox-w">
+                <p-tableCheckbox
+                  (click)="handlePlayer(player, i)"
+                  [value]="player"
+                ></p-tableCheckbox>
+              </td>
+              <td>
+               
+                <img
+                  class="rounded-circle principalImg"
+                  src="{{ playerImage(player) }}"
+                  width="25px"
+                  height="25px"
+                />
+                <strong class="m-2">{{ player.full_name }}</strong>
+              </td>
+              <td class="text-center">
+                <div>
+                  <span class="p-column-title">
+                    {{ "RFD.LBL_ACTIVE_INJURY" | translate }}
+                  </span>
+                </div>
+                <i
+                  *ngIf="player.injury_status && !player.closed_rfd"
+                  class="fas fa-check check"
+                  pTooltip="{{ 'RFD.active' | translate }}"
+                ></i>
+                <i
+                  *ngIf="!player.injury_status && !player.closed_rfd"
+                  class="far fa-times-circle circle"
+                  pTooltip="{{ 'RFD.withoutRFD' | translate }}"
+                ></i>
+                <i
+                  *ngIf="player.closed_rfd"
+                  class="fas fa-check check closed"
+                  pTooltip="{{ 'RFD.finished' | translate }}"
+                ></i>
+              </td>
+              <td class="checbox-w d-sm-none"></td>
+              <td class="align-items-center justify-content-center">
+                <div>
+                  <span class="p-column-title">
+                    {{ "RFD.LBL_TYPE_INJURY" | translate }}
+                  </span>
+                </div>
+                <div
+                  [ngClass]="{
+                    'justify-content-center': !player.injury_type_spec_image
+                  }"
+                  class="d-flex"
+                >
+                  <img
+                    *ngIf="player.injury_type_spec_image"
+                    alt="injury"
+                    class="mr-1"
+                    height="20px"
+                    src="{{ baseUrl + player.injury_type_spec_image }}"
+                    width="25px"
+                  />
+                  <div class="text-sm-center w-100">
+                    <span>
+                      {{ player.type_injury || "N/A" }}
+                    </span>
+                  </div>
+                </div>
+              </td>
+              <td class="text-center">
+                <div>
+                  <span class="p-column-title">
+                    {{ "RFD.LBL_DAY_INJURY" | translate }}
+                  </span>
+                </div>
+                <span
+                  [pTooltip]="
+                    calculateDiff(player.injury_date) +
+                    ((calculateDiff(player.injury_date) > 1 ? 'days' : 'day')
+                      | translate)
+                  "
+                >
+                  {{ converInjuryDate(player.injury_date) }}
+                </span>
+              </td>
+              <td class="checbox-w d-sm-none"></td>
+              <td class="text-center">
+                <span class="p-column-title">{{
+                  "RFD.LBL_SEVERITY" | translate
+                }}</span>
+                <div>
+                  {{ player.injury_severity || "N/A" }}
+                </div>
+              </td>
+              <td class="actions_column text-center w-column-full">
+                <div class="d-flex justify-content-center">
+                  <button
+                    [disabled]="
+                      loadingAction || !player.injury_status || !player.code_rfd
+                    "
+                    [routerLink]="[
+                      '/rfd-injuries/reeducacion/' + player?.code_rfd
+                    ]"
+                    class="btn"
+                    pTooltip="{{ 'table_icons.seeDetails' | translate }}"
+                    *ngIf="showPermission.read"
+                  >
+                    <img class="" src="assets/img/icons/ver.svg" />
+                  </button>
+
+                  <button
+                    (click)="deleteRfdInjury(player.code_rfd)"
+                    [disabled]="loadingAction || !player.code_rfd"
+                    class="btn"
+                    pTooltip="{{ 'table_icons.delete' | translate }}"
+                    *ngIf="showPermission.delete"
+                  >
+                    <img class="" src="assets/img/icons/eliminar.svg" />
+                  </button>
+                </div>
+              </td>
+              <!-- <td class="text-center">8</td> -->
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="7" style="text-align: center">
+                {{ "nodata.sinprogramarfd" | translate }}
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
+  </div>
+</div>
+<app-new-rfd-dialog
+  (dismiss)="newRfd = false"
+  (resetPlayerList)="resetPlayerList()"
+  *ngIf="newRfd"
+  [selectedPlayer]="selectedPlayer[0]"
+  [showModal]="newRfd"
+></app-new-rfd-dialog>
+
+<p-dialog
+  *ngIf="openRFDDialog"
+  [(visible)]="openRFDDialog"
+  [closable]="false"
+  [modal]="true"
+  id="add_space_dialog"
+  maskStyleClass="purple_mask"
+  styleClass=""
+>
+  <div class="text-center">
+    <img
+      alt="equipo"
+      class="pb-5"
+      src="{{ resources + '/rfd_injuries/record_day_zero_injury.svg' }}"
+      width="250px"
+    />
+
+    <h6 class="mb-4">
+      {{ "RFD.createRFDInjury" | translate }}
+    </h6>
+  </div>
+
+  <div class="footer_btns">
+    <button (click)="openRFDDialog = false" class="btn back_btn shrink_btn">
+      {{ "LBL_ATRAS" | translate }}
+    </button>
+    <button (click)="openRFDForm()" class="btn next_btn shrink_btn">
+      <span>{{ "LBL_SIGUIENTE" | translate }}</span>
+    </button>
+  </div>
+</p-dialog>

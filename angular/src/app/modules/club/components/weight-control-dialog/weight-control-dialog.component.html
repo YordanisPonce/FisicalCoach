@@ -1,0 +1,109 @@
+<p-dialog
+  id="weight_control_dialog"
+  [modal]="true"
+  [(visible)]="visible"
+  class="custom_dialog"
+  styleClass="fullscreenDialog"
+  maskStyleClass=""
+  (onHide)="closeDialog()"
+>
+  <ng-template pTemplate="header">
+    <div class="d-flex flex-column header_content">
+      <img src="/assets/img/logo_panel.svg" alt="" />
+    </div>
+  </ng-template>
+
+  <div class="d-flex justify-content-center control_container">
+    <img
+      src="{{ resources + '/nutrition/weight_controls.jpg' }}"
+      alt="control"
+      class="weight_image"
+    />
+    <div id="weight_control_dialog_container" class="dialog_container">
+      <div class="current_player mb-5">
+        <button
+          class="btn"
+          (click)="
+            handlePlayerStep > 0 && (handlePlayerStep = handlePlayerStep - 1)
+          "
+        >
+          <i class="pi pi-angle-left"></i>
+        </button>
+        <div class="player d-flex">
+          <img
+            class="player_image mr-3"
+            src="{{ players[handlePlayerStep] | avatarPipe }}"
+            alt="avatar"
+          />
+          <span class="player_name">{{
+            players[handlePlayerStep].full_name
+          }}</span>
+        </div>
+        <button
+          class="btn"
+          (click)="
+            handlePlayerStep >= 0 &&
+              handlePlayerStep < players.length - 1 &&
+              (handlePlayerStep = handlePlayerStep + 1)
+          "
+        >
+          <i class="pi pi-angle-right"></i>
+        </button>
+      </div>
+      <div class="d-flex">
+        <!-- <i class="pi pi-angle-left text-primary back_btn" (click)="(step>1) ? step=step-1 : ''"></i> -->
+        <h6 class="font-weight-bold mb-4">
+          {{ "nutrition.weight_control_dialog.title" | translate }}
+        </h6>
+      </div>
+      <form [formGroup]="createWeightControlForm" (ngSubmit)="onSubmit()">
+        <div class="step_content" *ngIf="step == 1">
+          <!-- <form action=""> -->
+          <div class="row">
+            <div class="mb-4 col-12">
+              <label for="" class="mb-3">{{
+                "nutrition.weight_control_dialog.weight" | translate
+              }}</label>
+              <input
+                class="form-control"
+                id=""
+                placeholder="{{
+                  'nutrition.weight_control_dialog.type_weight' | translate
+                }}"
+                aria-label="Default"
+                aria-describedby="inputGroup-sizing-default"
+                formControlName="weight"
+                type="number"
+                min="0"
+              />
+            </div>
+          </div>
+          <!-- </form> -->
+        </div>
+        <div *ngIf="!loading">
+          <button
+            type="submit"
+            class="btn next_btn btn-block"
+            [disabled]="!createWeightControlForm.valid"
+          >
+            {{ "BTN_FINALIZAR" | translate }}
+          </button>
+        </div>
+        <div *ngIf="loading">
+          <button
+            type="button"
+            class="btn next_btn btn-block"
+            [disabled]="loading"
+          >
+            <span
+              class="spinner-grow spinner-grow-sm"
+              role="status"
+              aria-hidden="true"
+            ></span>
+            {{ "LBL_GUARDANDO" | translate }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</p-dialog>

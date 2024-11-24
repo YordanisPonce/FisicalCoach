@@ -1,0 +1,204 @@
+<form action="" [formGroup]="newDailyWorkoutForm" (ngSubmit)="onSubmit()">
+  <p-dialog
+    id="trabajo_diario_dialog"
+    class="custom_dialog"
+    [modal]="true"
+    header="{{ 'RFD_daily_work.title' | translate }}"
+    [(visible)]="visible"
+    styleClass=""
+    maskStyleClass="purple_mask"
+    (onHide)="closeDialog()"
+  >
+    <div id="trabajo_diario_dialog_container" class="dialog_container">
+      <div>
+        <div class="step_content">
+          <div class="row">
+            <div class="col-12 col-lg-6 mb-4">
+              <label>{{ "RFD_daily_work.duration" | translate }} *</label>
+              <!-- <p-inputMask
+                mask="99:99"
+                class="form-control mask"
+                placeholder="{{ 'LBL_ESCRIBIR' | translate }}"
+                aria-label="Default"
+                aria-describedby="inputGroup-sizing-default"
+                formControlName="duration"
+              ></p-inputMask> -->
+
+              <input
+                class="form-control input-rounded"
+                placeholder="{{ 'LBL_ESCRIBIR' | translate }}"
+                aria-label="Default"
+                aria-describedby="inputGroup-sizing-default"
+                formControlName="duration"
+                type="number"
+              />
+            </div>
+
+            <div class="col-12 col-lg-6 mb-4">
+              <label>{{ "RFD_daily_work.tests" | translate }} *</label>
+
+              <input
+                class="form-control input-rounded"
+                placeholder="{{ 'LBL_ESCRIBIR' | translate }}"
+                aria-label="Default"
+                aria-describedby="inputGroup-sizing-default"
+                formControlName="test"
+              />
+            </div>
+
+            <div class="col-12 col-lg-6 mb-4"></div>
+
+            <div class="col-12 col-lg-6 mb-4">
+              <p-radioButton
+                name="control_test"
+                [value]="true"
+                label="{{ 'RFD.passed' | translate }}"
+                class="mr-3"
+                formControlName="control_test"
+              ></p-radioButton>
+
+              <p-radioButton
+                name="control_test"
+                [value]="false"
+                label="{{ 'RFD.notPassed' | translate }}"
+                class="mr-3"
+                formControlName="control_test"
+              ></p-radioButton>
+            </div>
+            <div class="col-12 col-lg-12">
+              <div class="row">
+                <div class="col-12 mb-4">
+                  <label>{{ "RFD_daily_work.description" | translate }} *</label>
+                  <textarea
+                    class="form-control"
+                    placeholder="{{ 'LBL_ESCRIBIR' | translate }}"
+                    name=""
+                    id=""
+                    cols="20"
+                    (resize)="(false)"
+                    rows="6"
+                    formControlName="description"
+                  ></textarea>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-lg-12">
+              <div class="row">
+                <div class="col-12 mb-4 text-center mt-3">
+                  <label>{{ "RFD_daily_work.rpe" | translate }} *</label>
+
+                  <div
+                    class="row d-flex justify-content-center auto-height"
+                  >
+                    <div
+                      class="col-4 mt-3"
+                      *ngFor="let value of rpeList; index as i"
+                    >
+                      <span [style]="{ 'margin-left': '-15px' }">{{ i }}</span>
+                      <button
+                        class="btn rpe-btn"
+                        [ngClass]="{
+                          selected:
+                            dailyWork?.rpe === i ||
+                            (newDailyWorkoutForm.get('rpe')?.value ===
+                              value.value &&
+                              !dailyWork?.rpe)
+                        }"
+                        type="button"
+                        (click)="setRpeValue(value.value)"
+                      >
+                        <img
+                          src="{{ resources + '/face/' + value.icon }}"
+                          alt=""
+                          width="35px"
+                        />
+                      </button>
+
+                      <div>
+                        <span>{{
+                          "RFD_daily_work." + value.text | translate
+                        }}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p-footer>
+      <div class="footer_btns">
+        <button
+          class="btn back_btn shrink_btn"
+          type="button"
+          (click)="closeDialog()"
+        >
+          {{ "LBL_CERRAR" | translate }}
+        </button>
+
+        <button
+          class="btn next_btn shrink_btn"
+          type="submit"
+          [disabled]="!newDailyWorkoutForm.valid"
+          *ngIf="!loading && !dailyWork"
+        >
+          {{ "BTN_FINALIZAR" | translate }}
+        </button>
+        <button
+          class="btn next_btn shrink_btn"
+          type="button"
+          [disabled]="loading"
+          *ngIf="loading && !dailyWork"
+        >
+          {{ "LBL_GUARDANDO" | translate }}
+        </button>
+      </div>
+    </p-footer>
+  </p-dialog>
+</form>
+
+<p-dialog
+  id="daily_work_result_dialog"
+  class="custom_dialog"
+  [modal]="true"
+  [(visible)]="openResultDialog"
+  styleClass=""
+  [showHeader]="false"
+  maskStyleClass="purple_mask"
+>
+  <div class="result-wrapper">
+    <h4>
+      {{ "RFD_daily_work.dailyWorkResults" | translate }}
+    </h4>
+
+    <div class="d-flex justify-content-center align-items-center flex-column">
+      <div>
+        <img
+          src="{{ resources + '/rfd_injuries/good_work.svg' }}"
+          class="result_image"
+          *ngIf="dailyWorkResults.control_test"
+        />
+        <img
+          src="{{ resources + '/rfd_injuries/work_not_been_good.svg' }}"
+          class="result_image"
+          *ngIf="!dailyWorkResults.control_test"
+        />
+      </div>
+
+      <p class="title" *ngIf="dailyWorkResults.control_test">
+        {{ "RFD_daily_work.testControlPassed" | translate }}
+      </p>
+      <p class="title" *ngIf="!dailyWorkResults.control_test">
+        {{ "RFD_daily_work.testControlNotPassed" | translate }}
+      </p>
+    </div>
+
+    <div class="text-center">
+      <button class="btn close-btn mt-4" type="button" (click)="closeDialog()">
+        {{ "LBL_CERRAR" | translate }}
+      </button>
+    </div>
+  </div>
+</p-dialog>

@@ -1,0 +1,343 @@
+:host ::ng-deep {
+  .p-dialog {
+    .subtitle {
+      color: #050c44;
+      opacity: 0.66;
+      font-weight: 600;
+    }
+
+    .p-dialog-content {
+      padding-top: 2rem;
+
+      #invitar_miembros_dialog_container {
+        max-width: 1000px;
+
+        &.not-wide {
+          max-width: 400px !important;
+        }
+
+        .view_header {
+          flex-direction: column;
+          align-items: unset;
+
+          .action {
+            background-color: #024cac;
+            color: white;
+            font-size: 0.9rem;
+            border-radius: 8px;
+            height: 45px;
+            padding-left: 2rem;
+            padding-right: 2rem;
+            width: 100%;
+            margin-left: 0;
+          }
+        }
+
+        margin: 0 auto;
+
+        .members_container {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: space-between;
+        }
+
+        .team-item-color {
+          flex: 0 0 15px;
+          height: 15px;
+          border-radius: 50%;
+        }
+
+        p-checkbox {
+          .p-checkbox-label {
+            margin-bottom: 0;
+            font-weight: 400 !important;
+            font-size: 0.9rem;
+            white-space: nowrap;
+          }
+        }
+
+        p-chip {
+          flex: 0 0 49%;
+          // cursor: pointer;
+          &.selected {
+            .p-chip {
+              background-color: #050c44;
+
+              .member {
+                .name {
+                  color: white;
+                }
+
+                button {
+                  background-color: white;
+                }
+              }
+            }
+          }
+
+          .p-chip {
+            display: block;
+            background-color: transparent;
+            padding: 0.25rem 1rem;
+            border: 1px solid #050c4426;
+            border-radius: 23px;
+            margin-bottom: 1.5rem;
+
+            .member {
+              display: flex;
+              align-items: center;
+
+              .image {
+                flex: 0 0 30px;
+                height: 30px;
+                // border: 1px solid #050C4426;
+                border-radius: 50%;
+                background-position: center;
+                background-repeat: no-repeat;
+                background-size: cover;
+                margin-right: 1rem;
+              }
+
+              .name {
+                font-size: 0.9rem;
+                font-weight: 600;
+                color: #050c44;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                // margin-right: 1rem;
+              }
+
+              button {
+                margin-left: auto;
+                border-radius: 50%;
+                width: 30px;
+                height: 30px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+              }
+            }
+          }
+        }
+
+        .permisos_container {
+          display: flex;
+          flex-direction: column;
+
+          .selected_members {
+            display: none;
+          }
+
+          .permisos {
+            table {
+              width: 100%;
+              border: 1px solid #050c443d;
+
+              tbody {
+                tr {
+                  .action {
+                    background-color: #024cac;
+                    color: white;
+                    font-size: 0.9rem;
+                    border-radius: 8px;
+                    height: 45px;
+                    padding-left: 2rem;
+                    padding-right: 2rem;
+                  }
+
+                  display: flex;
+                  border-bottom: 1px solid #050c443d;
+
+                  td {
+                    padding-left: 1.5rem;
+                    padding-right: 1.5rem;
+                  }
+
+                  td:nth-child(1) {
+                    flex: 0 0 60%;
+                    display: flex;
+                    border-right: 1px solid #050c443d;
+
+                    span {
+                      align-self: center;
+                      color: #050c44;
+                      font-weight: 600;
+                    }
+                  }
+                }
+              }
+            }
+
+            .options {
+              display: flex;
+              flex-direction: column;
+
+              p-checkbox {
+                margin-top: 0.5rem;
+                margin-bottom: 0.5rem;
+              }
+            }
+          }
+        }
+
+        .invitados {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: space-between;
+
+          p-chip {
+            margin: 0.25rem 0;
+            flex: 0 0 48%;
+            max-width: 48%;
+            background-color: #050c44;
+            border-radius: 19px;
+            padding: 0.25rem;
+
+            .p-chip {
+              display: flex;
+              margin-bottom: 0;
+              color: white;
+
+              .p-chip-text {
+                white-space: nowrap;
+                max-width: 85%;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                margin: 0;
+              }
+
+              .p-chip-remove-icon {
+                margin-left: auto;
+              }
+            }
+          }
+
+          // .p-chips{
+          //     min-height: 100px !important;
+          //     .p-chips-multiple-container {
+          //         display: flex;
+          //         align-items: flex-start;
+          //         padding: 1rem !important;
+          //         justify-content: space-between;
+          //         .p-chips-token{
+          //             margin: 0.25rem 0;
+          //             flex: 0 0 48%;
+          //             max-width: 48%;
+          //             background-color: #050C44;
+          //             border-radius: 19px;
+          //             color: white;
+          //             font-weight: 400;
+          //             padding: .5rem 1.25rem;
+          //             .p-chips-token-label{
+          //                 white-space: nowrap;
+          //                 max-width: 85%;
+          //                 text-overflow: ellipsis;
+          //                 overflow: hidden;
+          //             }
+          //             .p-chips-token-icon{
+          //                 margin-left: auto;
+          //             }
+          //         }
+          //     }
+          // }
+        }
+
+        #btn-send-invitation {
+          border-radius: 32px;
+          background-color: #0065e9;
+          color: white;
+          font-size: 0.9rem;
+          height: 45px;
+        }
+
+        .caption {
+          color: rgba($color: #050c44, $alpha: 0.66);
+          text-align: center;
+          margin-bottom: 1rem;
+          font-family: "Montserrat", sans-serif;
+        }
+
+        .success_content {
+          .success_sphere {
+            width: 200px;
+            height: 200px;
+            border: 1px solid #050c44;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto 3rem;
+
+            i {
+              font-size: 4rem;
+              color: #00e9c5;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (min-width: 1024px) {
+  :host ::ng-deep {
+    .p-dialog {
+      .p-dialog-content {
+        #invitar_miembros_dialog_container {
+          .view_header {
+            flex-direction: row;
+            align-items: center;
+
+            .action {
+              width: auto;
+            }
+          }
+
+          p-chip {
+            flex: 0 0 32%;
+          }
+
+          .permisos_container {
+            .permisos {
+              .view_header {
+                flex-direction: column;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (min-width: 1200px) {
+  :host ::ng-deep {
+    .p-dialog {
+      .p-dialog-content {
+        #invitar_miembros_dialog_container {
+          p-chip {
+            flex: 0 0 24%;
+          }
+
+          .permisos_container {
+            flex-direction: row;
+
+            .selected_members {
+              display: block;
+              flex: 0 0 20%;
+            }
+
+            .permisos {
+              flex: 0 0 80%;
+              padding-left: 2rem;
+
+              .view_header {
+                flex-direction: row;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,311 @@
+:host ::ng-deep {
+  .p-grid {
+    .p-col {
+      width: 100%;
+      text-align: center !important;
+    }
+  }
+
+  .p-skeleton {
+    background-color: #e9ecef75;
+  }
+
+  .top_header {
+    background-color: #050c44;
+    padding-top: 4rem;
+    // padding: 4rem 2rem 2rem 2rem;
+    color: white;
+    font-size: 0.9rem;
+    // display: flex;
+    justify-content: flex-end;
+    position: relative;
+
+    .back_btn {
+      position: absolute;
+      width: 40px;
+      height: 40px;
+      background-color: white;
+      left: 50px;
+      top: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+
+      @media (max-width: 600px) {
+        left: 25px;
+        top: 70px;
+      }
+    }
+
+    .p-rating {
+      .p-rating-icon {
+        color: #00e9c5;
+      }
+      .p-rating-icon.pi-star {
+        color: #00e9c5;
+      }
+    }
+    .session_img {
+      border-radius: 50%;
+      border: 5px solid white;
+      position: absolute;
+      width: 150px;
+      height: 150px;
+      background-position: center;
+      background-size: cover;
+      left: 60px;
+      top: 24%;
+
+      @media (max-width: 1024px) {
+        position: relative;
+        margin: 0 auto;
+        left: 0;
+        top: 0;
+      }
+    }
+    .content {
+      display: flex;
+      padding: 2rem;
+      padding-top: 1rem;
+      padding-left: 220px;
+      padding-right: 120px;
+      justify-content: space-between;
+
+      .difficulty,
+      .intensity,
+      .duration,
+      .wrapper_buttons {
+        @media (max-width: 600px) {
+          width: 40%;
+          align-items: center;
+        }
+
+        .header-title {
+          font-weight: 600;
+        }
+
+        .header-text {
+          color: #00e9c5;
+
+          .pointer {
+            cursor: pointer;
+          }
+        }
+      }
+
+      .type-session {
+        @media (max-width: 600px) {
+          width: 100%;
+        }
+      }
+
+      .sm-text {
+        @media (max-width: 600px) {
+          width: 40%;
+        }
+      }
+
+      @media (max-width: 1024px) {
+        // flex-direction: column;
+        padding-left: 12px;
+        padding-right: 12px;
+        flex-wrap: wrap;
+        padding-top: 2rem;
+      }
+
+      .separator {
+        border-right: 1px solid white;
+      }
+      .actions {
+        display: flex;
+        padding: 0 1rem;
+
+        @media (max-width: 600px) {
+          flex-direction: column;
+          padding: 0;
+          width: 100%;
+        }
+        .header_btn {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          margin: 0 0.5rem;
+
+          @media (max-width: 600px) {
+            align-items: start;
+            margin: 0;
+          }
+          button {
+            width: 40px;
+            height: 40px;
+            background-color: white;
+            margin-bottom: 0.5rem;
+            border-radius: 50%;
+            border: 0;
+          }
+        }
+      }
+    }
+  }
+  .training_sessions_header {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding-left: 45px;
+    background: white;
+    // padding: 1.5rem 2rem;
+    // padding: 1rem 0rem;
+
+    border-bottom: 1px solid #050c441a;
+
+    min-height: 75px;
+    padding: 1.25rem 1rem;
+
+    .search-input {
+      flex: unset;
+      margin: 0 0.5rem;
+
+      input {
+        width: 200px !important;
+      }
+    }
+
+    @media (max-width: 600px) {
+      display: flex;
+    }
+
+    .group-buttons {
+      @media (max-width: 600px) {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .calendar_btn {
+        height: 45px;
+        border-radius: 9px;
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+        margin-left: 1rem;
+
+        @media (max-width: 600px) {
+          width: 100%;
+          margin-bottom: 2rem;
+        }
+      }
+      .new_training_sessions_btn {
+        background-color: #024cac;
+        color: white;
+        font-weight: 500;
+        height: 45px;
+        margin-left: auto;
+        // flex: 1 1 100%;
+
+        &:hover {
+          background: #0d89ec;
+          color: #ffffff;
+          border-color: #0d89ec;
+
+          i {
+            color: #01e9c5 !important;
+          }
+        }
+
+        @media (max-width: 600px) {
+          width: 100%;
+        }
+      }
+    }
+
+    #sorting {
+      #sorting_btn {
+        background-color: transparent;
+        color: #050c44;
+        font-weight: 600;
+        border-radius: 9px;
+        border: 1px solid #050c4410;
+        height: 45px;
+        font-size: 0.9rem;
+        .filter_label {
+          opacity: 0.39;
+        }
+      }
+      .p-overlaypanel {
+        top: auto !important;
+        left: auto !important;
+        min-width: 300px;
+        // max-width: 500px;
+        width: 375px;
+        box-shadow: none;
+        border: 1px solid #050c4429;
+        border-radius: 0;
+        .p-overlaypanel-content {
+          padding: 1.5rem;
+        }
+        .sorting_content {
+          color: #050c44;
+          font-weight: 600;
+          .option {
+            padding: 1rem 0;
+          }
+        }
+      }
+      .p-overlaypanel::before,
+      .p-overlaypanel::after {
+        display: none !important;
+      }
+    }
+    input {
+      // margin:0;
+      height: 45px;
+      font-weight: 500;
+      border-radius: 9px;
+      border: 1px solid #050c4410;
+    }
+  }
+  .workouts_container {
+    padding: 1.5rem 1.5rem;
+
+    .p-dataview {
+      .p-dataview-content {
+        .p-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          grid-gap: 10px;
+
+          margin-right: -15px;
+          margin-left: -15px;
+
+          justify-content: center;
+
+          @media (max-width: 1440px) {
+            grid-template-columns: repeat(2, 1fr);
+          }
+
+          @media (max-width: 767px) {
+            grid-template-columns: repeat(1, 1fr);
+          }
+        }
+      }
+
+      .workout {
+        margin: 0 auto !important;
+      }
+    }
+
+    .workout_skeleton {
+      border: 1px solid #050c4421;
+      border-radius: 17px;
+      overflow: hidden;
+      position: relative;
+      margin: 1rem 0;
+    }
+  }
+
+  .nodatatext {
+    color: #050c4475;
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+}

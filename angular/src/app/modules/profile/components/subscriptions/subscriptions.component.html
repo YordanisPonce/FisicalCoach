@@ -1,0 +1,344 @@
+<div class="container border">
+  <div *ngIf="loadingSubcriptions" class="not_content">
+    <i class="spinner-grow spinner-grow-sm" style="font-size: 2rem"></i>
+  </div>
+  <div *ngIf="!loadingSubcriptions" class="row">
+    <div class="col-12 col-lg-12 my-4 d-flex justify-content-center">
+      <div class="suscription_level">
+        <div class="suscription_level_content">
+          <ng-container *ngIf="!showUpdateCardInput && paymentMethod">
+            <span class="suscription"
+              >{{ "profile.tarjetaactual" | translate }} : **** **** ****
+              {{ paymentMethod?.card?.last4 }}</span
+            >
+            <span class="suscription"
+              >{{ "profile.fechavencimiento" | translate }}:
+              {{ paymentMethod?.card?.exp_month }} /{{
+                paymentMethod?.card?.exp_year
+              }}</span
+            >
+          </ng-container>
+          <ng-container *ngIf="!paymentMethod">
+            <span class="suscription">{{
+              "profile.msgsintarjeta" | translate
+            }}</span>
+          </ng-container>
+        </div>
+        <div *ngIf="!showUpdateCardInput" class="sport_plan">
+          <button
+            (click)="addPaymentMethod()"
+            *ngIf="!paymentMethod"
+            class="btn actualizar_pack_btn"
+            label="{{ 'profile.agregar' | translate }}"
+            pButton
+          ></button>
+          <button
+            (click)="deletePaymentMethod()"
+            *ngIf="paymentMethod"
+            [loading]="deleting"
+            class="btn actualizar_pack_btn"
+            label="{{ 'profile.borrar' | translate }}"
+            pButton
+          ></button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12 my-5">
+      <div class="separator">
+        <span class="line"></span>
+        <span class="title">{{
+          "profile.subscription_level" | translate
+        }}</span>
+        <span class="line"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div
+      *ngFor="let subscription of subscriptions; index as i"
+      [ngClass]="{
+        'justify-content-around': subscriptions.length > 1,
+        'justify-content-center': subscriptions.length === 1
+      }"
+      class="col-12 col-lg-6 my-4 d-flex"
+    >
+      <div class="suscription_level">
+        <i
+          *ngIf="subscription.stripe_status === StripeStatus.TRIALING"
+          class="pi pi-question-circle icon_info"
+          pTooltip="{{ subscription.stripe_status | translate }}"
+          style="color: #024cac"
+        ></i>
+        <i
+          *ngIf="subscription.stripe_status === StripeStatus.PASTDUE"
+          class="pi pi-question-circle icon_info"
+          pTooltip="{{ subscription.stripe_status | translate }}"
+          style="color: red"
+        ></i>
+        <i
+          *ngIf="subscription.stripe_status === StripeStatus.ACTIVE"
+          class="pi pi-question-circle icon_info"
+          pTooltip="{{ subscription.stripe_status | translate }}"
+          style="color: #04e9c5"
+        ></i>
+        <div
+          (click)="viewDetail(subscription)"
+          class="suscription_level_content"
+          pTooltip="{{ 'profile.verdetalle' | translate }}"
+        >
+          <img alt="package-icon" [src]="getIcons(subscription)" width="40px" />
+          <span class="suscription">{{ subscription.subpackage_name }}</span>
+          <small class="renewal"
+            >{{ "profile.subscription_renovation" | translate }} :
+            {{ subscription.trial_ends_at | date : "dd/MM/YYYY" }}</small
+          >
+        </div>
+        <div class="sport_plan_2">
+          <button
+            class="btn"
+            label="{{ 'profile.subscription_update_pack' | translate }}"
+            pButton
+            pTooltip="{{ 'profile.subscription_update_pack' | translate }}"
+            routerLink="{{
+              '/profile/update-subscription/' + subscription.package_code
+            }}"
+          ></button>
+          <button
+            (click)="cancelSubscription(subscription)"
+            [loading]="cancelando"
+            class="ml-2 p-button-outlined p-button-secondary"
+            label="{{ 'profile.subscription_cancel' | translate }}"
+            pButton
+          ></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div
+    *ngIf="
+      subscriptions.length === 1 && subscriptions[0]?.package_code === 'teacher'
+    "
+    class="row p-lg-5"
+  >
+    <div class="col-12">
+      <div class="separator">
+        <span class="line"></span>
+        <span class="title">{{
+          "profile.subscription_plan_sport" | translate
+        }}</span>
+        <span class="line"></span>
+      </div>
+    </div>
+    <div class="suscription_selector col-12 offset-lg-3">
+      <div
+        (click)="time = false; type = 'year'; check()"
+        [ngClass]="{ selectTwo: !time }"
+        class="select"
+        pTooltip="{{ 'registerPlank.anual' | translate }}"
+        tooltipPosition="top"
+      >
+        {{ "registerPlank.anual" | translate }}
+      </div>
+      <div
+        (click)="time = true; type = 'month'; check()"
+        [ngClass]="{ selectTwo: time }"
+        class="select"
+        pTooltip="{{ 'registerPlank.mes' | translate }}"
+        tooltipPosition="top"
+      >
+        {{ "registerPlank.mes" | translate }}
+      </div>
+    </div>
+    <div *ngIf="availablePackage" class="col-md-4 col-xl-12">
+      <div class="pack">
+        <div class="pack_header">
+          <h6 class="pack_title">
+            {{ availablePackage?.name }}
+          </h6>
+          <div *ngIf="type === 'year'" class="pack_price">
+            {{ yearValue(availablePackage) }} €
+          </div>
+          <div *ngIf="type === 'month'" class="pack_price">
+            {{ monthValue(availablePackage) }} €
+          </div>
+          <div class="text-center">
+            <img
+              alt=""
+              class="pack_icon"
+              src="/assets/img/icons/sport-equipment.svg"
+            />
+          </div>
+        </div>
+        <div class="pack_action">
+          <button
+            (click)="goToSubPackage(availablePackage)"
+            class="btn btn-block"
+            pTooltip="{{ 'profile.subscription_buy' | translate }}"
+            tooltipPosition="top"
+          >
+            {{ "profile.subscription_buy" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    *ngIf="
+      subscriptions.length === 1 && subscriptions[0]?.package_code === 'sport'
+    "
+    class="row p-lg-5"
+  >
+    <div class="col-12">
+      <div class="separator">
+        <span class="line"></span>
+        <span class="title">{{
+          "profile.subscription_plan_teacher" | translate
+        }}</span>
+        <span class="line"></span>
+      </div>
+    </div>
+    <div class="suscription_selector col-12 offset-lg-3">
+      <div
+        (click)="time = false; type = 'year'; check()"
+        [ngClass]="{ selectTwo: !time }"
+        class="select"
+        pTooltip="{{ 'registerPlank.anual' | translate }}"
+        tooltipPosition="top"
+      >
+        {{ "registerPlank.anual" | translate }}
+      </div>
+      <div
+        (click)="time = true; type = 'month'; check()"
+        [ngClass]="{ selectTwo: time }"
+        class="select"
+        pTooltip="{{ 'registerPlank.mes' | translate }}"
+        tooltipPosition="top"
+      >
+        {{ "registerPlank.mes" | translate }}
+      </div>
+    </div>
+    <div *ngIf="availablePackage" class="col-md-4 col-xl-12">
+      <div class="pack">
+        <div class="pack_header">
+          <h6 class="pack_title">
+            {{ availablePackage?.name }}
+          </h6>
+          <div *ngIf="type === 'year'" class="pack_price">
+            {{ yearValue(availablePackage) }} €
+          </div>
+          <div *ngIf="type === 'month'" class="pack_price">
+            {{ monthValue(availablePackage) }} €
+          </div>
+          <div class="text-center">
+            <img
+              alt=""
+              class="pack_icon"
+              src="/assets/img/icons/sport-equipment.svg"
+            />
+          </div>
+        </div>
+        <div class="pack_action">
+          <button
+            (click)="goToSubPackage(availablePackage)"
+            class="btn btn-block"
+            pTooltip="{{ 'profile.subscription_buy' | translate }}"
+            tooltipPosition="top"
+          >
+            {{ "profile.subscription_buy" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<p-dialog
+  (onHide)="showUpdateCardInput = false"
+  [(visible)]="showUpdateCardInput"
+  [modal]="true"
+  [style]="{ width: '400px' }"
+>
+  <div *ngIf="showUpdateCardInput" class="mt-2">
+    <div id="stripe-card">
+      <div class="row justify-content-center">
+        <div class="col-12 text-center example example3">
+          <img alt="" src="/assets/img/tarjeta.jpg" width="200px" />
+          <p>{{ "registerMembership.tex_info_payment" | translate }}</p>
+          <stripe-card
+            #stripeCard
+            (cardMounted)="cardCaptureReady = 1"
+            (catch)="onStripeError($event)"
+            (paymentMethodChange)="setPaymentMethod($event)"
+            (sourceChange)="setStripeSource($event)"
+            (tokenChange)="setStripeToken($event)"
+            [(complete)]="cardDetailsFilledOut"
+            [(invalid)]="invalidError"
+            [options]="options"
+            style="width: auto"
+          ></stripe-card>
+          <div *ngIf="invalidError && !cardDetailsFilledOut" class="error">
+            <span class="text-danger">{{
+              invalidError?.code | translate
+            }}</span>
+          </div>
+          <button
+            (click)="stripeCard.createPaymentMethod(extraData); loading = true"
+            [disabled]="loading"
+            class="btn btn-block btn-main"
+            id="btn-validar"
+            pTooltip=" {{ 'registerMembership.addcard' | translate }}"
+            style="margin-top: 10px"
+            tooltipPosition="top"
+            type="button"
+          >
+            <span *ngIf="loading" class="pi pi-spinner pi-spin"></span>
+            {{ "registerMembership.addcard" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</p-dialog>
+<app-subpackege-detail
+  *ngIf="selectedPackage"
+  [(view)]="detailSubcription"
+  [selectedPackage]="selectedPackage"
+></app-subpackege-detail>
+<p-dialog
+  (onHide)="showDialog = false"
+  [(visible)]="showDialog"
+  [modal]="true"
+  [style]="{ width: '500px' }"
+  class="custom_dialog"
+>
+  <ng-template pTemplate="header">
+    <img class="logo" src="assets/img/logo_panel.svg" style="height: 22px" />
+  </ng-template>
+  <div>
+    <h6 class="mt-4 mb-4">
+      {{ "subscriptionpasdue" | translate }}:
+      <ul>
+        <li *ngFor="let item of listPastDue">
+          {{ item.package_name + " " + item.name }}
+        </li>
+      </ul>
+    </h6>
+    <h6 class="mt-4 mb-4">
+      <p>{{ "msgpastdue" | translate }}</p>
+    </h6>
+    <div class="text-center mb-2">
+      <img
+        src="https://testing-cdn.fisicalcoach.com/resources/images/fi/splash_tutorial.png"
+        width="150"
+      />
+    </div>
+    <div class="text-center">
+      <button (click)="showDialog = false" class="btn btn-primary btn-accept">
+        {{ "LBL_ACCEPT" | translate }}
+      </button>
+    </div>
+  </div>
+</p-dialog>

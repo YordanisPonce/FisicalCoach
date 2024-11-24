@@ -1,0 +1,65 @@
+<p-dialog
+  class="custom_exersice_dialog"
+  id="crear_exersice_dialog"
+  [modal]="true"
+  header="{{
+    'nutrition.create_sheet_dialog.take_supplement.select_supplement'
+      | translate
+  }} +"
+  [(visible)]="visible"
+  styleClass=""
+  maskStyleClass="purple_mask"
+  (onHide)="closeDialog()"
+>
+  <div id="crear_exersice_dialog_container">
+    <div class="step_content">
+      <div class="row">
+        <div class="mb-4 col-12">
+          <div class="select_supplement">
+            <label for="">{{
+              "nutrition.create_sheet_dialog.take_supplement.select_supplement"
+                | translate
+            }}</label>
+            <input
+              class="form-control"
+              placeholder="{{
+                'nutrition.create_sheet_dialog.others' | translate
+              }}"
+              aria-label="Default"
+              aria-describedby="inputGroup-sizing-default"
+              [(ngModel)]="other"
+            />
+          </div>
+        </div>
+        <div class="col-12 supplement_container">
+          <div *ngFor="let supplement of supplements; let i = index">
+            <div
+              class="supplement"
+              [ngClass]="
+                selectedSupplements.includes(supplement)
+                  ? 'selected'
+                  : 'deselected'
+              "
+              (click)="handleSupplements(supplement)"
+            >
+              <span>{{ supplement?.name }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p-footer>
+    <div class="footer_btns">
+      <button
+        type="button"
+        class="btn next_btn"
+        [disabled]="this.selectedSupplements.length === 0 && other === ''"
+        (click)="saveSupplements()"
+      >
+        {{ "BTN_CONFIRMAR" | translate }}
+      </button>
+    </div>
+  </p-footer>
+</p-dialog>

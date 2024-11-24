@@ -1,0 +1,149 @@
+:host ::ng-deep{
+    .p-dialog{
+        max-width: 600px;
+        .p-dialog-header{
+        }
+        .p-dialog-content{
+            // #add_rubric_dialog_container{
+                .input-group{
+                    .input-group-text{
+                        border-top-left-radius: 9px;
+                        border-bottom-left-radius: 9px;
+                        background: #0065E9;
+                        color: white;
+                        padding-left: 1.5rem;
+                        padding-right: 1.5rem;
+                        border: 1px solid #0065E9;
+                    }
+                }
+            // }
+            #calification_dialog_container{
+                .form-control::placeholder{
+                    color: rgba($color: #000000, $alpha: .5);
+                }
+                .btn_add_rubric{
+                    border: 1px solid #0065E9;
+                    border-radius: 9px;
+                    height: 45px;
+                    color: #0065E9;
+                    font-weight: 400;
+                    font-size: .9rem;
+                    text-align: left;
+                    background-color: #0065E908;
+                }
+                .rubrics{
+                    .rubric{
+                        border: 1px solid #050C44;
+                        border-radius: 9px;
+                        height: 50px;
+                        color: white;
+                        font-weight: 400;
+                        font-size: .9rem;
+                        background-color: #050C44;
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        text-align: left;
+                        margin-bottom: 2rem;
+                        &_name{
+                            text-overflow: ellipsis;
+                            overflow: hidden;
+                            white-space: nowrap;
+                            flex: 1;
+                        }
+                        button{
+                            margin-left: 1rem;
+                            flex: 0 4%;
+                        }
+                    }                    
+                }
+                // .rubrics_list{
+                //     .rubric{
+                //         .input-group-text{
+                //             border-top-left-radius: 9px;
+                //             border-bottom-left-radius: 9px;
+                //             background-color: #0065E9;
+                //             color: white;
+                //             min-width: 50px;
+                //             justify-content: center;
+                //         }
+                //     }
+                //     .add_rubric_btn{
+                //         border: 1px solid #0065E9;
+                //         border-radius: 6px;
+                //         min-height: 45px;
+                //         color: #0065E9;
+                //         padding: 1rem;
+                //         background-color: #0065E90F;
+                //         font-size: .9rem;
+                //         font-family: "Montserrat", sans-serif;
+                //     }
+                //     .alerta{
+                //         margin-top: 1rem;
+                //         background-color: rgba($color: #F92F28, $alpha: .2);
+                //         border-radius: 4px;
+                //         color: #F92F28;
+                //         padding: .5rem;
+                //         text-align: center;
+                //     }
+                // }
+            }
+        }
+    }
+}
+
+// Small devices (landscape phones, 576px and up)
+@media (min-width: 576px) {
+    :host ::ng-deep{    
+        .p-dialog{
+            .p-dialog-content{
+            }
+        }
+    }
+}
+
+// Medium devices (tablets, 768px and up)
+@media (min-width: 1024px) {
+    :host ::ng-deep{    
+        .p-dialog{
+            width: 600px;
+            .p-dialog-header{
+            }
+            .p-dialog-content{
+            }
+        }
+        #add_rubric_dialog{
+            .p-dialog{
+                width: 400px;
+            }
+        }
+    }    
+}
+
+@media (min-width: 1200px) {
+    :host ::ng-deep{
+        .p-dialog{
+            .p-dialog-header{
+                padding: 3rem 3rem 0 3rem
+            }
+            .p-dialog-content{
+                padding: 2rem 3rem
+            }
+            .p-dialog-footer{
+                padding: 1.5rem 3rem;
+            }
+        }
+    }    
+}
+
+// Extra large devices (large desktops, 1200px and up)
+@media (min-width: 1200px) {
+    :host ::ng-deep{
+        .p-dialog{
+            .p-dialog-header{
+            }
+            .p-dialog-content{
+            }
+        }
+    }  
+}

@@ -1,0 +1,232 @@
+<div class="ball_possession">
+  <div class="selector">
+    <span
+      ><p-radioButton
+        name="groupname"
+        [value]="1"
+        [(ngModel)]="teamPosition"
+        (onClick)="selectOwningTeam(1)"
+        [disabled]="true"
+        class="mr-2"
+      ></p-radioButton>
+      <img
+        src="{{
+          teamPosition === 1
+            ? 'https://testing-cdn.fisicalcoach.com/resources/images/sports/baseball/batter_team.svg'
+            : 'https://testing-cdn.fisicalcoach.com/resources/images/sports/baseball/fielding_team.svg'
+        }}"
+        alt="icon-posession"
+        width="20"
+        height="20"
+    /></span>
+    <span> </span>
+    <span>
+      <img
+        src="{{
+          teamPosition === 2
+            ? 'https://testing-cdn.fisicalcoach.com/resources/images/sports/baseball/batter_team.svg'
+            : 'https://testing-cdn.fisicalcoach.com/resources/images/sports/baseball/fielding_team.svg'
+        }}"
+        alt="icon-posession"
+        width="20"
+        height="20"
+        class="mr-2"
+      />
+      <p-radioButton
+        name="groupname"
+        [value]="2"
+        [(ngModel)]="teamPosition"
+        (onClick)="selectOwningTeam(2)"
+        [disabled]="true"
+      ></p-radioButton>
+    </span>
+  </div>
+  <div class="score_table mt-0">
+    <div class="team">
+      <div class="text-center mb-3">
+        <span class="location">Local</span>
+      </div>
+      <app-team-avatar [matchInfo]="matchInfo" [situation]="'local'">
+      </app-team-avatar>
+
+      <div class="truncate-text mt-2">
+        <span>{{
+          matchInfo.match_situation === "L"
+            ? matchInfo.team.name
+            : matchInfo.competition_rival_team.rival_team
+        }}</span>
+      </div>
+
+      <div class="mt-2">
+        <span class="mr-2">{{ "scouting.run" | translate }}:</span>
+
+        <span>{{
+          matchInfo.match_situation === "L"
+            ? matchResults.score.own
+            : matchResults.score.rival
+        }}</span>
+      </div>
+    </div>
+
+    <div class="score">
+      <div class="text-center text-white mb-3">
+        <span class="location">INNING</span>
+        <p class="text-center mb-0" *ngIf="matchResults.score?.current_over">
+          {{ matchResults.score.current_over.replace("_", " ") }}
+        </p>
+        <p class="text-center mb-0" *ngIf="matchResults.score?.current_inning">
+          {{ matchResults.score.current_inning.replace("_", " ") }}
+        </p>
+      </div>
+
+      <!-- <small class="clock">43:00:00</small> -->
+    </div>
+
+    <div class="team">
+      <!-- <span class="possession_percent">23%</span> -->
+      <div class="text-center mb-3">
+        <span class="location">{{ "scouting.guess" | translate }}</span>
+      </div>
+
+      <app-team-avatar [matchInfo]="matchInfo" [situation]="'guess'">
+      </app-team-avatar>
+
+      <div class="truncate-text mt-2">
+        <span>{{
+          matchInfo.match_situation === "V"
+            ? matchInfo.team.name
+            : matchInfo.competition_rival_team.rival_team
+        }}</span>
+      </div>
+
+      <div class="mt-2">
+        <span class="mr-2">{{ "scouting.run" | translate }}:</span>
+        <span>{{
+          matchInfo.match_situation === "V"
+            ? matchResults.score.own
+            : matchResults.score.rival
+        }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="my-3 text-center">
+    <button
+      class="btn new-bat-button"
+      (click)="
+        !isDisabled &&
+          selectActionFromBoard(
+            selectType === 'player' ? 'new_batter' : 'new_batter_rival'
+          )
+      "
+      [disabled]="isDisabled"
+      pTooltip="{{
+        (selectType === 'player'
+          ? 'scouting.newBatter'
+          : 'scouting.newBatterRival'
+        ) | translate
+      }}"
+    >
+      <img
+        src="https://testing-cdn.fisicalcoach.com/resources/scoutings/actions/baseball/2EBOSFmdGcH86SYAde0gy4scC50KMGkfIL0DHiZ8.svg"
+        alt="new bat"
+        width="36"
+        height="39"
+      />>
+    </button>
+  </div>
+
+  <div class="mb-5 mt-5">
+    <div class="d-flex justify-content-around text-white">
+      <div>
+        <div class="d-flex">
+          Bola
+          <div
+            class="plus-button ml-3"
+            (click)="
+              !isDisabled &&
+                selectActionFromBoard(
+                  selectType === 'team' ? 'rival_balls' : 'own_balls'
+                )
+            "
+          >
+            <span>+</span>
+          </div>
+        </div>
+        <div class="d-flex">
+          <div class="dot mr-1" *ngFor="let ball of balls"></div>
+        </div>
+      </div>
+
+      <div>
+        <div class="d-flex">
+          Strike
+          <div
+            class="plus-button ml-3"
+            (click)="
+              !isDisabled &&
+                selectActionFromBoard(
+                  selectType === 'team' ? 'rival_strikes' : 'own_strikes'
+                )
+            "
+          >
+            <span>+</span>
+          </div>
+        </div>
+        <div class="d-flex">
+          <div class="dot mr-1" *ngFor="let strike of strikes"></div>
+        </div>
+      </div>
+
+      <div>
+        <div class="d-flex">
+          Out
+          <div
+            class="plus-button ml-3"
+            (click)="
+              !isDisabled &&
+                selectActionFromBoard(
+                  selectType === 'team' ? 'rival_outs' : 'outs'
+                )
+            "
+          >
+            <span>+</span>
+          </div>
+        </div>
+        <div class="d-flex">
+          <div class="dot mr-1" *ngFor="let out of outs"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="clock-wrapper d-flex flex-column align-items-center mt-3">
+    <span> Tiempo </span>
+
+    <div class="mt-3 d-flex align-items-center">
+      <small
+        class="clock"
+        *ngIf="!isScoutingPaused && getElapsedTime(time) as elapsed"
+        >{{ elapsed.hours < 10 ? "0" + elapsed.hours : elapsed.hours }}:{{
+          elapsed.minutes < 10 ? "0" + elapsed.minutes : elapsed.minutes
+        }}:{{
+          elapsed.seconds < 10 ? "0" + elapsed.seconds : elapsed.seconds
+        }}</small
+      >
+
+      <small class="clock" *ngIf="isScoutingPaused"
+        >{{
+          pausedTime.hours < 10 ? "0" + pausedTime.hours : pausedTime.hours
+        }}:{{
+          pausedTime.minutes < 10
+            ? "0" + pausedTime.minutes
+            : pausedTime.minutes
+        }}:{{
+          pausedTime.seconds < 10
+            ? "0" + pausedTime.seconds
+            : pausedTime.seconds
+        }}</small
+      >
+    </div>
+  </div>
+</div>

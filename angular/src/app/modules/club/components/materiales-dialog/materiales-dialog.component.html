@@ -1,0 +1,37 @@
+<p-dialog
+  id="materiales_dialog"
+  [modal]="true"
+  header="{{ 'training_session.materials_used' | translate }}"
+  [(visible)]="visible"
+  styleClass=""
+  maskStyleClass="purple_mask"
+  (onHide)="closeDialog()"
+>
+  <div id="materiales_dialog_container" class="dialog_container">
+    <p-selectButton [options]="materials" [(ngModel)]="value" [disabled]="true">
+      <ng-template let-item pTemplate>
+        <img
+          src="{{ item.full_url }}"
+          alt=""
+          class="mb-2"
+          width="70px"
+          height="70px"
+        />
+        <span>{{ item.name }}</span>
+
+        <div class="mt-2">
+          <span>{{ item.count }}</span>
+        </div>
+      </ng-template>
+    </p-selectButton>
+
+    <div class="row" *ngIf="!loading && materials.length === 0">
+      <div class="col-12 text-center">
+        <p>{{ "training_session.no_materials" | translate }}</p>
+      </div>
+    </div>
+  </div>
+  <p-footer>
+    <div class="footer_btns"></div>
+  </p-footer>
+</p-dialog>

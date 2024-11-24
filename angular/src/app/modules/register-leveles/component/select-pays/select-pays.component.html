@@ -1,0 +1,258 @@
+<div class="d-none d-md-flex align-items-center px-3 px-sm-5 my-5">
+  <img
+    class="mr-3"
+    src="https://testing-cdn.fisicalcoach.com/resources/images/logos/logo_inicio.svg"
+    width="200"
+  />
+  <div class="ml-auto">
+    <select
+      (change)="handleLanguage($event)"
+      [(ngModel)]="language"
+      class="botone custom-select text-center header_btn"
+      id="idiomaselect"
+      name="language"
+    >
+      <option selected value="es">{{ "LBL_SPANISH" | translate }}</option>
+      <option value="en">{{ "LBL_ENGLISH" | translate }}</option>
+    </select>
+  </div>
+</div>
+
+<div
+  class="row justify-content-center pb-4 d-none d-lg-flex mt-5"
+  *ngIf="verifyAccount"
+>
+  <div class="col-12 p-3 text-center mt-5">
+    <i class="fa fa-spin fa-spinner fa-4x" style="color: #01e9c2"></i>
+  </div>
+  <div class="col-12 text-center">
+    <h5>{{ "registerPlank.verifyAccount" | translate }}</h5>
+  </div>
+</div>
+
+<div class="text-center" *ngIf="!verifyAccount">
+  <h2 class="title">
+    {{ "registerPlank.textone" | translate }}
+    {{ "registerPlank.texttwo" | translate }}
+  </h2>
+  <p class="subtitle">{{ "registerPlank.textthree" | translate }}</p>
+  <div class="suscription_selector">
+    <div
+      class="select"
+      [ngClass]="{ selectTwo: !time }"
+      (click)="time = false; type = 'year'; check()"
+    >
+      {{ "registerPlank.anual" | translate }}
+    </div>
+
+    <div
+      class="select"
+      [ngClass]="{ selectTwo: time }"
+      (click)="time = true; type = 'month'; check()"
+    >
+      {{ "registerPlank.mes" | translate }}
+    </div>
+  </div>
+  <div class="row d-lg-none">
+    <div class="col-12">
+      <p-carousel [value]="packs">
+        <ng-template let-pack pTemplate="item">
+          <div class="pack">
+            <div class="pack_header text-center">
+              <div class="pack_titl my-2">
+                {{ "registerPlank." + pack.code | translate }}
+              </div>
+
+              <div *ngIf="pack.code === 'sport'">
+                <img
+                  src="https://testing-cdn.fisicalcoach.com/resources/images/menu/sports_blue.svg"
+                  alt="sport"
+                  width="45"
+                  height="60"
+                  class="pack_icon"
+                />
+
+                <div class="role-type mb-2">
+                  <span>
+                    {{ "registerPlank.sports_available" | translate }}</span
+                  >
+                </div>
+              </div>
+
+              <div *ngIf="pack.code === 'teacher'">
+                <img
+                  src="https://testing-cdn.fisicalcoach.com/resources/images/menu/teacher/class.svg"
+                  alt="teacher"
+                  width="75"
+                  height="60"
+                  class="pack_icon"
+                />
+
+                <div class="role-type mb-2">
+                  <span>
+                    {{ "registerPlank.physical_education" | translate }}</span
+                  >
+                </div>
+              </div>
+
+              <div class="pack_price_container text-center mt-2">
+                <div *ngIf="type === 'year'" class="mx-auto pack_price">
+                  {{ pack.subpackages[0].prices[0].year }}
+                  <span>/{{ "registerPlank.anual" | translate }}</span>
+                </div>
+                <div *ngIf="type === 'month'" class="mx-auto pack_price">
+                  {{ pack.subpackages[0].prices[0].month }}
+                  <span>/{{ "registerPlank.mes" | translate }}</span>
+                </div>
+              </div>
+              <p class="pack_description">{{ pack.description }}</p>
+            </div>
+            <div class="pack_benefits">
+              <ul>
+                <li *ngFor="let benefit of pack.benefits">{{ benefit }}</li>
+              </ul>
+            </div>
+            <div class="pack_benefits" *ngIf="pack.code === 'sport'">
+              <h6 style="font-size: 0.9rem">
+                {{ "SELECT_PAYMENT.PACKAGE_SPORT_TITLE" | translate }}asdasd
+              </h6>
+              <ul>
+                <li>{{ "SELECT_PAYMENT.PACKAGE_SPORT_UL_1" | translate }}</li>
+                <li>{{ "SELECT_PAYMENT.PACKAGE_SPORT_UL_2" | translate }}</li>
+                <li>{{ "SELECT_PAYMENT.PACKAGE_SPORT_UL_3" | translate }}</li>
+                <li>{{ "SELECT_PAYMENT.PACKAGE_SPORT_UL_4" | translate }}</li>
+                <li>{{ "SELECT_PAYMENT.PACKAGE_SPORT_UL_5" | translate }}</li>
+                <li>{{ "SELECT_PAYMENT.PACKAGE_SPORT_UL_6" | translate }}</li>
+                <li>{{ "SELECT_PAYMENT.PACKAGE_SPORT_UL_7" | translate }}</li>
+                <li>{{ "SELECT_PAYMENT.PACKAGE_SPORT_UL_8" | translate }}</li>
+                <li>{{ "SELECT_PAYMENT.PACKAGE_SPORT_UL_9" | translate }}</li>
+                <li>{{ "SELECT_PAYMENT.PACKAGE_SPORT_UL_10" | translate }}</li>
+                <li>{{ "SELECT_PAYMENT.PACKAGE_SPORT_UL_11" | translate }}</li>
+                <li>{{ "SELECT_PAYMENT.PACKAGE_SPORT_UL_12" | translate }}</li>
+                <li>{{ "SELECT_PAYMENT.PACKAGE_SPORT_UL_13" | translate }}</li>
+                <li>{{ "SELECT_PAYMENT.PACKAGE_SPORT_UL_14" | translate }}</li>
+              </ul>
+            </div>
+            <div class="pack_benefits" *ngIf="pack.code === 'teacher'">
+              <h6 style="font-size: 0.9rem">
+                {{ "SELECT_PAYMENT.PACKAGE_TEACHER_TITLE" | translate }}
+              </h6>
+              <ul>
+                <li>{{ "SELECT_PAYMENT.PACKAGE_TEACHER_UL_1" | translate }}</li>
+                <li>{{ "SELECT_PAYMENT.PACKAGE_TEACHER_UL_2" | translate }}</li>
+                <li>{{ "SELECT_PAYMENT.PACKAGE_TEACHER_UL_3" | translate }}</li>
+                <li>{{ "SELECT_PAYMENT.PACKAGE_TEACHER_UL_4" | translate }}</li>
+                <li>{{ "SELECT_PAYMENT.PACKAGE_TEACHER_UL_5" | translate }}</li>
+                <li>{{ "SELECT_PAYMENT.PACKAGE_TEACHER_UL_6" | translate }}</li>
+                <li>{{ "SELECT_PAYMENT.PACKAGE_TEACHER_UL_7" | translate }}</li>
+                <li>{{ "SELECT_PAYMENT.PACKAGE_TEACHER_UL_8" | translate }}</li>
+                <li>{{ "SELECT_PAYMENT.PACKAGE_TEACHER_UL_9" | translate }}</li>
+              </ul>
+            </div>
+            <div class="pack_caption">
+              {{ "SELECT_PAYMENT.PACKAGE_MORE_BENEFITS" | translate }}
+            </div>
+            <div class="pack_action btn_margin_bottom">
+              <button class="btn btn-block" (click)="irTabla(pack)">
+                {{ "registerPlank.boton" | translate }}
+              </button>
+            </div>
+          </div>
+        </ng-template>
+      </p-carousel>
+    </div>
+  </div>
+  <div class="row justify-content-center pb-4 d-none d-lg-flex">
+    <div *ngFor="let datos of data" class="col-md-4 col-xl-3">
+      <div class="pack">
+        <div class="pack_header">
+          <h6 class="pack_title">
+            {{ "registerPlank." + datos.code | translate }}
+          </h6>
+          <div *ngIf="type === 'year'" class="pack_price">
+            {{ datos.subpackages[0].prices[0].year }} €
+          </div>
+          <div *ngIf="type === 'month'" class="pack_price">
+            {{ datos.subpackages[0].prices[0].month }} €
+          </div>
+          <div class="pack_caption">1 {{ textSubscrpcion }}</div>
+
+          <div *ngIf="datos.code === 'sport'">
+            <img
+              src="https://testing-cdn.fisicalcoach.com/resources/images/menu/sports_blue.svg"
+              alt="sport"
+              width="45"
+              height="60"
+              class="pack_icon"
+            />
+
+            <div class="role-type">
+              <span> {{ "registerPlank.sports_available" | translate }}</span>
+            </div>
+          </div>
+
+          <div *ngIf="datos.code === 'teacher'">
+            <img
+              src="https://testing-cdn.fisicalcoach.com/resources/images/menu/teacher/class.svg"
+              alt="teacher"
+              width="75"
+              height="60"
+              class="pack_icon"
+            />
+
+            <div class="role-type">
+              <span> {{ "registerPlank.physical_education" | translate }}</span>
+            </div>
+          </div>
+          <div class="pack_caption text-main">{{ textBeneficios }}</div>
+        </div>
+        <div class="pack_benefits" *ngIf="datos.code === 'sport'">
+          <h6 style="font-size: 0.9rem">
+            {{ "SELECT_PAYMENT.PACKAGE_SPORT_TITLE" | translate }}
+          </h6>
+          <ul>
+            <li>{{ "SELECT_PAYMENT.PACKAGE_SPORT_UL_1" | translate }}</li>
+            <li>{{ "SELECT_PAYMENT.PACKAGE_SPORT_UL_2" | translate }}</li>
+            <li>{{ "SELECT_PAYMENT.PACKAGE_SPORT_UL_3" | translate }}</li>
+            <li>{{ "SELECT_PAYMENT.PACKAGE_SPORT_UL_4" | translate }}</li>
+            <li>{{ "SELECT_PAYMENT.PACKAGE_SPORT_UL_5" | translate }}</li>
+            <li>{{ "SELECT_PAYMENT.PACKAGE_SPORT_UL_6" | translate }}</li>
+            <li>{{ "SELECT_PAYMENT.PACKAGE_SPORT_UL_7" | translate }}</li>
+            <li>{{ "SELECT_PAYMENT.PACKAGE_SPORT_UL_8" | translate }}</li>
+            <li>{{ "SELECT_PAYMENT.PACKAGE_SPORT_UL_9" | translate }}</li>
+            <li>{{ "SELECT_PAYMENT.PACKAGE_SPORT_UL_10" | translate }}</li>
+            <li>{{ "SELECT_PAYMENT.PACKAGE_SPORT_UL_11" | translate }}</li>
+            <li>{{ "SELECT_PAYMENT.PACKAGE_SPORT_UL_12" | translate }}</li>
+            <li>{{ "SELECT_PAYMENT.PACKAGE_SPORT_UL_13" | translate }}</li>
+            <li>{{ "SELECT_PAYMENT.PACKAGE_SPORT_UL_14" | translate }}</li>
+          </ul>
+          <br />
+        </div>
+        <div class="pack_benefits" *ngIf="datos.code === 'teacher'">
+          <h6 style="font-size: 0.9rem">
+            {{ "SELECT_PAYMENT.PACKAGE_TEACHER_TITLE" | translate }}
+          </h6>
+          <ul>
+            <li>{{ "SELECT_PAYMENT.PACKAGE_TEACHER_UL_1" | translate }}</li>
+            <li>{{ "SELECT_PAYMENT.PACKAGE_TEACHER_UL_2" | translate }}</li>
+            <li>{{ "SELECT_PAYMENT.PACKAGE_TEACHER_UL_3" | translate }}</li>
+            <li>{{ "SELECT_PAYMENT.PACKAGE_TEACHER_UL_4" | translate }}</li>
+            <li>{{ "SELECT_PAYMENT.PACKAGE_TEACHER_UL_5" | translate }}</li>
+            <li>{{ "SELECT_PAYMENT.PACKAGE_TEACHER_UL_6" | translate }}</li>
+            <li>{{ "SELECT_PAYMENT.PACKAGE_TEACHER_UL_7" | translate }}</li>
+            <li>{{ "SELECT_PAYMENT.PACKAGE_TEACHER_UL_8" | translate }}</li>
+            <li>{{ "SELECT_PAYMENT.PACKAGE_TEACHER_UL_9" | translate }}</li>
+          </ul>
+        </div>
+        <div class="pack_caption">
+          {{ "SELECT_PAYMENT.PACKAGE_MORE_BENEFITS" | translate }}
+        </div>
+        <div class="pack_action">
+          <button class="btn btn-block" (click)="irTabla(datos)">
+            {{ "registerPlank.boton" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

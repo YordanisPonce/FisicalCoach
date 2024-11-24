@@ -1,0 +1,54 @@
+:host ::ng-deep {
+  #edit_cover_btn {
+    background-color: rgb(1 76 172);
+    padding: 0.5rem 1.5rem;
+    color: white;
+    font-size: 0.9rem;
+  }
+  .custom-file-input:focus~.custom-file-label {
+    box-shadow: none !important;
+  }
+  .p-dialog {
+    max-width: 400px !important;
+    .p-dialog-content {
+      max-width: 400px !important;
+      .custom-file,
+      .custom-file-input {
+        height: 45px;
+        cursor: pointer;
+      }
+      .custom-file-label {
+        height: 45px !important;
+        line-height: 2.5;
+        font-weight: 500;
+        color: #495057;
+        background-color: #fff;
+        border: 1px solid #050c4433;
+        border-radius: 9px;
+        font-size: 0.9rem;
+        text-align: center;
+        &:after {
+          content: unset;
+        }
+      }
+      #crop_buttons {
+        justify-content: center;
+        flex-wrap: wrap;
+        button {
+          height: 45px;
+          border-radius: 9px;
+          flex: 1 1 100%;
+          font-size: 0.9rem;
+          margin: 0.25rem 0;
+
+          &:focus {
+            border:  none !important;
+          }
+        }
+        button:nth-child(1) {
+          border: 1px solid #050c4433;
+        }
+      }
+    }
+  }
+}

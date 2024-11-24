@@ -1,0 +1,199 @@
+<form action="" [formGroup]="newSessionForm" (ngSubmit)="onSubmit()">
+  <p-dialog
+    id="new_session_dialog"
+    [modal]="true"
+    header="{{ 'training_session.create_new' | translate }}"
+    [(visible)]="visible"
+    styleClass=""
+    maskStyleClass="purple_mask"
+    (onHide)="closeDialog()"
+  >
+    <div id="new_session_dialog_container" class="dialog_container">
+      <div>
+        <div class="step_content">
+          <div class="row">
+            <div class="col-12 mb-4">
+              <label>{{ "training_session.title" | translate }} *</label>
+              <input
+                class="form-control input-rounded"
+                placeholder="{{
+                  'training_session.title_placeholder' | translate
+                }}"
+                aria-label="Default"
+                aria-describedby="inputGroup-sizing-default"
+                formControlName="title"
+              />
+            </div>
+
+            <div class="col-12 mb-4">
+              <label>{{ "training_session.nSession" | translate }} *</label>
+              <input
+                class="form-control input-rounded"
+                placeholder="1"
+                aria-label="Default"
+                aria-describedby="inputGroup-sizing-default"
+                formControlName="order"
+              />
+            </div>
+
+            <div class="col-12 mb-4" *ngIf="role === 'sport'">
+              <label>{{ "training_session.session_type" | translate }} *</label>
+              <p-dropdown
+                [options]="trainingSessionTypeList"
+                [(ngModel)]="typeSessionId"
+                optionLabel="name"
+                optionValue="id"
+                styleClass="form-control"
+                formControlName="type_exercise_session_id"
+              ></p-dropdown>
+            </div>
+            <div class="mb-4 col-12" *ngIf="role === 'sport'">
+              <label for=""
+                >{{ "training_session.training_period" | translate }} *</label
+              >
+              <div class="d-flex align-items-center flex-column flex-md-row">
+                <div
+                  *ngFor="let period of trainingPeriodList; let i = index"
+                  class="w-100"
+                >
+                  <p-radioButton
+                    name="training_period"
+                    value="{{ period.id }}"
+                    label="{{ period.name }}"
+                    class="mr-3"
+                    formControlName="training_period"
+                  ></p-radioButton>
+                </div>
+              </div>
+            </div>
+            <div class="mb-4 col-12">
+              <label for=""
+                >{{ "training_session.session_date" | translate }} *</label
+              >
+              <div>
+                <p-calendar
+                  class="w-100"
+                  [styleClass]="'w-100 form-control border-none'"
+                  formControlName="date_session"
+                  [firstDayOfWeek]="1"
+                  [selectionMode]="'single'"
+                  [placeholder]="'DD/MM/AAAA HH:mm'"
+                  [showTime]="true"
+                  [dateFormat]="'dd/mm/yy'"
+                  [dataType]="'string'"
+                  [minDate]="minDate"
+                ></p-calendar>
+              </div>
+            </div>
+
+            <div class="mb-4 col-12">
+              <div class="d-flex justify-content-between">
+                <label for=""
+                  >{{ "training_session.session_place" | translate }} *</label
+                >
+                <label
+                  class="label-link ml-2 label-place"
+                  (click)="handlePlaces()"
+                >
+                  {{ "training_session.add_place" | translate }}</label
+                >
+              </div>
+              <div></div>
+
+              <p-dropdown
+                [filter]="true"
+                [options]="places"
+                [showClear]="true"
+                *ngIf="!placeInput"
+                [(ngModel)]="selectedPlace"
+                [styleClass]="'form-control'"
+                aria-describedby="inputGroup-sizing-default"
+                class="control-custom"
+                optionLabel="place_session"
+                optionValue="id"
+                formControlName="place_id"
+                id="place_id"
+                placeholder="{{ 'LBL_SELECCIONE' | translate }}"
+              ></p-dropdown>
+
+              <input
+                formControlName="place_session"
+                type="text"
+                class="form-control input-rounded"
+                placeholder="{{ 'LBL_ESCRIBEAQI' | translate }}"
+                aria-label="Default"
+                aria-describedby="inputGroup-sizing-default"
+                *ngIf="placeInput"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p-footer>
+      <div class="footer_btns">
+        <button
+          class="btn back_btn shrink_btn"
+          (click)="closeDialog()"
+          type="button"
+        >
+          {{ "LBL_ATRAS" | translate }}
+        </button>
+
+        <button
+          class="btn next_btn shrink_btn"
+          type="submit"
+          *ngIf="
+            !loading &&
+            (!checkSelectedSession() || isReusedSession) &&
+            isNewSession
+          "
+          [disabled]="!newSessionForm.valid || loading"
+        >
+          {{ "training_session.create" | translate }}
+        </button>
+
+        <button
+          class="btn next_btn shrink_btn"
+          type="submit"
+          *ngIf="
+            loading &&
+            (!checkSelectedSession() || isReusedSession) &&
+            isNewSession
+          "
+          [disabled]="loading"
+        >
+          {{ "LBL_GUARDANDO" | translate }}
+        </button>
+
+        <button
+          class="btn next_btn shrink_btn"
+          type="submit"
+          *ngIf="
+            !loading &&
+            checkSelectedSession() &&
+            !isReusedSession &&
+            !isNewSession
+          "
+          [disabled]="!newSessionForm.valid || loading"
+        >
+          {{ "LBL_EDIT" | translate }}
+        </button>
+
+        <button
+          class="btn next_btn shrink_btn"
+          type="submit"
+          *ngIf="
+            loading &&
+            checkSelectedSession() &&
+            !isReusedSession &&
+            !isNewSession
+          "
+          [disabled]="loading"
+        >
+          {{ "LBL_EDITING" | translate }}
+        </button>
+      </div>
+    </p-footer>
+  </p-dialog>
+</form>

@@ -1,0 +1,298 @@
+:host ::ng-deep {
+  .p-dropdown {
+    border: none !important;
+    background-color: transparent !important;
+    width: 100% !important;
+  }
+
+  .custom_dialog .p-dialog {
+    min-width: 630px;
+
+    @media (max-width: 600px) {
+      min-width: 300px;
+      max-width: 100% !important;
+    }
+
+    .p-dialog-content {
+      border-bottom-left-radius: 11px;
+      border-bottom-right-radius: 11px;
+
+      .verify-color {
+        color: #01e9c2;
+      }
+
+      .btn-accept {
+        padding: 12px 16px;
+        margin-top: 20px;
+      }
+    }
+  }
+}
+
+#register_content {
+  scroll-behavior: smooth;
+  height: 100vh;
+  overflow: hidden;
+  #register_form_col {
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem;
+    height: 100%;
+    .ingresa_tus_datos {
+      flex: 0 0 100px;
+      #go_back {
+        margin-bottom: 1rem;
+        i {
+          font-size: 1.5rem;
+          color: #050c44;
+        }
+      }
+      h6 {
+        text-transform: uppercase;
+        margin-bottom: 0;
+      }
+    }
+    #register_data {
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      .data_form_container {
+        // padding-left: 7rem;
+        overflow: hidden;
+        padding-bottom: 1rem;
+        flex: 1;
+        #data_form {
+          height: 100%;
+          border-radius: 9px;
+          label {
+            color: #050c44;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+          }
+          .form-control {
+            height: 50px;
+            border-radius: 6px;
+            border: 1px solid #00000024 !important;
+            &::-webkit-input-placeholder,
+            ::placeholder {
+              color: rgba($color: #050c44, $alpha: 0.36);
+              font-size: 0.9rem;
+              font-weight: 500;
+            }
+          }
+          .p-input-icon-left > i:first-of-type {
+            left: 1rem;
+          }
+          .p-input-icon-left > .p-inputtext {
+            padding-left: 3rem;
+          }
+        }
+      }
+      .button_container {
+        // padding-left: 7rem;
+        margin-top: auto;
+        flex: 0 0 50px;
+        .btn_crear {
+          background-color: #024cac;
+          max-width: 750px;
+          margin: 0 auto;
+          border-radius: 28px;
+          color: white;
+          height: 50px;
+          text-transform: uppercase;
+          font-size: 0.9rem;
+          letter-spacing: 1px;
+        }
+      }
+      #login_footer {
+        color: #050717;
+        text-align: center;
+        margin-bottom: 0;
+        line-height: 25px;
+        margin-top: 25px;
+        font-size: 0.9rem;
+        flex: 0 0 25px;
+        a {
+          color: #050717;
+          font-weight: 600;
+        }
+      }
+    }
+  }
+}
+.rellenoimg {
+  background-color: white;
+  .block-back-img {
+    max-height: 60%;
+    top: 15%;
+    height: 60%;
+    position: relative;
+    z-index: 1;
+  }
+  .block-img {
+    max-height: 50%;
+    height: 50%;
+    position: absolute;
+    z-index: 2;
+    top: 20vh;
+    left: 25%;
+  }
+}
+// Small devices (landscape phones, 576px and up)
+@media (min-width: 576px) {
+}
+
+// Medium devices (tablets, 768px and up)
+@media (min-width: 1024px) {
+  #register_content {
+    height: calc(100vh - 90px);
+    #register_form_col {
+      .ingresa_tus_datos {
+        // display: none;
+      }
+      #register_data {
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        .data_form_container {
+          // padding-left: 7rem;
+          overflow: hidden;
+          padding-bottom: 1rem;
+          flex: 1;
+          #data_form {
+            height: 100%;
+            border-radius: 9px;
+            label {
+              color: #050c44;
+              font-weight: 600;
+              font-size: 0.9rem;
+              margin-bottom: 1rem;
+            }
+            .form-control {
+              height: 50px;
+              border-radius: 6px;
+              border: 1px solid #00000024 !important;
+              &::-webkit-input-placeholder,
+              ::placeholder {
+                color: rgba($color: #050c44, $alpha: 0.36);
+                font-size: 0.9rem;
+                font-weight: 500;
+              }
+            }
+            .p-input-icon-left > i:first-of-type {
+              left: 1rem;
+            }
+            .p-input-icon-left > .p-inputtext {
+              padding-left: 3rem;
+            }
+          }
+        }
+        .button_container {
+          // padding-left: 7rem;
+          margin-top: auto;
+          flex: 0 0 50px;
+          .btn_crear {
+            background-color: #024cac;
+            max-width: 750px;
+            margin: 0 auto;
+            border-radius: 28px;
+            color: white;
+            height: 50px;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+          }
+        }
+        #login_footer {
+          color: #050717;
+          text-align: center;
+          margin-bottom: 0;
+          line-height: 25px;
+          margin-top: 25px;
+          font-size: 0.9rem;
+          flex: 0 0 25px;
+          a {
+            color: #050717;
+            font-weight: 600;
+          }
+        }
+      }
+    }
+  }
+}
+
+// Large devices (desktops, 992px and up)
+@media (min-width: 992px) {
+}
+
+// Extra large devices (large desktops, 1200px and up)
+@media (min-width: 1200px) {
+  #register_content {
+    #register_form_col {
+      .ingresa_tus_datos {
+        // display: none;
+        flex: 0 0 50px;
+        padding-left: 7rem;
+      }
+      #register_data {
+        padding-left: 7rem;
+        .data_form_container {
+          // padding-left: 7rem;
+          overflow: hidden;
+          padding-bottom: 1rem;
+          flex: 1;
+          #data_form {
+            height: 100%;
+            border-radius: 9px;
+            label {
+              color: #000000;
+              font-weight: 600;
+              font-size: 0.9rem;
+              margin-bottom: 1rem;
+            }
+          }
+        }
+        .button_container {
+          // padding-left: 7rem;
+          margin-top: auto;
+          flex: 0 0 50px;
+          .btn_crear {
+            background-color: #024cac;
+            max-width: 750px;
+            text-transform: none;
+            letter-spacing: 0;
+          }
+        }
+        #login_footer {
+          color: #050c447a;
+          font-weight: 700;
+          a {
+            color: #050c447a;
+            font-weight: 700;
+          }
+        }
+      }
+    }
+  }
+}
+.control-error {
+  border-color: red !important;
+}
+.icon-float {
+  float: right;
+  right: -25px;
+  color: #01e9c2;
+  font-size: 22px;
+}
+.icon-float-2 {
+  float: right !important;
+  right: -12px;
+  color: #01e9c2;
+  font-size: 22px;
+  position: absolute;
+}
+.field-custom {
+  display: flex;
+  align-items: center;
+}

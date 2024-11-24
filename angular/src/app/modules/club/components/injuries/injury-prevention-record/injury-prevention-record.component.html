@@ -1,0 +1,475 @@
+<div class="row">
+  <div class="col-12">
+    <div class="card box-shadow">
+      <div class="card-body p-0">
+        <div class="injury_prevention_record_header view_header">
+          <span class="icon_left" routerLink="/club/injury-prevention"
+            ><i class="fas fa-chevron-left"></i>
+          </span>
+          <h6 class="font-weight-600 mb-0 mr-4 text-main view_header_title">
+            {{ "injury_prevention_record.title" | translate }}
+          </h6>
+        </div>
+        <div class="injury_prevention_record_content">
+          <!-- jugador -->
+          <div class="row">
+            <div class="col-12">
+              <div class="program_player">
+                <div class="my-3 col-12">
+                  <div
+                    *ngIf="injuryPrograms"
+                    class="col-12 row-download text-lg-right pr-0"
+                    style="height: 22.5px"
+                  >
+                    <i
+                      (click)="printInjuryPrograms()"
+                      class="fa fa-download fa-1x"
+                    ></i>
+                  </div>
+
+                  <div class="d-flex">
+                    <div>
+                      <p-skeleton
+                        shape="circle"
+                        size="110px"
+                        styleClass="mb-2"
+                        *ngIf="!injuryPrograms"
+                      ></p-skeleton>
+                      <div class="image" *ngIf="injuryPrograms">
+                        <img
+                          width="110px"
+                          height="110px"
+                          src="/assets/img/{{
+                            injuryPrograms.image ||
+                            injuryPrograms.gender.id === 1
+                              ? 'chico.png'
+                              : injuryPrograms.gender.id === 2
+                              ? 'chica.png'
+                              : 'chica.png'
+                          }}"
+                          class="rounded-circle"
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <div
+                        class="program_player_title text-main font-weight-600 mb-2"
+                        *ngIf="injuryPrograms"
+                      >
+                        {{ injuryPrograms.full_name }}
+                      </div>
+                      <p-skeleton
+                        shape="rectangle"
+                        height="15px"
+                        width="150px"
+                        styleClass="mb-2"
+                        *ngIf="!injuryPrograms"
+                      ></p-skeleton>
+                      <div class="club">
+                        <span>{{ injuryPrograms?.alias }}</span>
+                      </div>
+                      <div class="d-flex text-center">
+                        <div class="program_player_info mr-4">
+                          <div class="program_player_info_title text-left">
+                            <span>{{ "PLAYERS.LBL_ALTURA" | translate }}</span>
+                          </div>
+                          <div class="player_profile_info_desc">
+                            <span
+                              >{{
+                                injuryPrograms?.height
+                                  ? (injuryPrograms?.height | number : "1.0-0")
+                                  : "-"
+                              }}
+                              cm</span
+                            >
+                          </div>
+                        </div>
+                        <div class="program_player_info">
+                          <div class="program_player_info_title">
+                            <span>{{ "PLAYERS.LBL_PESO" | translate }}</span>
+                          </div>
+                          <div class="player_profile_info_desc">
+                            <span
+                              >{{
+                                injuryPrograms?.weight
+                                  ? (injuryPrograms?.weight | number : "1.0-1")
+                                  : "-"
+                              }}
+                              kg</span
+                            >
+                          </div>
+                        </div>
+                        <div class="program_player_info ml-4">
+                          <div class="program_player_info_title text-center">
+                            <span>{{ "PSYCHOLOGY.LBL_AGE" | translate }}</span>
+                          </div>
+                          <div class="player_profile_info_desc text-right">
+                            <span>
+                              {{
+                                injuryPrograms?.age ? injuryPrograms.age : "-"
+                              }}
+                              {{ "LBL_YEARS" | translate }}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- listado de lesiones -->
+          <div *ngIf="injuryPrograms" class="row no-gutters">
+            <div class="col-12">
+              <ng-container
+                *ngIf="injuryPrograms.injury_preventions.length > 0"
+              >
+                <p-carousel
+                  [value]="injuryPrograms.injury_preventions"
+                  [numVisible]="1"
+                  [numScroll]="1"
+                >
+                  <ng-template let-program pTemplate="item">
+                    <div class="program">
+                      <div class="program_details pr-0">
+                        <div class="row">
+                          <div class="col-12 mb-3 text-right">
+                            <!-- evaluar -->
+                            <button
+                              class="btn action_btn"
+                              (click)="evaluateProgram(program)"
+                              [disabled]="loading"
+                              *ngIf="!program.is_finished"
+                              pTooltip="{{
+                                'injury_prevention.strategy_injury_prevention'
+                                  | translate
+                              }}"
+                            >
+                              <img
+                                src="/assets/img/icons/done-all.svg"
+                                width="15px"
+                              />
+                            </button>
+                            <!-- editar -->
+                            <button
+                              class="btn action_btn"
+                              pTooltip="{{ 'LBL_PRINT' | translate }}"
+                              [disabled]="loading"
+                              (click)="printInjuryProgram(program)"
+                            >
+                              <i class="fa fa-download fa-1x"></i>
+                            </button>
+                            <!-- eliminar -->
+                            <button
+                              class="btn action_btn"
+                              pTooltip="{{ 'LBL_DELETE' | translate }}"
+                              (click)="deleteProgram(program)"
+                            >
+                              <img
+                                src="assets/img/icons/eliminar.svg"
+                                width="15px"
+                              />
+                            </button>
+                          </div>
+                          <div class="col-12 col-lg-4">
+                            <h6>
+                              {{
+                                "injury_prevention_record.start_date"
+                                  | translate
+                              }}
+                            </h6>
+                            <p>{{ program.created_at | transformTimestamp }}</p>
+                          </div>
+                          <div class="col-12 col-lg-4">
+                            <h6>
+                              {{
+                                "injury_prevention_record.end_date" | translate
+                              }}
+                            </h6>
+                            <p>
+                              {{
+                                program.end_date != null
+                                  ? (program.end_date | transformTimestamp)
+                                  : "-"
+                              }}
+                            </p>
+                          </div>
+                          <div class="col-12 col-lg-4">
+                            <h6>
+                              {{
+                                "injury_prevention_record.program_title"
+                                  | translate
+                              }}
+                            </h6>
+                            <p>{{ program.title }}</p>
+                          </div>
+                          <div class="col-12 col-lg-4">
+                            <h6>
+                              {{ "new_program.specialist_name" | translate }}
+                            </h6>
+                            <p>{{ program?.team_staff.full_name }}</p>
+                          </div>
+                          <div class="col-12 col-lg-4">
+                            <h6>
+                              {{
+                                "new_program.preventive_program_type"
+                                  | translate
+                              }}
+                            </h6>
+                            <p>{{ program?.preventive_program_type.name }}</p>
+                          </div>
+                          <div class="col-12 col-lg-4">
+                            <h6>
+                              {{ "new_program.location" | translate }}
+                            </h6>
+                            <p>{{ program?.injury_location.name }}</p>
+                          </div>
+                          <div class="col-12 col-lg-4">
+                            <h6>
+                              {{ "new_program.detailed_location" | translate }}
+                            </h6>
+                            <p>{{ program?.detailed_location }}</p>
+                          </div>
+                          <div class="col-12 col-lg-4">
+                            <h6>
+                              {{
+                                "new_program.preventive_program_description"
+                                  | translate
+                              }}
+                            </h6>
+                            <p>{{ program?.description }}</p>
+                          </div>
+                          <div class="col-12 col-lg-4">
+                            <h6>
+                              {{
+                                "injury_prevention_record.injury_total"
+                                  | translate
+                              }}
+                            </h6>
+                            <p>07</p>
+                          </div>
+                          <div class="col-12 col-lg-4">
+                            <h6>
+                              {{
+                                "injury_prevention_record.strategy_evaluation"
+                                  | translate
+                              }}
+                            </h6>
+                            <div
+                              class="text-aqua font-weight-600 d-flex align-items-center mb-3"
+                              *ngIf="program && program.is_finished == true"
+                            >
+                              <span
+                                class="mb-0 mr-3"
+                                *ngIf="program.evaluation_points !== null"
+                                >{{ program.evaluation_points }}/10</span
+                              >
+                              <span
+                                class="{{
+                                  program.evaluation_points >= 8
+                                    ? 'text-aqua'
+                                    : 'text-danger'
+                                }}"
+                                [innerHTML]="
+                                  program.evaluation_points >= 8
+                                    ? ('strategy_prevention.success_program'
+                                      | translate)
+                                    : ('strategy_prevention.failed_program'
+                                      | translate)
+                                "
+                              ></span>
+                            </div>
+                            <p
+                              class=""
+                              *ngIf="program && program.is_finished != true"
+                            >
+                              {{
+                                "injury_prevention.active_program" | translate
+                              }}
+                            </p>
+                            <div
+                              class="text-center"
+                              *ngIf="program && program.is_finished == true"
+                            >
+                              <img
+                                src="{{
+                                  images + 'images/rfd_injuries/good_work.svg'
+                                }}"
+                                alt=""
+                                *ngIf="program.evaluation_points >= 8"
+                                width="150px"
+                              />
+                              <img
+                                src="{{
+                                  images +
+                                    'images/rfd_injuries/work_not_been_good.svg'
+                                }}"
+                                alt=""
+                                *ngIf="program.evaluation_points < 8"
+                                width="150px"
+                              />
+                            </div>
+                            <!-- <p class="text-success">{{program.evaluation_points}}/10</p> -->
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </ng-template>
+                </p-carousel>
+              </ng-container>
+              <ng-container
+                *ngIf="injuryPrograms.injury_preventions.length <= 0"
+              >
+                <div class="row my-3">
+                  <div class="col-12 text-center">
+                    <h6 class="sindatos">
+                      {{ "LBL_SINREGISTROS" | translate }}
+                    </h6>
+                  </div>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+          <!-- skelectons listado de lesiones -->
+          <div class="row no-gutters" *ngIf="!injuryPrograms">
+            <div class="col-12">
+              <p-carousel
+                [value]="loadingItems"
+                [numVisible]="1"
+                [numScroll]="1"
+              >
+                <ng-template let-program pTemplate="item">
+                  <div class="program">
+                    <div class="program_details">
+                      <div class="row">
+                        <div class="col-12 col-lg-4">
+                          <h6>
+                            {{
+                              "injury_prevention_record.start_date" | translate
+                            }}
+                          </h6>
+                          <p-skeleton
+                            shape="rectangle"
+                            height="15px"
+                            width="50%"
+                            styleClass="mb-2"
+                          ></p-skeleton>
+                        </div>
+                        <div class="col-12 col-lg-4">
+                          <h6>
+                            {{
+                              "injury_prevention_record.end_date" | translate
+                            }}
+                          </h6>
+                          <p-skeleton
+                            shape="rectangle"
+                            height="15px"
+                            width="50%"
+                            styleClass="mb-2"
+                          ></p-skeleton>
+                        </div>
+                        <div class="col-12 col-lg-4">
+                          <h6>
+                            {{
+                              "new_program.preventive_program_title" | translate
+                            }}
+                          </h6>
+                          <p-skeleton
+                            shape="rectangle"
+                            height="15px"
+                            width="50%"
+                            styleClass="mb-2"
+                          ></p-skeleton>
+                        </div>
+                        <div class="col-12 col-lg-4">
+                          <h6>
+                            {{ "new_program.specialist_name" | translate }}
+                          </h6>
+                          <p-skeleton
+                            shape="rectangle"
+                            height="15px"
+                            width="50%"
+                            styleClass="mb-2"
+                          ></p-skeleton>
+                        </div>
+                        <div class="col-12 col-lg-4">
+                          <h6>
+                            {{
+                              "new_program.preventive_program_type" | translate
+                            }}
+                          </h6>
+                          <p-skeleton
+                            shape="rectangle"
+                            height="15px"
+                            width="50%"
+                            styleClass="mb-2"
+                          ></p-skeleton>
+                        </div>
+                        <div class="col-12 col-lg-4">
+                          <h6>
+                            {{ "new_program.location" | translate }}
+                          </h6>
+                          <p-skeleton
+                            shape="rectangle"
+                            height="15px"
+                            width="75%"
+                            styleClass="mb-2"
+                          ></p-skeleton>
+                        </div>
+                        <div class="col-12 col-lg-4">
+                          <h6>
+                            {{
+                              "injury_prevention_record.injury_total"
+                                | translate
+                            }}
+                          </h6>
+                          <p-skeleton
+                            shape="rectangle"
+                            height="15px"
+                            width="25%"
+                            styleClass="mb-2"
+                          ></p-skeleton>
+                        </div>
+                        <div class="col-12 col-lg-4">
+                          <h6>
+                            {{
+                              "injury_prevention_record.strategy_evaluation"
+                                | translate
+                            }}
+                          </h6>
+                          <p-skeleton
+                            shape="rectangle"
+                            height="15px"
+                            width="25%"
+                            styleClass="mb-2"
+                          ></p-skeleton>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </ng-template>
+              </p-carousel>
+            </div>
+          </div>
+          <div
+            class="row no-gutters"
+            *ngIf="injuryPrograms && injuryPrograms.length > 0"
+          >
+            <div class="col-12 text-center p-5">
+              {{ "LBL_SINREGISTROS" | translate }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<strategy-prevention-dialog
+  [visible]="strategyPrevention"
+  (close)="strategyPrevention = false"
+  [evaluatingProgram]="evaluatingProgram"
+  (evaluated)="getProgramsRecord(teamId, playerId)"
+>
+</strategy-prevention-dialog>

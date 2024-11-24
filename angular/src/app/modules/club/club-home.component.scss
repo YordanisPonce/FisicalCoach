@@ -1,0 +1,31 @@
+.menu_team {
+  margin-left: 60px;
+  max-width: 300px;
+  position: absolute;
+  display: none;
+}
+.menu_team > .team_sidebar {
+  box-shadow: 4px -15px 14px #00000024 !important;
+}
+.navbar_team {
+  margin-left: 0;
+  padding: 0;
+  background-color: #f9f9f9;
+  min-height: 100%;
+  overflow: hidden;
+}
+@media (min-width: 1200px) {
+  .menu_team {
+    position: fixed;
+    height: 100vh;
+    display: block;
+  }
+  .navbar_team {
+    margin-left: 360px;
+    padding: 10px;
+
+    &.noTeam {
+      margin-left: 300px;
+    }
+  }
+}

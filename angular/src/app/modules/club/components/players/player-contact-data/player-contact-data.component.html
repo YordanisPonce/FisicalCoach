@@ -1,0 +1,212 @@
+<div class="player_contact_data_form_container" style="margin: 2px">
+  <form
+    (ngSubmit)="onSubmit()"
+    [formGroup]="formDataContact"
+    id="player_contact_data_form"
+    *ngIf="formDataContact"
+    name="nomForm"
+  >
+    <div class="row pb-2">
+      <div class="mb-3 col-12 col-md-6 my-3">
+        <label class="" for="country">{{
+          "CLUB.LBL_COUNTRY" | translate
+        }}</label>
+        <p-dropdown
+          (onChange)="handleCities($event)"
+          [filter]="true"
+          [options]="listCountries"
+          [styleClass]="'w-100 form-control'"
+          aria-describedby="inputGroup-sizing-default"
+          formControlName="country_id"
+          id="country"
+          placeholder="{{ 'LBL_SELECCIONE' | translate }}"
+        ></p-dropdown>
+        <div
+          *ngIf="submitted && f.country_id.invalid"
+          class="form-text text-danger"
+        >
+          {{ "CLUB.LBL_COUNTRY" | translate }} {{ "LBL_REQUERIDO" | translate }}
+        </div>
+      </div>
+
+      <div
+        *ngIf="listCities.length > 0 || !playerContactData.id"
+        class="mb-3 col-12 col-md-6 my-3"
+      >
+        <label class="" for="province">{{
+          "CLUB.LBL_STATE" | translate
+        }}</label>
+        <p-dropdown
+          [filter]="true"
+          [options]="listCities"
+          [styleClass]="'w-100 form-control'"
+          aria-describedby="inputGroup-sizing-default"
+          formControlName="province_id"
+          id="province"
+          placeholder="{{ 'LBL_SELECCIONE' | translate }}"
+        ></p-dropdown>
+        <div
+          *ngIf="submitted && f.province_id.invalid"
+          class="form-text text-danger"
+        >
+          {{ "CLUB.LBL_STATE" | translate }}
+          {{ "LBL_REQUERIDO" | translate }}
+        </div>
+      </div>
+
+      <div class="mb-3 col-12 col-md-6 my-3">
+        <label class="" for="city">{{ "CLUB.LBL_CITY" | translate }}</label>
+        <input
+          aria-describedby="inputGroup-sizing-default"
+          aria-label="Default"
+          class="form-control"
+          formControlName="city"
+          id="city"
+          placeholder="{{ 'LBL_ESCRIBEAQI' | translate }}"
+          type="text"
+        />
+        <div *ngIf="submitted && f.city.invalid" class="form-text text-danger">
+          {{ "CLUB.LBL_CITY" | translate }} {{ "LBL_REQUERIDO" | translate }}
+        </div>
+      </div>
+
+      <div class="mb-3 col-12 col-md-6 my-3">
+        <label class="" for="postal_code">{{
+          "CLUB.LBL_POSTALCODE" | translate
+        }}</label>
+        <input
+          aria-describedby="inputGroup-sizing-default"
+          aria-label="Default"
+          class="form-control input-rounded"
+          formControlName="postal_code"
+          id="postal_code"
+          placeholder="{{ 'LBL_ESCRIBEAQI' | translate }}"
+          type="text"
+          pKeyFilter="alphanum"
+        />
+        <div
+          *ngIf="submitted && f.postal_code.invalid"
+          class="form-text text-danger"
+        >
+          {{ "CLUB.LBL_POSTALCODE" | translate }}
+          {{ "LBL_REQUERIDO" | translate }}
+        </div>
+      </div>
+
+      <div class="mb-3 col-12 col-md-6 my-3">
+        <label class="" for="street">{{
+          "CLUB.LBL_ADDRESS" | translate
+        }}</label>
+        <input
+          aria-describedby="inputGroup-sizing-default"
+          aria-label="Default"
+          class="form-control input-rounded"
+          formControlName="street"
+          id="street"
+          placeholder="{{ 'LBL_ESCRIBEAQI' | translate }}"
+          type="text"
+        />
+        <div
+          *ngIf="submitted && f.street.invalid"
+          class="form-text text-danger"
+        >
+          {{ "CLUB.LBL_ADDRESS" | translate }} {{ "LBL_REQUERIDO" | translate }}
+        </div>
+      </div>
+
+      <div class="mb-3 col-12 col-md-6 my-3">
+        <label class="">{{ "MEMBERS.LBL_MOVIL" | translate }}</label>
+        <p-chips
+          [addOnBlur]="true"
+          formControlName="mobile_phone"
+          pKeyFilter="num"
+          placeholder="+12345678"
+          separator=","
+        ></p-chips>
+        <div
+          *ngIf="submitted && f.mobile_phone.invalid"
+          class="form-text text-danger"
+        >
+          {{ "MEMBERS.LBL_MOVIL" | translate }}
+          {{ "LBL_REQUERIDO" | translate }}
+        </div>
+      </div>
+      <div class="mb-3 col-12 col-md-6 my-3">
+        <label class="">{{ "MEMBERS.LBL_TELEFONO" | translate }}</label>
+        <p-chips
+          [addOnBlur]="true"
+          formControlName="phone"
+          pKeyFilter="num"
+          placeholder="+12345678"
+          separator=","
+        ></p-chips>
+        <div *ngIf="submitted && f.phone.invalid" class="form-text text-danger">
+          {{ "MEMBERS.LBL_TELEFONO" | translate }}
+          {{ "LBL_REQUERIDO" | translate }}
+        </div>
+      </div>
+
+      <div class="mb-3 col-12 col-md-6 my-3">
+        <label class="" for="email">{{
+          "MEMBERS.LBL_EMAIL" | translate
+        }}</label>
+        <input
+          aria-describedby="inputGroup-sizing-default"
+          aria-label="Default"
+          class="form-control input-rounded"
+          formControlName="email"
+          id="email"
+          placeholder="{{ 'LBL_ESCRIBEAQI' | translate }}"
+          type="email"
+        />
+        <div *ngIf="submitted && f.email.invalid" class="form-text text-danger">
+          {{ "MEMBERS.LBL_EMAIL" | translate }}
+          {{ "LBL_REQUERIDO" | translate }}
+        </div>
+      </div>
+
+      <div *ngIf="role === 'teacher'" class="mb-3 col-md-6 my-3">
+        <label class="" for="email">{{
+          "new_alumn.academic_email" | translate
+        }}</label>
+        <input
+          aria-describedby="inputGroup-sizing-default"
+          aria-label="Default"
+          class="form-control input-rounded"
+          formControlName="academical_emails"
+          id="academical_emails"
+          placeholder="{{ 'LBL_ESCRIBEAQI' | translate }}"
+          type="email"
+        />
+      </div>
+
+      <div *ngIf="role === 'teacher'" class="mb-3 col-md-6 my-3">
+        <label class="" for="email">{{
+          "new_alumn.virtual_space" | translate
+        }}</label>
+        <input
+          aria-describedby="inputGroup-sizing-default"
+          aria-label="Default"
+          class="form-control input-rounded"
+          formControlName="virtual_space"
+          id="virtual_space"
+          placeholder="{{ 'LBL_ESCRIBEAQI' | translate }}"
+          type="text"
+        />
+      </div>
+    </div>
+    <div *ngIf="playerContactData.id" class="row">
+      <div class="col-12">
+        <button
+          [loading]="saving"
+          class="btn btn-primary btn-block py-2 save_btn"
+          label="{{ 'PLAYERS.BTN_GUARDAR' | translate }}"
+          pButton
+          tooltipPosition="top"
+          pTooltip="{{ 'PLAYERS.BTN_GUARDAR' | translate }}"
+          type="submit"
+        ></button>
+      </div>
+    </div>
+  </form>
+</div>

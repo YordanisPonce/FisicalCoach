@@ -1,0 +1,47 @@
+<div class="h-100" id="wrapper">
+  <div id="page-content-wrapper">
+    <app-navbar></app-navbar>
+    <div class="row" style="margin-top: 10px">
+      <div class="col-12 col-xl-8" *ngIf="!showAllActivities">
+        <app-carousel></app-carousel>
+        <!-- <app-ultimos-hilos></app-ultimos-hilos> -->
+        <app-partidos-recientes
+          *ngIf="role === 'sport'"
+        ></app-partidos-recientes>
+
+        <!-- <app-last-evaluations
+          *ngIf="role === 'teacher'"
+          [evaluations]="recentEvaluations"
+          [loading]="loadingEvaluations"
+        ></app-last-evaluations> -->
+      </div>
+      <div class="col-12 col-xl-4">
+        <app-activity-component
+          [list]="activitieList"
+          [loading]="loading"
+          [loadingScroll]="loadingScroll"
+          [seeAllActivities]="showAllActivities"
+          (showAllActivities)="showAllActivities = $event"
+          (seeMoreActivities)="refreshActivities()"
+        ></app-activity-component>
+      </div>
+    </div>
+  </div>
+</div>
+<app-licence-dialog
+  *ngIf="licences.length > 0"
+  [(visible)]="licenceDialog"
+  [licences]="licences"
+  (refreshList)="getUserLicences()"
+></app-licence-dialog>
+
+<p-dialog
+  *ngIf="addSpaceDialog"
+  [(visible)]="addSpaceDialog"
+  [modal]="true"
+  header="{{ 'academySidebar.create_new_club' | translate }}"
+  id="add_space_dialog"
+  maskStyleClass="purple_mask"
+>
+  <app-add-club></app-add-club>
+</p-dialog>

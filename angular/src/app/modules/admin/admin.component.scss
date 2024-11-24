@@ -1,0 +1,38 @@
+.content_admin {
+    padding: 0;
+    background-color: #f9f9f9;
+    min-height: 100%;
+  }
+  /* #menu_academy {
+    width: 100%;
+  } */
+  
+  @media (min-width: 1200px) {
+    /* .sidebar-btn {
+      display: none;
+    } */
+    .content_admin {
+      padding: 10px 10px 10px 355px;
+  
+      /* &.is_club_empty {
+        padding: 10px 10px 10px 315px !important;
+      } */
+    }
+    /* #menu_academy {
+      position: static;
+      top: 0;
+      z-index: 1;
+      left: 0;
+      width: 100%;
+    } */
+  }
+  
+  @media (max-width: 1200px) {
+    .bg-content {
+      background-color: #fff;
+    }
+  
+    /* .academy-wrapper {
+      display: none;
+    } */
+  }

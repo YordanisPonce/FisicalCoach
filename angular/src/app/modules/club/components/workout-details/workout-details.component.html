@@ -1,0 +1,448 @@
+<div class="row">
+  <div class="col-12 col-lg-9">
+    <div class="card box-shadow">
+      <div class="card-body p-0 container-fluid">
+        <div class="workout_details">
+          <div
+            class="workout_image"
+            [style]="
+              'background-image: url(' +
+              exercise?.sport?.image_exercise?.full_url +
+              ')'
+            "
+            *ngIf="!exercise?.image"
+          >
+            <button class="btn back_btn" (click)="previousPage()">
+              <i class="pi pi-angle-left"></i>
+            </button>
+          </div>
+
+          <div
+            class="workout_image"
+            [style]="'background-image: url(' + exercise?.image?.full_url + ')'"
+            *ngIf="exercise?.image"
+          >
+            <button class="btn back_btn" (click)="previousPage()">
+              <i class="pi pi-angle-left"></i>
+            </button>
+          </div>
+
+          <div class="workout_header">
+            <div class="row w-100 align-items-center justify-content-between">
+              <div class="col-12 col-sm-2">
+                <h6 class="workout_author mb-0">
+                  {{ exercise?.user?.full_name }}
+                </h6>
+                <h6 class="workout_name mt-3" *ngIf="!loadingExercise">
+                  {{ exercise?.title }}
+                </h6>
+
+                <h6 *ngIf="loadingExercise">
+                  <p-skeleton width="100px"></p-skeleton>
+                </h6>
+              </div>
+
+              <div class="col-12 col-sm-2">
+                <h6 class="difficulty mb-0 text-center">
+                  {{ "workout.whatDifficultyHadTheExercise" | translate }}
+                </h6>
+
+                <div class="mt-3 text-center">
+                  <p-rating
+                    [(ngModel)]="exerciseDifficulty"
+                    [cancel]="false"
+                    [disabled]="!isTrainingRoute"
+                  ></p-rating>
+                </div>
+              </div>
+
+              <div
+                class="col-12 col-sm-2 d-flex flex-column align-items-center"
+              >
+                <h6 class="difficulty mb-0">
+                  {{ "workout.intensity" | translate }}
+                </h6>
+
+                <img
+                  src="{{ resources + '/face/' + intensityIcon?.icon }}"
+                  alt="{{ intensityIcon.text }}"
+                  width="25px"
+                  class="ml-2 mt-3 pointer"
+                  *ngIf="intensityIcon"
+                  pTooltip="{{
+                    'ratingExercise.' + intensityIcon.text | translate
+                  }}"
+                  (click)="isTrainingRoute && (showRatingDialog = true)"
+                />
+
+                <span
+                  *ngIf="!intensityIcon"
+                  (click)="isTrainingRoute && (showRatingDialog = true)"
+                  class="ml-2 workout_name mt-3"
+                  pTooltip="{{
+                    (isTrainingRoute ? 'ratingExercise.editIntensity' : '')
+                      | translate
+                  }}"
+                  >N/A
+                </span>
+              </div>
+
+              <div class="col-12 col-sm-2 text-center">
+                <h6 class="workout_author mb-3">
+                  {{ "new_exercises.distribution" | translate }}
+                </h6>
+
+                <div *ngIf="exercise?.distribution?.name">
+                  <img
+                    [src]="getDistributionImage(exercise.distribution.code)"
+                    alt="distribution"
+                    style="width: 25px; height: 25px"
+                    pTooltip="{{ exercise.distribution.name }}"
+                    tooltipPosition="top"
+                  />
+                </div>
+                <span
+                  class="workout_name mt-3"
+                  *ngIf="!exercise?.distribution?.name"
+                >
+                  N/A
+                </span>
+              </div>
+
+              <div class="col-12 col-sm-2 text-center">
+                <h6 class="workout_author mb-3">
+                  {{ "new_exercises.dimensions" | translate }}
+                </h6>
+                <span class="workout_name" *ngIf="!loadingExercise">
+                  {{
+                    exercise?.dimentions === "null" || !exercise?.dimentions
+                      ? "N/A"
+                      : exercise?.dimentions
+                  }}
+                </span>
+                <span class="workout_name" *ngIf="loadingExercise">N/A</span>
+              </div>
+
+              <div
+                class="col-12 col-sm-2 d-flex flex-column align-items-center"
+                *ngIf="!isTrainingRoute"
+              >
+                <span
+                  class="pointer ml-2"
+                  (click)="handleLike(exercise?.like)"
+                  pTooltip="{{ 'workout.like' | translate }}"
+                >
+                  <i class="pi pi-heart" *ngIf="!exercise?.like"></i>
+                  <img
+                    src="/assets/img/icons/heart-icon.png"
+                    width="15px"
+                    class="mb-1"
+                    *ngIf="exercise?.like"
+                  />
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="workout_body">
+            <div
+              class="workout_content"
+              *ngIf="exercise?.contents && !exercise?.content_blocks?.length"
+            >
+              <label class="">{{ "workout.contents" | translate }}</label>
+              <div
+                class="workout_icons"
+                *ngIf="
+                  exercise?.contents &&
+                  exercise.contents.length > 0 &&
+                  !loadingExercise
+                "
+              >
+                <div
+                  class="content-img"
+                  *ngFor="let content of exercise.contents"
+                >
+                  <img src="{{ content.image.full_url }}" alt="" />
+                  <span>{{ content.name }}</span>
+                </div>
+              </div>
+
+              <div class="workout_icons" *ngIf="loadingExercise">
+                <div
+                  class="d-flex align-items-center mb-3"
+                  *ngFor="let content of [1, 2, 3]"
+                >
+                  <p-skeleton shape="circle" size="25px"></p-skeleton>
+                  <p-skeleton width="120px" class="ml-4"></p-skeleton>
+                </div>
+              </div>
+
+              <div
+                class="workout_icons align-items-center"
+                *ngIf="exercise?.contents?.length === 0 && !loadingExercise"
+              >
+                <p class="m-0">{{ "exercise.noContent" | translate }}</p>
+              </div>
+
+              <div class="text-center">
+                <button
+                  *ngIf="
+                    exercise?.contents &&
+                    exercise.contents.length > 0 &&
+                    !loadingExercise
+                  "
+                  class="btn btn-primary see-contents-btn mx-2 save-btn"
+                  (click)="showTargetsAndObjetives = true"
+                >
+                  <span>{{ "workout.seeContents" | translate }}</span>
+                </button>
+              </div>
+            </div>
+            <div
+              class="workout_content"
+              *ngIf="
+                (exercise?.content_blocks &&
+                  exercise.content_blocks.length > 0) ||
+                exercise?.exercise_education_level_id
+              "
+            >
+              <label class="">{{
+                "exercise.educationalLevel" | translate
+              }}</label>
+              <div
+                class="workout_icons"
+                *ngIf="exercise?.exercise_education_level && !loadingExercise"
+              >
+                <div class="content-img">
+                  <span>{{ exercise.exercise_education_level.name }}</span>
+                </div>
+              </div>
+
+              <div class="workout_icons" *ngIf="loadingExercise">
+                <div
+                  class="d-flex align-items-center mb-3"
+                  *ngFor="let content of [1, 2, 3]"
+                >
+                  <p-skeleton shape="circle" size="25px"></p-skeleton>
+                  <p-skeleton width="120px" class="ml-4"></p-skeleton>
+                </div>
+              </div>
+
+              <div
+                class="workout_icons align-items-center"
+                *ngIf="!exercise?.exercise_education_level && !loadingExercise"
+              >
+                <p class="m-0">{{ "exercise.noEducationLevel" | translate }}</p>
+              </div>
+
+              <div class="text-center center-content-button">
+                <button
+                  *ngIf="
+                    exercise?.content_blocks &&
+                    exercise.content_blocks.length > 0 &&
+                    !loadingExercise
+                  "
+                  class="btn btn-primary see-contents-btn mx-2 save-btn"
+                  (click)="showTargetsAndObjetives = true"
+                >
+                  <span>{{ "workout.seeContents" | translate }}</span>
+                </button>
+              </div>
+            </div>
+            <div class="row workout_description" *ngIf="!loadingExercise">
+              <div class="col-12">
+                <label class="mb-3">{{
+                  "workout.description" | translate
+                }}</label>
+                <p>
+                  {{ exercise?.description || "N/A" }}
+                </p>
+              </div>
+              <div
+                class="col-12 mtop-5 mb-3 d-flex align-items-center justify-content-center"
+              >
+                <div
+                  class="d-flex flex-column flex-sm-row sm=block justify-content-center"
+                >
+                  <button
+                    class="btn btn-primary save-btn mx-2 my-2 my-sm-0"
+                    (click)="downloadPdf()"
+                    [disabled]="loadingSinglePDF"
+                  >
+                    <span>{{ "workout.downloadPdf" | translate }}</span>
+                  </button>
+                  <button
+                    class="btn btn-primary save-btn mx-2 my-2 my-sm-0"
+                    (click)="open3DIframe()"
+                  >
+                    <span>{{ "workout.see" | translate }}</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="row workout_description" *ngIf="loadingExercise">
+              <div class="col-6">
+                <p *ngFor="let item of [1, 2, 3, 4, 5]">
+                  <p-skeleton width="450px" class="mb-1"></p-skeleton>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-12 col-lg-3">
+    <div class="card box-shadow">
+      <div class="card-body p-0 container-fluid">
+        <div class="information">
+          <div class="information_header">
+            <span>{{ "workout.information" | translate }}</span>
+          </div>
+          <form [formGroup]="workoutForm" (submit)="submit()">
+            <div class="information_body">
+              <div class="row">
+                <div class="col-12 mb-5">
+                  <div class="exercise-item-title">
+                    <label>
+                      {{ "workout.duration_exercise" | translate }}</label
+                    >
+                  </div>
+
+                  <p-inputMask
+                    mask="99:99"
+                    placeholder="00:00"
+                    class="form-control"
+                    formControlName="duration"
+                  ></p-inputMask>
+                </div>
+
+                <div class="col-12 mb-4">
+                  <div class="mt-2 exercise-item-title">
+                    <label>{{ "workout.series" | translate }}</label>
+                  </div>
+
+                  <label class="mt-3">{{ "workout.number" | translate }}</label>
+                  <input
+                    class="form-control mt-0"
+                    placeholder="20"
+                    aria-label="Default"
+                    aria-describedby="inputGroup-sizing-default"
+                    formControlName="series"
+                  />
+
+                  <label class="mt-3">{{ "workout.rest" | translate }}</label>
+                  <input
+                    class="form-control mt-0"
+                    placeholder="{{ 'workout.restBetweenSeries' | translate }}"
+                    aria-label="Default"
+                    aria-describedby="inputGroup-sizing-default"
+                    formControlName="break_series"
+                  />
+                </div>
+
+                <div class="col-12 mb-5">
+                  <div class="mt-2 exercise-item-title">
+                    <label>{{ "workout.repetitions" | translate }}</label>
+                  </div>
+
+                  <label class="mt-3">{{ "workout.number" | translate }}</label>
+                  <input
+                    class="form-control mt-0"
+                    placeholder="{{ 'workout.number_repetitions' | translate }}"
+                    aria-label="Default"
+                    aria-describedby="inputGroup-sizing-default"
+                    formControlName="repetitions"
+                  />
+
+                  <div class="mt-3">
+                    <label>{{ "workout.duration" | translate }}</label>
+                  </div>
+                  <input
+                    class="form-control mt-0"
+                    placeholder="{{ 'workout.repetitionDuration' | translate }}"
+                    aria-label="Default"
+                    aria-describedby="inputGroup-sizing-default"
+                    formControlName="duration_repetitions"
+                  />
+
+                  <div class="mt-3">
+                    <label>{{ "workout.rest" | translate }}</label>
+                  </div>
+                  <input
+                    class="form-control mt-0"
+                    placeholder="{{
+                      'workout.restBetweenRepetitions' | translate
+                    }}"
+                    aria-label="Default"
+                    aria-describedby="inputGroup-sizing-default"
+                    formControlName="break_repetitions"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="information_action" *ngIf="isTrainingRoute">
+              <button type="submit" class="btn btn-primary" *ngIf="!loading">
+                {{ "workout.update_exercise" | translate }}
+              </button>
+
+              <button
+                type="submit"
+                class="btn btn-primary"
+                *ngIf="loading"
+                disabled
+              >
+                {{ "LBL_GUARDANDO" | translate }}
+              </button>
+
+              <button
+                type="button"
+                class="btn btn-main"
+                (click)="showGroupDialog = true"
+              >
+                {{ "training_session.seeWorkoutGroups" | translate }}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-workout-groups-dialog
+  [visible]="showGroupDialog"
+  [sessionId]="details.exercise_session_id"
+  *ngIf="showGroupDialog"
+  (close)="showGroupDialog = false"
+>
+</app-workout-groups-dialog>
+
+<app-targets-and-objetives-dialog
+  [visible]="showTargetsAndObjetives"
+  [contentBlockList]="exercise.content_blocks"
+  *ngIf="showTargetsAndObjetives"
+  [workoutContentList]="workoutContentList"
+  (close)="showTargetsAndObjetives = false"
+>
+</app-targets-and-objetives-dialog>
+
+<app-new-workout-dialog
+  *ngIf="show3dDialog"
+  [visible]="show3dDialog"
+  (dismiss)="cerrarModalIframe($event)"
+  (close)="close3DModal($event)"
+  [urlTeam]="urlIframe"
+  [exerciseCreated]="exerciseCreated"
+>
+</app-new-workout-dialog>
+
+<app-rating-exercise-dialog
+  *ngIf="showRatingDialog"
+  [visible]="showRatingDialog"
+  [ratingIcons]="ratingIcons"
+  (close)="showRatingDialog = false"
+  (setRatingValue)="getIntensity($event)"
+>
+</app-rating-exercise-dialog>

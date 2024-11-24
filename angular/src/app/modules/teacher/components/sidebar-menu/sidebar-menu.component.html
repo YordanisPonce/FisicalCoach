@@ -1,0 +1,61 @@
+<div class="team_sidebar">
+  <div class="team_sidebar_items mb-0">
+    <a
+      (click)="clickItem()"
+      [ngClass]="{ 'main-bg': isAcademyPath }"
+      class="team_sidebar_header"
+      routerLink="{{ role !== 'teacher' ? '/teacher/home' : '/club/home' }}"
+    >
+      <div class="sidebar-item-img" style="flex: 0 0 45px; height: 45px">
+        <p-avatar
+          *ngIf="team.image && team.image.full_url; else showColor"
+          image="{{ team.image.full_url }}"
+          shape="circle"
+          styleClass="large"
+        ></p-avatar>
+
+        <ng-template #showColor>
+          <div
+            *ngIf="team?.color"
+            [style]="'background-color:' + team.color"
+            class="color"
+          ></div>
+        </ng-template>
+      </div>
+      <div
+        [ngClass]="{ 'main-text': !isAcademyPath, 'text-white': isAcademyPath }"
+        class="ml-3 sidebar-item-text font-weight-600"
+      >
+        <span>{{ team?.name }}</span>
+      </div>
+    </a>
+    <div class="sidebar_items_container">
+      <p-scrollPanel [style]="{ width: '100%', height: 'inherit' }" class="p-0">
+        <ul class="mb-0">
+          <li
+            (click)="clickItem()"
+            *ngFor="let option of teamOptions"
+            [ngClass]="{ 'selected-path-bg': path.includes(option.route) }"
+            [routerLink]="option.route"
+            class="team_sidebar_item"
+          >
+            <div
+              [ngClass]="{ 'selected-path': path.includes(option.route) }"
+              class="d-flex align-items-center"
+            >
+              <span class="mr-3">
+                <img
+                  alt="{{ option.name | translate }}"
+                  class="team-text"
+                  loading="lazy"
+                  src="{{ urlBase + 'images/menu' + option.icon }}"
+                  width="22px"
+              /></span>
+              {{ "nav_bar." + option.name | translate }}
+            </div>
+          </li>
+        </ul>
+      </p-scrollPanel>
+    </div>
+  </div>
+</div>

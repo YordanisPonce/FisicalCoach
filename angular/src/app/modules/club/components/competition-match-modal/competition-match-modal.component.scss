@@ -1,0 +1,112 @@
+:host ::ng-deep #add_space_dialog,
+:host ::ng-deep #match_dialog {
+  .p-dialog {
+    //   min-width: 360px;
+    width: 420px;
+  }
+  .p-dialog-header {
+    //   min-width: 360px;
+    display: none;
+  }
+  .p-dialog-content {
+    overflow: unset;
+    padding: 47px 25px 10px 25px;
+    border-radius: 18px;
+  }
+}
+
+.match_dialog {
+  border-radius: 18px;
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+  // opacity: 0.1;
+  .match_dialog_info {
+    display: flex;
+    padding: 2rem 2rem 1rem;
+    .league_name {
+      color: #050c44;
+      font-weight: 600;
+    }
+    .championship {
+      color: #050c44;
+      opacity: 0.56;
+    }
+  }
+  .last_game {
+    // padding: 2rem 2.5rem;
+    display: flex;
+    text-align: center;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    .last_game_tag {
+      position: absolute;
+      top: -7.5px;
+      height: 15px;
+      left: calc(50% - 50px);
+      background-color: white;
+      width: 100px;
+      color: #050c4456;
+    }
+    .score {
+      padding-top: 1rem;
+      .result {
+        margin-bottom: 1rem;
+      }
+    }
+  }
+  .match_border {
+    border-top: 1px solid #050c441a;
+    margin-top: 20px;
+  }
+  .match_dialog_footer {
+    border-top: 1px solid #050c441a;
+    text-align: center;
+    padding: 2rem 0.5rem 0.5rem 0.5rem;
+    margin-top: 20px;
+    a {
+      color: #024cac;
+      font-weight: 600;
+      font-size: 0.9rem;
+      text-decoration: none;
+    }
+  }
+}
+
+.match_info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  .time {
+    font-size: 1.45rem;
+    font-weight: 700;
+    display: block;
+    position: relative;
+    margin-bottom: 0.25rem;
+  }
+  .separator {
+    width: 45px;
+    border: 2px solid #024cac;
+    margin: 0 auto 1rem;
+  }
+}
+
+.match_detail {
+  &_footer {
+    text-align: center;
+    margin-top: 20px;
+  }
+  &_text {
+    margin: 4px 0;
+
+    span {
+      color: #050c44;
+      opacity: 0.57;
+      font-size: 14px;
+    }
+  }
+}
+
+.team {
+  width: 150px;
+}

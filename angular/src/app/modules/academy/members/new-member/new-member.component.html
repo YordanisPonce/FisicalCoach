@@ -1,0 +1,268 @@
+<form
+  *ngIf="!showImagen"
+  (ngSubmit)="onSubmit()"
+  [formGroup]="formMember"
+  id="idFormMember"
+  name="nomForm"
+>
+  <div class="row">
+    <!-- name -->
+    <div class="mb-3 col-12">
+      <label for="name">{{ "MEMBERS.LBL_NOMBRE" | translate }}</label>
+      <input
+        class="form-control"
+        id="name"
+        [placeholder]="'LBL_ESCRIBEAQI' | translate"
+        formControlName="full_name"
+        sin-numeros-reactive
+        aria-label="Default"
+        aria-describedby="inputGroup-sizing-default"
+        [ngClass]="{
+          'ng-invalid ng-dirty is-invalid':
+            (f.full_name.invalid &&
+              (f.full_name.dirty || f.full_name.touched)) ||
+            (f.full_name.invalid && submitted)
+        }"
+      />
+      <div *ngIf="f.full_name?.errors" class="invalid-feedback">
+        {{ "MEMBERS.LBL_NOMBRE" | translate }} {{ "LBL_REQUERIDO" | translate }}
+      </div>
+    </div>
+
+    <!-- email -->
+    <div class="mb-3 col-12">
+      <label for="name">{{ "MEMBERS.LBL_EMAIL" | translate }}</label>
+      <input
+        class="form-control"
+        id="name"
+        type="email"
+        [placeholder]="'LBL_ESCRIBEAQI' | translate"
+        formControlName="email"
+        aria-label="Default"
+        aria-describedby="inputGroup-sizing-default"
+        [ngClass]="{
+          'ng-invalid ng-dirty is-invalid':
+            (f.email.invalid && (f.email.dirty || f.email.touched)) ||
+            (f.email.invalid && submitted)
+        }"
+      />
+      <div *ngIf="f.email?.errors" class="invalid-feedback">
+        {{ "MEMBERS.LBL_EMAIL" | translate }} {{ "LBL_REQUERIDO" | translate }}
+      </div>
+    </div>
+
+    <!-- area -->
+    <div class="mb-3 col-12">
+      <label for="job_area">{{ "MEMBERS.LBL_AREA" | translate }}</label>
+      <p-dropdown
+        [filter]="true"
+        [options]="listJobArea"
+        aria-describedby="inputGroup-sizing-default"
+        [styleClass]="'w-100 form-control'"
+        [ngClass]="{
+          'ng-invalid ng-dirty is-invalid':
+            (f.jobs_area_id.invalid &&
+              (f.jobs_area_id.dirty || f.jobs_area_id.touched)) ||
+            (f.jobs_area_id.invalid && submitted)
+        }"
+        formControlName="jobs_area_id"
+        id="job_area"
+        placeholder="{{ 'LBL_SELECCIONE' | translate }}"
+        optionValue="id"
+        optionLabel="name"
+        (onChange)="setResponsabilityItems()"
+      ></p-dropdown>
+      <div *ngIf="f.jobs_area_id?.errors" class="invalid-feedback">
+        {{ "MEMBERS.LBL_AREA" | translate }} {{ "LBL_REQUERIDO" | translate }}
+      </div>
+    </div>
+
+    <!-- cargo/responsabilidad -->
+    <div class="mb-3 col-12" *ngIf="responsabilityItems != null">
+      <label for="job">{{
+        "MEMBERS.LBL_CARGORESPOSABILIDAD" | translate
+      }}</label>
+      <p-dropdown
+        [filter]="true"
+        [options]="responsabilityItems"
+        aria-describedby="inputGroup-sizing-default"
+        [styleClass]="'w-100 form-control'"
+        placeholder="{{ 'LBL_SELECCIONE' | translate }}"
+        optionLabel="name"
+        *ngIf="responsabilityItems != null"
+        [ngModelOptions]="{ standalone: true }"
+        [(ngModel)]="selectedResponsability"
+        (onChange)="setResponsabilityValue()"
+        [ngClass]="{
+          'ng-invalid ng-dirty is-invalid':
+            (f.position_staff_id.invalid &&
+              (f.position_staff_id.dirty || f.position_staff_id.touched)) ||
+            (f.position_staff_id.invalid && submitted)
+        }"
+      ></p-dropdown>
+      <div *ngIf="f.position_staff_id?.errors" class="invalid-feedback">
+        {{ "MEMBERS.LBL_CARGORESPOSABILIDAD" | translate }}
+        {{ "LBL_REQUERIDO" | translate }}
+      </div>
+
+      <input
+        class="form-control mt-3"
+        id="job"
+        [placeholder]="
+          ('LBL_ESCRIBIR' | translate) +
+          ' ' +
+          ('MEMBERS.LBL_CARGORESPOSABILIDAD' | translate).toLowerCase() +
+          '...'
+        "
+        formControlName="responsibility"
+        sin-numeros-reactive
+        aria-label="Default"
+        aria-describedby="inputGroup-sizing-default"
+        *ngIf="
+          selectedResponsability != null &&
+          selectedResponsability.code.includes('other')
+        "
+      />
+      <div *ngIf="f.responsibility?.errors" class="invalid-feedback">
+        {{ "MEMBERS.LBL_CARGORESPOSABILIDAD" | translate }}
+        {{ "LBL_REQUERIDO" | translate }}
+      </div>
+    </div>
+
+    <!-- sexo -->
+    <div class="mb-3 col-12">
+      <label for="gender">{{ "MEMBERS.LBL_SEXO" | translate }}</label>
+      <p-dropdown
+        [filter]="false"
+        [options]="listGender"
+        aria-describedby="inputGroup-sizing-default"
+        [styleClass]="'w-100 form-control'"
+        [ngClass]="{
+          'ng-invalid ng-dirty is-invalid':
+            (f.gender_id.invalid &&
+              (f.gender_id.dirty || f.gender_id.touched)) ||
+            (f.gender_id.invalid && submitted)
+        }"
+        formControlName="gender_id"
+        id="gender"
+        placeholder="{{ 'LBL_SELECCIONE' | translate }}"
+      ></p-dropdown>
+      <div *ngIf="f.gender_id?.errors" class="invalid-feedback">
+        {{ "MEMBERS.LBL_SEXO" | translate }} {{ "LBL_REQUERIDO" | translate }}
+      </div>
+    </div>
+  </div>
+  <div>
+    <ul class="step_markers">
+      <li>
+        <span class="step_marker active"></span>
+      </li>
+      <li>
+        <span class="step_marker" (click)="onSubmit()"></span>
+      </li>
+    </ul>
+  </div>
+  <div class="row mt-4">
+    <div class="col-12 col-md-6 btn_margin_bottom">
+      <button class="btn btn-block back_btn" type="button" (click)="back()">
+        {{ "LBL_ATRAS" | translate }}
+      </button>
+    </div>
+    <div class="col-12 col-md-6">
+      <button class="btn btn btn-block next_btn" type="submit">
+        {{ "LBL_SIGUIENTE" | translate }}
+      </button>
+    </div>
+    <div class="col-12 mt-3">
+      <button
+        class="btn btn-block advance_btn"
+        type="button"
+        (click)="sendDatos()"
+      >
+        {{ "LBL_DATOSAVANZADOS" | translate }}
+      </button>
+    </div>
+  </div>
+</form>
+
+<ng-container *ngIf="showImagen">
+  <div class="row">
+    <div class="col-12">
+      <div class="text-center step_content">
+        <!-- <input
+          #file
+          (change)="fileUpload($event, 'image_1')"
+          accept="image/*"
+          hidden
+          id="filedatag1"
+          type="file"
+        /> -->
+
+        <div (click)="openCropperDialog = true" class="image">
+          <img
+            *ngIf="imagenPreview !== '' && imagen"
+            [src]="imagenPreview"
+            alt="img-preview"
+            width="200px"
+          />
+        </div>
+
+        <br />
+        <img
+          alt=""
+          (click)="openCropperDialog = true"
+          style="cursor: pointer"
+          class="mb-5"
+          src="../../../../../assets/img/equipo.svg"
+          width="200px"
+          *ngIf="!imagenPreview && !imagen"
+        />
+        <button
+          (click)="openCropperDialog = true"
+          class="btn btn-block btn-primary rounded-pill"
+        >
+          {{ "CLUB.BTN_UPLOADIMAGE" | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="mt-4">
+    <ul class="step_markers">
+      <li>
+        <span class="step_marker" (click)="showImagen = false"></span>
+      </li>
+      <li>
+        <span class="step_marker active"></span>
+      </li>
+    </ul>
+  </div>
+  <div class="row mt-4">
+    <div class="col-sm-12 col-md-6">
+      <button
+        class="btn back_btn btn-block btn_margin_bottom"
+        type="button"
+        (click)="showImagen = false"
+      >
+        {{ "LBL_ATRAS" | translate }}
+      </button>
+    </div>
+    <div class="col-sm-12 col-md-6">
+      <button
+        class="btn next_btn btn-block"
+        type="button"
+        (click)="saveInfo()"
+        [disabled]="saving"
+      >
+        {{ "LBL_GUARDAR" | translate }}
+      </button>
+    </div>
+  </div>
+</ng-container>
+
+<app-image-cropper
+  *ngIf="openCropperDialog"
+  [coverDialog]="openCropperDialog"
+  (sendImage)="getImage($event)"
+  (close)="openCropperDialog = false"
+>
+</app-image-cropper>

@@ -1,0 +1,139 @@
+<div>
+  <nav>
+    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+      <a aria-controls="nav-profile" aria-selected="true" class="nav-link active" data-toggle="tab" href="#nav-profile"
+         id="nav-profile-tab" role="tab">{{"INJURY.LBL_INJURY_PROFILE"|translate}}</a>
+
+      <a aria-controls="moment-tab" aria-selected="false" class="nav-link" data-toggle="tab" href="#nav-moment"
+         id="nav-moment-tab" role="tab">{{"INJURY.LBL_INJURY_TIME"|translate}}</a>
+
+      <a aria-controls="nav-pronostico" aria-selected="false" class="nav-link" data-toggle="tab" href="#nav-pronostico"
+         id="nav-pronostico-tab" role="tab">{{"INJURY.LBL_INJURY_FORECAST"|translate}}</a>
+
+      <a aria-controls="nav-cirugia" aria-selected="false" class="nav-link" data-toggle="tab" href="#nav-cirugia"
+         id="nav-cirugia-tab" role="tab">{{"INJURY.LBL_SURGERY"|translate}}</a>
+
+      <a aria-controls="nav-pruebas" aria-selected="false" class="nav-link" data-toggle="tab" href="#nav-pruebas"
+         id="nav-pruebas-tab" role="tab">{{"INJURY.LBL_CLINICAL_TEST"|translate}}</a>
+    </div>
+  </nav>
+
+  <div class="tab-content p-3 p-lg-5" id="nav-tabContent">
+    <div aria-labelledby="nav-profile-tab" class="tab-pane fade show active" id="nav-profile" role="tabpanel">
+      <div class="row">
+        <div class="element col-md-6 my-4">
+          <span class="title">{{"INJURY.LBL_DATE"|translate}}</span>
+          <span class="value">{{(details?.injury_date | date:"dd/MM/YYYY") || 'N/A'}}</span>
+        </div>
+        <div class="element col-md-6 my-4">
+          <span class="title">{{"INJURY.LBL_TYPE"|translate}}</span>
+          <span class="value">{{details?.type?.name}} - {{details?.type_spec?.name}}</span>
+        </div>
+        <div class="element col-md-6 my-4">
+          <span class="title">{{"INJURY.LBL_LOCATION"|translate}}</span>
+          <span class="value">{{details?.location?.name}}</span>
+        </div>
+        <div class="element col-md-6 my-4">
+          <span class="title">{{"INJURY.LBL_DETAILED_LOCATION"|translate}}</span>
+          <span class="value">{{details?.detailed_location || 'N/A'}}</span>
+        </div>
+        <div class="element col-md-6 my-4">
+          <span class="title">{{"INJURY.LBL_AFFECTED_SIDE"|translate}}</span>
+          <span class="value">{{details?.affected_side?.name}}</span>
+        </div>
+        <div class="element col-md-6 my-4">
+          <span class="title">{{"INJURY.LBL_RECIDIVE"|translate}}</span>
+          <span class="value">{{details?.is_relapse ? ('LBL_YES'|translate) : ('LBL_YES'|translate)}}</span>
+        </div>
+        <div class="element col-md-6 my-4">
+          <span class="title">{{"INJURY.LBL_DEGREE_SEVERITY"|translate}}</span>
+          <span class="value">{{details?.severity?.name}}</span>
+        </div>
+      </div>
+    </div>
+    <div aria-labelledby="nav-moment-tab" class="tab-pane fade" id="nav-moment" role="tabpanel">
+      <div class="row">
+        <div class="element col-md-6 my-4">
+          <span class="title">{{"INJURY.LBL_SITUATION"|translate}}</span>
+          <span class="value">{{details?.injury_situation?.name || 'N/A'}}</span>
+        </div>
+        <div class="element col-md-6 my-4">
+          <span class="title">{{"INJURY.LBL_ACONTECIMIENTO_DESENCADENANTE"|translate}}</span>
+          <span class="value">{{details?.is_triggered_by_contact ? ("LBL_YES"|translate) : ("LBL_NO"|translate)}}</span>
+        </div>
+        <div class="element col-md-6 my-4">
+          <span class="title">{{"INJURY.LBL_MECHANISM"|translate}}</span>
+          <span class="value">{{details?.mechanism?.name || 'N/A'}}</span>
+        </div>
+        <div class="element col-md-6 my-4">
+          <span class="title">{{"INJURY.LBL_INTRINSIC_FACTORS"|translate}}</span>
+          <span class="value">{{mapElements(details?.intrinsic_factor)}}</span>
+        </div>
+        <div class="element col-md-6 my-4">
+          <span class="title">{{"INJURY.LBL_EXTRINCAL_FACTORS"|translate}}</span>
+          <span class="value">{{mapElements(details?.extrinsic_factor)}}</span>
+        </div>
+      </div>
+    </div>
+    <div aria-labelledby="nav-pronostico-tab" class="tab-pane fade" id="nav-pronostico" role="tabpanel">
+      <div class="row">
+        <div class="element col-md-6 my-4">
+          <span class="title">{{"INJURY.LBL_INJURY_FORECAST"|translate}}</span>
+          <span class="value">{{details?.injury_forecast || 'N/A'}}</span>
+        </div>
+        <div class="element col-md-6 my-4">
+          <span class="title">{{"INJURY.LBL_HIGH_MEDICAL"|translate}}</span>
+          <span class="value">{{ (details?.medically_discharged_at | date:"dd/MM/YYYY") || 'N/A' }}</span>
+        </div>
+        <div class="element col-md-6 my-4">
+          <span class="title">{{"INJURY.LBL_LEAVING_DAYS"|translate}}</span>
+          <span class="value">{{details?.injury_day}}</span>
+        </div>
+        <div class="element col-md-6 my-4">
+          <span class="title">{{"INJURY.LBL_HIGH_SPORTS"|translate}}</span>
+          <span class="value">{{ (details?.sportly_discharged_at | date:"dd/MM/YYYY") || 'N/A' }}</span>
+        </div>
+        <div class="element col-md-6 my-4">
+          <span class="title">{{"INJURY.LBL_MATCH_NOT_PLAYED"|translate}}</span>
+          <span class="value">{{details?.days_off || 'N/A'}}</span>
+        </div>
+        <div class="element col-md-6 my-4">
+          <span class="title">{{"INJURY.LBL_HIGH_COMPETITIVE"|translate}}</span>
+          <span class="value">{{ (details?.competitively_discharged_at | date:"dd/MM/YYYY") || 'N/A' }}</span>
+        </div>
+      </div>
+    </div>
+    <div aria-labelledby="nav-cirugia-tab" class="tab-pane fade" id="nav-cirugia" role="tabpanel">
+      <div class="row">
+        <div class="element col-md-6 my-4">
+          <span class="title">{{"INJURY.LBL_SURGERY_DATE"|translate}}</span>
+          <span class="value">{{ (details?.surgery_date | date:"dd/MM/YYYY") || 'N/A' }}</span>
+        </div>
+        <div class="element col-md-6 my-4">
+          <span class="title">{{"INJURY.LBL_MEDICAL_CENTER"|translate}}</span>
+          <span class="value">{{details?.medical_center_name || 'N/A'}}</span>
+        </div>
+        <div class="element col-md-6 my-4">
+          <span class="title">{{"INJURY.LBL_SURGEON"|translate}}</span>
+          <span class="value">{{details?.surgeon_name || 'N/A'}}</span>
+        </div>
+        <div class="element col-md-6 my-4">
+          <span class="title">{{"INJURY.LBL_ADDITIONAL_INFO"|translate}}</span>
+          <span class="value">{{details?.surgery_extra_info || 'N/A'}}</span>
+        </div>
+      </div>
+    </div>
+    <div aria-labelledby="nav-pruebas-tab" class="tab-pane fade" id="nav-pruebas" role="tabpanel">
+      <div class="row">
+        <div class="element col-12 my-4">
+          <span class="title">{{"INJURY.LBL_TEST_CLINICAL"|translate}}</span>
+          <span *ngIf="details" class="value">{{mapElements(details?.clinical_test_types)}}</span>
+        </div>
+        <div class="element col-12 my-4">
+          <span class="title">{{"INJURY.LBL_ADDITIONAL_INFO"|translate}}</span>
+          <span class="value">{{details?.detailed_diagnose || 'N/A'}}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

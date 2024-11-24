@@ -1,0 +1,95 @@
+<!-- Button trigger modal -->
+<button
+  (click)="coverDialog = true"
+  class="btn"
+  id="edit_cover_btn"
+  tooltipPosition="bottom"
+  pTooltip="{{ 'profile.editar_portada' | translate }}"
+  type="button"
+>
+  {{ "profile.editar_portada" | translate }} <i class="fa fa-camera"></i>
+</button>
+<p-dialog
+  (onHide)="onHide()"
+  (onShow)="onShow()"
+  [(visible)]="coverDialog"
+  [modal]="true"
+  class="custom_dialog"
+  header="{{ 'profile.editar_portada' | translate }}"
+  id="editar_portada_dialog"
+  maskStyleClass="purple_mask"
+  styleClass=""
+>
+  <div class="dialog_container" id="editar_portada_dialog_container">
+    <div *ngIf="showSelector" class="custom-file mb-4">
+      <input
+        (change)="selectImg($event)"
+        class="custom-file-input"
+        pTooltip="{{ 'profile.select_image' | translate }}"
+        id="customFile"
+        type="file"
+      />
+      <label class="custom-file-label" for="customFile">{{
+        "profile.select_image" | translate
+      }}</label>
+    </div>
+    <angular-cropper
+      #angularCropper
+      *ngIf="imageUrl && viewImg && showSelector"
+      [imageUrl]="imageUrl"
+    ></angular-cropper>
+    <img
+      *ngIf="cropperResult && !viewImg"
+      [src]="cropperResult"
+      class="img-fluid"
+    />
+    <div class="d-flex" id="crop_buttons">
+      <button
+        (click)="undo()"
+        class="btn"
+        pTooltip="{{ 'profile.deshacer' | translate }}"
+      >
+        {{ "profile.deshacer" | translate }}
+      </button>
+      <button
+        (click)="getimgedit()"
+        class="btn btn-primary"
+        pTooltip="{{ 'profile.recortar' | translate }}"
+      >
+        {{ "profile.recortar" | translate }}
+      </button>
+    </div>
+    <div *ngIf="isFileRejected" class="mt-2">
+      <span class="text-danger">{{ "fileRejectedBySize" | translate }}</span>
+    </div>
+  </div>
+  <p-footer>
+    <div class="footer_btns">
+      <button
+        (click)="resetFile()"
+        class="btn back_btn"
+        tooltipPosition="bottom"
+        pTooltip="{{ 'LBL_ATRAS' | translate }}"
+      >
+        {{ "LBL_ATRAS" | translate }}
+      </button>
+      <button
+        (click)="saveData()"
+        *ngIf="!loadingImage"
+        [disabled]="imageUrl === ''"
+        class="btn next_btn"
+        pTooltip="{{ 'LBL_GUARDAR' | translate }}"
+      >
+        {{ "LBL_GUARDAR" | translate }}
+      </button>
+      <button
+        *ngIf="loadingImage"
+        [disabled]="true"
+        class="btn next_btn"
+        pTooltip="{{ 'LBL_GUARDANDO' | translate }}"
+      >
+        {{ "LBL_GUARDANDO" | translate }}
+      </button>
+    </div>
+  </p-footer>
+</p-dialog>

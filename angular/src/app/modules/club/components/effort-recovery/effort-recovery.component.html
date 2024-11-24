@@ -1,0 +1,385 @@
+<div
+  class="row"
+  appUserPermission
+  [method]="['team_effort_recovery_store']"
+  (showItem)="handlePermission($event)"
+>
+  <div class="col-12">
+    <div class="card box-shadow">
+      <div class="card-body p-0">
+        <div class="effort_recovery_header view_header">
+          <h6 class="font-weight-600 mb-0 mr-4 text-main view_header_title">
+            {{ "LBL_PLAYERS" | translate }}
+          </h6>
+
+          <div class="p-input-icon-left d-md-inline buscador">
+            <i class="pi pi-search"></i>
+            <input
+              type="text"
+              pInputText
+              placeholder="{{ 'LBL_SEARCH' | translate }}"
+              (input)="searchPlayer($event)"
+            />
+          </div>
+
+          <div class="sort-input">
+            <div class="d-flex align-items-center">
+              <p-treeSelect
+                [(ngModel)]="selectedFilter"
+                (ngModelChange)="handleSelectFilter()"
+                [options]="filterOptions"
+                placeholder="{{ 'LBL_FILTRAR' | translate }}"
+              ></p-treeSelect>
+
+              <div *ngIf="this.selectedFilter?.code">
+                <button
+                  class="btn see_all_btn"
+                  (click)="effortRecoveryList = players; selectedFilter = null"
+                  pTooltip="{{ 'seeAll' | translate }}"
+                >
+                  <i class="pi pi-times"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="header_buttons">
+            <button
+              class="btn action"
+              [disabled]="selectedPlayer.length === 0"
+              (click)="newQuestions = true"
+              *ngIf="showPermission.store"
+              pButton
+            >
+              <span class="d-sm-inline mr-2">
+                {{ "effort_recovery.new_questionnaire" | translate }}
+              </span>
+              <i class="fa fa-plus text-white"></i>
+            </button>
+          </div>
+        </div>
+        <p-table
+          [value]="effortRecoveryList"
+          [paginator]="true"
+          [rows]="10"
+          [loading]="loading"
+          [showLoader]="false"
+          class="p-datatable-responsive"
+          selectionMode="single"
+          [alwaysShowPaginator]="false"
+          [(selection)]="selectedPlayer"
+        >
+          <ng-template pTemplate="header">
+            <tr class="text-center">
+              <th style="width: 3rem; min-width: 3rem !important"></th>
+              <th class="text-left" pSortableColumn="full_name">
+                {{ "effort_recovery.name" | translate }}
+                <p-sortIcon field="full_name"></p-sortIcon>
+              </th>
+              <th
+                class="text-center"
+                style="width: 13rem"
+                pSortableColumn="has_strategy"
+              >
+                {{ "effort_recovery.strategy" | translate }}
+                <p-sortIcon field="has_strategy"></p-sortIcon>
+              </th>
+              <th class="text-center" pSortableColumn="Sueño">
+                {{ "effort_recovery.sleepiness" | translate }}
+                <p-sortIcon field="Sueño"></p-sortIcon>
+              </th>
+              <th class="text-center" pSortableColumn="Estrés">
+                {{ "effort_recovery.stress" | translate }}
+                <p-sortIcon field="Estrés"></p-sortIcon>
+              </th>
+              <th class="text-center" pSortableColumn="Fatiga">
+                {{ "effort_recovery.fatigue" | translate }}
+                <p-sortIcon field="Fatiga"></p-sortIcon>
+              </th>
+              <th class="text-center" pSortableColumn="Dolor Muscular (DOMS)">
+                {{ "effort_recovery.doms" | translate }}
+                <p-sortIcon field="Dolor Muscular (DOMS)"></p-sortIcon>
+              </th>
+              <th class="text-center" pSortableColumn="Estado de Ánimo">
+                {{ "effort_recovery.courage" | translate }}
+                <p-sortIcon field="Estado de Ánimo"></p-sortIcon>
+              </th>
+              <th
+                class="text-center"
+                style="width: 8rem"
+                pSortableColumn="calculated_status"
+              >
+                {{ "effort_recovery.status" | translate }}
+                <p-sortIcon field="calculated_status"></p-sortIcon>
+              </th>
+              <th class="text-center" [width]="100">
+                {{ "LBL_ACTIONS" | translate }}
+              </th>
+            </tr>
+          </ng-template>
+          <ng-template let-player pTemplate="body" let-i="rowIndex">
+            <tr class="colum-responsive">
+              <td class="checbox-w">
+                <p-tableCheckbox
+                  [value]="player"
+                  (click)="handleSelectPlayer(player, i)"
+                ></p-tableCheckbox>
+              </td>
+              <td>
+                <img
+                  class="rounded-circle"
+                  src="{{ playerImage(player) }}"
+                  width="25px"
+                  height="25px"
+                />
+                <span class="m-2 d-inline">{{ player.full_name }}</span>
+              </td>
+              <td class="text-center">
+                <div>
+                  <span class="p-column-title">{{
+                    "effort_recovery.strategy" | translate
+                  }}</span>
+                </div>
+
+                <div>
+                  <!-- <img *ngIf="player.has_strategy" src="assets/img/icons/awesome-check.png" alt=""> -->
+                  <i
+                    *ngIf="player?.latest_effort_recovery?.has_strategy"
+                    class="fas fa-check check strategy_check_icon"
+                    pTooltip="{{ 'effort_recovery.use_strategy' | translate }}"
+                  ></i>
+
+                  <i
+                    *ngIf="!player?.latest_effort_recovery?.has_strategy"
+                    class="far fa-times-circle circle"
+                    pTooltip="{{ 'effort_recovery.no_strategy' | translate }}"
+                  ></i>
+                </div>
+              </td>
+              <td class="checbox-w d-sm-none"></td>
+              <td class="text-center">
+                <div>
+                  <span class="p-column-title">{{
+                    "effort_recovery.sleepiness" | translate
+                  }}</span>
+                </div>
+
+                <div>
+                  <span
+                    class="answer"
+                    [ngClass]="
+                      player?.latest_effort_recovery?.answers[0].status +
+                      '-text'
+                    "
+                    *ngIf="player?.latest_effort_recovery?.answers.length > 0"
+                  >
+                    {{ player?.latest_effort_recovery?.answers[0].name }}
+                  </span>
+                  <span
+                    *ngIf="
+                      player?.latest_effort_recovery === null ||
+                      player?.latest_effort_recovery?.answers.length === 0
+                    "
+                    >N/A</span
+                  >
+                </div>
+              </td>
+              <td class="text-center">
+                <div>
+                  <span class="p-column-title">{{
+                    "effort_recovery.stress" | translate
+                  }}</span>
+                </div>
+
+                <div>
+                  <span
+                    class="answer"
+                    [ngClass]="
+                      player?.latest_effort_recovery?.answers[1].status +
+                      '-text'
+                    "
+                    *ngIf="player?.latest_effort_recovery?.answers.length > 0"
+                  >
+                    {{ player?.latest_effort_recovery?.answers[1].name }}
+                  </span>
+                  <span
+                    *ngIf="
+                      player?.latest_effort_recovery === null ||
+                      player?.latest_effort_recovery?.answers.length === 0
+                    "
+                    >N/A</span
+                  >
+                </div>
+              </td>
+
+              <td class="checbox-w d-sm-none"></td>
+              <td class="text-center">
+                <div>
+                  <span class="p-column-title">{{
+                    "effort_recovery.fatigue" | translate
+                  }}</span>
+                </div>
+
+                <div>
+                  <span
+                    class="answer"
+                    [ngClass]="
+                      player?.latest_effort_recovery?.answers[2].status +
+                      '-text'
+                    "
+                    *ngIf="player?.latest_effort_recovery?.answers.length > 0"
+                    >{{ player?.latest_effort_recovery?.answers[2].name }}</span
+                  >
+                  <span
+                    *ngIf="
+                      player?.latest_effort_recovery === null ||
+                      player?.latest_effort_recovery?.answers.length === 0
+                    "
+                    >N/A</span
+                  >
+                </div>
+              </td>
+
+              <td class="text-center">
+                <div>
+                  <span class="p-column-title">{{
+                    "effort_recovery.doms" | translate
+                  }}</span>
+                </div>
+
+                <div>
+                  <span
+                    class="answer"
+                    [ngClass]="
+                      player?.latest_effort_recovery?.answers[3].status +
+                      '-text'
+                    "
+                    *ngIf="player?.latest_effort_recovery?.answers.length > 0"
+                    >{{ player?.latest_effort_recovery?.answers[3].name }}</span
+                  >
+                  <span
+                    *ngIf="
+                      player?.latest_effort_recovery === null ||
+                      player?.latest_effort_recovery?.answers?.length === 0
+                    "
+                    >N/A</span
+                  >
+                </div>
+              </td>
+
+              <td class="checbox-w d-sm-none"></td>
+              <td class="text-center">
+                <div>
+                  <span class="p-column-title">{{
+                    "effort_recovery.courage" | translate
+                  }}</span>
+                </div>
+
+                <div>
+                  <span
+                    class="answer"
+                    [ngClass]="
+                      player?.latest_effort_recovery?.answers[4].status +
+                      '-text'
+                    "
+                    *ngIf="player?.latest_effort_recovery?.answers.length > 0"
+                    >{{ player?.latest_effort_recovery?.answers[4].name }}</span
+                  >
+                  <span
+                    *ngIf="
+                      player?.latest_effort_recovery === null ||
+                      player?.latest_effort_recovery?.answers.length === 0
+                    "
+                    >N/A</span
+                  >
+                </div>
+              </td>
+
+              <td class="text-center">
+                <div>
+                  <span class="p-column-title">{{
+                    "effort_recovery.status" | translate
+                  }}</span>
+                </div>
+                <div>
+                  <img
+                    *ngIf="player?.latest_effort_recovery?.calculated_status"
+                    src="{{
+                      urlImages +
+                        'images/batteries/' +
+                        player?.latest_effort_recovery?.calculated_code +
+                        '.svg'
+                    }}"
+                    alt=""
+                    width="35px"
+                    pTooltip="{{
+                      getBatteryToolTip(
+                        player?.latest_effort_recovery?.calculated_code
+                      )
+                    }}"
+                  />
+                </div>
+                <span
+                  *ngIf="
+                    player?.latest_effort_recovery?.calculated_status === null
+                  "
+                  >N/A</span
+                >
+              </td>
+
+              <td class="actions_column w-column-full">
+                <div class="text-center">
+                  <button
+                    class="btn"
+                    [routerLink]="['/club/effort-recovery/record', player.id]"
+                    pTooltip="{{ 'LBL_HISTORIAL' | translate }}"
+                    [disabled]="player?.latest_effort_recovery === null"
+                  >
+                    <img src="/assets/img/icons/book-icon.svg" class="" />
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage" let-columns>
+            <tr>
+              <td colspan="9" style="text-align: center">
+                {{ "nodata.sincuestionario" | translate }}
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="loadingbody" let-columns>
+            <tr *ngFor="let i of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]">
+              <td><p-skeleton width="100%" height="1rem"></p-skeleton></td>
+              <td><p-skeleton width="100%" height="1rem"></p-skeleton></td>
+              <td><p-skeleton width="100%" height="1rem"></p-skeleton></td>
+              <td><p-skeleton width="100%" height="1rem"></p-skeleton></td>
+              <td><p-skeleton width="100%" height="1rem"></p-skeleton></td>
+              <td><p-skeleton width="100%" height="1rem"></p-skeleton></td>
+              <td><p-skeleton width="100%" height="1rem"></p-skeleton></td>
+              <td><p-skeleton width="100%" height="1rem"></p-skeleton></td>
+              <td><p-skeleton width="100%" height="1rem"></p-skeleton></td>
+              <td class="d-flex justify-content-around">
+                <p-skeleton width="20px" height="1rem"></p-skeleton>
+                <p-skeleton width="20px" height="1rem"></p-skeleton>
+                <p-skeleton width="20px" height="1rem"></p-skeleton>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<effort-questions-dialog
+  [visible]="newQuestions"
+  (close)="newQuestions = false"
+  [teamId]="getTeamId()"
+  [playerId]="selectedPlayer[0].id"
+  [recoveryProgram]="programId"
+  (created)="refreshListPrograms()"
+  *ngIf="newQuestions"
+  (resetPlayer)="refreshAllData()"
+>
+</effort-questions-dialog>

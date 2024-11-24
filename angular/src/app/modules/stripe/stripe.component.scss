@@ -1,0 +1,19 @@
+#stripe-card {
+  img {
+    max-width: 250px;
+  }
+  p {
+    max-width: 300px;
+    margin: 20px auto;
+  }
+  #btn-validar {
+    height: 45px;
+    margin-top: 2rem;
+  }
+}
+
+.error {
+  margin-top: 20px;
+  text-align: start;
+  font-size: 0.8rem;
+}

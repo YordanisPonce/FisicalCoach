@@ -1,0 +1,36 @@
+<p-dialog
+  [modal]="true"
+  [(visible)]="visible"
+  maskStyleClass="purple_mask"
+  styleClass=""
+  header="{{ 'competition_details.playerResults' | translate }} {{
+    ' ' + playerName
+  }} "
+  (onHide)="closeDialog()"
+>
+  <div class="text-center"></div>
+
+  <div class="row mx-n2">
+    <div
+      class="col-sm-6 col-lg-4 my-2 px-2"
+      *ngFor="let statistic of playerStatistics; index as i"
+    >
+      <div class="match_stat">
+        <div class="name">
+          {{ statistic.name }}
+        </div>
+        <div class="stat">
+          <span class="stat_number">{{ statistic.value }}</span>
+          <span>
+            <img
+              [src]="statistic.image"
+              alt="player-result-icon"
+              width="60px"
+              height="60px"
+            />
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</p-dialog>

@@ -1,0 +1,204 @@
+<div class="row">
+  <div class="col-12">
+    <div class="card box-shadow">
+      <div class="card-body p-0">
+        <!-- header -->
+        <div class="daily_check_header view_header">
+          <h6 class="font-weight-600 mb-0 mr-4 text-main view_header_title">
+            {{ "LBL_STUDENTS_LIST" | translate }}
+          </h6>
+          <div class="p-input-icon-left d-md-inline buscador">
+            <i class="pi pi-search"></i>
+            <input
+              (input)="searchAlumn($event)"
+              pInputText
+              placeholder="{{ 'LBL_SEARCH' | translate }}..."
+              type="text"
+            />
+          </div>
+          <div class="header_buttons flex_column_resp">
+            <div class="load_btn">
+              <button
+                (click)="undo()"
+                [disabled]="
+                  !academicYearEnabled ||
+                  (academicYearEnabled && !redoAction.active)
+                "
+                class="undo_btn btn p-button-rounded p-button-text"
+                pButton
+                type="button"
+              >
+                <i class="pi pi-replay"></i>
+              </button>
+              <button
+                (click)="redo()"
+                [disabled]="
+                  !academicYearEnabled ||
+                  (academicYearEnabled && !redoAction.active)
+                "
+                class="redo_btn btn p-button-rounded p-button-text"
+                pButton
+                type="button"
+              >
+                <i class="pi pi-replay"></i>
+              </button>
+            </div>
+            <button
+              (click)="resetDialog = true"
+              [disabled]="!academicYearEnabled"
+              class="btn action"
+              pButton
+            >
+              <span class="d-md-inline mr-2">{{
+                "daily_check.reset_all" | translate
+              }}</span>
+              <i class="pi pi-refresh text-white"></i>
+            </button>
+          </div>
+        </div>
+        <div>
+          <p-table
+            [loading]="loading"
+            [showLoader]="false"
+            [value]="students"
+            class="p-datatable-responsive"
+          >
+            <ng-template let-student pTemplate="body">
+              <tr>
+                <td class="">
+                  <div class="d-flex align-items-center">
+                    <span
+                      *ngIf="student?.image != null"
+                      class="player_image"
+                      style="background-image: url('{{
+                        student.image.full_url
+                      }}')"
+                    ></span>
+                    <span
+                      *ngIf="
+                        student?.image === null && student.gender === 'female'
+                      "
+                      class="player_image"
+                      style="background-image: url({{ girlAlumnImage }})"
+                    ></span>
+                    <span
+                      *ngIf="
+                        student?.image === null &&
+                        (student.gender === 'male' ||
+                          student.gender === 'undefined')
+                      "
+                      class="player_image"
+                      style="background-image: url({{ boyAlumnImage }})"
+                    ></span>
+                    <span class="player_name">{{ student.name }}</span>
+                  </div>
+                </td>
+                <td>
+                  <p-carousel
+                    [numScroll]="1"
+                    [numVisible]="3"
+                    [responsiveOptions]="responsiveOptions"
+                    [value]="student.control_items"
+                  >
+                    <ng-template let-option pTemplate="item">
+                      <div class="option">
+                        <p-button
+                          (click)="updateDailyControl(option)"
+                          [disabled]="disabledOption(option)"
+                          styleClass="pt-0 pb-0 pl-2 pr-2"
+                        >
+                          <ng-template pTemplate="content">
+                            <small class="value">{{ option.count }}</small>
+                            <div class="icon">
+                              <img
+                                alt=""
+                                src="{{ urlImages + option.image_url }}"
+                              />
+                            </div>
+                            <div class="title">
+                              {{ option.control_name }}
+                            </div>
+                          </ng-template>
+                        </p-button>
+                      </div>
+                    </ng-template>
+                  </p-carousel>
+                </td>
+
+                <td class="">
+                  <span class="p-column-title">
+                    {{ "LBL_ACTIONS" | translate }}</span
+                  >
+                  <button
+                    (click)="resetDailyControl(student.id)"
+                    [disabled]="!academicYearEnabled"
+                    class="btn"
+                    label="{{ 'daily_check.reset' | translate }}"
+                    pButton
+                    type="button"
+                    style="display: flex"
+                  ></button>
+                </td>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+              <tr>
+                <td colspan="3" style="text-align: center">
+                  {{ "LBL_SINREGISTROS" | translate }}
+                </td>
+              </tr>
+            </ng-template>
+            <ng-template let-columns pTemplate="loadingbody">
+              <tr *ngFor="let i of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]">
+                <td>
+                  <p-skeleton height="1rem" width="100%"></p-skeleton>
+                </td>
+                <td>
+                  <p-skeleton height="1rem" width="100%"></p-skeleton>
+                </td>
+                <td class="">
+                  <p-skeleton height="1rem" width="20px"></p-skeleton>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<p-dialog
+  [(visible)]="resetDialog"
+  [modal]="true"
+  class="custom_dialog"
+  maskStyleClass="purple_mask"
+>
+  <ng-template pTemplate="header"> </ng-template>
+  <div class="text-center" id="reset_dialog_container">
+    <img
+      alt=""
+      src="{{ images + 'images/daily_control/reset_counters.svg' }}"
+      width="300px"
+    />
+    <h5 class="text-main mb-4">¿Reiniciar contadores?</h5>
+    <p>
+      Se eliminará el registro de contador que tienes actualmente para tus
+      alumnos
+    </p>
+  </div>
+  <p-footer>
+    <div class="footer_btns confirm_buttons">
+      <button
+        (click)="resetAll()"
+        [disabled]="!academicYearEnabled"
+        class="btn btn-primary"
+        pButton
+      >
+        {{ "daily_check.reset" | translate }}
+      </button>
+      <button (click)="resetDialog = false" class="btn">
+        {{ "LBL_ATRAS" | translate }}
+      </button>
+    </div>
+  </p-footer>
+</p-dialog>

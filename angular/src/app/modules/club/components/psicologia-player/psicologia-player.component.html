@@ -1,0 +1,297 @@
+<div class="card box-shadow">
+  <div class="card-body p-0">
+    <div class="row">
+      <div class="col-12">
+        <div class="psicologia_player_header">
+          <span class="icon_left" routerLink="/club/psychology"
+            ><i class="fas fa-chevron-left"></i>
+          </span>
+          <h6 class="font-weight-600 mb-0 mr-5">
+            {{ "psychologyDetails.playerReportTitle" | translate }}
+          </h6>
+        </div>
+      </div>
+
+      <div class="col-12">
+        <div class="row psicologia_players_container">
+          <div class="col-12 my-3">
+            <div
+              *ngIf="playerPsichology.psychology_reports.length > 0"
+              class="col-12 row-download text-lg-right pr-0"
+              style="height: 22.5px"
+            >
+              <i
+                (click)="downloadAllReports(playerPsichology.id)"
+                *ngIf="!loadingPDFS"
+                class="fa fa-download fa-1x"
+                pTooltip="{{
+                  'psychologyDetails.download_reports' | translate
+                }}"
+                role="button"
+                tooltipPosition="top"
+              ></i>
+              <i
+                *ngIf="loadingPDFS"
+                class="fa fa-spinner fa-1x"
+                role="button"
+              ></i>
+            </div>
+            <div class="psicologia_player_profile">
+              <div class="psicologia_player_profile_image">
+                <img
+                  class="rounded-circle imagen-psichology"
+                  src="{{ playerData | avatarPipe }}"
+                  width="108px"
+                  heigth="108px"
+                />
+              </div>
+              <div class="row">
+                <div class="col-12 w-100">
+                  <div class="psicologia_player_profile_title">
+                    <span>{{ playerPsichology.full_name }}</span>
+                  </div>
+                  <div class="psicologia_player_profile_academy">
+                    <span>{{ playerPsichology.alias }}</span>
+                  </div>
+                  <div class="d-flex">
+                    <div class="mr-4">
+                      <div class="psicologia_player_profile_info_title">
+                        <span>{{ "PLAYERS.LBL_ALTURA" | translate }}</span>
+                      </div>
+                      <div class="psicologia_player_profile_info_desc">
+                        <span
+                          >{{
+                            playerPsichology.height
+                              ? (playerPsichology.height | number : "1.0-0")
+                              : "-"
+                          }}
+                          cm</span
+                        >
+                      </div>
+                    </div>
+                    <div>
+                      <div class="psicologia_player_profile_info_title">
+                        <span>{{ "PLAYERS.LBL_PESO" | translate }}</span>
+                      </div>
+                      <div class="psicologia_player_profile_info_desc">
+                        <span
+                          >{{
+                            playerPsichology.weight
+                              ? (playerPsichology.weight | number : "1.0-0")
+                              : "-"
+                          }}
+                          kg</span
+                        >
+                      </div>
+                    </div>
+                    <div class="ml-4">
+                      <div
+                        class="psicologia_player_profile_info_title text-center"
+                      >
+                        <span>{{ "PSYCHOLOGY.LBL_AGE" | translate }}</span>
+                      </div>
+                      <div
+                        class="psicologia_player_profile_info_desc text-right"
+                      >
+                        <span
+                          >{{ playerPsichology.age }}
+                          {{ "LBL_YEARS" | translate }}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <ng-container *ngIf="playerPsichology.psychology_reports.length > 0">
+          <p-carousel
+            [circular]="false"
+            [numScroll]="1"
+            [numVisible]="1"
+            [value]="playerPsichology.psychology_reports"
+            styleClass="custom_carousel"
+          >
+            <ng-template let-itemPlayer pTemplate="item">
+              <div class="col-12 my-3 carousel">
+                <div class="row">
+                  <div class="col-12">
+                    <div class="row">
+                      <div class="col-12 text-lg-right">
+                        <i
+                          (click)="downloadPdfById(itemPlayer.id)"
+                          *ngIf="!loadingSinglePDF"
+                          class="fa fa-download fa-1x"
+                          pTooltip="{{
+                            'psychologyDetails.download_report' | translate
+                          }}"
+                          role="button"
+                          tooltipPosition="top"
+                        ></i>
+                        <i
+                          (click)="downloadPdfById(itemPlayer.id)"
+                          *ngIf="loadingSinglePDF"
+                          class="fa fa-spinner fa-1x"
+                          role="button"
+                        ></i>
+                        <i
+                          (click)="
+                            !loadingSinglePDF && filterReportById(itemPlayer.id)
+                          "
+                          class="fa fa-pencil ml-3 fa-1x"
+                          pTooltip="{{
+                            'psychologyDetails.edit_report' | translate
+                          }}"
+                          role="button"
+                          tooltipPosition="top"
+                        ></i>
+                        <i
+                          (click)="
+                            !loadingSinglePDF && deleteDialog(itemPlayer.id)
+                          "
+                          class="fa fa-trash ml-3 fa-1x"
+                          pTooltip="{{
+                            'psychologyDetails.delete_report' | translate
+                          }}"
+                          role="button"
+                          tooltipPosition="top"
+                        ></i>
+                      </div>
+                      <!-- fecha -->
+                      <div class="col-sm-6 col-xl-4 mb-5">
+                        <div class="psicologia_player_info_title">
+                          <span>{{ "PSYCHOLOGY.LBL_DATE" | translate }}</span>
+                        </div>
+                        <span class="psicologia_player_info_text">{{
+                          itemPlayer.date
+                            ? (itemPlayer.date | date : "dd/MM/YYYY")
+                            : "Sin datos"
+                        }}</span>
+                      </div>
+                      <!-- especialista   -->
+                      <div class="col-sm-6 col-xl-4 mb-5">
+                        <div class="psicologia_player_info_title">
+                          <span>{{ "PSYCHOLOGY.SPECIALIST" | translate }}</span>
+                        </div>
+                        <span class="psicologia_player_info_text">{{
+                          itemPlayer.psychology_specialist_name
+                        }}</span>
+                      </div>
+                      <!-- evaluador -->
+                      <div class="col-sm-6 col-xl-4 mb-5">
+                        <div class="psicologia_player_info_title">
+                          <span>{{
+                            "PSYCHOLOGY.LBL_EVALUATOR" | translate
+                          }}</span>
+                        </div>
+                        <span class="psicologia_player_info_text">{{
+                          itemPlayer.team_staff_name
+                            ? itemPlayer.team_staff_name
+                            : itemPlayer.staff_name
+                        }}</span>
+                      </div>
+                      <!-- Motivo consulta -->
+                      <div class="col-sm-6 col-xl-4 mb-5">
+                        <div class="psicologia_player_info_title">
+                          <span>{{
+                            "PSYCHOLOGY.LBL_REASON_CONSULTATION" | translate
+                          }}</span>
+                        </div>
+                        <p class="psicologia_player_info_text">
+                          {{ itemPlayer.cause }}
+                        </p>
+                      </div>
+                      <!-- Anamnesis -->
+                      <div class="col-sm-6 col-xl-4 mb-5">
+                        <div class="psicologia_player_info_title">
+                          <span>{{
+                            "PSYCHOLOGY.LBL_ANAMNESIS" | translate
+                          }}</span>
+                        </div>
+                        <span class="psicologia_player_info_text">{{
+                          itemPlayer.anamnesis
+                        }}</span>
+                      </div>
+
+                      <div class="col-sm-6 col-xl-4 mb-5">
+                        <div class="psicologia_player_info_title">
+                          <span>{{
+                            "PSYCHOLOGY.LBL_PRESUMPTIVE_DIAGNOSIS" | translate
+                          }}</span>
+                        </div>
+                        <span class="psicologia_player_info_text">{{
+                          itemPlayer.presumptive_diagnosis
+                        }}</span>
+                      </div>
+
+                      <div class="col-sm-12 col-xl-12 mb-5">
+                        <div class="psicologia_player_info_title">
+                          <span>{{
+                            "PSYCHOLOGY.LBL_OBSERVATIONS" | translate
+                          }}</span>
+                        </div>
+                        <span class="psicologia_player_info_text">{{
+                          itemPlayer.note
+                        }}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ng-template>
+          </p-carousel>
+        </ng-container>
+        <ng-container *ngIf="playerPsichology.psychology_reports.length <= 0">
+          <div class="row my-3">
+            <div class="col-12 text-center">
+              <h6 class="sindatos">{{ "LBL_SINREGISTROS" | translate }}</h6>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p-dialog
+  [style]="{ width: '50vw' }"
+  [(visible)]="showDeleteDialog"
+  class="custom_dialog"
+  maskStyleClass="purple_mask"
+  (onHide)="closeDialog()"
+>
+  <ng-template pTemplate="body">
+    <h5 class="text-center mb-3">{{ "PSYCHOLOGY.areYouSure" | translate }}</h5>
+  </ng-template>
+  <ng-template pTemplate="footer">
+    <div class="footer_btns">
+      <button
+        (click)="showDeleteDialog = false"
+        class="btn back_btn"
+        type="button"
+      >
+        {{ "BTN_CANCELAR" | translate }}
+      </button>
+      <button
+        (click)="deleteReportById(reportId)"
+        [disabled]="loadingDelete"
+        class="btn next_btn"
+        type="button"
+      >
+        {{ (loadingDelete ? "LBL_DELETING" : "LBL_DELETE") | translate }}
+      </button>
+    </div>
+  </ng-template>
+</p-dialog>
+
+<app-new-test-psicologico-dialog
+  (close)="showEditTestDialog = false"
+  *ngIf="showEditTestDialog"
+  [isPlayerReport]="true"
+  [listPlayers]="[playerData]"
+  [playerReportData]="selectedReport"
+  [playerId]="playerData?.id"
+  [team]="team"
+  [visible]="showEditTestDialog"
+></app-new-test-psicologico-dialog>

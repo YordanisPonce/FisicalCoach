@@ -1,0 +1,276 @@
+<div class="card box-shadow">
+    <div class="card-body p-0">
+      <div class="row">
+        <div class="col-12">
+          <div class="tutorship_details_header view_header">
+            <span class="icon_left" routerLink="/teacher/tutor"
+              ><i class="fas fa-chevron-left"></i>
+            </span>
+            <h6 class="font-weight-600 mb-0 mr-5">
+              {{ "tutorship_details.title" | translate }}
+            </h6>
+          </div>
+        </div>
+  
+        <div class="col-12">
+            <div class="row mx-0 tutorship_details_container">
+                <div class="col-12 my-3">
+                  <div class="player_profile">
+                    <div class="player_profile_image">
+                        <p-skeleton
+                            shape="circle"
+                            size="100px"
+                            styleClass="mb-2"
+                            *ngIf="loading"
+                        ></p-skeleton>
+
+                        <div
+                        *ngIf="tutorshipDetails"
+                        class="avatar_image avatar_100 rounded-circle"
+                        [style.backgroundImage]="'url('+(tutorshipDetails.alumn?.image ? tutorshipDetails.alumn.image.full_url : tutorshipDetails.alumn?.gender.code==='female' ? girlAlumnImage : boyAlumnImage)+')'"
+                        ></div>
+                    </div>
+    
+                    <div *ngIf="tutorshipDetails" class="row mb-3 mb-lg-0">
+                        <div class="col-12 w-100">
+                            <div class="player_profile_title">
+                                <span>{{ tutorshipDetails?.alumn?.full_name }}</span>
+                            </div>
+                            <div class="player_profile_academy">
+                                <span>{{ tutorshipDetails?.alumn?.alias }}</span>
+                            </div>
+                            <div class="d-flex text-center">
+                                <div class="mr-4">
+                                  <div class="player_profile_info_title">
+                                    <span>{{'PLAYERS.LBL_ALTURA' |translate}}</span>
+                                  </div>
+                                  <div class="player_profile_info_desc">
+                                    <span>{{tutorshipDetails.alumn?.height ? (tutorshipDetails.alumn?.height | number: '1.0-0') : '-'}} cm</span>
+                                  </div>
+                                </div>
+                                <div>
+                                  <div class="player_profile_info_title">
+                                    <span>{{'PLAYERS.LBL_PESO' | translate}}</span>
+                                  </div>
+                                  <div class="player_profile_info_desc">
+                                    <span>{{tutorshipDetails.alumn?.weight ? (tutorshipDetails.alumn?.weight | number: '1.0-1'): '-'}} kg</span>
+                                  </div>
+                                </div>
+                                <div class="ml-4">
+                                  <div class="player_profile_info_title text-center">
+                                    <span>{{'PSYCHOLOGY.LBL_AGE' | translate}}</span>
+                                  </div>
+                                  <div class="player_profile_info_desc text-right">
+                                    <span>{{tutorshipDetails.alumn?.age}} {{'LBL_YEARS' | translate}}</span>
+                                  </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div *ngIf="loading" class="row">
+                      <div class="col-12">
+                          <p-skeleton
+                          shape="rectangle"
+                          height="15px"
+                          width="150px"
+                          styleClass="mb-2"
+                          ></p-skeleton>
+                      </div>
+                    </div>
+
+                    <!-- <div class="player_profile_actions ml-lg-auto" *ngIf="tutorshipDetails">
+                      <button 
+                      class="btn" 
+                      [disabled]="loading" 
+                      (click)="deleteTutorship(tutorshipDetails.id)"
+                      pTooltip="{{'LBL_DELETE' | translate}}"
+                      >
+                          <img src="assets/img/icons/eliminar.svg" class=""/>
+                      </button>
+                    </div> -->
+    
+                  </div>
+                </div>
+            </div>
+        </div>
+     
+        <div class="col-12">
+            <div class="row mx-0 tutorship_details_container">
+                <div class="col-12 my-3">
+                    <div class="row">
+                          <div class="col-12 text-right" *ngIf="tutorshipDetails">
+                            <!-- Imprimir -->
+                            <button 
+                            class="btn"
+                            pTooltip="{{'LBL_PRINT' | translate}}"
+                            (click)="download(tutorshipDetails.id)"
+                            >
+                                <i class="pi pi-print"></i>
+                            </button>
+                            <!-- editar -->
+                            <button 
+                            class="btn"
+                            pTooltip="{{'LBL_EDIT' | translate}}"
+                            (click)="editingTutorship=newTutorshipDialog=true"
+                            >
+                              <img src="assets/img/icons/lapiz.svg" class="" />
+                            </button>
+                            <!-- eliminar -->
+                            <button 
+                            class="btn" 
+                            pTooltip="{{'LBL_DELETE' | translate}}"
+                            (click)="deleteTutorship(tutorshipDetails.id)"
+                            >
+                                <img src="assets/img/icons/eliminar.svg" class=""/>
+                            </button>
+                            
+                        </div>
+                        <!-- Fecha -->
+                        <div class="col-sm-6 col-xl-4 mb-5">
+                            <div class="player_info_title">
+                              <span>
+                                {{'tutor.tutorshipDate' | translate}}
+                              </span>
+                            </div>
+                            <span
+                            class="player_info_text"
+                            *ngIf="tutorshipDetails"
+                            >{{
+                                tutorshipDetails?.date|date:'d/M/y'
+                            }}
+                            </span>
+
+                            <p-skeleton
+                            shape="rectangle"
+                            height="15px"
+                            width="50%"
+                            styleClass="mb-2"
+                            *ngIf="loading"
+                            ></p-skeleton>
+                        </div>
+
+                        <!-- teacher -->
+                        <div class="col-sm-6 col-xl-4 mb-5">
+                            <div class="player_info_title">
+                              <span>
+                                {{'tutor.teacher' | translate}}
+                              </span>
+                            </div>
+                            <span
+                            class="player_info_text"
+                            *ngIf="tutorshipDetails"
+                            >{{ tutorshipDetails?.tutor.name}}</span
+                            >
+
+                            <p-skeleton
+                            shape="rectangle"
+                            height="15px"
+                            width="50%"
+                            styleClass="mb-2"
+                            *ngIf="loading"
+                            ></p-skeleton>
+                        </div>
+
+                        <!-- tutorship type -->
+                        <div class="col-sm-6 col-xl-4 mb-5">
+                            <div class="player_info_title">
+                              <span>
+                                {{'tutor.tutorshipType' | translate}}
+                              </span>
+                            </div>
+                            <span
+                            class="player_info_text"
+                            *ngIf="tutorshipDetails"
+                            >{{ tutorshipDetails?.tutorship_type.name}}</span
+                            >
+
+                            <p-skeleton
+                            shape="rectangle"
+                            height="15px"
+                            width="50%"
+                            styleClass="mb-2"
+                            *ngIf="loading"
+                            ></p-skeleton>
+                        </div>
+
+                        <!-- reason -->
+                        <div class="col-sm-6 col-xl-4 mb-5">
+                            <div class="player_info_title">
+                              <span>
+                                {{'tutor.reason' | translate}}
+                              </span>
+                            </div>
+                            <span
+                            class="player_info_text"
+                            *ngIf="tutorshipDetails"
+                            >{{ tutorshipDetails?.reason}}</span
+                            >
+
+                            <p-skeleton
+                            shape="rectangle"
+                            height="15px"
+                            width="50%"
+                            styleClass="mb-2"
+                            *ngIf="loading"
+                            ></p-skeleton>
+                        </div>
+
+                        <!-- resume -->
+                        <div class="col-sm-6 col-xl-4 mb-5">
+                            <div class="player_info_title">
+                              <span>
+                                {{'tutor.tutorship_resume' | translate}}
+                              </span>
+                            </div>
+                            <span
+                            class="player_info_text"
+                            *ngIf="tutorshipDetails"
+                            >{{ tutorshipDetails?.resume}}
+                            </span>
+
+                            <p-skeleton
+                            shape="rectangle"
+                            height="15px"
+                            width="50%"
+                            styleClass="mb-2"
+                            *ngIf="loading"
+                            ></p-skeleton>
+                        </div>
+
+                        <!-- specialist -->
+                        <div class="col-sm-6 col-xl-4 mb-5">
+                            <div class="player_info_title">
+                              <span>
+                                {{'tutor.specialist' | translate}}
+                              </span>
+                            </div>
+                            <span
+                            class="player_info_text"
+                            *ngIf="tutorshipDetails"
+                            >{{ tutorshipDetails?.specialist_referral.name}}</span>
+
+                            <p-skeleton
+                            shape="rectangle"
+                            height="15px"
+                            width="50%"
+                            styleClass="mb-2"
+                            *ngIf="loading"
+                            ></p-skeleton>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        </div>
+    </div>
+</div>
+
+<new-tutorship-dialog
+[visible]="newTutorshipDialog"
+[student]="tutorshipDetails"
+[editingTutorship]="editingTutorship"
+(close)="newTutorshipDialog=editingTutorship=false"
+(actionExecuted)="getTutorshipDetails()"
+></new-tutorship-dialog>

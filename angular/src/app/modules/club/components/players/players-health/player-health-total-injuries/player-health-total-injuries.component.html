@@ -1,0 +1,165 @@
+<div class="player mb-4">
+  <div class="avatar">
+    <div
+      [style.background-image]="'url(' + getImage() + ')'"
+      class="image"
+      *ngIf="role === 'teacher'"
+    ></div>
+
+    <img
+      src="{{ person | avatarPipe }}"
+      class="image"
+      alt="avatar"
+      *ngIf="role === 'sport'"
+    />
+
+    <img />
+    <span class="title">{{ person?.full_name }}</span>
+  </div>
+  <div class="last_injury">
+    <div class="mb-2">
+      {{ "PLAYERHEALTH.LBL_LAST_LESSION" | translate }}:<span class="date">
+        {{
+          injuriesHistory.length === 0
+            ? "-"
+            : (injuriesHistory[0].injury_date | date : "dd/MM/YYYY")
+        }}
+      </span>
+    </div>
+    <button
+      (click)="showLastInjury()"
+      [disabled]="injuriesHistory.length === 0"
+      class="last_injury_btn btn"
+      pTooltip="{{ 'PLAYERHEALTH.LBL_SHOW_LASTINJURY' | translate }}"
+      tooltipPosition="top"
+    >
+      {{ "PLAYERHEALTH.LBL_SHOW_LASTINJURY" | translate }}
+    </button>
+  </div>
+</div>
+<div class="injuries">
+  <div class="row">
+    <div class="col-md-4 mb-4 injury_element">
+      {{ "PLAYERHEALTH.LBL_TOTALLESIONES" | translate }}:
+      <strong>{{ totalInjuries }}</strong>
+    </div>
+    <div class="col-md-4 mb-4 injury_element">
+      {{ "PLAYERHEALTH.LBL_TRAUMATIC_INJURIES" | translate }}:
+      <strong>{{ injuriesByType?.traumatic_injury || 0 }}</strong>
+    </div>
+    <div class="col-md-4 mb-4 injury_element">
+      {{ "PLAYERHEALTH.LBL_OVERUSE_INJURIES" | translate }}:
+      <strong>{{ injuriesByType?.overuse_injury || 0 }}</strong>
+    </div>
+    <div class="col-12 injury_severities">
+      <span class="title"
+        >{{ "PLAYERHEALTH.LBL_SEVERITY_INJURIES" | translate }}:</span
+      >
+      <div class="pills">
+        <div class="pill">
+          {{ "PLAYERHEALTH.LBL_MINIMUN" | translate }}
+          <strong>{{ injuriesBySeverity?.severity_minimum }}</strong>
+        </div>
+        <div class="pill">
+          {{ "PLAYERHEALTH.LBL_MILD" | translate }}
+          <strong>{{ injuriesBySeverity?.severity_mild }}</strong>
+        </div>
+        <div class="pill">
+          {{ "PLAYERHEALTH.LBL_MODERATE" | translate }}
+          <strong>{{ injuriesBySeverity?.severity_moderate }}</strong>
+        </div>
+        <div class="pill">
+          {{ "PLAYERHEALTH.LBL_SERIOUS" | translate }}
+          <strong>{{ injuriesBySeverity?.severity_serious }}</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="injuries_risk_header" style="align-items: end">
+  <span>{{ "PLAYERHEALTH.LBL_DETAILED_INJURIES" | translate }}</span>
+  <div style="display: flex; align-items: center">
+    <span class="mr-2">{{
+      "injury_prevention.injury_risk_profile" | translate
+    }}</span>
+    <span
+      [pTooltip]="injuryRisk?.total_points"
+      [style]="{ color: injuryRisk?.rank.color }"
+      class="mr-2"
+      >{{ !!injuryRisk?.rank?.name ? injuryRisk?.rank.name : "N/A" }}</span
+    >
+    <button
+      (click)="calculateInjuryRisk()"
+      class="btn btn-primary"
+      pTooltip="{{ 'PLAYERHEALTH.LBL_CALCULATE' | translate }}"
+      tooltipPosition="top"
+    >
+      {{ "PLAYERHEALTH.LBL_CALCULATE" | translate }}
+    </button>
+  </div>
+</div>
+<div class="injuries_details">
+  <div class="row">
+    <div class="col-lg-6 px-0">
+      <ul class="injury_types">
+        <li *ngFor="let injury of injuriesHistory">
+          <p-accordion>
+            <p-accordionTab>
+              <ng-template pTemplate="header">
+                <img alt="" src="{{ injury.type_spec?.image.full_url }}" />
+                <span>{{ injury.area_body.name }}</span>
+              </ng-template>
+
+              <table>
+                <thead>
+                  <tr>
+                    <th>
+                      {{ "INJURY.LBL_DATE" | translate }}
+                    </th>
+                    <th>
+                      {{ "INJURY.LBL_LEAVING_DAYS" | translate }}
+                    </th>
+                    <th>
+                      {{ "INJURY.LBL_DEGREE_SEVERITY" | translate }}
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>{{ injury?.injury_date | date : "dd/MM/yyyy" }}</td>
+                    <td>{{ injury?.injury_day }}</td>
+                    <td>{{ injury?.severity?.name }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </p-accordionTab>
+          </p-accordion>
+        </li>
+      </ul>
+    </div>
+    <div class="col-lg-6 m-auto">
+      <div *ngIf="injuriesHistory && injuriesHistory.length > 0; else noInjury">
+        <injury-body [injuryImage]="injuriesImages"></injury-body>
+      </div>
+      <ng-template #noInjury>
+        <injury-body></injury-body>
+
+        <span *ngIf="role === 'sport'">
+          {{ "PLAYERHEALTH.LBL_PLAYER_NO_INJURIES" | translate }}
+        </span>
+
+        <span *ngIf="role === 'teacher'">
+          {{ "PLAYERHEALTH.LBL_ALUMN_NO_INJURIES" | translate }}
+        </span>
+      </ng-template>
+    </div>
+  </div>
+</div>
+
+<risk-calculator
+  (calculated)="riskCalculator = false"
+  (close)="riskCalculator = false"
+  (rankResult)="getRankResult($event)"
+  [entityId]="injuryRiskId"
+  [visible]="riskCalculator"
+></risk-calculator>

@@ -1,0 +1,133 @@
+<p-dialog
+  (onHide)="closeDialog()"
+  [(visible)]="visible"
+  [header]="'injury_prevention.calculate_risk' | translate"
+  [modal]="true"
+  [styleClass]="step != 0 ? 'wide_dialog' : ''"
+  class="custom_dialog"
+  id="risk_calculator_dialog"
+  maskStyleClass="purple_mask"
+  styleClass=""
+>
+  <div class="dialog_container" id="risk_calculator_dialog_container">
+    <form [formGroup]="calculatorForm">
+      <div *ngIf="step == 0" class="text-center">
+        <img
+          alt=""
+          class="py-5"
+          src="{{
+            resources + '/images/injury_prevention/injury_risk_calculator.svg'
+          }}"
+          width="300px"
+        />
+        <h6 class="mb-4">
+          {{ "injury_prevention.calculate_player_risk" | translate }}
+        </h6>
+      </div>
+      <div *ngIf="step == 1" class="step_content">
+        <div class="row">
+          <div class="col-12">
+            <ng-container *ngIf="calculatorOptions.length > 0">
+              <div
+                *ngFor="let option of calculatorOptions.slice(0, 5)"
+                class="hability"
+              >
+                <div class="hability_info">
+                  <div class="info">
+                    <span class="title">{{ option.name }}</span>
+                  </div>
+                </div>
+                <div class="hability_selectors">
+                  <p-selectButton
+                    (onChange)="selectOption($event)"
+                    [options]="option.calculator_entity_item_point_values"
+                    formControlName="{{ 'item' + option.id }}"
+                    optionLabel="{{ option.id }}"
+                  >
+                    <ng-template let-item pTemplate>
+                      <span>{{ item.title }}</span>
+                    </ng-template>
+                  </p-selectButton>
+                </div>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="step == 2" class="step_content">
+        <div class="row">
+          <div class="col-12">
+            <ng-container *ngIf="calculatorOptions.length > 0">
+              <div
+                *ngFor="let option of calculatorOptions.slice(5, 10)"
+                class="hability"
+              >
+                <div class="hability_info">
+                  <div class="info">
+                    <span class="title">{{ option.name }}</span>
+                  </div>
+                </div>
+                <div class="hability_selectors">
+                  <p-selectButton
+                    (onChange)="selectOption($event)"
+                    [options]="option.calculator_entity_item_point_values"
+                    formControlName="{{ 'item' + option.id }}"
+                    optionLabel="{{ option.id }}"
+                  >
+                    <ng-template let-item pTemplate>
+                      <span>{{ item.title | titlecase }}</span>
+                    </ng-template>
+                  </p-selectButton>
+                </div>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+    </form>
+    <div *ngIf="step != 0" class="step_markers_container">
+      <ul class="step_markers full_markers">
+        <li>
+          <span
+            (click)="step = 1"
+            [ngClass]="{ active: step == 1 }"
+            class="step_marker"
+          ></span>
+        </li>
+        <li>
+          <span [ngClass]="{ active: step == 2 }" class="step_marker"></span>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <p-footer>
+    <div class="footer_btns">
+      <button
+        (click)="step > 0 ? (step = step - 1) : closeDialog()"
+        [ngClass]="{ shrink_btn: step == 2 }"
+        class="btn back_btn"
+      >
+        {{ "LBL_ATRAS" | translate }}
+      </button>
+      <button
+        (click)="step <= 2 ? validateStep() : closeDialog()"
+        [disabled]="loading == true"
+        class="btn next_btn"
+      >
+        <span
+          *ngIf="loading"
+          aria-hidden="true"
+          class="spinner-border spinner-border-sm"
+          role="status"
+        ></span>
+        <span *ngIf="loading == false">
+          {{
+            step < 2
+              ? ("LBL_SIGUIENTE" | translate)
+              : ("BTN_FINALIZAR" | translate)
+          }}
+        </span>
+      </button>
+    </div>
+  </p-footer>
+</p-dialog>

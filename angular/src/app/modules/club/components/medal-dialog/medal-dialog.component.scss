@@ -1,0 +1,12 @@
+:host ::ng-deep{ 
+    #medal_dialog{
+        .p-dialog{
+            width: 500px;
+            .p-dialog-content{
+                #risk_calculator_dialog_container{
+                }
+            }
+        }
+    }
+}
+  

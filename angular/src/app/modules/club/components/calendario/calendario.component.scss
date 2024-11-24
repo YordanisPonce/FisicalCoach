@@ -1,0 +1,103 @@
+:host ::ng-deep .fc {
+  .fc-h-event {
+    background-color: #fefefe !important;
+    border-color: #fefefe !important;
+  }
+
+  .fc-event-today {
+    border-color: #FFFADF !important;
+  }
+
+  .fc-event .fc-event-main {
+    color: #000 !important;
+  }
+
+  .fc-toolbar.fc-header-toolbar {
+    margin-bottom: 0;
+    padding: 1.5rem 2rem !important;
+    .fc-toolbar-title {
+      font-size: 1rem !important;
+      color: #050c44;
+      font-weight: 600;
+    }
+    .fc-prev-button,
+    .fc-next-button {
+      background-color: transparent;
+      border: transparent;
+      color: #050c44;
+      .fc-icon {
+        font-size: 0.75rem !important;
+      }
+    }
+  }
+
+  .fc-col-header-cell.fc-day {
+    // background-color: turquoise
+    border: 0;
+    border-bottom: 1px solid #ddd;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+  }
+
+  .fc-col-header-cell-cushion {
+    text-decoration: none;
+    color: #050c44;
+    opacity: 0.49;
+    font-weight: 500;
+  }
+
+  .fc-daygrid-day-top {
+    // display: flex;
+    flex-direction: row;
+    .fc-daygrid-day-number {
+      // padding: 4px;
+      // position: relative;
+      // z-index: 4;
+      color: #050c44;
+      // opacity: 0.74;
+      font-weight: 500;
+      padding: 10px;
+      text-decoration: none;
+    }
+  }
+}
+
+.matches {
+  padding: 0;
+  .match {
+    display: flex;
+    list-style: none;
+    text-align: center;
+    justify-content: space-between;
+    padding: 2rem;
+    border-bottom: 1px solid #050c441a;
+    .match_info {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      .time {
+        font-size: 1.35rem;
+        font-weight: 700;
+        display: block;
+        position: relative;
+        margin-bottom: 0.25rem;
+      }
+      .separator {
+        width: 40px;
+        border: 2px solid #024cac;
+        margin: 0 auto 1rem;
+      }
+    }
+    .team {
+    }
+  }
+  .matches_footer {
+    padding: 1.5rem;
+    .btn_ver_calendario {
+      background-color: #0065e9;
+      color: white;
+      font-weight: 500;
+      padding: 0.5rem 2rem;
+    }
+  }
+}

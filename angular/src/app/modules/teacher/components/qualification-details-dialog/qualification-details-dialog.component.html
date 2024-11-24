@@ -1,0 +1,219 @@
+<p-dialog
+      (onHide)="closeDialog()"
+      [(visible)]="visible"
+      [header]="
+    ('qualification.calification_details' | translate) + ': ' + alumnName
+  "
+      [modal]="true"
+      class="custom_dialog"
+      id="new_calification_dialog"
+      maskStyleClass="purple_mask"
+>
+  <form action="">
+    <div class="dialog_container" id="calification_dialog_container">
+      <div class="row">
+        <div class="col-sm-6 mb-4">
+          <label>{{ "qualification.title" | translate }}</label>
+          <div class="">
+            <input
+                  class="form-control"
+                  readonly
+                  type="text"
+                  value="{{ qualification?.qualification?.title }}"
+            />
+          </div>
+        </div>
+        <!-- period -->
+        <div class="col-md-6 mb-4">
+          <label class="">{{ "MEMBERS.LBL_PERIODO" | translate }} *</label>
+          <div>
+            <p-dropdown
+                  [(ngModel)]="periodId"
+                  [ngModelOptions]="{ standalone: true }"
+                  [options]="periods"
+                  [readonly]="true"
+                  [styleClass]="'w-100 form-control'"
+                  id="period"
+                  optionLabel="title"
+                  optionValue="id"
+                  placeholder="{{ 'LBL_SELECCIONE' | translate }}"
+            ></p-dropdown>
+          </div>
+        </div>
+        <!-- descripcion -->
+        <div class="col-sm-6 mb-4">
+          <label>{{ "qualification.description" | translate }}</label>
+          <div class="">
+            <input
+                  class="form-control"
+                  readonly
+                  type="text"
+                  value="{{ qualification?.qualification?.description }}"
+            />
+          </div>
+        </div>
+        <!-- profesor -->
+        <div class="col-sm-6 mb-4">
+          <label>{{ "create_new_classroom.teacher" | translate }}</label>
+          <div class="">
+            <input
+                  class="form-control"
+                  readonly
+                  type="text"
+                  value="{{ qualification?.qualification?.tutor?.full_name }}"
+            />
+          </div>
+        </div>
+        <div class="col-12 mb-4 d-flex">
+          <div class="d-flex" style="width: 90%;">
+            <label class="mr-2">{{ "alumns.calification" | translate }}</label>
+            <div class="d-flex">
+              <span class="mr-3">{{ qualification?.grade }}</span>
+              <span
+                    [style]="{
+                  color: handleCalifications(qualification?.grade).color
+                }"
+              ><img
+                    alt=""
+                    src="{{ handleCalifications(qualification?.grade).icon }}"
+                    width="25px"
+              />
+                {{"qualification." + handleCalifications(qualification?.grade).label | translate}} {{handleCalifications(qualification?.grade).value}}</span
+              >
+            </div>
+          </div>
+          <div>
+            <button
+                  [disabled]="loadingPDF"
+                  class="btn action_btn"
+                  pTooltip="{{'LBL_PRINT' | translate}}"
+                  (click)="downloadPDFDetails(qualification, alumnId)"
+            >
+              <i *ngIf="!loadingPDF" class="pi pi-print"></i>
+              <img
+                *ngIf="loadingPDF"
+                src="assets/img/icons/loading.svg"
+                alt=""
+                width="50px"
+              />
+            </button>
+          </div>
+        </div>
+        <div class="col-12 mb-4 d-flex">
+          <label class="mr-2 mb-0">{{ "qualification.acquisition_degree" | translate }}</label>
+          <div class="d-flex flex-wrap">
+            <div *ngFor="let competence of qualification?.competences"
+                 class="competence d-flex align-items-center mr-2">
+              <span class="competence_abbr">{{ competence.competence.acronym }}</span>
+              <img alt="" class="mx-1" pTooltip="{{ competence.competence.name }}"
+                   src="{{ competence.competence.image.full_url }}" width="25px"/>
+              <span class="competence_grade font-weight-bold"
+                    pTooltip="{{ competence.competence_key }}">{{ getCompetenceKey(competence.competence_key, true) }}</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-12">
+          <div class="experiences_table">
+            <p-table [loading]="loading" [rows]="3" [showLoader]="false"
+                     [value]="qualification?.qualification?.qualification_items" class="p-datatable-responsive">
+              <ng-template pTemplate="header">
+                <tr class="text-center">
+                  <th class="text-center" style="width: 150px;">
+                    {{ "evaluation.rubric" | translate }}
+                  </th>
+                  <th class="text-center" style="width: 150px;">
+                    {{ "evaluation.evaluation" | translate }}
+                  </th>
+                  <th class="text-center" style="width: 50px">%</th>
+                  <th class="text-center" style="width: 115px;">
+                    {{ "alumns.calification" | translate }}
+                  </th>
+                  <th class="text-center">
+                    {{ "new_indicator.competences" | translate }}
+                  </th>
+                  <th class="text-center" style="width: 100px;"></th>
+                </tr>
+              </ng-template>
+              <ng-template let-item pTemplate="body">
+                <tr>
+                  <td class="text-center">
+                    <span class="p-column-title">{{"evaluation.rubric" | translate}}</span>
+                    {{ item.rubric.name }}
+                  </td>
+                  <td class="text-center">
+                    {{item?.evaluation?.evaluation_grade}}
+                  </td>
+                  <td class="text-center">
+                    <span class="p-column-title">%</span>
+                    {{ item.percentage }}
+                  </td>
+                  <td class="text-center">
+                    <span class="p-column-title">{{"alumns.calification" | translate}}</span>
+                    {{ getItem(item.id).items?.result }}
+                  </td>
+                  <td class="text-center">
+                    <span class="p-column-title">{{
+                       "new_indicator.competence" | translate
+                      }}</span>
+                    <div class="d-flex flex-wrap">
+                      <div *ngFor=" let competence of getItem(item.id).items ?.competence_score "
+                           class="competence d-flex align-items-center flex-wrap"
+                           pTooltip="{{ competence.competence.acronym + ' | ' + getCompetenceKey(competence.competence_key, true) }}">
+                        <img alt="" class="m-1" src="{{ competence.competence.image.full_url }}" width="25px"/>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="text-center">
+                    <a [queryParams]="{ rubric: item.rubric_id }"
+                       [routerLink]="'/teacher/evaluation/rubrics-by-alumn/' + alumnId"
+                       [state]="item.rubric">{{'evaluation.detail'|translate}}</a>
+                  </td>
+                </tr>
+              </ng-template>
+              <ng-template let-columns pTemplate="emptymessage">
+                <tr>
+                  <td colspan="5" style="text-align: center">
+                    {{ "LBL_SINREGISTROS" | translate }}
+                  </td>
+                </tr>
+              </ng-template>
+              <ng-template let-columns pTemplate="loadingbody">
+                <tr *ngFor="let i of [1, 2, 3]">
+                  <td>
+                    <p-skeleton height="1rem" width="100%"></p-skeleton>
+                  </td>
+                  <td>
+                    <p-skeleton height="1rem" width="100%"></p-skeleton>
+                  </td>
+                  <td>
+                    <p-skeleton height="1rem" width="100%"></p-skeleton>
+                  </td>
+                  <td>
+                    <p-skeleton height="1rem" width="100%"></p-skeleton>
+                  </td>
+                  <td>
+                    <p-skeleton height="1rem" width="100%"></p-skeleton>
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+  <ng-template pTemplate="footer">
+    <div class="footer_btns">
+      <button (click)="closeDialog()" class="back_btn btn">
+        {{ "LBL_ATRAS" | translate }}
+      </button>
+      <!-- <button 
+      class="next_btn btn" 
+      (click)="details!=true ? onSubmit() : ''"
+      [disabled]="(loading === true || details===true || loadingRubrics===true || (rubrics && getIndicatorsTotalpercentage()!=100))"
+      >
+        {{ editing ? ('qualification.edit_qualification' | translate) : ('qualification.create_qualification' | translate) }}
+      </button> -->
+    </div>
+  </ng-template>
+</p-dialog>

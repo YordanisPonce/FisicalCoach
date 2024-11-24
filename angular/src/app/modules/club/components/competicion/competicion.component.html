@@ -1,0 +1,31 @@
+<div class="row">
+    <div class="col-lg-8">
+        <router-outlet></router-outlet>
+    </div>
+    <div class="col-lg-4">
+        <p-tabView>
+            <p-tabPanel [header]="tab.name" *ngFor="let tab of games; let i = index" [selected]="i == 0">
+                <ul class="matches">
+                    <li class="match" *ngFor="let match of [0,1,2,3]">
+                        <div class="team">
+                            <p-avatar image="assets/img/equipo.png" size="large"></p-avatar>
+                            <span class="d-block font-weight-600">ALF</span>
+                        </div>
+                        <div class="match_info">
+                            <span class="time">17:00</span>
+                            <div class="separator"></div>
+                            <small class="font-weight-600 text-secondary">Premiere League</small>
+                        </div>
+                        <div class="team">
+                            <p-avatar image="assets/img/equipo.png" size="large"></p-avatar>
+                            <span class="d-block font-weight-600">ALF</span>
+                        </div>
+                    </li>
+                    <div class="matches_footer">
+                        <a routerLink="calendario" class="btn btn_ver_calendario">Ver calendario</a>
+                    </div>
+                </ul>
+            </p-tabPanel>
+        </p-tabView>
+    </div>
+</div>

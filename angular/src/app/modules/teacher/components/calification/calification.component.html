@@ -1,0 +1,276 @@
+<div class="card box-shadow">
+  <div class="card-body p-0">
+    <div class="row">
+      <div class="col-12">
+        <div class="calification_header view_header p-4">
+          <p-selectButton
+            (onChange)="resetFilter()"
+            [(ngModel)]="selectedView"
+            [options]="views"
+            optionLabel="name"
+            optionValue="value"
+            styleClass="mb-2"
+          ></p-selectButton>
+
+          <span class="buscador p-input-icon-left d-md-inline">
+            <i class="pi pi-search"></i>
+            <input
+              (keyup)="search($event)"
+              [(ngModel)]="inputSearch"
+              pInputText
+              placeholder="{{ 'LBL_SEARCH' | translate }}"
+              type="text"
+            />
+          </span>
+
+          <div class="header_buttons">
+            <button
+              (click)="calificationDialog = true"
+              class="btn action"
+              pButton
+            >
+              <span class="d-md-inline mr-1">{{
+                "qualification.new_qualification" | translate
+              }}</span>
+              <i class="fa fa-plus text-white"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="col-12">
+        <div *ngIf="selectedView === 'qualifications'">
+          <p-table
+            [alwaysShowPaginator]="false"
+            [loading]="loading"
+            [paginator]="true"
+            [rows]="10"
+            [showLoader]="false"
+            [value]="qualificationList"
+            class="p-datatable-responsive"
+          >
+            <ng-template let-qualification pTemplate="body">
+              <tr>
+                <td class="">
+                  <h6 class="title">
+                    <span><i class="pi pi-list mr-2"></i></span>
+                    {{ qualification.title }}
+                  </h6>
+                  <p class="description">{{ qualification.description }}</p>
+                </td>
+
+                <td class="text-lg-right actions">
+                  <span class="p-column-title">{{
+                    "LBL_ACTIONS" | translate
+                  }}</span>
+                  <button
+                    (click)="showQualification(qualification)"
+                    class="btn view_btn"
+                  >
+                    <img src="{{ urlImages + 'images/menu/ver.svg' }}" />
+                  </button>
+                  <button
+                    (click)="editQualification(qualification)"
+                    class="btn"
+                  >
+                    <img src="{{ urlImages + 'images/menu/edit.svg' }}" />
+                  </button>
+                  <button (click)="confirm(qualification.id)" class="btn">
+                    <img src="{{ urlImages + 'images/menu/delete.svg' }}" />
+                  </button>
+                </td>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+              <tr>
+                <td colspan="6" style="text-align: center">
+                  {{ "nodata.sincalificaciones" | translate }}
+                </td>
+              </tr>
+            </ng-template>
+            <ng-template let-columns pTemplate="loadingbody">
+              <tr *ngFor="let i of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]">
+                <td>
+                  <p-skeleton height="1rem" width="100%"></p-skeleton>
+                </td>
+                <td class="d-flex justify-content-around">
+                  <p-skeleton height="1rem" width="20px"></p-skeleton>
+                  <p-skeleton height="1rem" width="20px"></p-skeleton>
+                  <p-skeleton height="1rem" width="20px"></p-skeleton>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+        <div *ngIf="selectedView === 'students'">
+          <div *ngIf="qualificationList.length > 0; else noQualifications">
+            <p-table
+              [loading]="loading"
+              [showLoader]="false"
+              [value]="classroomStudents"
+              class="p-datatable-responsive"
+              styleClass="alumns_table"
+            >
+              <ng-template let-student pTemplate="body">
+                <tr>
+                  <td class="alumn">
+                    <div class="student d-flex align-items-center">
+                      <div
+                        *ngIf="student.alumn.image != null"
+                        class="alumn_image"
+                        style="background-image: url('{{
+                          student.alumn.image.full_url
+                        }}')"
+                      ></div>
+                      <div
+                        *ngIf="
+                          student.alumn.image === null &&
+                          student.alumn.gender.code === 'female'
+                        "
+                        class="alumn_image"
+                        style="background-image: url({{ girlAlumnImage }})"
+                      ></div>
+                      <div
+                        *ngIf="
+                          student.alumn.image === null &&
+                          (student.alumn.gender.code === 'male' ||
+                            student.alumn.gender.code === 'undefined')
+                        "
+                        class="alumn_image"
+                        style="background-image: url({{ boyAlumnImage }})"
+                      ></div>
+                      <span class="alumn_name font-weight-bold">{{
+                        student.alumn.full_name
+                      }}</span>
+                    </div>
+                  </td>
+
+                  <td>
+                    <p-carousel
+                      [numScroll]="1"
+                      [numVisible]="3"
+                      [responsiveOptions]="responsiveOptions"
+                      [value]="student.qualifications"
+                    >
+                      <ng-template let-option pTemplate="item">
+                        <div class="option">
+                          <!-- <button (click)="updateDailyControl(option)"> -->
+                          <button
+                            (click)="
+                              alumnQualificationsDetails(
+                                option.qualification.id,
+                                student.alumn.id,
+                                student.alumn.full_name
+                              )
+                            "
+                          >
+                            <span class="value">{{ option.grade }}</span>
+
+                            <div class="title">
+                              {{ option.qualification.title }}
+                            </div>
+                          </button>
+                        </div>
+                      </ng-template>
+                    </p-carousel>
+                  </td>
+
+                  <td class="text-sm-right actions">
+                    <span class="p-column-title">
+                      {{ "LBL_ACTIONS" | translate }}</span
+                    >
+                    <button
+                      (click)="downloadPDFAll(student)"
+                      [disabled]="loadingPDF"
+                      class="btn action_btn"
+                      pTooltip="{{ 'LBL_PRINT' | translate }}"
+                    >
+                      <i class="pi pi-print"></i>
+                    </button>
+                  </td>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="emptymessage">
+                <tr>
+                  <td colspan="3" style="text-align: center">
+                    <p class="nodata">
+                      {{ "nodata.sincalificaciones" | translate }}
+                    </p>
+                  </td>
+                </tr>
+              </ng-template>
+              <ng-template let-columns pTemplate="loadingbody">
+                <tr *ngFor="let i of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]">
+                  <td>
+                    <p-skeleton height="1rem" width="100%"></p-skeleton>
+                  </td>
+                  <td>
+                    <p-skeleton height="1rem" width="100%"></p-skeleton>
+                  </td>
+                  <td class="">
+                    <p-skeleton height="1rem" width="20px"></p-skeleton>
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
+          <ng-template #noQualifications>
+            <div class="text-center py-4">
+              <p class="nodata">
+                {{ "nodata.sincalificaciones" | translate }}
+              </p>
+            </div>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<new-calification-dialog
+  (close)="calificationDialog = $event; qualification = details = undefined"
+  (created)="getQualifications(); getClassroomStudents()"
+  [details]="details"
+  [qualification]="qualification"
+  [visible]="calificationDialog"
+></new-calification-dialog>
+
+<qualification-details-dialog
+  (close)="
+    alumnQualificationsDialog = $event;
+    qualificationId = alumnQualificationId = undefined
+  "
+  [alumnId]="alumnQualificationId"
+  [alumnName]="alumnQualificationName"
+  [qualificationId]="qualificationId"
+  [visible]="alumnQualificationsDialog"
+></qualification-details-dialog>
+
+<p-confirmDialog
+  #cd
+  [style]="{ width: '50vw' }"
+  class="custom_dialog"
+  maskStyleClass="purple_mask"
+>
+  <ng-template pTemplate="header">
+    <h3>{{ "LBL_CONFIRM_DIALOG" | translate }}</h3>
+  </ng-template>
+  <ng-template pTemplate="footer">
+    <div class="footer_btns">
+      <button
+        (click)="cd.reject()"
+        icon="pi pi-times"
+        label="{{ 'LBL_NO' | translate }}"
+        pButton
+        type="button"
+      ></button>
+      <button
+        (click)="cd.accept()"
+        class="next_btn"
+        icon="pi pi-check"
+        label="{{ 'LBL_YES' | translate }}"
+        pButton
+        type="button"
+      ></button>
+    </div>
+  </ng-template>
+</p-confirmDialog>

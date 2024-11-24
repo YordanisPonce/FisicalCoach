@@ -1,0 +1,63 @@
+<p-dialog
+  class="dialog"
+  [modal]="true"
+  id="scouting-confirm-dialog"
+  [(visible)]="visible"
+  styleClass=""
+  maskStyleClass="purple_mask"
+  (onHide)="closeDialog()"
+>
+  <div class="scouting">
+    <div class="main-image">
+      <img
+        src="{{ resources + '/images/scouting/ended_scouting.svg' }}"
+        alt="finish"
+      />
+    </div>
+    <h5 class="title">
+      {{ "scouting.finishScoutingConfirmation" | translate }}
+    </h5>
+
+    <div class="text-left" *ngIf="sportCode === 'swimming'">
+      <label class="input-label" for="">{{
+        "scouting.add_real_time" | translate
+      }}</label>
+
+      <p-inputMask
+        [(ngModel)]="finalTimer"
+        mask="99:99"
+        class="form-control"
+        (ngModelChange)="convertSecondsToMinutes($event)"
+      ></p-inputMask>
+
+      <div *ngIf="submit && errorMessage" class="form-text text-danger">
+        {{ "LBL_FIELD_REQUIRED" | translate }}
+      </div>
+    </div>
+  </div>
+  <p-footer>
+    <div class="footer_btns">
+      <button type="button" class="btn back_btn" (click)="closeDialog()">
+        {{ "LBL_ATRAS" | translate }}
+      </button>
+
+      <button
+        type="button"
+        class="btn next_btn"
+        *ngIf="loading"
+        [disabled]="true"
+      >
+        {{ "BTN_FINALIZANDO" | translate }}
+      </button>
+
+      <button
+        type="button"
+        class="btn next_btn"
+        (click)="handleScouting()"
+        *ngIf="!loading"
+      >
+        {{ "BTN_CONFIRMAR" | translate }}
+      </button>
+    </div>
+  </p-footer>
+</p-dialog>

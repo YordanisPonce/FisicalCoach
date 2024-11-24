@@ -1,0 +1,339 @@
+<p-dialog
+  id="evolucion_psicologica_dialog"
+  class="custom_dialog"
+  [modal]="true"
+  [(visible)]="visible"
+  styleClass="fullscreenDialog"
+  maskStyleClass=""
+  (onHide)="closeDialog()"
+>
+  <ng-template pTemplate="header">
+    <div class="d-flex header_content">
+      <img src="/assets/img/logo_panel.svg" alt="logo" />
+    </div>
+  </ng-template>
+  <div
+    id="evolucion_psicologica_dialog_container"
+    class="dialog_container wide"
+  >
+    <div class="step_content">
+      <div>
+        <div>
+          <div class="questions">
+            <div class="text-center">
+              <h4 class="mb-3" style="margin-top: 8rem">
+                <strong>{{ getStepTitle(step, true, true) }}</strong>
+              </h4>
+              <h5 class="font-weight-500">
+                Usted está cambiando de <strong>{{ currentPackage }}</strong> a
+                <strong> {{ selectedPackage.name }}</strong>
+                <span *ngIf="showData">
+                  y tiene mas
+                  {{ getStepTitle(step, true) }} de lo que su plan permite. Debe
+                  seleccionar {{ getStepTitle(step, false) }} que desea eliminar
+                </span>
+              </h5>
+
+              <h6
+                *ngIf="planData.teacher[currentCode] && showData"
+                class="mt-2"
+              >
+                {{ getStepTitleByCode(step) }}
+                {{ planData.teacher[currentCode].length }} /
+                {{ getStepTotal() }}
+              </h6>
+
+              <h6 *ngIf="!showData" class="my-4">Sin Datos</h6>
+            </div>
+
+            <div
+              class="d-flex justify-content-between mt-3 mb-2"
+              *ngIf="showData"
+            >
+              <button class="btn btn-primary p-2" (click)="selectAllIds('')">
+                Seleccionar todos
+              </button>
+
+              <button
+                class="btn btn-primary p-2"
+                (click)="selectAllIds('recent')"
+              >
+                Seleccionar primeros
+              </button>
+
+              <button
+                class="btn btn-primary p-2"
+                (click)="selectAllIds('latest')"
+              >
+                Seleccionar últimos
+              </button>
+            </div>
+
+            <p-scrollPanel
+              class="question"
+              [style]="{ width: '100%', height: '400px' }"
+              *ngIf="showData"
+            >
+              <!-- tutorships -->
+              <div
+                *ngIf="tutorshipList.schools_center.length > 0 && step === 0"
+              >
+                <div
+                  class="my-5"
+                  *ngFor="let item of tutorshipList.schools_center; index as i"
+                >
+                  <div *ngIf="item.classrooms.length > 0">
+                    <h6 class="d-flex align-items-center mb-2">
+                      <span>{{ item.name }}</span>
+                    </h6>
+                    <div *ngFor="let classroom of item.classrooms; index as i">
+                      <div *ngIf="classroom.academicYears.length > 0">
+                        <div>
+                          <h6 class="d-flex align-items-center mb-3 mt-2 ml-2">
+                            <span>{{ classroom.name }}</span>
+                          </h6>
+
+                          <div
+                            *ngFor="
+                              let academicYear of classroom.academicYears;
+                              index as i
+                            "
+                          >
+                            <div *ngIf="academicYear.alumns.length > 0">
+                              <div *ngFor="let alumn of academicYear.alumns">
+                                <h6
+                                  class="d-flex align-items-center mb-3 mt-2 ml-4"
+                                  *ngIf="alumn.tutorships.length > 0"
+                                >
+                                  <span>{{ alumn.full_name }}</span>
+                                </h6>
+
+                                <div
+                                  class="options row"
+                                  *ngIf="alumn.tutorships.length > 0"
+                                >
+                                  <div
+                                    *ngFor="
+                                      let tutorship of alumn.tutorships;
+                                      index as i
+                                    "
+                                    class="option-content col-12 col-md-6"
+                                  >
+                                    <p-checkbox
+                                      label="{{ tutorship.reason }}"
+                                      [value]="tutorship.id"
+                                      [(ngModel)]="selectedTutorships"
+                                      (onChange)="
+                                        handleSelectAttributesData(
+                                          'tutorships',
+                                          tutorship.id
+                                        )
+                                      "
+                                    ></p-checkbox>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- rubrics -->
+
+              <!-- <div *ngIf="rubricList.schools_center.length > 0 && step === 1">
+                <div
+                  class="my-5"
+                  *ngFor="let item of rubricList.schools_center; index as i"
+                >
+                  <h6 class="d-flex align-items-center mb-2">
+                    <span>{{ item.name }}</span>
+                  </h6>
+
+                  <div *ngFor="let classroom of item.classrooms; index as i">
+                    <div *ngIf="classroom.rubrics.length > 0">
+                      <h6 class="d-flex align-items-center mb-3 mt-2 ml-2">
+                        <span>{{ classroom.name }}</span>
+                      </h6>
+
+                      <div class="options row">
+                        <div
+                          *ngFor="let rubric of classroom.rubrics; index as i"
+                          class="option-content col-12 col-md-6"
+                        >
+                          <p-checkbox
+                            label="{{ rubric.name }}"
+                            [value]="rubric.id"
+                           
+                          ></p-checkbox>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div> -->
+
+              <!-- tests -->
+              <div *ngIf="testList.schools_center.length > 0 && step === 1">
+                <div
+                  class="my-5"
+                  *ngFor="let item of testList.schools_center; index as i"
+                >
+                  <div *ngIf="item.classrooms.length > 0">
+                    <h6 class="d-flex align-items-center mb-2">
+                      <span>{{ item.name }}</span>
+                    </h6>
+                    <div *ngFor="let classroom of item.classrooms; index as i">
+                      <div *ngIf="classroom.academicYears.length > 0">
+                        <div>
+                          <h6 class="d-flex align-items-center mb-3 mt-2 ml-2">
+                            <span>{{ classroom.name }}</span>
+                          </h6>
+
+                          <div
+                            *ngFor="
+                              let academicYear of classroom.academicYears;
+                              index as i
+                            "
+                          >
+                            <div *ngIf="academicYear.alumns.length > 0">
+                              <div *ngFor="let alumn of academicYear.alumns">
+                                <h6
+                                  class="d-flex align-items-center mb-3 mt-2 ml-4"
+                                  *ngIf="alumn.tests?.length > 0"
+                                >
+                                  <span>{{ alumn.full_name }}</span>
+                                </h6>
+
+                                <div
+                                  class="options row"
+                                  *ngIf="alumn.tests?.length > 0"
+                                >
+                                  <div
+                                    *ngFor="let test of alumn.tests; index as i"
+                                    class="option-content col-12 col-md-6"
+                                  >
+                                    <p-checkbox
+                                      label="{{ test.date_application }}"
+                                      [value]="test.id"
+                                      [(ngModel)]="selectedTests"
+                                      (onChange)="
+                                        handleSelectAttributesData(
+                                          'tests',
+                                          test.id
+                                        )
+                                      "
+                                    ></p-checkbox>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- sessions -->
+
+              <div *ngIf="sessionList.schools_center.length > 0 && step === 2">
+                <div
+                  class="my-5"
+                  *ngFor="let item of sessionList.schools_center; index as i"
+                >
+                  <h6 class="d-flex align-items-center mb-2">
+                    <span>{{ item.name }}</span>
+                  </h6>
+
+                  <div *ngFor="let classroom of item.classrooms; index as i">
+                    <div *ngIf="classroom.exercise_sessions.length > 0">
+                      <h6 class="d-flex align-items-center mb-3 mt-2 ml-2">
+                        <span>{{ classroom.name }}</span>
+                      </h6>
+
+                      <div class="options row">
+                        <div
+                          *ngFor="
+                            let session of classroom.exercise_sessions;
+                            index as i
+                          "
+                          class="option-content col-12 col-md-6"
+                        >
+                          <p-checkbox
+                            label="{{ session.title }}"
+                            [value]="session.id"
+                            [(ngModel)]="selectedSessions"
+                            (onChange)="
+                              handleSelectAttributesData(
+                                'exercise_sessions',
+                                session.id
+                              )
+                            "
+                          ></p-checkbox>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </p-scrollPanel>
+
+            <div class="questions_nav">
+              <button class="btn back_btn_progress" (click)="handleSteps(true)">
+                <i class="pi pi-arrow-left"></i>
+              </button>
+              <div class="questions_bar">
+                <p-progressBar
+                  [value]="((step + 1) * 100) / 3"
+                  [showValue]="false"
+                ></p-progressBar>
+              </div>
+              <button
+                class="btn btn-primary next_question_btn"
+                (click)="handleSteps()"
+                [disabled]="handleSubmitValidation() && showData"
+              >
+                <i class="pi pi-arrow-right" *ngIf="!loading"></i>
+                <i class="pi pi-spin pi-spinner" *ngIf="loading"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</p-dialog>
+
+<p-confirmDialog
+  #cd
+  [style]="{ width: '50vw' }"
+  class="custom_dialog"
+  maskStyleClass="purple_mask"
+>
+  <!-- <ng-template pTemplate="header">
+      <h3>{{ 'LBL_CONFIRM_DIALOG' | translate}}</h3>
+  </ng-template> -->
+  <ng-template pTemplate="footer">
+    <div class="footer_btns">
+      <button
+        (click)="cd.reject()"
+        label="{{ 'LBL_NO' | translate }}"
+        pButton
+        type="button"
+        class="back_btn"
+      ></button>
+      <button
+        (click)="cd.accept()"
+        class="next_btn"
+        label="{{ 'LBL_YES' | translate }}"
+        pButton
+        type="button"
+      ></button>
+    </div>
+  </ng-template>
+</p-confirmDialog>

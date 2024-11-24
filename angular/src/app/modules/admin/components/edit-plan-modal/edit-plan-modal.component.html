@@ -1,0 +1,81 @@
+<p-dialog 
+  [(visible)]="visible" 
+  [closable]="true"
+  (onHide)="close()"
+  [modal]="true"
+  class="custom_dialog" 
+  header="{{'Detalles plan'|translate}}"
+  id="subscriptiondetail" 
+  maskStyleClass="purple_mask"
+>
+  <div *ngIf="subpackageData" class="row" style="margin: 10px">
+    <div class="table_labels">
+      <div *ngFor="let item of subpackageData.attributes" style="display: flex; flex-direction: row;">
+        <div class="labels">{{item.name}}</div>
+      </div>
+    </div>
+
+    <div class="row mx-lg-n2">
+      <div class="suscription_pack">
+        <table class="table text-center">
+          <thead style="height: 80px">
+            <tr>
+              <th class="text-center">{{ 'Detalles' | translate }}</th>
+              <th class="text-center">{{ 'Habilitar/Deshabilitar' | translate }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let data of subpackageData.attributes">
+              <ng-container *ngIf="data && data.pivot">
+                <td class="text-center">
+                  <ng-container *ngIf="data.name === 'Clubs' || data.name === 'Competición' || data.name === 'Scouting de partidos'">
+                    <input 
+                      type="checkbox" 
+                      [(ngModel)]="data.pivot.available" 
+                      (change)="onToggleAvailable(data)" 
+                      class="custom-checkbox align-left">
+                  </ng-container>
+                  <ng-container *ngIf="data.pivot.quantity !== undefined && data.name !== 'Clubs' && data.name !== 'Competición' && data.name !== 'Scouting de partidos'">
+                    <input 
+                      type="number" 
+                      [(ngModel)]="tempQuantity[data.id]"
+                      [disabled]="!data.pivot.available" 
+                      min="0" 
+                      (blur)="validateEmptyField(data.id)"  
+                      step="1"
+                      class="text-center"
+                      style="width: 50px; border: none;">
+                  </ng-container>
+                </td>
+                
+                <td class="text-center">
+                  <ng-container *ngIf="!data.pivot.quantity">
+                    <input 
+                      type="checkbox" 
+                      [(ngModel)]="data.pivot.available" 
+                      (change)="onToggleAvailable(data)" 
+                      class="custom-checkbox align-left">
+                  </ng-container>
+                  <ng-container *ngIf="data.pivot.quantity">
+                    <input 
+                      type="checkbox" 
+                      [(ngModel)]="data.pivot.available" 
+                      (change)="onToggleAvailable(data)" 
+                      class="custom-checkbox align-left">
+                  </ng-container>
+                </td>
+              </ng-container>
+            </tr>
+          </tbody>
+        </table>
+        <div class="button-container text-center">
+          <button class="btn btn-primary p-button" 
+                  (click)="saveData()" 
+                  [disabled]="hasEmptyFields()">
+            {{ 'Actualizar plan' | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</p-dialog>

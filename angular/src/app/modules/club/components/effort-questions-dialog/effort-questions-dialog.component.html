@@ -1,0 +1,281 @@
+<p-dialog
+  (onHide)="closeDialog()"
+  [(visible)]="visible"
+  [draggable]="false"
+  [header]="
+    !advancedDialog ? ('effort_recovery.new_questionnaire' | translate) : ''
+  "
+  [modal]="true"
+  [ngClass]="{ fullscreenDialog: advancedDialog == true }"
+  class="custom_dialog"
+  id="effort_questions_dialog"
+  maskStyleClass="purple_mask"
+  styleClass=""
+>
+  <ng-template pTemplate="header">
+    <div *ngIf="advancedDialog" class="d-flex flex-column header_content">
+      <img alt="" src="/assets/img/logo_panel.svg" />
+    </div>
+  </ng-template>
+  <div class="dialog_container" id="effort_questions_dialog_container">
+    <!-- <div *ngIf="!advancedDialog">
+      <form [formGroup]="newProgramForm">
+        <div class="step_content" *ngIf="step == 0">
+          <div class="row">
+            <div class="mb-4 col-12">
+              <label for="">{{
+                "recovery_questionnaire.use_strategies" | translate
+              }}</label>
+              <div class="d-flex align-items-center">
+                <p-radioButton
+                  name="has_strategy"
+                  [value]="true"
+                  label="{{ 'LBL_YES' | translate }}"
+                  class="mr-5"
+                  formControlName="has_strategy"
+                >
+                </p-radioButton>
+                <p-radioButton
+                  name="has_strategy"
+                  [value]="false"
+                  label="{{ 'LBL_NO' | translate }}"
+                  class="mr-3"
+                  formControlName="has_strategy"
+                >
+                </p-radioButton>
+              </div>
+            </div>
+            <div class="mb-4 col-12">
+              <label for="">{{
+                "recovery_questionnaire.strategy_types" | translate
+              }}</label>
+              <div>
+                <p-multiSelect
+                  [options]="effortRecoveryStrategies"
+                  formControlName="effort_recovery_strategy_ids"
+                  [styleClass]="'w-100 form-control'"
+                  placeholder="{{
+                    'recovery_questionnaire.select_strategy' | translate
+                  }}"
+                  optionLabel="name"
+                  optionValue="id"
+                  [ngClass]="{
+                    'ng-invalid ng-dirty is-invalid':
+                      newProgramControls.effort_recovery_strategy_ids.invalid &&
+                      (newProgramControls.effort_recovery_strategy_ids.dirty ||
+                        newProgramControls.effort_recovery_strategy_ids.touched)
+                  }"
+                  [disabled]="!newProgramControls.has_strategy.value"
+                ></p-multiSelect>
+                <div
+                  class="invalid-feedback"
+                  *ngIf="
+                    newProgramControls.effort_recovery_strategy_ids?.errors
+                  "
+                >
+                  {{ "new_program.validate_program_type" | translate }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div> -->
+
+    <div *ngIf="!startedTest" class="w-100">
+      <div class="step_content split_content">
+        <div class="test_image text-center p-4">
+          <img
+            alt=""
+            src="{{
+              urlImages + 'images/effort_recovery/recuperacion_del_esfuerzo.svg'
+            }}"
+          />
+        </div>
+        <div class="test_description">
+          <h5 class="title">
+            {{ "recovery_questionnaire.wellness_questionnaire" | translate }}
+          </h5>
+          <p class="text">
+            {{ "recovery_questionnaire.description" | translate }}
+          </p>
+
+          <form [formGroup]="newProgramForm">
+            <div class="mb-4">
+              <label for="">{{
+                "recovery_questionnaire.use_strategies" | translate
+              }}</label>
+              <div class="d-flex align-items-center">
+                <p-radioButton
+                  [value]="true"
+                  class="mr-5"
+                  formControlName="has_strategy"
+                  label="{{ 'LBL_YES' | translate }}"
+                  name="has_strategy"
+                >
+                </p-radioButton>
+                <p-radioButton
+                  [value]="false"
+                  class="mr-3"
+                  formControlName="has_strategy"
+                  label="{{ 'LBL_NO' | translate }}"
+                  name="has_strategy"
+                >
+                </p-radioButton>
+              </div>
+            </div>
+            <div class="mb-4">
+              <label for="">{{
+                "recovery_questionnaire.strategy_types" | translate
+              }}</label>
+              <div class="selected-questions">
+                <p-multiSelect
+                  [disabled]="!newProgramForm.value?.has_strategy"
+                  [maxSelectedLabels]="1"
+                  [ngClass]="{
+                    'ng-invalid ng-dirty is-invalid':
+                      newProgramControls.effort_recovery_strategy_ids.invalid &&
+                      (newProgramControls.effort_recovery_strategy_ids.dirty ||
+                        newProgramControls.effort_recovery_strategy_ids.touched)
+                  }"
+                  [options]="effortRecoveryStrategies"
+                  [styleClass]="'w-100 form-control  '"
+                  formControlName="effort_recovery_strategy_ids"
+                  optionLabel="name"
+                  optionValue="id"
+                  placeholder="{{
+                    'recovery_questionnaire.select_strategy' | translate
+                  }}"
+                ></p-multiSelect>
+                <div
+                  *ngIf="
+                    newProgramControls.effort_recovery_strategy_ids?.errors
+                  "
+                  class="invalid-feedback"
+                >
+                  {{ "new_program.validate_program_type" | translate }}
+                </div>
+              </div>
+            </div>
+          </form>
+          <div class="text-center nav_btns">
+            <button (click)="closeDialog()" class="btn back_btn btn-outline">
+              {{ "LBL_ATRAS" | translate }}
+            </button>
+            <button
+              (click)="saveRecoveryProgram()"
+              [disabled]="
+                loading ||
+                (newProgramForm.value.effort_recovery_strategy_ids?.length ===
+                  0 &&
+                  newProgramForm.value.has_strategy)
+              "
+              class="btn btn-primary next_btn"
+            >
+              {{ "recovery_questionnaire.initquestionnaire" | translate }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="startedTest" class="w-100">
+      <form [formGroup]="newQuestionnaireForm">
+        <div class="questions">
+          <div
+            *ngFor="let question of questionnaire; index as i"
+            class="question"
+          >
+            <!-- {{i}}
+                        {{step}} -->
+            <div *ngIf="step == i + 1">
+              <div class="image text-center">
+                <img alt="" src="{{ question.image.full_url }}" width="100px" />
+              </div>
+              <div class="title">{{ question.name }}</div>
+              <div class="subtitle mt-4 mb-5">
+                {{
+                  "recovery_questionnaire.wellness_questionnaire" | translate
+                }}
+              </div>
+              <p-selectButton
+                [options]="question.items"
+                formControlName="{{ 'question' + question.id }}"
+                optionLabel="{{ 'question' + question.id }}"
+              >
+                <ng-template let-item pTemplate>
+                  <div class="item">
+                    <img
+                      alt=""
+                      class="icon"
+                      src="{{ urlImages + 'images/face/' + item.icon }}"
+                    />
+                    <span class="value">{{ item.name }}</span>
+                  </div>
+                </ng-template>
+              </p-selectButton>
+            </div>
+          </div>
+          <div class="questions_nav">
+            <button
+              (click)="step > 1 ? prevQuestion() : ''"
+              class="btn back_btn"
+            >
+              <i class="pi pi-arrow-left"></i>
+            </button>
+
+            <div class="questions_bar">
+              <p-progressBar
+                [showValue]="false"
+                [value]="value"
+              ></p-progressBar>
+            </div>
+
+            <button
+              (click)="
+                step < questionnaire.length ? validateStep() : saveTest()
+              "
+              [disabled]="
+                validateField(newQuestionnaireForm, 'question' + step) ||
+                loading
+              "
+              class="btn btn-primary next_question_btn"
+            >
+              <span class="d-none d-md-inline">
+                {{
+                  step < questionnaire.length
+                    ? ("recovery_questionnaire.next_question" | translate)
+                    : ("BTN_FINALIZAR" | translate)
+                }}
+              </span>
+              <i class="pi pi-arrow-right"></i>
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <!-- <p-footer *ngIf="advancedDialog == false">
+    <div class="footer_btns">
+      <button
+        class="btn back_btn"
+        [ngClass]="{ shrink_btn: step == 2 }"
+        (click)="step > 0 ? (step = step - 1) : closeDialog()"
+      >
+        {{ "LBL_ATRAS" | translate }}
+      </button>
+
+      <button
+        class="btn next_btn"
+        (click)="saveRecoveryProgram()"
+        [disabled]="loading"
+      >
+        {{
+          step == 0
+            ? ("LBL_SIGUIENTE" | translate)
+            : ("recovery_questionnaire.questionnaire" | translate)
+        }}
+      </button>
+    </div>
+  </p-footer> -->
+</p-dialog>

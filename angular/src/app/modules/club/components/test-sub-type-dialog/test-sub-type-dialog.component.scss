@@ -1,0 +1,55 @@
+:host ::ng-deep {
+  .p-dialog {
+    max-width: 100% !important;
+
+    .subtitle {
+      color: #050c44;
+      opacity: 0.66;
+    }
+  }
+
+  .p-dialog-content {
+    border-bottom-left-radius: 11px !important;
+    border-bottom-right-radius: 11px !important;
+  }
+}
+
+#test_btn_group {
+  display: flex;
+  flex-wrap: wrap;
+  @media screen and (max-width: 500px){
+    flex-direction: column;
+  }
+  // justify-content: space-between;
+  margin: 0 8px !important;
+  .btn {
+    flex: 0 31% !important;
+    border-radius: 0 !important;
+    margin: 0.5rem 0 !important;
+    background-color: transparent;
+    border: 0 !important;
+    padding: 1rem 0.5rem;
+    min-width: 176px;
+    .test_icon {
+      max-width: 81px;
+      max-height: 55px;
+      margin-bottom: 0.5rem;
+    }
+    .test_name {
+      color: #050c44;
+      opacity: 0.83;
+      font-weight: 600;
+      font-size: 0.9rem;
+      display: block;
+    }
+  }
+  .btn.active {
+    background-color: #050c44 !important;
+    .test_icon {
+      filter: brightness(255);
+    }
+    .test_name {
+      color: white;
+    }
+  }
+}

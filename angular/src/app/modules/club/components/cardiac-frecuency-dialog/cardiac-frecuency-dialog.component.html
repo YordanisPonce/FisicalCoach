@@ -1,0 +1,136 @@
+<p-dialog
+  id="heart_frecuency_dialog"
+  class="custom_dialog"
+  styleClass="fullscreenDialog"
+  [modal]="true"
+  [(visible)]="visible"
+  maskStyleClass=""
+  (onHide)="closeDialog()"
+>
+  <ng-template pTemplate="header">
+    <div class="d-flex header_content">
+      <img src="/assets/img/logo_panel.svg" alt="" />
+    </div>
+  </ng-template>
+  <div>
+    <ng-template pTemplate="header">
+      <div class="d-flex header_content">
+        <img src="/assets/img/logo_panel.svg" alt="" />
+      </div>
+    </ng-template>
+
+    <form
+      [formGroup]="form"
+      class="form-wrapper"
+      *ngIf="testFields.length && !loadingTest"
+    >
+      <div id="heart_frecuency_dialog_container">
+        <div class="questions">
+          <div class="question">
+            <div class="text-center">
+              <img
+                src="assets/img/icons/FC_green.svg"
+                width="80px"
+                class="mb-3"
+                alt="test-icon"
+                *ngIf="testType === 'exercise_session_frecuency_cardiac'"
+              />
+
+              <img
+                src="assets/img/icons/GPS_green.svg"
+                width="80px"
+                class="mb-3"
+                alt="test-icon"
+                *ngIf="testType === 'exercise_session_gps'"
+              />
+
+              <h5
+                class="font-weight-500 mb-4"
+                *ngIf="testType === 'exercise_session_frecuency_cardiac'"
+              >
+                {{ "training_session.heart_frequency" | translate }}
+              </h5>
+
+              <h5
+                class="font-weight-500 mb-4"
+                *ngIf="testType === 'exercise_session_gps'"
+              >
+                {{ "GPS" | translate }}
+              </h5>
+            </div>
+
+            <div class="current_player" *ngIf="selectedPlayers.length > 0">
+              <button
+                class="btn"
+                (click)="handlePreviousCarousel(currentPlayerNumber)"
+              >
+                <i class="pi pi-angle-left"></i>
+              </button>
+              <div
+                class="player d-flex justify-content-center align-items-center"
+              >
+                <p-avatar
+                  [image]="
+                    selectedPlayers[currentPlayerNumber]?.image
+                      ? selectedPlayers[currentPlayerNumber]?.image.url
+                      : '../../../../../assets//img/chico.png'
+                  "
+                  class="player_image mr-3"
+                  shape="circle"
+                ></p-avatar>
+                <span class="player_name"
+                  >{{ selectedPlayers[currentPlayerNumber]?.full_name }}
+                </span>
+              </div>
+              <button
+                class="btn"
+                (click)="handleNextCarousel(currentPlayerNumber)"
+              >
+                <i class="pi pi-angle-right"></i>
+              </button>
+            </div>
+
+            <div class="row mt-5 field-wrapper">
+              <div *ngFor="let test of testFields" class="col-6">
+                <label for="names">
+                  {{ test.name }} {{ " " }} ({{ test.unit }})
+                </label>
+                <input
+                  class="form-control mb-4"
+                  [type]="test.field_type"
+                  placeholder="{{ 'LBL_ESCRIBIR' | translate }}"
+                  aria-label="Default"
+                  aria-describedby="inputGroup-sizing-default"
+                  maxlength="5"
+                  [formControlName]="test.id"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-center align-items-center">
+            <button
+              class="btn back_btn shrink_btn mx-4"
+              type="button"
+              (click)="closeDialog()"
+            >
+              {{ "LBL_ATRAS" | translate }}
+            </button>
+
+            <button
+              class="btn btn-primary save-btn mx-4"
+              (click)="submit()"
+              *ngIf="!loading"
+            >
+              <span>{{ "LBL_GUARDAR" | translate }}</span>
+            </button>
+
+            <button class="btn btn-primary save-btn" *ngIf="loading" disabled>
+              <span>{{ "LBL_GUARDANDO" | translate }}</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</p-dialog>

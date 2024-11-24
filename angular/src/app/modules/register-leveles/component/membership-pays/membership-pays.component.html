@@ -1,0 +1,213 @@
+<div class="d-none d-md-flex align-items-center px-3 px-sm-5 my-3 mb-5">
+  <img
+    class="mr-3"
+    src="https://testing-cdn.fisicalcoach.com/resources/images/logos/logo_inicio.svg"
+    width="200"
+  />
+  <div class="ml-auto">
+    <select
+      (change)="handleLanguage($event)"
+      [(ngModel)]="language"
+      class="botone custom-select text-center header_btn"
+      id="idiomaselect"
+      name="language"
+    >
+      <option selected value="es">{{ "LBL_SPANISH" | translate }}</option>
+      <option value="en">{{ "LBL_ENGLISH" | translate }}</option>
+    </select>
+  </div>
+</div>
+
+<div class="row pt-4">
+  <div class="col-md-6 mb-4 mb-md-0 pack_and_payment">
+    <div class="d-flex d-md-none mb-4">
+      <span class="mx-auto text-uppercase font-weight-500">Checkout</span>
+    </div>
+    <div class="d-none d-md-block">
+      <h4>
+        <strong class="text-primary"
+          >{{ priceOne }} <small> €</small> /
+          {{ "registerMembership." + type | translate }}</strong
+        >
+      </h4>
+      <h4 class="text-uppercase font-weight-bold mb-4">
+        <img src="{{ icon }}" width="30" />
+        {{ "registerPlank." + title | translate }}
+      </h4>
+    </div>
+
+    <div class="row">
+      <div class="col-12 d-md-none">
+        <h6>{{ "registerMembership.resumen" | translate }}</h6>
+        <div class="order_resume">
+          <div class="item">
+            <div class="item_icon">
+              <img src="{{ icon }}" />
+            </div>
+            <div class="item_resume">
+              <div class="name">
+                {{ title }}
+              </div>
+              <div class="renewal">
+                {{ "registerMembership.renovation" | translate }}
+                {{ type }}
+              </div>
+              <div class="price">$149.99</div>
+            </div>
+            <div class="item_qty"></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12">
+        <div class="selected_pack d-flex mb-3">
+          <div class="selected_pack_info">
+            <div class="mb-2 mb-sm-0">
+              <p class="mb-0 font-weight-600">
+                {{ "registerMembership." + name | translate }}
+              </p>
+            </div>
+            <span
+              >{{ "registerMembership.licence" | translate
+              }}{{ posicion > 1 ? "s" : "" }}
+              <strong class="h4 font-weight-600">{{ posicion }}</strong></span
+            >
+          </div>
+          <div class="selected_pack_controls border-left py-3 text-center">
+            <button
+              (click)="seleccionar(1)"
+              class="btn border rounded-circle btn_margin_right"
+            >
+              <i class="fa fa-plus"></i>
+            </button>
+            <button (click)="seleccionar(-1)" class="btn border rounded-circle">
+              <i class="fa fa-minus"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <hr class="mt-5 mb-4 d-none d-lg-block" />
+    <div class="d-none d-lg-block mb-4">
+      <h4 class="mb-3">{{ "registerMembership.metodoPago" | translate }}</h4>
+      <p class="payment_method_text">
+        {{ "registerMembership.tex_info_payment" | translate }}
+      </p>
+    </div>
+    <div class="order_details d-md-none">
+      <ul class="list-group">
+        <li
+          class="list-group-item d-flex justify-content-between align-items-center"
+        >
+          {{ "registerMembership.packprice" | translate }}
+          <span class="">{{ price | number }} </span>
+        </li>
+        <li
+          class="list-group-item d-flex justify-content-between align-items-center"
+        >
+          {{ "registerMembership.adicionalLicence" | translate }}
+          <span class="">{{ posicion }}</span>
+        </li>
+        <li
+          class="list-group-item d-flex justify-content-between align-items-center"
+        >
+          {{ "registerMembership.tax" | translate }}
+          <span class="">{{ tax }} %</span>
+        </li>
+      </ul>
+      <hr class="" />
+      <ul class="list-group">
+        <li
+          class="list-group-item d-flex justify-content-between align-items-center"
+        >
+          {{ "registerMembership.total" | translate }}
+          <span class="">{{ total }}</span>
+        </li>
+      </ul>
+    </div>
+
+    <div class="payment_methods mb-4">
+      <div class="d-flex align-items-center payment_method">
+        <div class="payment_method_radio text-center">
+          <input
+            aria-label="Radio button for following text input"
+            checked
+            type="radio"
+          />
+        </div>
+        <div class="border p-3 payment_method_image">
+          <img class="mr-3" src="assets/img/stripe.png" width="50" /><label
+            class="ml-2"
+            >{{ "registerMembership.stripe" | translate }}
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col text-center">
+        <button
+          (click)="paymentDialog = true"
+          class="btn pay_btn btn-primary btn-block mt-3 font-weight-600 py-2"
+        >
+          {{ "registerMembership.procedepago" | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6 order_details d-none d-md-block">
+    <div class="p-5 orden">
+      <h5>
+        <strong> {{ "registerMembership.detalleOrden" | translate }} </strong>
+      </h5>
+      <ul class="list-group">
+        <li
+          class="list-group-item d-flex justify-content-between align-items-center"
+        >
+          {{ "registerMembership.packprice" | translate }}
+          <span class="">{{ price | number }} €</span>
+        </li>
+        <li
+          class="list-group-item d-flex justify-content-between align-items-center"
+        >
+          {{ "registerMembership.adicionalLicence" | translate }}
+          <span class="">{{ posicion }}</span>
+        </li>
+        <li
+          class="list-group-item d-flex justify-content-between align-items-center"
+        >
+          {{ "registerMembership.tax" | translate }}
+          <span class="">{{ tax }} %</span>
+        </li>
+      </ul>
+      <hr class="" />
+      <ul class="list-group">
+        <li
+          class="list-group-item d-flex justify-content-between align-items-center"
+        >
+          {{ "registerMembership.total" | translate }}
+          <span class="">{{ total }} €</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <p-dialog
+    [(visible)]="paymentDialog"
+    [modal]="true"
+    class="custom_dialog"
+    header="{{ 'registerMembership.validateCard' | translate }}"
+    id="payment_dialog"
+    maskStyleClass="purple_mask"
+    styleClass=""
+  >
+    <div class="dialog_container" id="payment_dialog_container">
+      <app-stripe [numero]="posicion"></app-stripe>
+    </div>
+    <p-footer>
+      <div class="footer_btns">
+        <!-- <button>Cancelar</button> -->
+      </div>
+    </p-footer>
+  </p-dialog>
+</div>

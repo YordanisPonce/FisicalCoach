@@ -1,0 +1,113 @@
+<p-dialog 
+id="assing_teacher_dialog" 
+class="custom_dialog" 
+[modal]="true" 
+[(visible)]="visible" 
+maskStyleClass="purple_mask" 
+(onHide)="closeDialog()" 
+[header]="('teachers.assing_teacher'|translate)"
+[draggable]="false"
+>
+  <form action="" [formGroup]="assingTeacherForm">
+    <div id="new_rubric_dialog_container" class="dialog_container">
+        <div class="row">
+            <!-- profesor -->
+            <div class="col-12 mb-4">
+                <label class="mb-4"
+                  >{{ "create_new_classroom.teacher" | translate }} *</label
+                >
+                <div>
+                  <p-dropdown
+                    [options]="teachersList"
+                    [styleClass]="'w-100 form-control'"
+                    [filter]="true"
+                    formControlName="teacher_id"
+                    optionValue="id"
+                    optionLabel="name"
+                    placeholder="{{ 'create_new_classroom.select' | translate }}"
+                    [ngClass]="{
+                      'ng-invalid ng-dirty is-invalid':
+                        (assingTeacherControls.subject_id.invalid &&
+                          (assingTeacherControls.subject_id.dirty ||
+                            assingTeacherControls.subject_id.touched)) ||
+                        (assingTeacherControls.subject_id.invalid && this.submittedForm)
+                    }"
+                  ></p-dropdown>
+                  <div
+                    class="invalid-feedback"
+                    *ngIf="assingTeacherControls.subject_id?.errors"
+                  >
+                    {{ "validations.required_field" | translate }}
+                  </div>
+                </div>
+            </div>
+            <!-- materia -->
+            <div class="col-12 mb-4">
+                <label class="mb-4"
+                  >{{ "create_new_classroom.subject" | translate }} *</label
+                >
+                <div>
+                  <p-dropdown
+                    [options]="subjectList"
+                    [styleClass]="'w-100 form-control'"
+                    [filter]="true"
+                    formControlName="subject_id"
+                    placeholder="{{ 'create_new_classroom.select' | translate }}"
+                    [ngClass]="{
+                      'ng-invalid ng-dirty is-invalid':
+                        (assingTeacherControls.subject_id.invalid &&
+                          (assingTeacherControls.subject_id.dirty ||
+                            assingTeacherControls.subject_id.touched)) ||
+                        (assingTeacherControls.subject_id.invalid && this.submittedForm)
+                    }"
+                  ></p-dropdown>
+                  <div
+                    class="invalid-feedback"
+                    *ngIf="assingTeacherControls.subject_id?.errors"
+                  >
+                    {{ "validations.required_field" | translate }}
+                  </div>
+                </div>
+            </div>
+            <!-- tutor -->
+            <div class="col-12 mb-4">
+              <label class="d-block ">{{
+                "teachers.is_tutor" | translate
+              }}</label>
+              <div class="d-flex">
+                <p-radioButton
+                  name="is_class_tutor"
+                  [value]="true"
+                  formControlName="is_class_tutor"
+                  [label]="('LBL_YES' | translate)"
+                  class="mr-3"
+                ></p-radioButton>
+                <p-radioButton
+                  name="is_class_tutor"
+                  [value]="false"
+                  formControlName="is_class_tutor"
+                  [label]="('LBL_NO' | translate)"
+                  class="mr-3"
+                ></p-radioButton>
+              </div>
+            </div>
+        </div>
+    </div>
+  </form>
+  <ng-template pTemplate="footer">
+    <div class="footer_btns">
+      <button 
+      class="back_btn btn"
+      (click)="closeDialog()"
+      >{{('LBL_ATRAS' | translate)}}</button>
+
+      <button 
+      class="next_btn btn" 
+      (click)="onSubmit()"
+      [disabled]="loading"
+      >
+        {{('teachers.assing_teacher' | translate)}}
+      </button>
+    </div>
+  </ng-template>
+</p-dialog>

@@ -1,0 +1,141 @@
+:host ::ng-deep {
+  #risk_calculator_dialog {
+    .p-dialog {
+      // width: 600px;
+      .p-dialog-content {
+        #risk_calculator_dialog_container {
+          .hability {
+            display: flex;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+
+            .hability_info {
+              display: flex;
+              flex: 1 1 100%;
+              margin-bottom: 1rem;
+              align-items: center;
+
+              .icon {
+                margin-right: 1.5rem;
+
+                img {
+                  width: 35px;
+                }
+              }
+
+              .info {
+                font-size: .9rem;
+                font-weight: 500;
+
+                .title {
+                  display: block;
+                  color: #050C44;
+                }
+
+                .points {
+                  color: rgba($color: #050C44, $alpha: .56);
+                }
+              }
+            }
+
+            .hability_selectors {
+              flex: 1 1 100%;
+
+              .p-selectbutton {
+                display: flex;
+                justify-content: space-between;
+
+                .p-button {
+                  flex: 0 30%;
+                  border-radius: 18px;
+                  border: 0;
+                  color: rgba($color: #050C44, $alpha: .75);
+                  font-size: .9rem;
+                  justify-content: center;
+                  white-space: nowrap;
+
+                  span {
+                    overflow: hidden;
+                  }
+
+                  &.p-highlight {
+                    color: #050C44;
+                  }
+
+                  &.p-highlight:nth-child(1) {
+                    background-color: rgba($color: #6cefd9, $alpha: 1);
+                  }
+
+                  &:nth-child(1) {
+                    background-color: rgba($color: #9af9e9, $alpha: .5);
+                  }
+
+                  &.p-highlight:nth-child(2) {
+                    background-color: rgba($color: #f1f7aa, $alpha: 1);
+                  }
+
+                  &:nth-child(2) {
+                    background-color: rgba($color: #fbffce, $alpha: .33);
+                  }
+
+                  &.p-highlight:nth-child(3) {
+                    background-color: rgba($color: #f1adad, $alpha: 1);
+                  }
+
+                  &:nth-child(3) {
+                    background-color: rgba($color: #fac8c8, $alpha: .5);
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (min-width: 1200px) {
+  :host ::ng-deep {
+    #risk_calculator_dialog {
+      .p-dialog {
+        // width: 800px;
+        .p-dialog-header {
+          padding: 2.5rem 4.5rem
+        }
+
+        .p-dialog-content {
+          #risk_calculator_dialog_container {
+            padding: 0 3rem;
+
+            .hability {
+              flex-wrap: nowrap;
+
+              .hability_info {
+                margin-bottom: 0;
+              }
+
+              .hability_selectors {
+                flex: 0 0 70%;
+              }
+            }
+          }
+        }
+
+        .p-dialog-footer {
+          padding: 1.5rem 4.5rem;
+        }
+      }
+    }
+  }
+}
+
+@media (min-width: 1200px) {
+  :host ::ng-deep {
+    #risk_calculator_dialog {
+      .p-dialog {
+
+      }
+    }
+  }
+}

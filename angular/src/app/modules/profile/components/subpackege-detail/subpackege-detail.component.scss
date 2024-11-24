@@ -1,0 +1,141 @@
+.table_labels {
+  padding-right: 8px;
+  margin-top: 81px;
+}
+
+.labels {
+  width: 100%;
+  background-color: #d3d3d30a;
+  padding: 5px;
+  border: 1px solid #e6e4e4c2;
+  height: 31px;
+  text-transform: uppercase;
+  font-weight: bold;
+  color: #050c44;
+  font-size: 13px;
+}
+
+:host ::ng-deep {
+  .specs {
+    padding-top: 130px;
+
+    table {
+      background-color: rgba($color: #050c44, $alpha: 0.02);
+
+      tr {
+        td {
+          font-size: 0.83rem;
+          font-weight: 600;
+          color: #050c44;
+          height: 20px;
+          text-transform: uppercase;
+          line-height: 20px;
+          padding: 15px;
+          border-top: 0;
+          border-bottom: 1px solid rgba($color: #050c44, $alpha: 0.12);
+        }
+      }
+    }
+  }
+
+  .suscription_pack {
+    box-shadow: 0px 0px 6px #00000017;
+    border: 1px solid #050c441f;
+    border-radius: 13px;
+
+    table {
+      margin-bottom: 0;
+      border-bottom: 1px solid rgba($color: #050c44, $alpha: 0.12);
+    }
+
+    th {
+      border-top: 0;
+      // background-color: salmon;
+      border-top-left-radius: 13px;
+      border-top-right-radius: 13px;
+      padding: 0px 20px;
+      border-bottom: 1px solid rgba($color: #050c44, $alpha: 0.12);
+
+      .suscription_pack_header {
+        height: 80px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+
+        .suscription_pack_caption {
+          font-size: 0.9rem;
+          color: rgba($color: #050c44, $alpha: 0.71);
+          margin-bottom: 10px;
+          font-weight: 600;
+        }
+
+        .suscription_pack_name {
+          text-transform: uppercase;
+          font-weight: bold;
+          font-size: 0.9rem;
+          color: #050c44;
+        }
+      }
+    }
+
+    tr {
+      td {
+        text-align: center;
+        color: #024cac;
+        font-weight: 600;
+        font-size: 0.9rem;
+        height: 20px;
+        line-height: 20px;
+        padding: 5px;
+        border-top: 0;
+        border-bottom: 1px solid rgba($color: #050c44, $alpha: 0.12);
+      }
+    }
+
+    .suscription_pack_footer {
+      padding: 1.5rem;
+
+      h6 {
+        margin-bottom: 1.5rem;
+        font-weight: 600;
+        color: #050c44;
+      }
+
+      button {
+        border: 1px solid #024cac;
+        border-radius: 5px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: #024cac;
+        height: 50px;
+      }
+    }
+  }
+  .p-dialog .p-dialog-footer button {
+    margin: 0 0.5rem 0 0;
+    width: 200px;
+    border-radius: 13px;
+    height: 55px;
+  }
+}
+
+.p-button {
+  color: #ffffff;
+  background: #014cac;
+  border: 1px solid #014cac;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
+}
+
+.p-button:enabled:hover {
+  background: #014cac;
+  color: #ffffff;
+  border-color: #014cac;
+}
+
+.p-button:enabled:active {
+  background: #014cac;
+  color: #ffffff;
+  border-color: #014cac;
+}

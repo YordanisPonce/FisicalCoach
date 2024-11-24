@@ -1,0 +1,147 @@
+:host ::ng-deep{
+    .view_header{
+        .p-selectbutton{
+            .p-button{
+                color: rgba($color: #050C44, $alpha: .21);
+                font-weight: 500;
+                font-size: .9rem;
+                border: 1px solid rgba(5, 12, 68, 0.04);
+                height: 45px;
+                border-radius: 8px;
+                &.p-highlight{
+                    color: rgba($color: #050C44, $alpha: 1);
+                    background-color: transparent;
+                    border: 1px solid rgba(5, 12, 68, 0.04);
+                }
+                &:first-of-type {
+                    border-bottom-right-radius: 0;
+                    border-top-right-radius: 0;
+                }
+                &:last-of-type {
+                    border-top-left-radius: 0;
+                    border-bottom-left-radius: 0;
+                }
+            }
+        }
+    }
+
+    .p-datatable{
+        .p-datatable-tbody > tr > td {
+            .title{
+                color: #050C44;
+                font-weight: 600;
+            }
+            .description{
+                color: rgba($color: #050C44, $alpha: .56);
+                font-weight: 500;
+                margin-bottom: 0;
+            }
+        }
+        .p-datatable-tbody > tr > td.alumn {
+            font-weight: bold;
+            .alumn_image{
+                flex: 0 30px;
+                height: 30px;
+                border-radius: 50%;
+                // background-color: brown;
+                background-position: center;
+                background-size: cover;
+                background-repeat: no-repeat;
+                margin-right: .5rem;
+            }
+            .alumn_name{
+                flex: 1;
+            }
+        }
+    }
+
+    .p-carousel {
+        .p-carousel-indicators, .p-carousel-prev, .p-carousel-next {
+            display: none;
+        }
+        .p-carousel-item{
+            button{
+                background-color: #0065E90A;
+                border: 1px solid #0065E91C;
+                color: #0065E9;
+                width: 100%;
+                height: 85px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                // .value{
+                //     align-self: flex-end;
+                // }
+                .icon{
+                    img{
+                        width: 24px;
+                    }
+                }
+                .title{
+                    font-size: .8rem;
+                }
+                &[disabled]{
+                    background-color: rgba($color: #00e9c5, $alpha: .15);
+                    // color: #000a;
+                }
+            }
+        }    
+    }
+}
+
+// Small devices (landscape phones, 576px and up)
+@media (min-width: 576px) {
+    :host ::ng-deep{
+    }
+}
+
+// Medium devices (tablets, 768px and up)
+@media (min-width: 768px) {
+    :host ::ng-deep{
+    }    
+}
+
+@media (min-width: 1200px) {
+    :host ::ng-deep{
+        .p-carousel {
+            .p-carousel-prev, .p-carousel-next {
+                display: block;
+                color: white;
+                border-radius: 0;
+                text-align: center;
+                height: 85px;
+                margin: 0;
+                background-color: #0065E9;
+                width: 15px;
+            }   
+        }
+        .p-datatable.alumns_table{
+            .p-datatable-tbody > tr > td {
+                padding: 2rem 3rem;
+                &.alumn{
+                    width: 225px;
+                }
+            }
+            .p-datatable-tbody > tr > td:nth-child(3) {
+                width: 125px;
+                text-align: center;
+            }
+        }
+    }    
+}
+
+// Extra large devices (large desktops, 1200px and up)
+@media (min-width: 1200px) {
+    :host ::ng-deep{
+        .p-datatable{
+            .p-datatable-tbody > tr > td {
+            }
+        }
+    }  
+}
+@media (max-width: 576px){
+    .action{
+        margin-right: 1.1rem !important;
+    }
+}

@@ -1,0 +1,213 @@
+:host ::ng-deep {
+  .form-control:disabled,
+  .form-control[readonly] {
+    background-color: transparent !important;
+  }
+
+  .pointer {
+    cursor: pointer;
+  }
+
+  input {
+    border: unset;
+    border-bottom: 1px solid rgba(5, 12, 68, 0.24);
+  }
+
+  .p-rating .p-rating-icon:focus {
+    box-shadow: unset;
+  }
+
+  .dimention-wrapper {
+    padding: 2rem 2rem 0rem 2rem;
+
+    .workout_author {
+      color: rgba($color: #050c44, $alpha: 0.33);
+      font-weight: 600;
+    }
+  }
+
+  .pointer {
+    cursor: pointer;
+  }
+
+  label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: black;
+  }
+
+  .btn-groups {
+    background-color: #024cac;
+    color: #fff;
+  }
+
+  .workout_details {
+    .workout_image {
+      height: 500px;
+
+      @media screen and (min-width: 1921px) {
+        height: 800px;
+      }
+      background-position: center;
+      background-size: cover;
+      background-repeat: no-repeat;
+      position: relative;
+      .back_btn {
+        position: absolute;
+        width: 40px;
+        height: 40px;
+        background-color: #050c44;
+        color: #fff;
+        left: 50px;
+        top: 30px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+      }
+    }
+    .workout_header {
+      padding: 2rem;
+      display: flex;
+      justify-content: space-evenly;
+      border-bottom: 1px solid rgba($color: #050c44, $alpha: 0.12);
+      .workout_author {
+        color: rgba($color: #050c44, $alpha: 0.33);
+        font-weight: 600;
+      }
+      .difficulty {
+        color: rgba($color: #050c44, $alpha: 0.33);
+        font-weight: 600;
+        font-size: 0.9rem;
+      }
+      .workout_name {
+        color: #050c44;
+        font-weight: 600;
+      }
+      .p-rating {
+        .p-rating-icon {
+          color: #00e9c5;
+          font-size: 1rem;
+          // margin-left: .75rem;
+        }
+      }
+    }
+    .workout_body {
+      display: flex;
+      min-height: 290px;
+
+      @media screen and (max-width: 600px) {
+        flex-direction: column;
+      }
+
+      .workout_content {
+        border-right: 1px solid rgba($color: #050c44, $alpha: 0.12);
+        padding: 2rem;
+        flex: 0 0 33.33%;
+
+        .see-contents-btn {
+          padding: 12px 15px;
+          background-color: #050c44;
+        }
+
+        .center-content-button {
+          display: flex;
+          align-items: flex-end;
+          height: 66%;
+        }
+
+        label {
+          margin-bottom: 2rem;
+        }
+        .workout_icons {
+          .content-img {
+            display: flex;
+            align-items: center;
+            margin-bottom: 2rem;
+            img {
+              margin-right: 1.5rem;
+              width: 25px;
+            }
+            span {
+              font-size: 0.9rem;
+              font-weight: 600;
+              color: black;
+            }
+          }
+        }
+      }
+      .workout_description {
+        flex: 0 0 66.66%;
+        padding: 2rem 2rem 0 2rem;
+        p {
+          color: black;
+          opacity: 0.76;
+          line-height: 2.25;
+        }
+
+        .mtop-5 {
+          margin-top: 9.5rem;
+        }
+
+        .save-btn {
+          background-color: #050c44;
+          padding: 12px 15px !important;
+          width: 160px !important;
+        }
+      }
+    }
+  }
+  .information {
+    .information_header {
+      padding: 2rem;
+      border-bottom: 1px solid rgba($color: #050c44, $alpha: 0.11);
+      text-align: center;
+      font-family: 0.9rem;
+      color: #050c44;
+      font-weight: 600;
+    }
+    .information_body {
+      padding: 2rem 2rem 0;
+      .form-control {
+        border-radius: 0;
+        border: 0;
+        border-bottom: 1px solid rgba($color: #050c44, $alpha: 0.24);
+        margin-top: 1rem;
+        font-size: 0.9rem;
+        padding-left: 0;
+        // opacity: 0.24;
+      }
+
+      .exercise-item-title {
+        label {
+          font-size: 1.1rem;
+
+          text-decoration: underline;
+          text-decoration-color: #00e9c5;
+
+          &::before {
+            content: "\2022"; /* Add content: \2022 is the CSS Code/unicode for a bullet */
+            color: #00e9c5; /* Change the color */
+            font-weight: bold; /* If you want it to be bold */
+            display: inline-block; /* Needed to add space between the bullet and the text */
+            width: 1em; /* Also needed for space (tweak if needed) */
+            margin-left: -1em; /* Also needed for space (tweak if needed) */
+          }
+        }
+      }
+    }
+    .information_action {
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+
+      padding: 2rem;
+      button {
+        border-radius: 5px;
+        font-size: 0.9rem;
+        padding: 1rem;
+        width: 180px;
+        margin: 5px 0;
+      }
+    }
+  }
+}

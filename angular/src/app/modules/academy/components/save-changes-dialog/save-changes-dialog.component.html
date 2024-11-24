@@ -1,0 +1,16 @@
+<p-dialog id="save_changes_dialog" [header]="'Salir de la sesión'" [modal]="true" [(visible)]="visible" styleClass="" [blockScroll]="true">
+    <div id="save_changes_dialog_container" class="dialog_container container-fluid">
+        <div class="row h-100">
+            <div class="col-12 text-center">
+                <h6 class="my-5 text-white">¿Desea guardar antes de salir?</h6>
+                <p class="my-5">La información se guardará en la sección de Ejercicios - Lista de ejercicios con los cambios actuales ¿Quiere continuar?</p>
+            </div>
+        </div>
+    </div>
+    <p-footer>
+        <div class="footer_btns">
+            <button class="btn back_btn">Salir</button>
+            <button class="btn next_btn">Guardar</button>
+          </div>
+    </p-footer>
+</p-dialog>

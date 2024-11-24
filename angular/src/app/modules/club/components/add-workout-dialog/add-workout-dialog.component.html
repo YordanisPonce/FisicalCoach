@@ -1,0 +1,207 @@
+<p-dialog
+  id="materiales_dialog"
+  [modal]="true"
+  [(visible)]="visible"
+  styleClass=""
+  maskStyleClass="purple_mask"
+  (onHide)="closeDialog()"
+>
+  <ng-template pTemplate="header">
+    <div>
+      <span class="p-dialog-title">
+        {{ "training_session.add_exercise" | translate }}</span
+      >
+    </div>
+
+    <div class="d-none d-sm-block">
+      <span class="buscador p-input-icon-left">
+        <i class="pi pi-search"></i>
+        <input
+          type="text"
+          pInputText
+          (keyup)="setValue($event)"
+          [(ngModel)]="searchExercise"
+          placeholder="{{ 'LBL_SEARCH' | translate }}"
+        />
+      </span>
+    </div>
+
+    <div class="d-none d-sm-block">
+      <button
+        class="btn btn-primary new_workout_btn"
+        routerLink="/club/workout"
+      >
+        <span class="mr-2">
+          {{ "training_session.new_exercise" | translate }}</span
+        >
+      </button>
+    </div>
+  </ng-template>
+  <div id="materiales_dialog_container" class="dialog_container">
+    <div>
+      <div class="d-sm-none d-block mb-4">
+        <span class="buscador p-input-icon-left">
+          <i class="pi pi-search"></i>
+          <input
+            type="text"
+            pInputText
+            (keyup)="setValue($event)"
+            [(ngModel)]="searchExercise"
+            placeholder="{{ 'LBL_SEARCH' | translate }}"
+          />
+        </span>
+      </div>
+
+      <div class="d-sm-none d-block">
+        <button
+          class="btn btn-primary new_workout_btn"
+          routerLink="/club/workout"
+        >
+          <span class="mr-2">
+            {{ "training_session.new_exercise" | translate }}</span
+          >
+        </button>
+      </div>
+    </div>
+    <div class="workouts_container" *ngIf="!loading">
+      <p-dataView
+        #dv
+        [value]="exerciseList"
+        [paginator]="false"
+        filterBy="title,description,difficulty,content.name"
+        layout="grid"
+        [style]="{ width: '100%' }"
+        [emptyMessage]="'workout.noExercices' | translate"
+      >
+        <ng-template let-item pTemplate="gridItem">
+          <div class="px-1 px-sm-3 my-3">
+            <app-single-workout
+              [ejercicio]="item"
+              [team]="team"
+              [ratingIcons]="ratingIcons"
+              [isSessionPage]="true"
+              [isSessionDetailsPage]="true"
+              [isAddList]="true"
+              [exerciseListLength]="exerciseListLength"
+              [exerciseList]="selectedExerciseList"
+              (handleExerciseId)="selectExercises($event)"
+            ></app-single-workout>
+          </div>
+        </ng-template>
+      </p-dataView>
+    </div>
+    <div class="workouts_container" *ngIf="loading">
+      <div class="row">
+        <div
+          class="col-md-6 col-xl-4 px-md-4 my-3"
+          *ngFor="let workout of [1, 2, 3, 4, 5, 6]"
+        >
+          <div class="workout_skeleton">
+            <p-skeleton width="100%" height="150px"></p-skeleton>
+            <div class="d-flex p-3">
+              <div class="flex-grow-1">
+                <p-skeleton
+                  width="40%"
+                  height="1rem"
+                  styleClass="my-1"
+                ></p-skeleton>
+                <p-skeleton
+                  width="65%"
+                  height="1rem"
+                  styleClass="my-1"
+                ></p-skeleton>
+                <p-skeleton
+                  width="40%"
+                  height="1rem"
+                  styleClass="my-1"
+                ></p-skeleton>
+              </div>
+            </div>
+            <div class="p-3 border-top border-bottom d-flex">
+              <p-skeleton
+                width="50%"
+                height="1rem"
+                styleClass="m-auto"
+                class="flex-grow-1"
+              ></p-skeleton>
+              <p-skeleton
+                width="50%"
+                height="1rem"
+                styleClass="m-auto"
+                class="flex-grow-1"
+              ></p-skeleton>
+              <p-skeleton
+                width="50%"
+                height="1rem"
+                styleClass="m-auto"
+                class="flex-grow-1"
+              ></p-skeleton>
+              <p-skeleton
+                width="50%"
+                height="1rem"
+                styleClass="m-auto"
+                class="flex-grow-1"
+              ></p-skeleton>
+            </div>
+            <div class="p-3">
+              <p-skeleton
+                width="90%"
+                height="1rem"
+                styleClass="my-1"
+              ></p-skeleton>
+              <p-skeleton
+                width="80%"
+                height="1rem"
+                styleClass="my-1"
+              ></p-skeleton>
+              <p-skeleton
+                width="75%"
+                height="1rem"
+                styleClass="my-1"
+              ></p-skeleton>
+              <p-skeleton
+                width="50%"
+                height="1rem"
+                styleClass="my-1"
+              ></p-skeleton>
+            </div>
+            <div class="d-flex p-3 border-top">
+              <div class="flex-grow-1">
+                <p-skeleton
+                  width="50%"
+                  height="1rem"
+                  styleClass="m-auto"
+                ></p-skeleton>
+              </div>
+              <div class="flex-grow-1">
+                <p-skeleton
+                  width="50%"
+                  height="1rem"
+                  styleClass="m-auto"
+                ></p-skeleton>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p-footer>
+    <div class="footer_btns">
+      <button class="back_btn btn" (click)="close.emit(true)">
+        {{ "LBL_ATRAS" | translate }}
+      </button>
+      <button
+        class="btn btn_primary add_btn"
+        (click)="submit()"
+        [disabled]="selectedExerciseList.length === 0"
+        *ngIf="!sending"
+      >
+        {{ "LBL_ANADIR" | translate }}
+      </button>
+      <button class="btn btn_primary add_btn" disabled *ngIf="sending">
+        {{ "LBL_GUARDANDO" | translate }}
+      </button>
+    </div>
+  </p-footer>
+</p-dialog>

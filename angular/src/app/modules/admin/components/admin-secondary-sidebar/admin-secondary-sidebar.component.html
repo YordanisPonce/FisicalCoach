@@ -1,0 +1,48 @@
+<div class="secondary_sidebar_active" id="secondary-sidebar">
+    <div class="sidebar-header">
+      <a
+        class="d-flex list-group-item list-group-item-action font-weight-500 sidebar-item align-items-center"
+      >
+        <span
+          class="ml-3 sidebar-item-text font-weight-600"
+          style="word-break: break-all"
+        >
+            Fisicalcoach
+
+        </span>
+      </a>
+    </div>
+
+    <p-scrollPanel [style]="{ height: 'inherit' }" class="p-0">
+        <div *ngIf="loadingMenu" class="p-4" style="text-align: center">
+          <div
+            *ngFor="let i of [1, 2, 3]"
+            class="d-flex align-items-center py-2 mb-3"
+          >
+            <p-skeleton shape="circle" size="25px" styleClass="mr-3"></p-skeleton>
+            <div class="flex-grow-1">
+              <p-skeleton
+                height="15px"
+                shape="rectangle"
+                width="90%"
+              ></p-skeleton>
+            </div>
+          </div>
+        </div>
+  
+        <div *ngIf="!loadingMenu" id="secondary-sidebar-content_c">
+          <a
+            *ngFor="let item of secondarySidebarMenu"
+            [ngClass]="{ 'selected-path-bg': pathSelected === item.code }"
+            (click)="navegar(item)"
+            class="d-flex list-group-item list-group-item-action sidebar-item align-items-center selected-path-bg"
+          >            
+            <span class="ml-3 sidebar-item-text">
+              {{ "adminSidear." + item.code | translate }}
+            </span>
+          </a>
+        </div>
+    </p-scrollPanel>
+    
+
+  </div>

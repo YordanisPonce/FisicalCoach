@@ -1,0 +1,297 @@
+:host ::ng-deep {
+  .title,
+  .subtitle {
+    display: none;
+  }
+  .suscription_selector {
+    background-color: white;
+    border-radius: 29px;
+    padding: 0;
+    display: flex;
+    max-width: unset;
+    margin: 2rem 1rem;
+    border: 1px solid #70707033;
+    .select {
+      height: 55px;
+      color: #050c44;
+      font-size: 0.9rem;
+      font-weight: 600;
+      border-radius: 29px;
+      flex: 1;
+      line-height: 55px;
+      cursor: pointer;
+      &.selectTwo {
+        background-color: #050c44;
+        color: white;
+      }
+    }
+  }
+  .p-carousel {
+    .p-carousel-content {
+      .p-carousel-container {
+        order: 1;
+        .p-link {
+          display: none;
+        }
+        .pack {
+          padding: 0 2rem;
+          background: white;
+          text-align: left;
+
+          .pack_header {
+            // padding: 3rem;
+            // border-bottom: 1px solid rgba($color: #050C44, $alpha: .11);
+            .pack_price_container {
+              display: flex;
+            }
+            .pack_title {
+              font-weight: 600;
+              text-transform: uppercase;
+              margin-bottom: 0;
+            }
+            .pack_price {
+              margin: 1.5rem 0;
+              font-size: 2rem;
+              font-weight: 700;
+            }
+            .pack_icon {
+              max-width: 2.25rem;
+              margin-right: 0.5rem;
+            }
+            .pack_description {
+              color: rgba($color: #000000, $alpha: 0.64);
+              line-height: 2.5;
+              font-size: 0.9rem;
+              font-weight: 500;
+            }
+
+            .role-type {
+              background-color: #434343;
+              color: #01e9c5;
+              border-radius: 6px;
+              padding: 6px;
+              width: 100%;
+              max-width: 250px;
+              margin: 0 auto;
+              margin-top: 10px;
+            }
+          }
+          .btn_margin_bottom {
+            margin-bottom: 1rem;
+          }
+          .pack_benefits {
+            padding: 0rem;
+            ul {
+              list-style: none;
+              padding-left: 1.5rem;
+              text-align: left;
+              margin-bottom: 1.5rem;
+              li {
+                font-size: 0.85rem;
+                color: #050c44;
+                font-weight: 500;
+                margin-bottom: 0.5rem;
+              }
+              li::before {
+                content: "\2022"; /* Add content: \2022 is the CSS Code/unicode for a bullet */
+                color: #52d88c; /* Change the color */
+                font-weight: bold; /* If you want it to be bold */
+                display: inline-block; /* Needed to add space between the bullet and the text */
+                width: 1em; /* Also needed for space (tweak if needed) */
+                margin-left: -1em; /* Also needed for space (tweak if needed) */
+                font-size: 1.5rem;
+                font-family: "Montserrat", sans-serif !important;
+              }
+            }
+          }
+          .pack_action {
+            padding: 0;
+            button {
+              border-radius: 13px;
+              color: #024cac;
+              font-size: 0.9rem;
+              font-weight: 600;
+              border: 1px solid #024cac;
+              height: 55px;
+            }
+          }
+        }
+      }
+      .p-carousel-indicators {
+        padding: 0;
+        margin-bottom: 1rem;
+        .p-carousel-indicator {
+          &.p-highlight button {
+            background-color: #050c44;
+          }
+          button {
+            background-color: white;
+            width: 1rem;
+            height: 1rem;
+            border: 1px solid #050c44;
+            border-radius: 50%;
+          }
+        }
+      }
+    }
+  }
+}
+// Small devices (landscape phones, 576px and up)
+@media (min-width: 375px) {
+  .title {
+    display: block;
+    color: #050c44;
+    font-weight: bold;
+    max-width: 500px;
+    margin-bottom: 1.5rem;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 4rem;
+    font-size: 20px;
+  }
+  .suscription_selector {
+    background-color: rgba($color: #050c44, $alpha: 0.02);
+    border-radius: 15px;
+    padding: 6px;
+    display: flex;
+    max-width: 300px;
+    margin: 3rem auto;
+    border: 0;
+    .select {
+      height: 55px;
+      color: rgba($color: #050c44, $alpha: 0.47);
+      border-radius: 8px;
+      line-height: 55px;
+      cursor: pointer;
+      &.selectTwo {
+        background-color: white;
+        color: #0065e9;
+      }
+    }
+  }
+  .pack {
+    .pack_caption {
+      font-size: 0.85rem;
+      color: rgba($color: #050c44, $alpha: 0.37);
+      font-weight: 600;
+      display: flex;
+      justify-content: center;
+      margin-bottom: 1rem;
+    }
+  }
+}
+
+// Medium devices (tablets, 768px and up)
+@media (min-width: 1024px) {
+  .title {
+    font-size: 2rem;
+  }
+}
+
+// Large devices (desktops, 992px and up)
+@media (min-width: 1000px) {
+  .subtitle {
+    color: rgba($color: #050c44, $alpha: 0.71);
+    font-weight: 700;
+    font-size: 0.85rem;
+    margin-bottom: 0;
+  }
+  .suscription_selector {
+    background-color: rgba($color: #050c44, $alpha: 0.02);
+    border-radius: 15px;
+    padding: 6px;
+    display: flex;
+    max-width: 300px;
+    margin: 3rem auto;
+    border: 0;
+    .select {
+      height: 55px;
+      color: rgba($color: #050c44, $alpha: 0.47);
+      border-radius: 8px;
+      line-height: 55px;
+      cursor: pointer;
+      &.selectTwo {
+        background-color: white;
+        color: #0065e9;
+      }
+    }
+  }
+  .pack {
+    box-shadow: 0px 3px 28px #0000001c;
+    border-radius: 16px;
+    background: white;
+    height: 100% !important;
+    .pack_caption {
+      font-size: 0.85rem;
+      color: rgba($color: #050c44, $alpha: 0.37);
+      font-weight: 600;
+    }
+    .pack_header {
+      padding: 3rem;
+      border-bottom: 1px solid rgba($color: #050c44, $alpha: 0.11);
+      .pack_title {
+        font-weight: 600;
+        text-transform: uppercase;
+        margin-bottom: 0;
+      }
+      .pack_price {
+        margin: 1.5rem 0;
+        font-size: 2rem;
+        font-weight: 700;
+      }
+      .pack_icon {
+        margin: 1.5rem 0;
+      }
+
+      .role-type {
+        background-color: #434343;
+        color: #01e9c5;
+        border-radius: 6px;
+        padding: 6px;
+        width: 100%;
+        max-width: 250px;
+        margin: 0 auto;
+      }
+    }
+    .pack_benefits {
+      min-height: 720px;
+      padding: 1.5rem;
+      ul {
+        list-style: none;
+        padding-left: 1.5rem;
+        text-align: left;
+        margin-bottom: 1.5rem;
+        li {
+          font-size: 0.85rem;
+          color: #050c44;
+          font-weight: 500;
+          margin-bottom: 0.5rem;
+        }
+        li::before {
+          content: "\2022"; /* Add content: \2022 is the CSS Code/unicode for a bullet */
+          color: #52d88c; /* Change the color */
+          font-weight: bold; /* If you want it to be bold */
+          display: inline-block; /* Needed to add space between the bullet and the text */
+          width: 1em; /* Also needed for space (tweak if needed) */
+          margin-left: -1em; /* Also needed for space (tweak if needed) */
+          font-size: 1.5rem;
+        }
+      }
+    }
+    .pack_action {
+      padding: 1.5rem;
+      button {
+        border-radius: 13px;
+        color: #024cac;
+        font-size: 0.9rem;
+        font-weight: 600;
+        border: 1px solid #024cac;
+        height: 55px;
+      }
+    }
+  }
+}
+
+// Extra large devices (large desktops, 1200px and up)
+@media (min-width: 1200px) {
+}

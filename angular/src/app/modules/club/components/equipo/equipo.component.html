@@ -1,0 +1,390 @@
+<!-- <link rel="stylesheet" href="../../../academy/members/members.component.scss"> -->
+<div class="row">
+  <div class="col-12">
+    <div class="card box-shadow">
+      <div class="card-body">
+        <div class="row">
+          <!-- descripcion superior con imagen -->
+          <div class="col-12 mb-5">
+            <div class="border d-flex flex-column flex-md-row">
+              <div class="descripcion_equipo order-1 order-md-0 p-4">
+                <div
+                  class="d-flex flex-column flex-md-row align-items-center text-center text-sm-left"
+                >
+                  <img
+                    *ngIf="!loadingSport && team?.image?.full_url"
+                    [src]="team?.image?.full_url"
+                    class="img-fluid team-image"
+                  />
+                  <div
+                    *ngIf="
+                      team.color && !team?.image?.full_url && !loadingSport
+                    "
+                    [style]="
+                      'background-color:' +
+                      team.color +
+                      ';' +
+                      'width: 113px; height: 113px;'
+                    "
+                    class="rounded-circle"
+                  ></div>
+                  <div
+                    *ngIf="!loadingSport && team"
+                    class="d-flex flex-column ml-md-4"
+                  >
+                    <span *ngIf="team" class="font-weight-600">{{
+                      team.name || ""
+                    }}</span>
+
+                    <span class="text-secondary my-2">{{
+                      team.sport.name || ""
+                    }}</span>
+                    <span class="font-weight-500 text-main">{{
+                      team.category
+                    }}</span>
+                    <div class="d-flex mt-1">
+                      <button (click)="editTeam()" *ngIf="team">
+                        <img
+                          src="{{ urlBase + 'images/menu/edit.svg' }}"
+                          width="16px"
+                        />
+                      </button>
+                      <button (click)="confirm()" *ngIf="team">
+                        <img
+                          src="{{ urlBase + 'images/menu/delete.svg' }}"
+                          width="16px"
+                        />
+                      </button>
+                    </div>
+                  </div>
+
+                  <div
+                    *ngIf="loadingSport"
+                    class="d-flex justify-content-around align-items-center ml-2 mr-5"
+                    style="
+                      text-align: center;
+                      width: 100%;
+                      margin: 25px 0;
+                      min-width: 250px;
+                    "
+                  >
+                    <div>
+                      <p-skeleton
+                        shape="circle"
+                        size="6rem"
+                        styleClass="mb-2 mr-4"
+                      ></p-skeleton>
+                    </div>
+                    <div>
+                      <p-skeleton styleClass="mb-3"></p-skeleton>
+                      <p-skeleton styleClass="mb-3" width="10rem"></p-skeleton>
+                      <p-skeleton styleClass="mb-2" width="10rem"></p-skeleton>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div
+                [style.backgroundImage]="'url(' + backgroundImage + ')'"
+                class="portada_equipo"
+              >
+                <button
+                  (click)="openCropperDialog = true"
+                  [disabled]="loadingCover"
+                >
+                  {{ "team.change_cover" | translate }}
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-5 col-xl-4 mb-3 mb-lg-0">
+            <div class="ranking_goleadores border">
+              <ul>
+                <li class="ranking_header">
+                  {{ "team.players" | translate }}
+                </li>
+              </ul>
+              <ul class="ranking-list">
+                <li *ngIf="loadingPlayers">
+                  <div
+                    class="d-flex align-items-center"
+                    style="text-align: center; width: 100%; margin: 25px 0"
+                  >
+                    <div>
+                      <p-skeleton
+                        shape="circle"
+                        size="5rem"
+                        styleClass="mr-3"
+                      ></p-skeleton>
+                    </div>
+                    <div style="flex: 1">
+                      <p-skeleton styleClass="mb-3" width="100%"></p-skeleton>
+                      <p-skeleton width="75%"></p-skeleton>
+                    </div>
+                  </div>
+                </li>
+                <li *ngIf="loadingPlayers">
+                  <div
+                    class="d-flex align-items-center"
+                    style="text-align: center; width: 100%; margin: 25px 0"
+                  >
+                    <div>
+                      <p-skeleton
+                        shape="circle"
+                        size="5rem"
+                        styleClass="mr-3"
+                      ></p-skeleton>
+                    </div>
+                    <div style="flex: 1">
+                      <p-skeleton styleClass="mb-3" width="100%"></p-skeleton>
+                      <p-skeleton width="75%"></p-skeleton>
+                    </div>
+                  </div>
+                </li>
+                <div
+                  *ngIf="players.length <= 0 && !loadingPlayers"
+                  style="display: flex; justify-content: center"
+                >
+                  <span class="nodata">{{
+                    "nodata.sinjugadores" | translate
+                  }}</span>
+                </div>
+                <li *ngFor="let item of players; index as i">
+                  <div
+                    *ngIf="players.length > 0 && !loadingPlayers"
+                    class="d-flex align-items-center"
+                  >
+                    <span>{{ item.shirt_number }}</span>
+                    <span class="goleader_img ml-3">
+                      <img
+                        src="{{ item | avatarPipe }}"
+                        class="rounded-circle"
+                        width="50px"
+                        height="50px"
+                      />
+                    </span>
+                    <div class="goleador_info ml-3">
+                      <span class="font-weight-600">{{ item.full_name }}</span>
+                      <span>{{ item.position?.name }}</span>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-lg-7 col-xl-8">
+            <div class="card">
+              <div class="card-body p-0">
+                <div class="info_tables">
+                  <div class="d-xl-flex">
+                    <ul
+                      class="nav nav-tabs flex-grow-1"
+                      id="myTab"
+                      role="tablist"
+                    >
+                      <li
+                        *ngFor="let tab of tabs; index as i"
+                        class="nav-item"
+                        role="presentation"
+                      >
+                        <a
+                          (click)="selectedTab = i"
+                          [ngClass]="{ active: i == 0 }"
+                          aria-controls="partidos_recientes"
+                          aria-selected="true"
+                          class="nav-link"
+                          data-toggle="tab"
+                          href="#{{ replaceSpaces(normalizeString(tab.name)) }}"
+                          id="{{
+                            replaceSpaces(normalizeString(tab.name))
+                          }}_tab"
+                          role="tab"
+                          >{{ "team." + tab.code | translate }}</a
+                        >
+                      </li>
+                    </ul>
+                    <div
+                      *ngIf="role !== 'teacher'"
+                      class="ml-md-auto nav-item text-center info_table_btns py-3 px-lg-2 px-xl-3"
+                    >
+                      <button
+                        (click)="handleQuickCreate()"
+                        *ngIf="selectedTab == 1"
+                        class="btn new-staff-btn"
+                        pButton
+                      >
+                        {{ "team.new_staff" | translate }} 
+                        <i class="fa fa-plus text-white ml-1"></i>
+                      </button>
+                      <button
+                        *ngIf="selectedTab == 2"
+                        class="btn new-staff-btn"
+                        routerLink="/club/players"
+                        pButton
+                      >
+                        {{ "team.go_to_players" | translate }}
+                      </button>
+                    </div>
+                  </div>
+                  <div class="tab-content" id="myTabContent">
+                    <div
+                      aria-labelledby="partidos_recientes_tab"
+                      class="tab-pane fade show active"
+                      id="partidos_recientes"
+                      role="tabpanel"
+                    >
+                      <games-component
+                        [loadingMatches]="loadingMatches"
+                        [matches]="recentMatches"
+                      ></games-component>
+
+                      <p
+                        *ngIf="recentMatches.length === 0 && !loadingMatches"
+                        class="py-4 text-center mb-0 nodata"
+                      >
+                        {{ "nodata.sinpartidos" | translate }}
+                      </p>
+                    </div>
+                    <div
+                      aria-labelledby="cuerpo_tecnico_tab"
+                      class="tab-pane fade"
+                      id="cuerpo_tecnico"
+                      role="tabpanel"
+                    >
+                      <cuerpo-tecnico-component
+                        (edit)="handleEdit($event)"
+                        (remove)="handleDelete($event)"
+                        (view)="handleView($event)"
+                        [loadingStaff]="loadingTeamStaff"
+                        [staff]="teamStaff"
+                      ></cuerpo-tecnico-component>
+                    </div>
+                    <div
+                      aria-labelledby="jugadores_tab"
+                      class="tab-pane fade"
+                      id="jugadores"
+                      role="tabpanel"
+                    >
+                      <div
+                        *ngIf="loadingPlayers"
+                        style="text-align: center; width: 100%; margin: 25px 0"
+                      >
+                        <i
+                          class="pi pi-spin pi-spinner"
+                          style="font-size: 1.5rem"
+                        ></i>
+                      </div>
+                      <jugadores-component
+                        *ngIf="!loadingPlayers"
+                        [players]="players"
+                      ></jugadores-component>
+
+                      <p
+                        *ngIf="players.length === 0 && !loadingPlayers"
+                        class="py-4 text-center nodata"
+                      >
+                        {{ "nodata.sinjugadores" | translate }}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<app-nuevo-equipo
+  (close)="newTeamDialog = false"
+  (createdTeam)="setNewTeamData($event)"
+  *ngIf="editTeam"
+  [editingTeam]="team"
+  [visible]="newTeamDialog"
+></app-nuevo-equipo>
+
+<p-dialog
+  [(visible)]="showModal"
+  [modal]="true"
+  class="custom_dialog"
+  header="{{ 'MEMBERS.LBL_NEWMEMBER' | translate }}"
+  id="dialog_config_member"
+  maskStyleClass="purple_mask"
+>
+  <div class="dialog_container" id="dialog_config_member_container">
+    <app-new-member
+      (data)="handleCreate()"
+      (goBack)="showModal = false"
+      (save)="loadMembersList()"
+      *ngIf="showModal"
+      [listGender]="listGender"
+      [listJobArea]="listJobArea"
+      member="team"
+    ></app-new-member>
+  </div>
+  <ng-template pTemplate="footer"> </ng-template>
+</p-dialog>
+
+<p-dialog
+  [(visible)]="showDataAdvance"
+  [modal]="false"
+  [resizable]="false"
+  class="custom_dialog"
+  id="new_advanced_member_dialog"
+  styleClass="fullscreenDialog"
+>
+  <ng-template pTemplate="header">
+    <div class="d-flex flex-column header_content">
+      <h5 class="title">{{ "team.addpeople" | translate }}</h5>
+      <div class="subtitle">
+        {{ "team.addpeoplemsg" | translate }}
+      </div>
+    </div>
+  </ng-template>
+  <app-steps-members
+    (save)="showDataAdvance = false; loadMembersList()"
+    *ngIf="showDataAdvance"
+    [data]="dataBasic"
+    [listGender]="listGender"
+    [listJobArea]="listJobArea"
+    [member]="'team'"
+    [view]="viewMember"
+  ></app-steps-members>
+</p-dialog>
+
+<p-confirmDialog
+  #cd
+  [style]="{ width: '50vw' }"
+  class="custom_dialog"
+  maskStyleClass="purple_mask"
+>
+  <ng-template pTemplate="footer">
+    <div class="footer_btns">
+      <button
+        (click)="cd.reject()"
+        class="back_btn"
+        icon="pi pi-times"
+        label="{{ 'LBL_NO' | translate }}"
+        pButton
+        type="button"
+      ></button>
+      <button
+        (click)="cd.accept()"
+        class="next_btn"
+        icon="pi pi-check"
+        label="{{ 'LBL_YES' | translate }}"
+        pButton
+        type="button"
+      ></button>
+    </div>
+  </ng-template>
+</p-confirmDialog>
+
+<app-image-cropper
+  *ngIf="openCropperDialog"
+  [coverDialog]="openCropperDialog"
+  (sendImage)="getImage($event)"
+  (close)="openCropperDialog = false"
+>
+</app-image-cropper>

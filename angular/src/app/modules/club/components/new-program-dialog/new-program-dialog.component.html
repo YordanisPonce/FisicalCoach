@@ -1,0 +1,327 @@
+<p-dialog
+  id="new_program_dialog"
+  class="custom_dialog"
+  [modal]="true"
+  [(visible)]="visible"
+  styleClass="fullscreenDialog"
+  maskStyleClass=""
+  (onHide)="closeDialog()"
+>
+  <ng-template pTemplate="header">
+    <div class="d-flex flex-column header_content">
+      <img src="/assets/img/logo_panel.svg" alt="" />
+      <!-- <div class="title">{{'PLAYERS.LBL_DATOSJUGADOR'| translate}}</div> -->
+      <!-- <div class="subtitle">{{'PLAYERS.LBL_INFOJUGADOR'| translate}}</div> -->
+    </div>
+  </ng-template>
+  <div id="new_program_dialog_container" class="dialog_container">
+    <div class="d-flex">
+      <i
+        class="pi pi-angle-left text-primary back_btn"
+        (click)="step > 1 ? (step = step - 1) : ''"
+        *ngIf="step != 4"
+      ></i>
+      <h6 class="font-weight-bold mb-5" *ngIf="step != 4">
+        {{ "new_program.new_preventive_program" | translate }}
+      </h6>
+    </div>
+    <form [formGroup]="newProgramForm">
+      <div class="step_content" *ngIf="step == 1">
+        <div class="row">
+          <!-- titulo del programa -->
+          <div class="col-12 mb-4">
+            <label for="title">
+              {{ "new_program.preventive_program_title" | translate }} *</label
+            >
+            <input
+              class="form-control"
+              [ngClass]="{
+                'ng-invalid ng-dirty is-invalid':
+                  (newProgramControls.title.invalid &&
+                    (newProgramControls.title.dirty ||
+                      newProgramControls.title.touched)) ||
+                  (newProgramControls.title.invalid && this.submittedForm)
+              }"
+              id="title"
+              placeholder="{{ 'LBL_ESCRIBEAQI' | translate }}"
+              aria-label="Default"
+              aria-describedby="inputGroup-sizing-default"
+              formControlName="title"
+            />
+            <div class="invalid-feedback">
+              {{ "new_program.validate_title" | translate }}
+            </div>
+          </div>
+          <!-- nombre del especialista -->
+          <div class="mb-4 col-12">
+            <label for=""
+              >{{ "new_program.specialist_name" | translate }} *</label
+            >
+            <div>
+              <p-dropdown
+                [options]="teamStaff"
+                optionLabel="full_name"
+                optionValue="id"
+                formControlName="team_staff_id"
+                [ngClass]="{
+                  'ng-invalid ng-dirty is-invalid':
+                    (newProgramControls.team_staff_id.invalid &&
+                      (newProgramControls.team_staff_id.dirty ||
+                        newProgramControls.team_staff_id.touched)) ||
+                    (newProgramControls.team_staff_id.invalid &&
+                      this.submittedForm)
+                }"
+                placeholder="{{ 'LBL_SELECCIONE' | translate }}"
+                [styleClass]="'w-100 form-control'"
+              >
+              </p-dropdown>
+              <div
+                class="invalid-feedback"
+                *ngIf="newProgramControls.team_staff_id?.errors"
+              >
+                {{ "new_program.validate_specialist_name" | translate }}
+              </div>
+            </div>
+          </div>
+          <!-- dias de la semana -->
+          <div class="col-12 mb-4">
+            <label for="names"
+              >{{ "new_program.week_days" | translate }}
+              <span *ngIf="!newProgramControls.week_days?.errors"
+                >({{ selectedDaysCount() }})</span
+              >
+              *</label
+            >
+            <div>
+              <p-selectButton
+                [options]="weekDays"
+                formControlName="week_days"
+                optionValue="id"
+                [multiple]="true"
+              >
+                <ng-template let-item pTemplate>
+                  <span class="w-100">
+                    {{ getDayLetter(item.name, item.code) }}
+                  </span>
+                </ng-template>
+              </p-selectButton>
+            </div>
+            <input
+              class="form-control"
+              [ngClass]="{
+                'ng-invalid ng-dirty is-invalid':
+                  (newProgramControls.week_days.invalid &&
+                    (newProgramControls.week_days.dirty ||
+                      newProgramControls.week_days.touched)) ||
+                  (newProgramControls.week_days.invalid && this.submittedForm)
+              }"
+              hidden
+              aria-describedby="sportInputFeedback"
+            />
+            <div
+              class="invalid-feedback"
+              *ngIf="newProgramControls.week_days?.errors"
+            >
+              {{ "new_program.validate_week_days" | translate }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- paso 2 -->
+      <div class="step_content" *ngIf="step == 2">
+        <div class="row">
+          <!-- tipo de programa preventivo -->
+          <div class="mb-4 col-12">
+            <label for=""
+              >{{ "new_program.preventive_program_type" | translate }} *</label
+            >
+            <div>
+              <p-dropdown
+                [options]="programTypes"
+                optionLabel="name"
+                placeholder="{{ 'LBL_SELECCIONE' | translate }}"
+                [ngClass]="{
+                  'ng-invalid ng-dirty is-invalid':
+                    (newProgramControls.preventive_program_type_id.invalid &&
+                      (newProgramControls.preventive_program_type_id.dirty ||
+                        newProgramControls.preventive_program_type_id
+                          .touched)) ||
+                    (newProgramControls.preventive_program_type_id.invalid &&
+                      this.submittedForm)
+                }"
+                [styleClass]="'w-100 form-control'"
+                (onChange)="setProgramType($event.value)"
+              >
+              </p-dropdown>
+              <div
+                class="invalid-feedback"
+                *ngIf="newProgramControls.preventive_program_type_id?.errors"
+              >
+                {{ "new_program.validate_program_type" | translate }}
+              </div>
+            </div>
+          </div>
+          <!-- otro tipo de programa preventivo -->
+          <div class="col-12 mb-4" *ngIf="otherProgramType">
+            <label for="title">
+              {{ "new_program.other_program_type" | translate }} *</label
+            >
+            <input
+              class="form-control"
+              [ngClass]="{
+                'ng-invalid ng-dirty is-invalid':
+                  (newProgramControls.other_preventive_program_type.invalid &&
+                    (newProgramControls.other_preventive_program_type.dirty ||
+                      newProgramControls.other_preventive_program_type
+                        .touched)) ||
+                  (newProgramControls.other_preventive_program_type.invalid &&
+                    this.submittedForm)
+              }"
+              id="title"
+              placeholder="{{ 'LBL_ESCRIBEAQI' | translate }}"
+              aria-label="Default"
+              aria-describedby="inputGroup-sizing-default"
+              formControlName="other_preventive_program_type"
+            />
+            <div class="invalid-feedback">
+              {{ "new_program.validate_program_type" | translate }}
+            </div>
+          </div>
+          <!-- localizacion -->
+          <div class="mb-4 col-12">
+            <label for="">{{ "new_program.location" | translate }} *</label>
+            <div>
+              <p-dropdown
+                [options]="injuriesLocation"
+                optionLabel="name"
+                optionValue="id"
+                placeholder="{{ 'LBL_SELECCIONE' | translate }}"
+                [styleClass]="'w-100 form-control'"
+                formControlName="injury_location_id"
+                [ngClass]="{
+                  'ng-invalid ng-dirty is-invalid':
+                    (newProgramControls.injury_location_id.invalid &&
+                      (newProgramControls.injury_location_id.dirty ||
+                        newProgramControls.injury_location_id.touched)) ||
+                    (newProgramControls.injury_location_id.invalid &&
+                      this.submittedForm)
+                }"
+              >
+              </p-dropdown>
+              <div
+                class="invalid-feedback"
+                *ngIf="newProgramControls.injury_location_id?.errors"
+              >
+                {{ "new_program.location" | translate }}
+              </div>
+            </div>
+          </div>
+          <!-- localizacion detallada -->
+          <div class="col-12 mb-4">
+            <label for="detailed_location">{{
+              "new_program.detailed_location" | translate
+            }}</label>
+            <input
+              class="form-control"
+              id="detailed_location"
+              placeholder="{{ 'LBL_ESCRIBEAQI' | translate }}"
+              aria-label="Default"
+              aria-describedby="inputGroup-sizing-default"
+              formControlName="detailed_location"
+              [ngClass]="{
+                'ng-invalid ng-dirty is-invalid':
+                  (newProgramControls.detailed_location.invalid &&
+                    (newProgramControls.detailed_location.dirty ||
+                      newProgramControls.detailed_location.touched)) ||
+                  (newProgramControls.detailed_location.invalid &&
+                    this.submittedForm)
+              }"
+            />
+            <div class="invalid-feedback">
+              {{ "new_program.validate_detailed_location" | translate }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step_content" *ngIf="step == 3">
+        <div class="row">
+          <div class="mb-4 col-12">
+            <label for=""
+              >{{
+                "new_program.preventive_program_description" | translate
+              }}
+              *</label
+            >
+            <textarea
+              name=""
+              id=""
+              cols="30"
+              rows="10"
+              class="form-control"
+              placeholder="{{ 'LBL_ESCRIBEAQI' | translate }}"
+              formControlName="description"
+              [ngClass]="{
+                'ng-invalid ng-dirty is-invalid':
+                  (newProgramControls.description.invalid &&
+                    (newProgramControls.description.dirty ||
+                      newProgramControls.description.touched)) ||
+                  (newProgramControls.description.invalid && this.submittedForm)
+              }"
+            >
+            </textarea>
+            <div class="invalid-feedback">
+              {{ "new_program.validate_description" | translate }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step_content" *ngIf="step == 4">
+        <div class="success_content text-center">
+          <div class="caption">
+            {{ "new_program.created_program" | translate }}
+          </div>
+          <!-- <div class="success_sphere">
+                        <i class="pi pi-check"></i>
+                    </div> -->
+          <img
+            alt="equipo"
+            class="py-5"
+            src="{{
+              resources + '/images/injury_prevention/injury_prevention.svg'
+            }}"
+            width="300px"
+          />
+          <div class="caption">
+            {{ "new_program.program_available" | translate }}
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <button
+          class="btn next_btn btn-block"
+          (click)="
+            step < 3
+              ? validateStep()
+              : step == 3
+              ? onSubmit($event)
+              : closeDialog()
+          "
+          [disabled]="loading == true"
+        >
+          {{
+            step < 3
+              ? ("LBL_SIGUIENTE" | translate)
+              : step == 3
+              ? ("new_program.create_program" | translate)
+              : ("BTN_FINALIZAR" | translate)
+          }}
+        </button>
+
+        <!-- <button class="btn next_btn btn-block" (click)="(step<3) ? step=step+1 : ''">{{step<3 ? 'Siguiente' : 'Finalizar programa preventivo'}}</button> -->
+      </div>
+    </form>
+  </div>
+</p-dialog>

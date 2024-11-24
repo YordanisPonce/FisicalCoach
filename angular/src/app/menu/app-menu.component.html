@@ -1,0 +1,627 @@
+<div *ngIf="verificar() && newVerify()" id="mobile_header">
+  <div class="selected_academy">
+    <div (click)="academy.toggle($event)" class="academy">
+      <div *ngIf="team && !club" class="d-flex align-items-center">
+        <div class="academy_icon">
+          <p-avatar
+            *ngIf="team && team.image && team?.image?.full_url; else showColor"
+            image="{{ team?.image?.full_url }}"
+            shape="circle"
+            styleClass="large"
+          ></p-avatar>
+          <ng-template #showColor>
+            <div
+              *ngIf="team?.color"
+              [style]="'background-color:' + team.color"
+              class="color"
+            ></div>
+          </ng-template>
+        </div>
+        <div class="academy_info" *ngIf="!!team">
+          <span class="name d-block font-weight-600"
+            >{{ team?.name }}<i class="pi pi-chevron-down ml-2"></i
+          ></span>
+        </div>
+      </div>
+
+      <div *ngIf="club" class="d-flex align-items-center">
+        <div class="academy_icon">
+          <p-avatar
+            *ngIf="club && club.image && !club.image.id"
+            image="{{ club.image.full_url }}"
+            shape="circle"
+          ></p-avatar>
+          <p-avatar
+            *ngIf="club && club.image && club.image.id"
+            image="{{ club.image.full_url }}"
+            shape="circle"
+          ></p-avatar>
+          <p-avatar
+            *ngIf="!club || !club.image"
+            image="{{ urlBase + 'images/menu/shield.png' }}"
+            shape="circle"
+          ></p-avatar>
+        </div>
+        <div class="academy_info">
+          <span class="name d-block font-weight-600"
+            >{{ club?.name }}<i class="pi pi-chevron-down ml-2"></i>
+
+            <div class="d-flex">
+              <small class="d-block fisical-text">
+                {{ club.users_count }}</small
+              >
+              <small class="fisical-text ml-1">{{
+                "academySidebar.guests" | translate
+              }}</small>
+            </div>
+          </span>
+        </div>
+      </div>
+
+      <div class="academy_info" *ngIf="!team && !club">
+        <span class="name d-block font-weight-600"
+          >{{
+            "academySidebar." +
+              (role === "sport" ? "select_club" : "select_school") | translate
+          }}<i class="pi pi-chevron-down ml-2"></i
+        ></span>
+      </div>
+    </div>
+  </div>
+
+  <p-overlayPanel #academy>
+    <ng-template pTemplate>
+      <div id="academy_options" *ngIf="clubs.length > 0">
+        <a
+          (click)="sendEvent(item, academy)"
+          *ngFor="let item of clubs"
+          class="d-flex align-items-center list-group-item list-group-item-action font-weight-500 sidebar-item"
+        >
+          <span class="border p-2 rounded-circle sidebar-item-img">
+            <p-avatar
+              *ngIf="item.image"
+              image="{{ item.image.full_url }}"
+              shape="circle"
+            ></p-avatar>
+            <p-avatar
+              *ngIf="!item.image"
+              image="{{ urlBase + 'images/menu/shield.png' }}"
+              shape="circle"
+            ></p-avatar>
+          </span>
+          <div class="ml-3 sidebar-item-text">
+            {{ item.name }}
+          </div>
+          <span class="ml-auto mr-3">
+            <img
+              alt="arrow"
+              class="principalImg"
+              loading="lazy"
+              src="assets/img/icons/menu_arrow.svg"
+              width="10px"
+              height="10px"
+            />
+          </span>
+        </a>
+        <div
+          *ngIf="
+            !loadingMenu &&
+            (activesubscription.stripe_status === 'active' ||
+              activesubscription.stripe_status === 'trialing')
+          "
+          class="d-flex align-items-center justify-content-center create-btn mt-3"
+        >
+          <button
+            (click)="addSpace()"
+            class="btn new_team_btn btn-block"
+            pButton
+          >
+            <span class="plus pr-2">+</span>
+            <span class="mx-2">
+              {{
+                (role === "teacher" ? "sidebar.add_class" : "sidebar.add_space")
+                  | translate
+              }}</span
+            >
+            <div>
+              <img
+                class="group-image-hover"
+                src="assets/img/icons/group-green.svg"
+              />
+              <img class="group-image" src="assets/img/icons/group_dark.svg" />
+            </div>
+          </button>
+        </div>s
+      </div>
+
+      <div id="academy_options" *ngIf="schools.length > 0">
+        <a
+          (click)="sendEvent(item, academy)"
+          *ngFor="let item of schools"
+          class="d-flex align-items-center list-group-item list-group-item-action font-weight-500 sidebar-item"
+        >
+          <span class="border p-2 rounded-circle sidebar-item-img">
+            <p-avatar
+              *ngIf="item.image"
+              image="{{ item.image.full_url }}"
+              shape="circle"
+            ></p-avatar>
+            <p-avatar
+              *ngIf="!item.image"
+              image="{{ urlBase + 'images/menu/shield.png' }}"
+              shape="circle"
+              styleClass="p-1"
+            ></p-avatar>
+          </span>
+          <div class="ml-3 sidebar-item-text">
+            {{ item.name }}
+          </div>
+          <span class="ml-auto mr-3">
+            <img
+              alt="arrow"
+              class="principalImg"
+              loading="lazy"
+              src="assets/img/icons/menu_arrow.svg"
+              width="10px"
+              height="10px"
+            />
+          </span>
+        </a>
+        <div
+          *ngIf="
+            !loadingMenu &&
+            (activesubscription.stripe_status === 'active' ||
+              activesubscription.stripe_status === 'trialing')
+          "
+          class="d-flex align-items-center justify-content-center create-btn mt-3"
+        >
+          <button
+            (click)="addSpace()"
+            class="btn new_team_btn btn-block"
+            pButton
+          >
+            <span class="plus pr-2">+</span>
+            <span class="mx-2">
+              {{
+                (role === "teacher" ? "sidebar.add_class" : "sidebar.add_space")
+                  | translate
+              }}</span
+            >
+            <div>
+              <img
+                class="group-image-hover"
+                src="assets/img/icons/group-green.svg"
+              />
+              <img class="group-image" src="assets/img/icons/group_dark.svg" />
+            </div>
+          </button>
+        </div>
+      </div>
+    </ng-template>
+  </p-overlayPanel>
+</div>
+
+<div *ngIf="team" class="selected_team d-sm-none">
+  <div class="academy">
+    <div class="d-flex align-items-center">
+      <div class="academy_icon">
+        <p-avatar
+          *ngIf="team && team.image && team?.image?.full_url; else showColor"
+          image="{{ team?.image?.full_url }}"
+          shape="circle"
+          styleClass="large"
+        ></p-avatar>
+        <ng-template #showColor>
+          <div
+            *ngIf="team?.color"
+            [style]="{
+              'background-color': team.color,
+              width: '64px !important',
+              margin: 0
+            }"
+            class="academy_icon color"
+          ></div>
+        </ng-template>
+      </div>
+      <div class="academy_info ml-2" *ngIf="!!team">
+        <span class="name d-block font-weight-600">{{ team?.name }} </span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  *ngIf="verificar() && newVerify()"
+  [ngClass]="{ 'mini-sidebar': miniSidebar }"
+  class=""
+  id="sidebar-wrapper"
+>
+  <!-- cabecera con el logo -->
+  <div
+    *ngIf="miniSidebar"
+    class="sidebar-heading d-none d-xl-flex align-items-center"
+  >
+    <img
+      alt="logo"
+      class="principalImg"
+      loading="lazy"
+      [src]="rutaImagen + 'images/logos/logo_panel.svg'"
+    />
+  </div>
+  <div
+    *ngIf="!miniSidebar"
+    class="sidebar-heading d-none d-xl-flex justify-content-center align-items-center"
+  >
+    <img
+      alt="logo-panel"
+      class="principalImg"
+      loading="lazy"
+      [src]="rutaImagen + 'images/logos/logo_panel.svg'"
+      width="200px"
+    />
+  </div>
+  <!-- listado de academias -->
+  <div class="list-group list-group-flush w-100 academias">
+    <p-scrollPanel [style]="{ width: '100%', height: 'inherit' }">
+      <div *ngIf="loadingMenu" style="padding: 10px; text-align: center">
+        <div *ngFor="let i of [1, 2, 3]" class="d-flex py-3 mb-3">
+          <p-skeleton shape="circle" size="35px" styleClass="mr-2"></p-skeleton>
+          <div class="flex-grow-1">
+            <p-skeleton
+              height="15px"
+              shape="rectangle"
+              styleClass="mb-2"
+              width="100%"
+            ></p-skeleton>
+            <p-skeleton
+              height="10px"
+              shape="rectangle"
+              width="50%"
+            ></p-skeleton>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="!loadingMenu">
+        <div *ngIf="role === 'sport' || role === null">
+          <a
+            (click)="sendEvent(item)"
+            *ngFor="let item of clubs"
+            class="d-flex align-items-center list-group-item list-group-item-action font-weight-500 sidebar-item"
+          >
+            <span
+              *ngIf="!miniSidebar"
+              [ngClass]="{ 'item-selected': seletectClub === item.id }"
+              class="border p-1 rounded-circle fisical-border sidebar-item-img text-center"
+            >
+              <p-avatar
+                *ngIf="item.image"
+                image="{{ item.image.full_url }}"
+                shape="circle"
+              ></p-avatar>
+              <p-avatar
+                *ngIf="!item.image"
+                image="{{ urlBase + 'images/menu/shield.png' }}"
+                shape="circle"
+              ></p-avatar>
+            </span>
+            <span
+              *ngIf="miniSidebar"
+              [ngClass]="{ 'item-selected': seletectClub === item.id }"
+              class="border p-1 rounded-circle fisical-border sidebar-item-img text-center"
+              pTooltip="{{ item.name }}"
+              tooltipPosition="top"
+            >
+              <p-avatar
+                *ngIf="item.image"
+                image="{{ item.image.full_url }}"
+                shape="circle"
+              ></p-avatar>
+              <p-avatar
+                *ngIf="!item.image"
+                image="{{ urlBase + 'images/menu/shield.png' }}"
+                shape="circle"
+              ></p-avatar>
+            </span>
+            <div class="ml-3 sidebar-item-text main-text">
+              {{ item.name }}
+              <small class="d-block fisical-text ml-1"
+                >{{ item.members > 0 ? ("sidebar.guests" | translate) : "" }}
+              </small>
+            </div>
+            <span class="ml-auto mr-3">
+              <img
+                class="principalImg"
+                loading="lazy"
+                src="assets/img/icons/menu_arrow.svg"
+                width="10px"
+                height="10px"
+              />
+            </span>
+          </a>
+        </div>
+
+        <div *ngIf="role === 'teacher'">
+          <a
+            (click)="sendEvent(item)"
+            *ngFor="let item of schools"
+            class="d-flex align-items-center list-group-item list-group-item-action font-weight-500 sidebar-item"
+          >
+            <span
+              *ngIf="!miniSidebar"
+              [ngClass]="{ 'item-selected': seletectClub === item.id }"
+              class="border p-1 rounded-circle fisical-border sidebar-item-img text-center"
+            >
+              <p-avatar
+                *ngIf="item.image"
+                image="{{ item.image.full_url }}"
+                shape="circle"
+              ></p-avatar>
+              <p-avatar
+                *ngIf="!item.image"
+                image="{{ urlBase + 'images/menu/shield.png' }}"
+                shape="circle"
+              ></p-avatar>
+            </span>
+            <span
+              *ngIf="miniSidebar"
+              [ngClass]="{ 'item-selected': seletectClub === item.id }"
+              class="border p-1 rounded-circle fisical-border sidebar-item-img text-center"
+              pTooltip="{{ item.name }}"
+              tooltipPosition="top"
+            >
+              <p-avatar
+                *ngIf="item.image"
+                image="{{ item.image.full_url }}"
+                shape="circle"
+              ></p-avatar>
+              <p-avatar
+                *ngIf="!item.image"
+                image="{{ urlBase + 'images/menu/shield.png' }}"
+                shape="circle"
+              ></p-avatar>
+            </span>
+            <div class="ml-3 sidebar-item-text main-text">
+              {{ item.name }}
+            </div>
+            <span class="ml-auto mr-3">
+              <img
+                class="principalImg"
+                loading="lazy"
+                src="assets/img/icons/menu_arrow.svg"
+                width="10px"
+                height="10px"
+              />
+            </span>
+          </a>
+        </div>
+
+        <a
+          (click)="addSpace()"
+          *ngIf="
+            !loadingMenu &&
+            miniSidebar &&
+            (activesubscription.stripe_status === 'active' ||
+              activesubscription.stripe_status === 'trialing')
+          "
+          class="d-flex align-items-center list-group-item list-group-item-action sidebar-item border-0"
+          pTooltip="{{
+            role === 'teacher'
+              ? ('sidebar.add_class' | translate)
+              : ('sidebar.add_space' | translate)
+          }}"
+          tooltipPosition="right"
+        >
+          <span
+            class="sidebar-item-img rounded-circle d-flex align-items-center justify-content-center bg-transparent"
+          >
+            <img
+              loading="add_space"
+              alt="house"
+              src="{{ resources + '/images/menu/add_space_green.svg' }}"
+              width="30px"
+              class="group-image-hover"
+            />
+            <img
+              loading="add_space"
+              src="{{ resources + '/images/menu/add_space_white.svg' }}"
+              width="30px"
+              class="group-image"
+            />
+          </span>
+          <div class="ml-3 sidebar-item-text">
+            <small class="d-block">{{
+              (role === "teacher" ? "sidebar.add_class" : "sidebar.add_space")
+                | translate
+            }}</small>
+          </div>
+        </a>
+        <div
+          *ngIf="
+            !loadingMenu &&
+            !miniSidebar &&
+            (activesubscription.stripe_status === 'active' ||
+              activesubscription.stripe_status === 'trialing')
+          "
+          class="d-flex align-items-center justify-content-center create-btn mt-3"
+        >
+          <button
+            (click)="addSpace()"
+            class="btn new_team_btn btn-block"
+            pButton
+          >
+            <span class="plus pr-2">+</span>
+            <span class="mx-2">
+              {{
+                (role === "teacher" ? "sidebar.add_class" : "sidebar.add_space")
+                  | translate
+              }}</span
+            >
+            <div>
+              <img
+                class="group-image-hover"
+                src="assets/img/icons/group-green.svg"
+              />
+              <img class="group-image" src="assets/img/icons/group_dark.svg" />
+            </div>
+          </button>
+        </div>
+      </div>
+    </p-scrollPanel>
+  </div>
+  <!-- Botones -->
+  <div
+    class="buttons_area list-group list-group-flush mt-auto w-100 simple-items pt-lg-4 pb-lg-5"
+  >
+    <a
+      (click)="inicio()"
+      class="d-flex align-items-center list-group-item list-group-item-action border-0 sidebar-item"
+    >
+      <span class="sidebar-item-img dist" *ngIf="miniSidebar">
+        <img
+          alt="house"
+          loading="lazy"
+          src="{{ resources + '/images/menu/home_white.svg' }}"
+          pTooltip="{{ 'sidebar.home' | translate }}"
+          width="25"
+          height="25"
+          class="group-image"
+        />
+        <img
+          alt="house"
+          loading="lazy"
+          src="{{ resources + '/images/menu/home.svg' }}"
+          pTooltip="{{ 'sidebar.home' | translate }}"
+          width="25"
+          height="25"
+          class="group-image-hover"
+        />
+      </span>
+      <span class="sidebar-item-img dist" *ngIf="!miniSidebar">
+        <img
+          alt="house"
+          loading="lazy"
+          src="assets/img/icons/house.png"
+          pTooltip="{{ 'sidebar.home' | translate }}"
+          width="25"
+          height="25"
+          class="group-image"
+        />
+        <img
+          alt="house"
+          loading="lazy"
+          src="{{ resources + '/images/menu/home.svg' }}"
+          pTooltip="{{ 'sidebar.home' | translate }}"
+          width="25"
+          height="25"
+          class="group-image-hover"
+        />
+      </span>
+      <div class="ml-md-3">
+        <small class="">{{ "sidebar.home" | translate }}</small>
+      </div>
+    </a>
+
+    <a
+      (click)="profile()"
+      class="d-flex align-items-center list-group-item list-group-item-action border-0 sidebar-item"
+    >
+      <span class="sidebar-item-img dist" *ngIf="miniSidebar">
+        <img
+          alt="info2"
+          loading="lazy"
+          src="{{ resources + '/images/menu/user_green.svg' }}"
+          pTooltip="{{ 'profile.my_profile' | translate }}"
+          width="25"
+          height="25"
+          class="group-image-hover"
+        />
+
+        <img
+          alt="info2"
+          loading="lazy"
+          src="{{ resources + '/images/menu/user_white.svg' }}"
+          pTooltip="{{ 'profile.my_profile' | translate }}"
+          width="29"
+          height="29"
+          class="group-image"
+        />
+      </span>
+      <span class="sidebar-item-img dist" *ngIf="!miniSidebar">
+        <img
+          alt="info2"
+          loading="lazy"
+          src="{{ resources + '/images/menu/user_blue.svg' }}"
+          pTooltip="{{ 'profile.my_profile' | translate }}"
+          width="25"
+          height="25"
+          class="group-image"
+        />
+
+        <img
+          alt="info2"
+          loading="lazy"
+          src="{{ 'assets/img/icons/user_green.svg' }}"
+          pTooltip="{{ 'profile.my_profile' | translate }}"
+          width="25"
+          height="25"
+          class="group-image-hover"
+        />
+      </span>
+      <div class="ml-md-3">
+        <small class="">{{ "profile.my_profile" | translate }}</small>
+      </div>
+    </a>
+
+    <a
+      (click)="signOut()"
+      class="d-flex align-items-center list-group-item list-group-item-action border-0 sidebar-item"
+    >
+      <span class="sidebar-item-img dist" *ngIf="!miniSidebar">
+        <img
+          alt="info2"
+          loading="lazy"
+          src="{{ 'assets/img/icons/switch_dark_blue.png' }}"
+          pTooltip="{{ 'profile.logout' | translate }}"
+          width="25"
+          height="25"
+          class="group-image"
+        />
+
+        <img
+          alt="info2"
+          loading="lazy"
+          src="{{ resources + '/images/menu/switch_green.svg' }}"
+          pTooltip="{{ 'profile.logout' | translate }}"
+          width="25"
+          height="25"
+          class="group-image-hover"
+        />
+      </span>
+
+      <span class="sidebar-item-img dist" *ngIf="miniSidebar">
+        <img
+          alt="info2"
+          loading="lazy"
+          src="{{ resources + '/images/menu/switch_white.svg' }}"
+          pTooltip="{{ 'profile.logout' | translate }}"
+          width="25"
+          height="25"
+          class="group-image"
+        />
+
+        <img
+          alt="info2"
+          loading="lazy"
+          src="{{ resources + '/images/menu/switch_green.svg' }}"
+          pTooltip="{{ 'profile.logout' | translate }}"
+          width="25"
+          height="25"
+          class="group-image-hover"
+        />
+      </span>
+      <div class="ml-md-3">
+        <small class="">{{ "profile.logout" | translate }}</small>
+      </div>
+    </a>
+  </div>
+</div>

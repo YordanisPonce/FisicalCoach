@@ -1,0 +1,126 @@
+<div class="row" style="margin: 2px">
+  <div class="col-lg-8" id="player_matches">
+    <div class="card soft-shadow">
+      <div class="card-header">
+        <span class="mr-4">{{ "trainingload.title" | translate }}</span>
+        <div class="p-input-icon-left d-none d-md-inline">
+          <i class="pi pi-search"></i>
+          <input
+            pInputText
+            placeholder="{{ 'trainingload.buscarpartido' | translate }}"
+            type="text"
+          />
+        </div>
+      </div>
+      <div class="card-body p-0 pb-5">
+        <p-table
+          [value]="list"
+          class="p-datatable-responsive"
+          selectionMode="single"
+          styleClass="p-datatable-responsive"
+        >
+          <ng-template pTemplate="header">
+            <tr>
+              <th class="text-center">
+                {{ "trainingload.fehca" | translate }}
+              </th>
+              <th class="text-center">{{ "trainingload.rpe" | translate }}</th>
+              <th class="text-center">
+                {{ "trainingload.duracion" | translate }}
+              </th>
+              <th class="text-center">
+                {{ "trainingload.carga" | translate }}
+              </th>
+              <th></th>
+            </tr>
+          </ng-template>
+          <ng-template let-item pTemplate="body">
+            <tr>
+              <td class="text-center">
+                {{
+                  item.exercise_session?.exercise_session_detail?.date_session
+                    | date : "dd/MM/YYYY"
+                }}
+              </td>
+              <td class="text-center">
+                <div class="flexcolunm">
+                  <img
+                    [pTooltip]="
+                      item.perception_effort?.number +
+                      ' - ' +
+                      item.perception_effort?.name
+                    "
+                    [src]="item.perception_effort?.image?.full_url"
+                    class="mr-1"
+                    tooltipPosition="left"
+                    width="25"
+                  />
+                  <label> {{ item.perception_effort?.number }}</label>
+                </div>
+              </td>
+              <td class="text-center">{{ item.time_training }}</td>
+              <td class="text-center">
+                <div>{{ item.training_load }} UA</div>
+              </td>
+              <td class="actions_column">
+                <button (click)="goToExercise(item)" class="btn outline">
+                  <img
+                    alt=""
+                    src="../../../../../../assets/img/icons/bar_chart.svg"
+                    width="12px"
+                  />
+                </button>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-4">
+    <div class="card soft-shadow">
+      <div class="card-header">
+        {{ "trainingload.cargapromediosemana" | translate }}
+      </div>
+
+      <div class="card-body p-2">
+        <p-table
+          [value]="statistics"
+          class="p-datatable-responsive"
+          selectionMode="single"
+          styleClass="p-datatable-responsive"
+        >
+          <ng-template pTemplate="header">
+            <tr>
+              <th class="text-center">
+                {{ "trainingload.desde" | translate }}
+              </th>
+              <th class="text-center">
+                {{ "trainingload.hasta" | translate }}
+              </th>
+              <th class="text-center">
+                {{ "trainingload.carga" | translate }}
+              </th>
+            </tr>
+          </ng-template>
+          <ng-template let-item pTemplate="body">
+            <tr>
+              <td class="text-center">{{ item.from | date : "dd/MM/YYYY" }}</td>
+              <td class="text-center">{{ item.to | date : "dd/MM/YYYY" }}</td>
+              <td class="text-center">{{ item.value }} UA</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+      <div class="card-footer">
+        <button (click)="verSessiones()" class="btn">
+          {{ "trainingload.versesiones" | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--{{ 'trainingload.cargapromediosemana'|translate }}-->
+<!--{{ 'trainingload.desde'|translate }}-->
+<!--{{ 'trainingload.hasta'|translate }}-->

@@ -1,0 +1,42 @@
+<!-- This is to check and fix -->
+<app-menu *ngIf="isLogin"></app-menu>
+
+<p-sidebar
+  [(visible)]="notificacionsSidebar"
+  [modal]="true"
+  position="right"
+  styleClass="notifications_sidebar"
+>
+  <app-sidebar-notificaciones></app-sidebar-notificaciones>
+</p-sidebar>
+
+<!-- create club dialog -->
+
+<app-add-club
+  *ngIf="addSpaceDialog && (role === 'sport' || !role)"
+  [(visible)]="addSpaceDialog"
+></app-add-club>
+
+<!-- create school center dialog -->
+<p-dialog
+  *ngIf="addSpaceDialog && role === 'teacher'"
+  [(visible)]="addSpaceDialog"
+  [modal]="true"
+  header="{{
+    !type
+      ? ('academySidebar.add_academic_year' | translate)
+      : type === 'EDITCE'
+      ? ('academySidebar.edit_school_center' | translate)
+      : ('academySidebar.new_school_center' | translate)
+  }}"
+  id="add_space_dialog"
+  maskStyleClass="purple_mask"
+  styleClass=""
+>
+  <app-add-school-center
+    (dismissModal)="closeModal($event)"
+    [editing]="editingSchoolCenter"
+  ></app-add-school-center>
+</p-dialog>
+
+<router-outlet></router-outlet>

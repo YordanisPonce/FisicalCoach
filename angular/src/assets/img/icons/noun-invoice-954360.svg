@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+version="1.1" x="0px" y="0px" viewBox="0 0 52 65" enable-background="new 0 0 52 52"
+ xml:space="preserve">
+    <g>
+        <g>
+            <path fill="#ffffff" d="M50,20.8061504H40v-14c0-2.7568998,2.2431984-5,5-5s5,2.2431002,5,5V20.8061504z M42,18.8061504h6v-12
+            c0-1.6542997-1.3456993-3-3-3s-3,1.3457003-3,3V18.8061504z"/>
+        </g>
+        <g>
+            <path fill="#ffffff" d="M2,50.1938515V6.80615c0-2.7568998,2.2431998-5,5-5h38v2H7c-1.6543002,0-3,1.3457003-3,3v40.6123009l1.9970999-0.6660004
+            l3.04,1l2.9604998-1.0009995l3.0039005,1.0009995l3.0267992-1l2.9737015,0.9990005l3.0150986-0.9990005l2.9834003,0.9990005
+            l2.9990005-0.9990005l3.0004997,1l2.9360008-0.9785004L40,47.5864487V19.8061504h2v30.219698l-5.9351006-1.1875L33,49.8598518
+            l-3.0004997-1l-3.0009995,1.0009995l-2.9843006-1.0009995l-3.0170994,1.0009995l-2.9746017-1.0009995l-3.0239992,1
+            l-2.9960995-0.9990005l-2.9565001,0.9990005l-3.0439005-1L2,50.1938515z"/>
+        </g>
+        <g>
+            <rect fill="#ffffff" x="7" y="7.80615" width="10" height="2"/>
+        </g>
+        <g>
+            <rect fill="#ffffff" x="7" y="11.8061504" width="14" height="2"/>
+        </g>
+        <g>
+            <rect fill="#ffffff" x="8" y="23.8061504" width="14" height="2"/>
+        </g>
+        <g>
+            <rect fill="#ffffff" x="32" y="23.8061504" width="4" height="2"/>
+        </g>
+        <g>
+            <rect fill="#ffffff" x="8" y="28.8061504" width="14" height="2"/>
+        </g>
+        <g>
+            <rect fill="#ffffff" x="32" y="28.8061504" width="4" height="2"/>
+        </g>
+        <g>
+            <rect fill="#ffffff" x="8" y="33.8061485" width="14" height="2"/>
+        </g>
+        <g>
+            <rect fill="#ffffff" x="30" y="40.8061485" width="8" height="2"/>
+        </g>
+        <g>
+            <rect fill="#ffffff" x="32" y="33.8061485" width="4" height="2"/>
+        </g>
+        <g>
+            <rect fill="#ffffff" x="15" y="17.8061504" width="14" height="2"/>
+        </g>
+    </g>
+    <text fill="#ffffff" x="0" y="67" font-size="5px" font-weight="bold" font-family="'Helvetica Neue', Helvetica, Arial-Unicode, Arial, Sans-serif">Created by DinosoftLabs</text>
+    <text fill="#ffffff" x="0" y="72" font-size="5px" font-weight="bold" font-family="'Helvetica Neue', Helvetica, Arial-Unicode, Arial, Sans-serif">from the Noun Project</text>
+</svg>

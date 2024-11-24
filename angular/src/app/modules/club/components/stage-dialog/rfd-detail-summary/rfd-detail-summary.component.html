@@ -1,0 +1,105 @@
+<p-dialog
+  id="evolucion_psicologica_dialog"
+  class="custom_dialog"
+  [modal]="true"
+  [(visible)]="visible"
+  styleClass="fullscreenDialog"
+  maskStyleClass=""
+  (onHide)="closeDialog()"
+>
+  <ng-template pTemplate="header">
+    <div class="d-flex header_content">
+      <img src="/assets/img/logo_panel.svg" alt="" />
+    </div>
+  </ng-template>
+  <div id="rfd_summary_dialog_container" class="dialog_container wide">
+    <div class="row">
+      <div class="col-8 info">
+        <div class="d-flex align-items-center">
+          <div>
+            <h3 class="title mb-3">
+              <span *ngIf="index !== 0"
+                >{{ "RFD.phase" | translate }} {{ index }}</span
+              >
+
+              <span>
+                {{ phase.name }}
+              </span>
+            </h3>
+          </div>
+          <button
+            class="btn btn-primary edit_btn"
+            (click)="goToEdit()"
+            *ngIf="!loadingClosedPhase"
+          >
+            <span *ngIf="index !== 0">
+              {{ "RFD.editPhaseRFD" | translate }}
+            </span>
+            <span *ngIf="index === 0">
+              {{ "RFD.editQuestionarie" | translate }}
+            </span>
+          </button>
+        </div>
+
+        <h4 class="summary-subtitle">
+          {{ "RFD.PhaseSummary" | translate }}
+        </h4>
+      </div>
+    </div>
+
+    <div
+      class="my-5 wrap"
+      *ngIf="phase?.question_test.length > 0 && categoryQuestions.length === 0"
+    >
+      <div *ngFor="let item of phase?.question_test; index as i" class="column">
+        <h4 class="mb-4 mt-2">
+          {{ item.question.name }}
+        </h4>
+
+        <div class="d-flex wrap-content">
+          <p
+            *ngFor="let response of item.responses"
+            class="d-flex align-items-center"
+            [ngClass]="{
+              'text-bold':
+                previousAnswers[item.code]?.responseId === response.value
+            }"
+          >
+            {{ response.name }}
+
+            <i
+              class="fas fa-check check"
+              *ngIf="previousAnswers[item.code]?.responseId === response.value"
+            ></i>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="my-5 wrap" *ngIf="categoryQuestions.length > 0">
+      <div *ngFor="let item of categoryQuestions; index as i" class="column">
+        <h4 class="mb-4">
+          {{ item.question.name }}
+        </h4>
+
+        <div class="d-flex wrap-content">
+          <span
+            *ngFor="let response of item.responses"
+            class="d-flex flex-row align-items-center"
+          >
+            {{ response.name }}
+
+            <i
+              class="far fa-times-circle circle"
+              *ngIf="!previousAnswers[response.question_responses_id]"
+            ></i>
+            <i
+              class="fas fa-check check"
+              *ngIf="previousAnswers[response.question_responses_id]"
+            ></i>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</p-dialog>

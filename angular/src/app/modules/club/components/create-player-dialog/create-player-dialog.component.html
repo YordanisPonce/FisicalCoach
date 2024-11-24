@@ -1,0 +1,288 @@
+<p-dialog
+  (onHide)="closeDialog()"
+  [(visible)]="visible"
+  [draggable]="false"
+  [header]="
+    !advancedDialog
+      ? role === 'sport'
+        ? ('PLAYERS.LBL_CREARJUGADOR' | translate)
+        : ('alumns.add_alumn' | translate)
+      : ''
+  "
+  [modal]="true"
+  [ngClass]="{ advanced_dialog: advancedDialog == true }"
+  id="create_player_dialog"
+  maskStyleClass="purple_mask"
+  styleClass=""
+>
+  <ng-template pTemplate="header" *ngIf="advancedDialog">
+    <div * class="d-flex flex-column header_content">
+      <div class="title">
+        {{
+          role === "teacher"
+            ? ("new_alumn.alumn_data" | translate)
+            : ("PLAYERS.LBL_DATOSJUGADOR" | translate)
+        }}
+      </div>
+      <div class="subtitle">
+        {{
+          role === "teacher"
+            ? ("new_alumn.subtitle" | translate)
+            : ("PLAYERS.LBL_INFOJUGADOR" | translate)
+        }}
+      </div>
+    </div>
+  </ng-template>
+  <div class="dialog_container" id="create_player_dialog_container">
+    <div *ngIf="!advancedDialog; else elseBlock">
+      <div *ngIf="step == 1" class="step_content">
+        <app-new-player
+          (nextstep)="next($event)"
+          [listGenderIdentity]="listGenderIdentity"
+          [listGenders]="listGenders"
+          [listPositionsAll]="listPositions"
+          [playerData]="player"
+        ></app-new-player>
+      </div>
+      <div *ngIf="step == 2" class="step_content">
+        <div [ngClass]="{ 'px-3': getScreenWidth() >= 768 }" class="row">
+          <div class="mb-4 col-12 text-center">
+            <div
+              (click)="openCropperDialog = true"
+              *ngIf="!imagenPreview"
+              class="player_image mb-4"
+            >
+              <span class="icon_image m-auto">
+                <i class="pi pi-image"></i>
+              </span>
+            </div>
+            <img
+              *ngIf="imagenPreview && imagenPreview.url"
+              [src]="imagenPreview.url"
+              class="rounded-circle"
+              style="height: 200px; width: 200px; cursor: pointer"
+              (click)="openCropperDialog = true"
+            />
+            <h6 class="mb-4 mt-3" *ngIf="role === 'sport'">
+              {{ "PLAYERS.LBL_FOTO" | translate }}
+            </h6>
+            <h6 class="mb-4 mt-3" *ngIf="role === 'teacher'">
+              {{ "new_alumn.fotoalumno" | translate }}
+            </h6>
+            <p>{{ "PLAYERS.LBL_INFOFOTO" | translate }}</p>
+            <p class="fototypes">{{ "PLAYERS.FOTOTYPES" | translate }}</p>
+          </div>
+        </div>
+        <div>
+          <ul class="step_markers full_markers">
+            <li>
+              <span (click)="step = 1" class="step_marker"></span>
+            </li>
+            <li>
+              <span class="step_marker active"></span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <ng-template #elseBlock class="h-100">
+      <div class="row h-100">
+        <div class="col-md-4">
+          <app-steps
+            (nextstep)="selectItem($event)"
+            [step]="selectStep"
+            [steps]="steps"
+            [validateDisable]="true"
+          ></app-steps>
+        </div>
+        <div class="col-md-8">
+          <div class="advanced_steps_container">
+            <div class="advanced_steps_content">
+              <div class="advanced_step_content_head mb-3">
+                <div>
+                  <div class="mb-2">
+                    {{ "PLAYERS.step" | translate }} {{ selectStep }}/{{
+                      steps.length
+                    }}
+                  </div>
+                  <div class="font-weight-bold mb-2">
+                    {{ steps[selectStep - 1].contentTitle }}
+                  </div>
+                  <div>{{ "PLAYERS.info" | translate }}</div>
+                </div>
+              </div>
+              <p-scrollPanel [style]="{ width: '100%', height: '450px' }">
+                <div *ngIf="selectStep === 1" class="step_content">
+                  <app-player-personal-data
+                    (nextstep)="nextStep($event)"
+                    (saveDataLocal)="saveData($event)"
+                    [listCountriesAll]="listCountriesAll"
+                    [listGenderIdentity]="listGenderIdentity"
+                    [listGenders]="listGenders"
+                    [playerData]="data"
+                  ></app-player-personal-data>
+                </div>
+                <div
+                  *ngIf="selectStep === 2 && role === 'sport'"
+                  class="step_content"
+                >
+                  <app-player-sporting-data
+                    (nextstep)="nextStep($event)"
+                    [listLateralityAll]="listLaterality"
+                    [listPositionsAll]="listPositions"
+                    [player]="data"
+                    [isAvancedFormRegister]="true"
+                  ></app-player-sporting-data>
+                </div>
+                <div
+                  *ngIf="selectStep === 2 && role === 'teacher'"
+                  class="step_content"
+                >
+                  <app-alumn-academic-data
+                    (nextstep)="nextStep($event)"
+                    [acneaeTypes]="listAcneaeTypes"
+                    [alumnData]="data"
+                    [listCourses]="listCourses"
+                  >
+                  </app-alumn-academic-data>
+                </div>
+                <div
+                  *ngIf="selectStep === 3 && role === 'teacher'"
+                  class="step_content"
+                >
+                  <app-alumn-sporting-data
+                    (nextstep)="nextStep($event)"
+                    [alumnSportingData]="data"
+                    [listLateralityAll]="listLaterality"
+                    [sportsList]="listSports"
+                  >
+                  </app-alumn-sporting-data>
+                </div>
+                <div
+                  *ngIf="
+                    (selectStep === 4 && role === 'teacher') ||
+                    (selectStep === 3 && role === 'sport')
+                  "
+                  class="step_content"
+                >
+                  <app-player-contact-data
+                    (nextstep)="nextStep($event)"
+                    [listCountriesAll]="listCountriesAll"
+                    [playerData]="data"
+                  ></app-player-contact-data>
+                </div>
+                <div
+                  *ngIf="
+                    (selectStep === 5 && role === 'teacher') ||
+                    (selectStep === 4 && role === 'sport')
+                  "
+                  class="step_content"
+                >
+                  <app-player-family-data
+                    (nextstep)="
+                      role === 'teacher' ? savePlayer($event) : nextStep($event)
+                    "
+                    [listCivilStatusAll]="listKinships"
+                    [listCountriesAll]="listCountriesAll"
+                    [playerData]="data"
+                  ></app-player-family-data>
+                </div>
+                <div
+                  *ngIf="selectStep === 5 && role === 'sport'"
+                  class="step_content"
+                >
+                  <app-new-agent
+                    (nextstep)="nextStep($event)"
+                    (save)="savePlayer($event)"
+                    [data]="data"
+                  ></app-new-agent>
+                </div>
+              </p-scrollPanel>
+              <div class="row mt-4">
+                <div class="col-md-4"></div>
+                <div class="col-md-4">
+                  <button
+                    (click)="
+                      selectStep === 1
+                        ? closeDialog()
+                        : (selectStep = selectStep - 1)
+                    "
+                    [ngClass]="{ shrink_btn: step == 2 }"
+                    class="btn back_btn btn-block"
+                    pTooltip=" {{ 'LBL_ATRAS' | translate }}"
+                    tooltipPosition="top"
+                  >
+                    {{ "LBL_ATRAS" | translate }}
+                  </button>
+                </div>
+                <div class="col-md-4">
+                  <button
+                    (click)="handleNextAdvance()"
+                    [disabled]="saving"
+                    class="btn next_btn btn-block"
+                    pTooltip="{{
+                      steps.length === step
+                        ? ('LBL_CREARJUGADOR' | translate)
+                        : ('LBL_SIGUIENTE' | translate)
+                    }}"
+                    tooltipPosition="top"
+                  >
+                    {{
+                      steps.length === step
+                        ? ("LBL_CREARJUGADOR" | translate)
+                        : ("LBL_SIGUIENTE" | translate)
+                    }}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </div>
+  <!-- botones del dialogo simple -->
+  <p-footer *ngIf="advancedDialog == false">
+    <div class="footer_btns">
+      <button
+        (click)="step === 2 ? (step = step - 1) : closeDialog()"
+        [ngClass]="{ shrink_btn: step == 2 }"
+        class="btn back_btn"
+        pTooltip="{{ 'LBL_ATRAS' | translate }}"
+        tooltipPosition="top"
+      >
+        {{ "LBL_ATRAS" | translate }}
+      </button>
+      <button
+        (click)="handleNext()"
+        [disabled]="saving"
+        [ngClass]="{ shrink_btn: step == 2 }"
+        class="btn next_btn"
+      >
+        {{
+          step === 1
+            ? ("LBL_SIGUIENTE" | translate)
+            : role === "teacher"
+            ? ("new_alumn.create_alumn" | translate)
+            : ("PLAYERS.LBL_CREARJUGADOR" | translate)
+        }}
+      </button>
+      <button
+        (click)="advancedDialog = true"
+        class="btn advance_btn btn-primary mt-3"
+        pTooltip=" {{ 'LBL_DATOSAVANZADOS' | translate }}"
+        tooltipPosition="top"
+      >
+        {{ "LBL_DATOSAVANZADOS" | translate }}
+      </button>
+    </div>
+  </p-footer>
+</p-dialog>
+
+<app-image-cropper
+  *ngIf="openCropperDialog"
+  [coverDialog]="openCropperDialog"
+  (sendImage)="fileUpload($event)"
+  (close)="openCropperDialog = false"
+>
+</app-image-cropper>

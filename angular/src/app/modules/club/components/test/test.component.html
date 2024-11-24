@@ -1,0 +1,243 @@
+<div
+  class="row"
+  appUserPermission
+  [method]="['team_test_store']"
+  (showItem)="handlePermission($event)"
+>
+  <div class="col-12">
+    <div class="card box-shadow">
+      <div class="card-body p-0">
+        <div class="test_header view_header">
+          <h6 class="font-weight-600 mb-0 mr-4 text-main view_header_title">
+            {{
+              (role === "teacher" ? "LBL_STUDENTS_LIST" : "LBL_PLAYERS")
+                | translate
+            }}
+          </h6>
+
+          <div class="buscador p-input-icon-left d-md-inline">
+            <i class="pi pi-search"></i>
+            <input
+              (keyup)="setValue($event)"
+              [(ngModel)]="searchPlayer"
+              pInputText
+              placeholder="{{ 'LBL_SEARCH' | translate }}"
+              type="text"
+              type="text"
+            />
+          </div>
+          <div class="header_buttons">
+            <button
+              (click)="newTest = true"
+              [disabled]="selectedPlayerList.length === 0"
+              class="btn make_test_btn action"
+              *ngIf="showPermission.store"
+              pButton
+            >
+              <span class="d-sm-inline mr-2">{{
+                "test.doTest" | translate
+              }}</span>
+              <i class="fa fa-plus text-white"></i>
+            </button>
+          </div>
+        </div>
+
+        <p-table
+          [value]="[1, 2]"
+          *ngIf="loadingPlayers"
+          class="p-datatable-responsive"
+        >
+          <ng-template pTemplate="header">
+            <tr>
+              <th style="width: 3rem; min-width: 3rem !important;"></th>
+              <th class="text-left pl-5">{{ "test.name" | translate }}</th>
+              <th class="text-center">{{ "test.testsApplied" | translate }}</th>
+              <th class="text-center">
+                {{ "test.lastTestApplied" | translate }}
+              </th>
+              <th class="text-center">{{ "LBL_DATE" | translate }}</th>
+              <th class="text-center">{{ "test.acciones" | translate }}</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-product>
+            <tr *ngFor="let i of [1, 2, 3]">
+              <td class="">
+                <p-skeleton width="1rem" height="1rem"></p-skeleton>
+              </td>
+              <td>
+                <p-skeleton
+                  class="d-flex justify-content-start"
+                  width="100%"
+                ></p-skeleton>
+              </td>
+              <td>
+                <p-skeleton
+                  class="d-flex justify-content-start"
+                  width="100%"
+                ></p-skeleton>
+              </td>
+              <td>
+                <p-skeleton
+                  class="d-flex justify-content-center"
+                  width="100%"
+                ></p-skeleton>
+              </td>
+              <td>
+                <p-skeleton
+                  class="d-flex justify-content-center"
+                  width="100%"
+                ></p-skeleton>
+              </td>
+              <td class="d-flex justify-content-center">
+                <p-skeleton width="4rem"></p-skeleton>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+        <p-table
+          *ngIf="!loadingPlayers"
+          [rowsPerPageOptions]="[5, 10, 20]"
+          [value]="players"
+          class="p-datatable-responsive"
+          selectionMode="single"
+        >
+          <ng-template pTemplate="header">
+            <tr>
+              <th style="width: 3rem; min-width: 3rem !important;"></th>
+              <th class="text-left" pSortableColumn="full_name">
+                {{ "test.name" | translate }}
+                <p-sortIcon field="full_name"></p-sortIcon>
+              </th>
+              <th class="text-center" pSortableColumn="test_applications_count">
+                {{ "test.testsApplied" | translate }}
+                <p-sortIcon field="test_applications_count"></p-sortIcon>
+              </th>
+              <th
+                class="text-center"
+                pSortableColumn="latest_test_application.date_application"
+              >
+                {{ "test.lastTestApplied" | translate }}
+                <p-sortIcon
+                  field="latest_test_application.date_application"
+                ></p-sortIcon>
+              </th>
+              <th
+                class="text-center"
+                pSortableColumn="latest_test_application.date_application"
+              >
+                {{ "LBL_DATE" | translate }}
+                <p-sortIcon
+                  field="latest_test_application.date_application"
+                ></p-sortIcon>
+              </th>
+              <th class="text-center">{{ "test.acciones" | translate }}</th>
+            </tr>
+          </ng-template>
+          <ng-template let-player pTemplate="body">
+            <tr class="colum-responsive">
+              <td class="checbox-w">
+                <p-tableCheckbox
+                  (click)="handleTestPlayer(player)"
+                  [value]="player"
+                ></p-tableCheckbox>
+              </td>
+              <td class="">
+                <div class="d-flex align-items-center">
+                  <div *ngIf="role === 'sport'">
+                    <img
+                      class="rounded-circle principalImg"
+                      src="{{ player | avatarPipe }}"
+                      width="25px"
+                      height="25px"
+                    />
+                  </div>
+
+                  <div *ngIf="role === 'teacher'">
+                    <img
+                      class="rounded-circle principalImg"
+                      src="{{ player | alumnAvatarPipe }}"
+                      width="25px"
+                      height="25px"
+                    />
+                  </div>
+                  <strong class="ml-2">{{ player.full_name }}</strong>
+                </div>
+              </td>
+              <td class="text-center">
+                <div>
+                  <span class="p-column-title" style="margin-bottom: 1rem">{{
+                    "test.testsApplied" | translate
+                  }}</span>
+                </div>
+                {{ player.test_applications_count }}
+              </td>
+              <td class="checbox-w d-sm-none"></td>
+              <td class="text-center">
+                <div>
+                  <span class="p-column-title" style="margin-bottom: 1rem">{{
+                    "test.lastTestApplied" | translate
+                  }}</span>
+                </div>
+                {{
+                  player.latest_test_application
+                    ? player.latest_test_application.test?.name
+                    : "N/A"
+                }}
+              </td>
+              <td class="text-center">
+                <div>
+                  <span class="p-column-title" style="margin-bottom: 1rem">
+                    {{ "LBL_DATE" | translate }}
+                  </span>
+                </div>
+                {{
+                  player.latest_test_application
+                    ? (player.latest_test_application.date_application
+                      | date : "dd/MM/YYYY")
+                    : "N/A"
+                }}
+              </td>
+
+              <td class="text-center actions w-column-full">
+                <div class="d-flex justify-content-center">
+                  <button
+                    (click)="handleTestPlayer(player, true)"
+                    class="btn view_btn mr-2"
+                    pTooltip="{{ 'test.makeTest' | translate }}"
+                    *ngIf="showPermission.store"
+                  >
+                    <i class="pi pi-plus mr-2"></i>
+                  </button>
+                  <button
+                    [routerLink]="['/club/test-details/' + player?.id]"
+                    class="view_btn btn"
+                    pTooltip="{{ 'test.viewTest' | translate }}"
+                  >
+                    <img src="/assets/img/icons/book-icon.svg" />
+                  </button>
+                </div>
+              </td>
+              <!-- <td class="text-center">8</td> -->
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="5" style="text-align: center">
+                {{ "nodata.sintest" | translate }}
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
+  </div>
+</div>
+<app-test-dialog
+  (close)="resetPlayerList()"
+  (resetPlayerList)="resetPlayerList()"
+  (sendSelectedPlayers)="handleSelectedPlayersFromModal($event)"
+  *ngIf="newTest"
+  [playersList]="players"
+  [selectedPlayerList]="selectedPlayerList"
+  [visible]="newTest"
+></app-test-dialog>

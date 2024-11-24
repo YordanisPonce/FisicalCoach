@@ -1,0 +1,28 @@
+.card{
+    border-radius: 0;
+}
+.card-header{
+    color: #050C44;
+    background-color: white;
+    font-weight: 600;
+    padding: 1.5rem;
+}
+#player_information_menu{
+    .nav-pills .nav-link {
+        border-radius: 0;
+        padding: 1.5rem 2rem;
+        color: #050C4467;
+        font-weight: 600;
+        font-size: .9rem;
+    }
+    .nav-pills .nav-link.active, .nav-pills .show>.nav-link {
+        color: #050C44;
+        font-weight: 600;
+        border-left: 3px solid #0065E9;
+        background: #024CAC05 0% 0% no-repeat padding-box;
+    }
+}
+
+:host ::ng-deep .p-radiobutton-label{
+    margin-bottom: 0;
+}

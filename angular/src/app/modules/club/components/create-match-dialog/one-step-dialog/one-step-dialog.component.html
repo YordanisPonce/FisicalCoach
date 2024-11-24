@@ -1,0 +1,241 @@
+<p-dialog
+  (onHide)="closeDialog()"
+  [(visible)]="visible"
+  [modal]="true"
+  header="{{ 'competition_details.' + dialogTitle | translate }} +"
+  id="create_match_dialog"
+  maskStyleClass="purple_mask"
+  styleClass=""
+>
+  <div class="" id="create_match_dialog_container">
+    <div class="step_content">
+      <form [formGroup]="matchForm">
+        <div [ngClass]="{ 'px-3': getScreenWidth() >= 768 }" class="row">
+          <div class="mb-4 col-12 col-md-6">
+            <label>
+              {{ "competition_details.oneStep.dateAndHour" | translate }} *
+            </label>
+            <div>
+              <p-calendar
+                (onSelect)="verifyMatchDate($event)"
+                [(ngModel)]="matchDate ? matchDate : date"
+                [dataType]="'string'"
+                [firstDayOfWeek]="1"
+                [minDate]="minDate"
+                [placeholder]="'DD-MM-AAAA HH:mm'"
+                [readonlyInput]="true"
+                [selectionMode]="'single'"
+                [showTime]="true"
+                [styleClass]="'w-100 border-0 p-0'"
+                formControlName="start_at"
+              ></p-calendar>
+
+              <p *ngIf="!isAvailableMatch" class="text-danger mt-1">
+                {{
+                  "competition_details.match_dialog.matchDateNotAvailable"
+                    | translate
+                }}
+              </p>
+            </div>
+          </div>
+          <div class="mb-4 col-12 col-md-6">
+            <label>{{ "competition_details.oneStep.place" | translate }}</label>
+            <input
+              aria-describedby="inputGroup-sizing-default"
+              aria-label="Default"
+              class="form-control"
+              formControlName="location"
+              placeholder="{{ 'LBL_ESCRIBIR' | translate }}"
+            />
+          </div>
+          <div class="mb-4 col-12 col-md-6">
+            <label
+              >{{
+                (tennisFormFields.includes(team.sport.code)
+                  ? "competition_details.oneStep.modality"
+                  : "competition_details.oneStep.style"
+                ) | translate
+              }}*
+            </label>
+            <div *ngIf="!checkSimilarSports()">
+              <p-dropdown
+                (ngModelChange)="getTestTypeCategories($event)"
+                [options]="testList"
+                [styleClass]="'w-100 form-control'"
+                formControlName="test_category_id"
+                placeholder="{{ 'LBL_SELECCIONE' | translate }}"
+              >
+              </p-dropdown>
+            </div>
+            <div *ngIf="checkSimilarSports()" class="mt-2">
+              <p-radioButton
+                (ngModelChange)="handleModality(item.code)"
+                *ngFor="let item of modalities"
+                [label]="item.name"
+                [value]="item.code"
+                class="mr-2"
+                formControlName="modality_id"
+                name="modality_id"
+              ></p-radioButton>
+            </div>
+            <div
+              *ngIf="
+                matchForm.controls.modality_id.errors?.required &&
+                isSubmit &&
+                tennisFormFields.includes(team.sport.code)
+              "
+              class="form-text text-danger"
+            >
+              {{ "LBL_FIELD_REQUIRED" | translate }}
+            </div>
+            <div
+              *ngIf="
+                matchForm.controls.test_category_id.errors?.required &&
+                isSubmit &&
+                !tennisFormFields.includes(team.sport.code)
+              "
+              class="form-text text-danger"
+            >
+              {{ "LBL_FIELD_REQUIRED" | translate }}
+            </div>
+          </div>
+
+          <div class="mb-4 col-12 col-md-6" *ngIf="!checkSimilarSports()">
+            <label
+              >{{ "competition_details.oneStep.test_type" | translate }}
+            </label>
+            <div>
+              <p-dropdown
+                [options]="testTypeList"
+                [styleClass]="'w-100 form-control'"
+                formControlName="test_type_category_id"
+                placeholder="{{ 'LBL_SELECCIONE' | translate }}"
+              >
+              </p-dropdown>
+            </div>
+          </div>
+
+          <div class="mb-4 col-12 col-md-6">
+            <label
+              >{{ "competition_details.oneStep.competitor" | translate }} *
+            </label>
+            <div>
+              <p-multiSelect
+                [(ngModel)]="seletectPlayers"
+                [options]="players"
+                [styleClass]="'w-100 form-control'"
+                formControlName="players"
+                optionLabel="label"
+                placeholder="{{ 'LBL_SELECCIONE' | translate }}"
+              ></p-multiSelect>
+            </div>
+            <div
+              *ngIf="matchForm.controls.players.errors?.required && isSubmit"
+              class="form-text text-danger"
+            >
+              {{ "LBL_FIELD_REQUIRED" | translate }}
+            </div>
+          </div>
+
+          <div class="mb-4 col-12 col-md-6">
+            <div class="d-flex justify-content-between">
+              <label>{{
+                "competition_details.oneStep.rival" | translate
+              }}</label>
+              <label
+                (click)="
+                  matchForm.get('rival_name')?.value !== '' && addRival()
+                "
+                class="label-link ml-2 label-referee"
+              >
+                {{ "competition_details.oneStep.addRival" | translate }}</label
+              >
+            </div>
+            <input
+              [disabled]="true"
+              class="form-control input-rounded"
+              formControlName="rival_name"
+              maxlength="35"
+              placeholder="{{ 'LBL_ESCRIBIR' | translate }}"
+              type="text"
+            />
+          </div>
+
+          <div class="mb-4 col-12 col-md-6">
+            <div class="d-flex justify-content-between">
+              <label>{{
+                "competition_details.oneStep.observations" | translate
+              }}</label>
+            </div>
+            <div></div>
+            <input
+              class="form-control input-rounded"
+              formControlName="observation"
+              placeholder="{{ 'LBL_ESCRIBIR' | translate }}"
+              type="text"
+            />
+          </div>
+
+          <div class="my-2 col-12">
+            <div *ngIf="rivalList.length > 0" class="wrap_rivals">
+              <div
+                *ngFor="let rivalItem of rivalList; index as i"
+                class="rival"
+              >
+                <div>{{ rivalItem.name }}</div>
+                <div class="delete_rival" (click)="deleteRival(i)">
+                  <span class="delete_rival_text">x</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div *ngIf="step != 0">
+      <ul class="step_markers full_markers">
+        <li>
+          <span [ngClass]="{ active: step == 1 }" class="step_marker"></span>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <p-footer>
+    <div class="footer_btns">
+      <button (click)="closeDialog()" class="btn back_btn">
+        {{ "competition_details.back_button" | translate }}
+      </button>
+      <button class="btn next_btn" (click)="onSubmit()" *ngIf="!loading">
+        <span
+          *ngIf="tennisFormFields.includes(team.sport.code); else isSwimming"
+        >
+          {{
+            (match
+              ? "competition_details.edit_match"
+              : "competition_details.create_match"
+            ) | translate
+          }}
+        </span>
+
+        <ng-template #isSwimming>
+          <span>
+            {{
+              (match
+                ? "competition_details.oneStep.editTest"
+                : "competition_details.oneStep.createTest"
+              ) | translate
+            }}
+          </span>
+        </ng-template>
+      </button>
+      <button class="btn next_btn" *ngIf="loading" [disabled]="loading">
+        <span
+          aria-hidden="true"
+          class="spinner-grow spinner-grow-sm"
+          role="status"
+        ></span>
+        {{ "LBL_GUARDANDO" | translate }}
+      </button>
+    </div>
+  </p-footer>
+</p-dialog>

@@ -1,0 +1,173 @@
+<div class="row">
+  <div class="col-12">
+    <div class="card box-shadow">
+      <div class="card-body p-0">
+        <div class="members_header view_header">
+          <h6 class="font-weight-600 mb-0 mr-4 text-main view_header_title">
+            {{ "MEMBERS.LBL_MEMBERS" | translate }}
+          </h6>
+          <div #sorting class="position-relative" id="sorting"></div>
+          <div class="p-input-icon-left d-md-inline buscador">
+            <i class="pi pi-search"></i>
+            <input
+              (input)="searchInvitation($event)"
+              pInputText
+              placeholder="{{ 'LBL_SEARCH' | translate }}"
+              type="text"
+            />
+          </div>
+          <div class="header_buttons">
+            <button
+              (click)="inviteMemberDialog = true"
+              class="btn add_player_btn action"
+            >
+              <span class="d-none d-md-inline">{{
+                "academySidebar.invite_members" | translate
+              }}</span>
+              <i class="fa fa-plus text-white"></i>
+            </button>
+          </div>
+        </div>
+        <p-table
+          [(selection)]="selectedPlayer"
+          [alwaysShowPaginator]="false"
+          [paginator]="true"
+          [loading]="loading"
+          [rows]="10"
+          [showLoader]="false"
+          [value]="membersInvitations"
+          class="p-datatable-responsive"
+          dataKey="index"
+          selectionMode="single"
+        >
+          <ng-template pTemplate="header">
+            <tr class="text-center">
+              <th class="text-center" pSortableColumn="name">
+                {{ "MEMBERS.LBL_EMAIL" | translate }}
+              </th>
+              <th
+                class="text-center"
+                tooltipPosition="top"
+                pTooltip="{{ 'MEMBERS.LBL_NOMBRE' | translate }}"
+              >
+                {{ "MEMBERS.LBL_NOMBRE" | translate }}
+              </th>
+              <th
+                class="text-center"
+                tooltipPosition="top"
+                pTooltip="{{ 'MEMBERS.LBL_EQUIPO' | translate }}"
+              >
+                {{ "MEMBERS.LBL_EQUIPO" | translate }}
+              </th>
+              <th
+                class="text-center"
+                tooltipPosition="top"
+                pTooltip="{{ 'MEMBERS.LBL_STATUS' | translate }}"
+              >
+                {{ "MEMBERS.LBL_STATUS" | translate }}
+              </th>
+              <th
+                class="text-center"
+                tooltipPosition="top"
+                pTooltip="{{ 'LBL_ACTIONS' | translate }}"
+              >
+                {{ "LBL_ACTIONS" | translate }}
+              </th>
+            </tr>
+          </ng-template>
+          <ng-template let-invitation pTemplate="body">
+            <tr *ngIf="!loading">
+              <td>
+                <div class="p-column-title">
+                  {{ "MEMBERS.LBL_EMAIL" | translate }}
+                </div>
+                <img
+                  [src]="'/assets/img/chico.png/'"
+                  class="rounded-circle principalImg"
+                  width="25px"
+                  height="25px"
+                />
+                <strong class="ml-4">{{
+                  invitation.invited_user_email
+                }}</strong>
+              </td>
+              <td class="text-center">
+                <div class="p-column-title">
+                  {{ "MEMBERS.LBL_NOMBRE" | translate }}
+                </div>
+                {{ invitation.inviter_user_full_name || "N/A" }}
+              </td>
+              <td class="text-center">
+                <div class="p-column-title">
+                  {{ "MEMBERS.LBL_EQUIPO" | translate }}
+                </div>
+                {{ invitation.team_name || "N/A" }}
+              </td>
+              <td class="text-center">
+                <div class="p-column-title">
+                  {{ "MEMBERS.LBL_STATUS" | translate }}
+                </div>
+                {{ invitation.status || "N/A" }}
+              </td>
+              <td class="text-center actions">
+                <button (click)="editMemberInvitation(invitation)" class="btn">
+                  <img class="" src="assets/img/icons/lapiz.svg" />
+                </button>
+                <button (click)="confirm($event, invitation.code)" class="btn">
+                  <img class="" src="assets/img/icons/eliminar.svg" />
+                </button>
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="4" style="text-align: center">
+                {{ "LBL_SINREGISTROS" | translate }}
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template let-columns pTemplate="loadingbody">
+            <tr *ngFor="let i of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]">
+              <td>
+                <p-skeleton height="1rem" width="100%"></p-skeleton>
+              </td>
+              <td>
+                <p-skeleton height="1rem" width="100%"></p-skeleton>
+              </td>
+              <td>
+                <p-skeleton height="1rem" width="100%"></p-skeleton>
+              </td>
+              <td>
+                <p-skeleton height="1rem" width="100%"></p-skeleton>
+              </td>
+              <td>
+                <p-skeleton height="1rem" width="100%"></p-skeleton>
+              </td>
+              <td class="d-flex justify-content-around">
+                <p-skeleton height="1rem" width="20px"></p-skeleton>
+                <p-skeleton height="1rem" width="20px"></p-skeleton>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
+  </div>
+</div>
+<p-confirmDialog
+  [header]="'LBL_CONFIRM_DELETE' | translate"
+  [rejectVisible]="false"
+  acceptButtonStyleClass="btn btn-primary"
+  class="custom_dialog"
+  header="Confirmation"
+  icon="pi pi-exclamation-triangle"
+  maskStyleClass="purple_mask"
+></p-confirmDialog>
+
+<invitar-miembros-dialog
+  (close)="inviteMemberDialog = false"
+  (invitationSent)="refreshInvitations()"
+  [editInvitation]="invitationToEdit"
+  [visible]="inviteMemberDialog"
+>
+</invitar-miembros-dialog>

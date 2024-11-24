@@ -1,0 +1,451 @@
+<p>
+  <span>{{ 'adminUsers.LBL_SELECTUSERTEAM' | translate }}</span>
+</p>
+
+<div class="d-flex">
+  <!-- Columna izquierda: Buscador de usuarios -->
+  <div class="search-container">
+    <app-user-search></app-user-search>
+  </div>
+  
+<div class="table-container">
+  <table class="table">
+    <!-- Fila 1: Permisos -->
+    <thead>
+      <tr>
+        <th colspan="4">
+          <div class="d-flex align-items-center justify-content-between">
+            <label for="teamSelect">
+              <span>{{ 'adminUsers.LBL_PERMISSIONS' | translate }}</span>
+            </label>
+            <select id="teamSelect" class="form-control custom-select w-25">
+              <option value="">{{ 'adminUsers.LBL_SELECT_TEAM' | translate }}</option>
+              <option value="team1">Equipo 1</option>
+              <option value="team2">Equipo 2</option>
+              <option value="team3">Equipo 3</option>
+            </select>
+
+            <div class="ml-3">
+              <label for="allPermissions">
+                <input type="checkbox" id="allPermissions" [(ngModel)]="allPermissionsSelected" (click)="toggleAllPermissions()"> 
+                <span>{{ 'adminUsers.LBL_ALLPERMISSIONS' | translate }}</span>
+              </label>
+            </div>
+            <div class="ml-3 position-relative">
+              <div *ngIf="showConfirmationMessage" class="confirmation-message">
+                {{ 'adminUsers.PermissionsGranted' | translate }}
+              </div>
+
+              <button class="btn btn-primary" (click)="grantPermissions()">
+                {{ 'adminUsers.ButtonSaveInvite' | translate }}
+              </button>
+            </div>
+          </div>
+        </th>
+      </tr>
+    </thead>
+
+    <!-- Fila 2: Club -->
+    <tbody>
+      <tr>
+        <td>Club</td>
+        <td>
+          <label for="createPermissionClub">
+            <input type="checkbox" id="createPermissionClub" [(ngModel)]="permissions.club.create" (click)="preventClickPropagation($event)">
+            <span>{{ 'adminUsers.checkboxCreate' | translate }}</span>
+          </label>
+        </td>
+      </tr>
+    </tbody>
+
+    <!-- Fila 3: Equipo -->
+    <tbody>
+      <tr>
+        <td>{{ 'adminUsers.LBL_TABLE_TEAM' | translate }}</td>
+        <td>
+          <label for="createPermissionTeam">
+            <input type="checkbox" id="createPermissionTeam" [(ngModel)]="permissions.team.create" (click)="preventClickPropagation($event)"> 
+            <span>{{ 'adminUsers.checkboxCreate' | translate }}</span>
+          </label>
+        </td>
+      </tr>
+    </tbody>
+
+    <!-- Fila 4: Competición (varias checkboxes) -->
+    <tbody>
+      <tr (click)="toggleRow('competition')">
+        <td>
+          <div class="toggle-container">
+            <span>{{ 'adminUsers.LBL_TABLE_COMPETITION' | translate }}</span>
+            <span *ngIf="getCheckboxCount('competition') > 1" class="toggle-arrow">
+              <i class="fas" [class.fa-chevron-up]="isOpen['competition']" [class.fa-chevron-down]="!isOpen['competition']"></i>
+            </span>
+          </div>
+        </td>
+
+        <!-- Mostrar solo una checkbox si la fila está cerrada -->
+        <td *ngIf="!isOpen['competition']">
+          <label for="createPermissionCompetition">
+            <input type="checkbox" id="createPermissionCompetition" [(ngModel)]="permissions.competition.create" (click)="preventClickPropagation($event)">
+            <span>{{ 'adminUsers.checkboxCreate' | translate }}</span>
+          </label>
+        </td>
+
+        <!-- Mostrar todas las checkboxes si la fila está abierta -->
+        <td *ngIf="isOpen['competition']">
+          <label for="createPermissionCompetition">
+            <input type="checkbox" id="createPermissionCompetition" [(ngModel)]="permissions.competition.create" (click)="preventClickPropagation($event)">
+            <span>{{ 'adminUsers.checkboxCreate' | translate }}</span>
+          </label><br>
+          <label for="readPermissionCompetition">
+            <input type="checkbox" id="readPermissionCompetition" [(ngModel)]="permissions.competition.read" (click)="preventClickPropagation($event)">
+            <span>{{ 'adminUsers.checkboxRead' | translate }}</span>
+          </label><br>
+          <label for="deletePermissionCompetition">
+            <input type="checkbox" id="deletePermissionCompetition" [(ngModel)]="permissions.competition.delete" (click)="preventClickPropagation($event)">
+            <span>{{ 'adminUsers.checkboxDelete' | translate }}</span>
+          </label>
+        </td>
+      </tr>
+    </tbody>
+
+    <!-- Fila 5: Partidos (varias checkboxes) -->
+    <tbody>
+      <tr (click)="toggleRow('matches')">
+        <td>
+          <div class="toggle-container">
+            <span>{{ 'adminUsers.LBL_TABLE_MATCHES' | translate }}</span>
+            <span *ngIf="getCheckboxCount('matches') > 1" class="toggle-arrow">
+              <i class="fas" [class.fa-chevron-up]="isOpen['matches']" [class.fa-chevron-down]="!isOpen['matches']"></i>
+            </span>
+          </div>
+        </td>
+
+        <!-- Mostrar solo una checkbox si la fila está cerrada -->
+        <td *ngIf="!isOpen['matches']">
+          <label for="createPermissionPartidos">
+            <input type="checkbox" id="createPermissionPartidos" [(ngModel)]="permissions.matches.create" (click)="preventClickPropagation($event)">
+            <span>{{ 'adminUsers.checkboxCreate' | translate }}</span>
+          </label>
+        </td>
+
+        <!-- Mostrar todas las checkboxes si la fila está abierta -->
+        <td *ngIf="isOpen['matches']">
+          <label for="createPermissionPartidos">
+            <input type="checkbox" id="createPermissionPartidos" [(ngModel)]="permissions.matches.create" (click)="preventClickPropagation($event)">
+            <span>{{ 'adminUsers.checkboxCreate' | translate }}</span>
+          </label><br>
+          <label for="readPermissionPartidos">
+            <input type="checkbox" id="readPermissionPartidos" [(ngModel)]="permissions.matches.read" (click)="preventClickPropagation($event)">
+            <span>{{ 'adminUsers.checkboxRead' | translate }}</span>
+          </label><br>
+          <label for="deletePermissionPartidos">
+            <input type="checkbox" id="deletePermissionPartidos" [(ngModel)]="permissions.matches.delete" (click)="preventClickPropagation($event)">
+            <span>{{ 'adminUsers.checkboxDelete' | translate }}</span>
+          </label>
+        </td>
+      </tr>
+    </tbody>
+
+    <!-- Fila 6: Scouting (varias checkboxes) -->
+    <tbody>
+      <tr (click)="toggleRow('scouting')">
+        <td>
+          <div class="toggle-container">
+            <span>{{ 'adminUsers.LBL_TABLE_Scouting' | translate }}</span>
+            <span *ngIf="getCheckboxCount('scouting') > 1" class="toggle-arrow">
+              <i class="fas" [class.fa-chevron-up]="isOpen['scouting']" [class.fa-chevron-down]="!isOpen['scouting']"></i>
+            </span>
+          </div>
+        </td>
+
+        <!-- Mostrar solo una checkbox si la fila está cerrada -->
+        <td *ngIf="!isOpen['scouting']">
+          <label for="createPermissionScouting">
+            <input type="checkbox" id="createPermissionScouting" [(ngModel)]="permissions.scouting.create" (click)="preventClickPropagation($event)">
+            <span>{{ 'adminUsers.checkboxCreate' | translate }}</span>
+          </label>
+        </td>
+
+        <!-- Mostrar todas las checkboxes si la fila está abierta -->
+        <td *ngIf="isOpen['scouting']">
+          <label for="createPermissionScouting">
+            <input type="checkbox" id="createPermissionScouting" [(ngModel)]="permissions.scouting.create" (click)="preventClickPropagation($event)">
+            <span>{{ 'adminUsers.checkboxCreate' | translate }}</span>
+          </label><br>
+          <label for="readPermissionScouting">
+            <input type="checkbox" id="readPermissionScouting" [(ngModel)]="permissions.scouting.read" (click)="preventClickPropagation($event)">
+            <span>{{ 'adminUsers.checkboxRead' | translate }}</span>
+          </label><br>
+          <label for="deletePermissionScouting">
+            <input type="checkbox" id="deletePermissionScouting" [(ngModel)]="permissions.scouting.delete" (click)="preventClickPropagation($event)">
+            <span>{{ 'adminUsers.checkboxDelete' | translate }}</span>
+          </label>
+        </td>
+      </tr>
+    </tbody>
+     <!-- Fila 7: Diseño (varias checkboxes) -->
+     <tbody>
+      <tr (click)="toggleRow('design')">
+        <td>
+          <div class="toggle-container">
+            <span>{{ 'adminUsers.LBL_TABLE_DISEGN' | translate }}</span>
+            <span *ngIf="getCheckboxCount('design') > 1" class="toggle-arrow">
+              <i class="fas" [class.fa-chevron-up]="isOpen['design']" [class.fa-chevron-down]="!isOpen['design']"></i>
+            </span>
+          </div>
+        </td>
+
+        <!-- Mostrar solo una checkbox si la fila está cerrada -->
+        <td *ngIf="!isOpen['design']">
+          <label for="createPermissionDesign">
+            <input type="checkbox" id="createPermissionDesign" [(ngModel)]="permissions.design.create" (click)="preventClickPropagation($event)">
+            <span>{{ 'adminUsers.checkboxCreate' | translate }}</span>
+          </label>
+        </td>
+
+        <!-- Mostrar todas las checkboxes si la fila está abierta -->
+        <td *ngIf="isOpen['design']">
+          <label for="createPermissionDesign">
+            <input type="checkbox" id="createPermissionDesign" [(ngModel)]="permissions.design.create" (click)="preventClickPropagation($event)">
+            <span>{{ 'adminUsers.checkboxCreate' | translate }}</span>
+          </label><br>
+          <label for="readPermissionDesign">
+            <input type="checkbox" id="readPermissionDesign" [(ngModel)]="permissions.design.read" (click)="preventClickPropagation($event)">
+            <span>{{ 'adminUsers.checkboxRead' | translate }}</span>
+          </label><br>
+          <label for="deletePermissionDesign">
+            <input type="checkbox" id="deletePermissionDesign" [(ngModel)]="permissions.design.delete" (click)="preventClickPropagation($event)">
+            <span>{{ 'adminUsers.checkboxDelete' | translate }}</span>
+          </label>
+        </td>
+      </tr>
+    </tbody>
+
+     <!-- Fila 8: Sesiones (varias checkboxes) -->
+     <tbody>
+      <tr (click)="toggleRow('sessions')">
+        <td>
+          <div class="toggle-container">
+            <span>{{ 'adminUsers.LBL_TABLE_Sesiones' | translate }}</span>
+            <span *ngIf="getCheckboxCount('sessions') > 1" class="toggle-arrow">
+              <i class="fas" [class.fa-chevron-up]="isOpen['sessions']" [class.fa-chevron-down]="!isOpen['sessions']"></i>
+            </span>
+          </div>
+        </td>
+
+        <!-- Mostrar solo una checkbox si la fila está cerrada -->
+        <td *ngIf="!isOpen['sessions']">
+          <label for="createPermissionSessions">
+            <input type="checkbox" id="createPermissionSessions" [(ngModel)]="permissions.sessions.create" (click)="preventClickPropagation($event)">
+            <span>{{ 'adminUsers.checkboxCreate' | translate }}</span>
+          </label>
+        </td>
+
+        <!-- Mostrar todas las checkboxes si la fila está abierta -->
+        <td *ngIf="isOpen['sessions']">
+          <label for="createPermissionSessions">
+            <input type="checkbox" id="createPermissionSessions" [(ngModel)]="permissions.sessions.create" (click)="preventClickPropagation($event)">
+            <span>{{ 'adminUsers.checkboxCreate' | translate }}</span>
+          </label><br>
+          <label for="readPermissionSessions">
+            <input type="checkbox" id="readPermissionSessions" [(ngModel)]="permissions.sessions.read" (click)="preventClickPropagation($event)">
+            <span>{{ 'adminUsers.checkboxRead' | translate }}</span>
+          </label><br>
+          <label for="deletePermissionSessions">
+            <input type="checkbox" id="deletePermissionSessions" [(ngModel)]="permissions.sessions.delete" (click)="preventClickPropagation($event)">
+            <span>{{ 'adminUsers.checkboxDelete' | translate }}</span>
+          </label>
+        </td>
+      </tr>
+    </tbody>
+     <!-- Fila 9: Jugadores (varias checkboxes) -->
+     <tbody>
+      <tr (click)="toggleRow('players')">
+        <td>
+          <div class="toggle-container">
+            <span>{{ 'adminUsers.LBL_TABLE_PLAYERS' | translate }}</span>
+            <span *ngIf="getCheckboxCount('players') > 1" class="toggle-arrow">
+              <i class="fas" [class.fa-chevron-up]="isOpen['players']" [class.fa-chevron-down]="!isOpen['players']"></i>
+            </span>
+          </div>
+        </td>
+
+        <!-- Mostrar solo una checkbox si la fila está cerrada -->
+        <td *ngIf="!isOpen['players']">
+          <label for="createPermissionPlayers">
+            <input type="checkbox" id="createPermissionPlayers" [(ngModel)]="permissions.players.create" (click)="preventClickPropagation($event)">
+            <span>{{ 'adminUsers.checkboxCreate' | translate }}</span>
+          </label>
+        </td>
+
+        <!-- Mostrar todas las checkboxes si la fila está abierta -->
+        <td *ngIf="isOpen['players']">
+          <label for="createPermissionPlayers">
+            <input type="checkbox" id="createPermissionPlayers" [(ngModel)]="permissions.players.create" (click)="preventClickPropagation($event)">
+            <span>{{ 'adminUsers.checkboxCreate' | translate }}</span>
+          </label><br>
+          <label for="readPermissionPlayers">
+            <input type="checkbox" id="readPermissionPlayers" [(ngModel)]="permissions.players.read" (click)="preventClickPropagation($event)">
+            <span>{{ 'adminUsers.checkboxRead' | translate }}</span>
+          </label><br>
+          <label for="deletePermissionPlayers">
+            <input type="checkbox" id="deletePermissionPlayers" [(ngModel)]="permissions.players.delete" (click)="preventClickPropagation($event)">
+            <span>{{ 'adminUsers.checkboxDelete' | translate }}</span>
+          </label>
+        </td>
+      </tr>
+    </tbody>
+    <!-- Fila 10: Test (varias checkboxes) -->
+    <tbody>
+      <tr (click)="toggleRow('test')">
+        <td>
+          <div class="toggle-container">
+            <span>Test</span>
+            <span *ngIf="getCheckboxCount('test') > 1" class="toggle-arrow">
+              <i class="fas" [class.fa-chevron-up]="isOpen['test']" [class.fa-chevron-down]="!isOpen['test']"></i>
+            </span>
+          </div>
+        </td>
+
+        <!-- Mostrar solo una checkbox si la fila está cerrada -->
+        <td *ngIf="!isOpen['test']">
+          <label for="createPermissionDesign">
+            <input type="checkbox" id="test" [(ngModel)]="permissions.test.create" (click)="preventClickPropagation($event)">
+            <span>{{ 'adminUsers.checkboxCreate' | translate }}</span>
+          </label>
+        </td>
+
+        <!-- Mostrar todas las checkboxes si la fila está abierta -->
+        <td *ngIf="isOpen['test']">
+          <label for="createPermissionTest">
+            <input type="checkbox" id="createPermissionTest" [(ngModel)]="permissions.test.create" (click)="preventClickPropagation($event)">
+            <span>{{ 'adminUsers.checkboxCreate' | translate }}</span>
+          </label><br>
+          <label for="readPermissionTest">
+            <input type="checkbox" id="readPermissionTest" [(ngModel)]="permissions.test.read" (click)="preventClickPropagation($event)">
+            <span>{{ 'adminUsers.checkboxRead' | translate }}</span>
+          </label><br>
+          <label for="deletePermissionTest">
+            <input type="checkbox" id="deletePermissionTest" [(ngModel)]="permissions.test.delete" (click)="preventClickPropagation($event)">
+            <span>{{ 'adminUsers.checkboxDelete' | translate }}</span>
+          </label>
+        </td>
+      </tr>
+    </tbody>
+    <!-- Fila 11: Fichas (varias checkboxes) -->
+    <tbody>
+      <tr (click)="toggleRow('files')">
+        <td>
+          <div class="toggle-container">
+            <span>{{ 'adminUsers.LBL_TABLE_FICHAS' | translate }}</span>
+            <span *ngIf="getCheckboxCount('files') > 1" class="toggle-arrow">
+              <i class="fas" [class.fa-chevron-up]="isOpen['files']" [class.fa-chevron-down]="!isOpen['files']"></i>
+            </span>
+          </div>
+        </td>
+
+        <!-- Mostrar solo una checkbox si la fila está cerrada -->
+        <td *ngIf="!isOpen['files']">
+          <label for="createPermissionFiles">
+            <input type="checkbox" id="files" [(ngModel)]="permissions.files.create" (click)="preventClickPropagation($event)">
+            <span>{{ 'adminUsers.checkboxCreate' | translate }}</span>
+          </label>
+        </td>
+
+        <!-- Mostrar todas las checkboxes si la fila está abierta -->
+        <td *ngIf="isOpen['files']">
+          <label for="createPermissionFiles">
+            <input type="checkbox" id="createPermissionFiles" [(ngModel)]="permissions.files.create" (click)="preventClickPropagation($event)">
+            <span>{{ 'adminUsers.checkboxCreate' | translate }}</span>
+          </label><br>
+          <label for="readPermissionFiles">
+            <input type="checkbox" id="readPermissionFiles" [(ngModel)]="permissions.files.read" (click)="preventClickPropagation($event)">
+            <span>{{ 'adminUsers.checkboxRead' | translate }}</span>
+          </label><br>
+          <label for="deletePermissionFiles">
+            <input type="checkbox" id="deletePermissionFiles" [(ngModel)]="permissions.files.delete" (click)="preventClickPropagation($event)">
+            <span>{{ 'adminUsers.checkboxDelete' | translate }}</span>
+          </label>
+        </td>
+      </tr>
+    </tbody>
+
+    <!-- Fila 12: Riesgo (varias checkboxes) -->
+    <tbody>
+      <tr (click)="toggleRow('risk')">
+        <td>
+          <div class="toggle-container">
+            <span>{{ 'adminUsers.LBL_TABLE_RIESGO' | translate }}</span>
+            <span *ngIf="getCheckboxCount('risk') > 1" class="toggle-arrow">
+              <i class="fas" [class.fa-chevron-up]="isOpen['risk']" [class.fa-chevron-down]="!isOpen['risk']"></i>
+            </span>
+          </div>
+        </td>
+
+        <!-- Mostrar solo una checkbox si la fila está cerrada -->
+        <td *ngIf="!isOpen['risk']">
+          <label for="createPermissionRisk">
+            <input type="checkbox" id="risk" [(ngModel)]="permissions.risk.create" (click)="preventClickPropagation($event)">
+            <span>{{ 'adminUsers.checkboxCreate' | translate }}</span>
+          </label>
+        </td>
+
+        <!-- Mostrar todas las checkboxes si la fila está abierta -->
+        <td *ngIf="isOpen['risk']">
+          <label for="createPermissionRisk">
+            <input type="checkbox" id="createPermissionRisk" [(ngModel)]="permissions.risk.create" (click)="preventClickPropagation($event)">
+            <span>{{ 'adminUsers.checkboxCreate' | translate }}</span>
+          </label><br>
+          <label for="readPermissionRisk">
+            <input type="checkbox" id="readPermissionRisk" [(ngModel)]="permissions.risk.read" (click)="preventClickPropagation($event)">
+            <span>{{ 'adminUsers.checkboxRead' | translate }}</span>
+          </label><br>
+          <label for="deletePermissionRisk">
+            <input type="checkbox" id="deletePermissionRisk" [(ngModel)]="permissions.risk.delete" (click)="preventClickPropagation($event)">
+            <span>{{ 'adminUsers.checkboxDelete' | translate }}</span>
+          </label>
+        </td>
+      </tr>
+    </tbody>
+
+    <!-- Fila 13: RFD (varias checkboxes) -->
+    <tbody>
+      <tr (click)="toggleRow('rfd')">
+        <td>
+          <div class="toggle-container">
+            <span>{{ 'adminUsers.LBL_TABLE_RFD' | translate }}</span>
+            <span *ngIf="getCheckboxCount('rfd') > 1" class="toggle-arrow">
+              <i class="fas" [class.fa-chevron-up]="isOpen['rfd']" [class.fa-chevron-down]="!isOpen['rfd']"></i>
+            </span>
+          </div>
+        </td>
+
+        <!-- Mostrar solo una checkbox si la fila está cerrada -->
+        <td *ngIf="!isOpen['rfd']">
+          <label for="createPermissionRfd">
+            <input type="checkbox" id="rfd" [(ngModel)]="permissions.rfd.create" (click)="preventClickPropagation($event)">
+            <span>{{ 'adminUsers.checkboxCreate' | translate }}</span>
+          </label>
+        </td>
+
+        <!-- Mostrar todas las checkboxes si la fila está abierta -->
+        <td *ngIf="isOpen['rfd']">
+          <label for="createPermissionRfd">
+            <input type="checkbox" id="createPermissionRfd" [(ngModel)]="permissions.rfd.create" (click)="preventClickPropagation($event)">
+            <span>{{ 'adminUsers.checkboxCreate' | translate }}</span>
+          </label><br>
+          <label for="readPermissionRfd">
+            <input type="checkbox" id="readPermissionRfd" [(ngModel)]="permissions.rfd.read" (click)="preventClickPropagation($event)">
+            <span>{{ 'adminUsers.checkboxRead' | translate }}</span>
+          </label><br>
+          <label for="deletePermissionRfd">
+            <input type="checkbox" id="deletePermissionRfd" [(ngModel)]="permissions.rfd.delete" (click)="preventClickPropagation($event)">
+            <span>{{ 'adminUsers.checkboxDelete' | translate }}</span>
+          </label>
+        </td>
+      </tr>
+    </tbody>
+    
+  </table>
+</div>

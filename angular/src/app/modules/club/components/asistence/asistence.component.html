@@ -1,0 +1,220 @@
+<p-dialog
+  id="asistence_dialog"
+  class="custom_dialog"
+  [modal]="true"
+  [(visible)]="visible"
+  styleClass=""
+  maskStyleClass="purple_mask"
+  (onHide)="closeDialog()"
+>
+  <ng-template pTemplate="header">
+    <div class="d-flex justify-content-between align-items-center">
+      <div>
+        <span class="p-dialog-title mr-3">
+          {{ "training_session.players_assistance" | translate }}
+        </span>
+        <span class="buscador p-input-icon-left d-none d-md-inline">
+          <i class="pi pi-search"></i>
+          <input
+            type="text"
+            pInputText
+            placeholder="{{ 'LBL_SEARCH' | translate }}"
+            [(ngModel)]="searchPlayer"
+            (keyup)="setValue($event)"
+          />
+        </span>
+      </div>
+    </div>
+  </ng-template>
+
+  <p-table [value]="players" [(selection)]="selectedPlayerList">
+    <ng-template pTemplate="header">
+      <tr class="text-center">
+        <th style="width: 3rem">
+          <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+        </th>
+
+        <th class="text-left" style="width: 240px" *ngIf="role === 'sport'">
+          {{ "training_session.players" | translate }}
+        </th>
+        <th class="text-left" style="width: 240px" *ngIf="role === 'teacher'">
+          {{ "training_session.alumns" | translate }}
+        </th>
+        <th class="text-center">RPE</th>
+        <th class="text-center">
+          <!-- {{ "training_session.assistance" | translate }} -->
+
+          <div>
+            <button
+              class="btn btn-primary assist-button"
+              (click)="setAllPlayersAssistances()"
+            >
+              {{ "training_session.assistance" | translate }}
+            </button>
+          </div>
+        </th>
+        <th class="text-center" style="width: 75px"></th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-item>
+      <tr>
+        <td>
+          <p-tableCheckbox [value]="item"></p-tableCheckbox>
+        </td>
+
+        <td class="text-center">
+          <div class="d-flex align-items-center">
+            <div class="mr-2" style="width: 20px">
+              <span>{{ item.shirt_number }}</span>
+            </div>
+            <span class="rounded-circle sidebar-item-img">
+              <img src="{{ item | avatarPipe }}" width="30px" height="30px" />
+            </span>
+            <span class="ml-2">{{ item.full_name }}</span>
+          </div>
+        </td>
+
+        <td class="text-center">
+          <img
+            src="{{ showRpe(item.id)?.img }}"
+            width="30px"
+            pTooltip="{{
+              showRpe(item.id)?.rpeNumber + ' - ' + showRpe(item.id)?.name
+            }}"
+            tooltipPosition="top"
+            *ngIf="showRpe(item.id); else noImage"
+          />
+          <div class="d-flex align-items-center justify-content-center">
+            <span class="rounded-circle sidebar-item-img">
+              <ng-template #noImage>
+                <strong>N/A</strong>
+              </ng-template>
+            </span>
+          </div>
+        </td>
+
+        <td class="text-center">
+          <i
+            class="far fa-times-circle circle"
+            (click)="addAssistance(item.id, item.assistance)"
+            *ngIf="!assistanceList.includes(item.id)"
+          ></i>
+
+          <i
+            class="fas fa-check check"
+            (click)="addAssistance(item.id, item.assistance)"
+            *ngIf="assistanceList.includes(item.id)"
+          ></i>
+        </td>
+
+        <td class="text-center">
+          <div class="d-flex">
+            <img
+              src="assets/img/icons/RPE_blue.svg"
+              alt="icon"
+              width="21px"
+              (click)="
+                openRpfDialog(
+                  item.id,
+                  item.perception_effort_id,
+                  item.full_name,
+                  item.assistance,
+                  item.percept_number
+                )
+              "
+              pTooltip="{{ 'matchResults.calculate_rfp' | translate }}"
+              class="p-mr-2 mr-1 rpe-icon-button"
+              *ngIf="
+                selectedPlayerList.length === 0 || showSelectedIcon(item.id)
+              "
+            />
+
+            <div
+              style="margin-right: 25px"
+              *ngIf="
+                selectedPlayerList.length > 0 && !showSelectedIcon(item.id)
+              "
+            ></div>
+
+            <img
+              src="assets/img/icons/FC_blue.svg"
+              alt="icon"
+              width="21px"
+              (click)="
+                openFcDialog(item.id, 'exercise_session_frecuency_cardiac')
+              "
+              pTooltip="{{ 'matchResults.calculate_fc' | translate }}"
+              class="p-mr-2 mr-1 rpe-icon-button"
+              *ngIf="
+                selectedPlayerList.length === 0 || showSelectedIcon(item.id)
+              "
+            />
+
+            <img
+              src="assets/img/icons/GPS_blue.svg"
+              alt="icon"
+              width="21px"
+              (click)="openFcDialog(item.id, 'exercise_session_gps')"
+              pTooltip="{{ 'matchResults.calculate_gps' | translate }}"
+              class="p-mr-2 mr-1 rpe-icon-button"
+              *ngIf="
+                selectedPlayerList.length === 0 || showSelectedIcon(item.id)
+              "
+            />
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+
+  <p-footer>
+    <div class="footer_btns">
+      <button
+        class="btn back_btn shrink_btn"
+        type="button"
+        (click)="closeDialog()"
+      >
+        {{ "LBL_ATRAS" | translate }}
+      </button>
+
+      <button
+        class="btn btn_primary add_btn"
+        *ngIf="!loading"
+        (click)="createAssistance()"
+        type="button"
+      >
+        {{ "training_session.saveAssistance" | translate }}
+      </button>
+
+      <button class="btn btn_primary add_btn" disabled *ngIf="loading">
+        {{ "LBL_GUARDANDO" | translate }}
+      </button>
+    </div>
+  </p-footer>
+</p-dialog>
+
+<app-calculate-rpe-dialog
+  [visible]="rpeDialog"
+  [playerRpe]="playerRpe"
+  [selectedPlayers]="selectedPlayerList"
+  [allPlayers]="allPlayers"
+  [isSessionPage]="true"
+  [sessionId]="sessionId"
+  (assistancePlayerRpe)="getAssistanceRpe($event)"
+  (close)="rpeDialog = false"
+  *ngIf="rpeDialog"
+>
+</app-calculate-rpe-dialog>
+
+<app-cardiac-frecuency-dialog
+  [visible]="cardiacFrecuencyDialog"
+  [user_id]="selectedPlayer"
+  [selectedPlayers]="selectedPlayerList"
+  [testType]="testType"
+  [sessionCode]="sessionCode"
+  [sessionId]="sessionId"
+  *ngIf="cardiacFrecuencyDialog"
+  (close)="cardiacFrecuencyDialog = false"
+  (refreshPlayers)="selectedPlayerList = []"
+>
+</app-cardiac-frecuency-dialog>

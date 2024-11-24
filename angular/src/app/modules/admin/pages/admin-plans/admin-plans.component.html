@@ -1,0 +1,31 @@
+<div class="my-4 mx-auto border-top border-bottom profile-width card box-shadow">
+  <div id="profile_nav">
+    <p-tabMenu [model]="items" [activeItem]="handleTab(activeItem)">
+      <ng-template let-i="index" let-item pTemplate="item">
+        <img
+          [src]="getIcon(item)"
+          class="d-none d-sm-block"
+          width="20"
+          style="margin-right: 5px"
+        />
+        {{ item.label | translate }}
+      </ng-template>
+    </p-tabMenu>    
+  </div>
+</div>
+
+<div class="mx-auto profile-width container">
+  <button class="btn btn-primary create-plan-button" (click)="showCreatePlanDialog()">
+    {{ 'adminPlans.create_plan_button' | translate }}
+  </button>
+</div>
+
+<app-create-plan-modal
+  (close)="hideDialog($event)"
+  *ngIf="dialogVisible"
+  [subpackageData]="subpackageData"
+></app-create-plan-modal>
+
+<div>
+  <router-outlet></router-outlet>
+</div>

@@ -1,0 +1,62 @@
+:host ::ng-deep #add_space_dialog_club {
+  .fototypes {
+    font-size: 14px;
+    color: #05e9c6;
+    font-weight: 500;
+  }
+}
+
+.footer_btns {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+
+  button {
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+    margin: 0 4px;
+  }
+
+  .shrink_btn {
+    flex: 0 0 200px !important;
+  }
+
+  @media (max-width: 500px) {
+    .back_btn {
+      flex: unset !important;
+    }
+    .shrink_btn {
+      flex: 0 0 315px !important;
+    }
+    button {
+      margin: 4px 0;
+      width: 315px !important;
+    }
+  }
+
+  .next_btn_flex {
+    flex: 1;
+  }
+
+  .back_btn {
+    flex: 1;
+    border: 1px solid rgba(5, 12, 68, 0.38823529411764707);
+    color: #050c44;
+    width: 250px;
+    padding: 0.75rem 1rem;
+  }
+
+  .advance_btn {
+    flex: 1 1 100%;
+    background-color: #26262610;
+    color: #050c4455;
+    font-weight: 600;
+  }
+}
+
+.step_marker {
+  &.active {
+    background: #024cac;
+    opacity: 1;
+  }
+}

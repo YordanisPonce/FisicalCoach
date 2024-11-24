@@ -1,0 +1,106 @@
+<div
+  [ngClass]="{ open: seeAllActivities }"
+  class="card box-shadow mb-5"
+  infiniteScroll
+>
+  <div class="card-body p-0">
+    <div class="activity_header">
+      <span class="font-weight-bold title">{{
+        "activity.activity" | translate
+      }}</span>
+    </div>
+    <div *ngIf="loading" class="p-4 list-wrapper">
+      <div *ngFor="let i of [1, 2, 3, 4, 5]" class="d-flex py-3 mb-3">
+        <p-skeleton shape="circle" size="35px" styleClass="mr-2"></p-skeleton>
+        <div class="flex-grow-1">
+          <p-skeleton
+            height="15px"
+            shape="rectangle"
+            styleClass="mb-2"
+            width="100%"
+          ></p-skeleton>
+          <p-skeleton height="10px" shape="rectangle" width="100%"></p-skeleton>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="list-wrapper"
+      [style]="{ height: '550px' }"
+      infiniteScroll
+      [scrollWindow]="false"
+      [infiniteScrollDistance]="2"
+      [infiniteScrollUpDistance]="1.5"
+      [infiniteScrollThrottle]="100"
+      (scrolled)="onScroll()"
+      *ngIf="!loading"
+    >
+      <ul class="list-group list-group-flush list">
+        <a
+          *ngFor="let item of list"
+          class="list-group-item list-group-item-action py-4 activity"
+        >
+          <span class="rounded-circle align-self-start activity_avatar">
+            <i class="fa fa-check icon-float"></i>
+          </span>
+          <div class="ml-3 activity_content">
+            <div class="text-primary title">
+              <span [ngClass]="{ 'open-text': seeAllActivities }">
+                {{ item.activity_type?.name }}
+              </span>
+            </div>
+            <small
+              [ngClass]="{ 'open-text': seeAllActivities }"
+              class="d-block text-secondary"
+              >{{ "activity.last_update" | translate }}
+              {{ item.date | date }}</small
+            >
+          </div>
+        </a>
+
+        <li
+          *ngIf="list.length <= 0 && !loading"
+          class="d-flex align-items-center justify-content-center list-group-item py-3"
+        >
+          <p class="nodata">
+            {{ "activity.no_activities" | translate }}
+          </p>
+        </li>
+      </ul>
+      <div *ngIf="loadingScroll" class="d-flex p-3 mb-3">
+        <p-skeleton shape="circle" size="35px" styleClass="mr-2"></p-skeleton>
+        <div class="flex-grow-1">
+          <p-skeleton
+            height="15px"
+            shape="rectangle"
+            styleClass="mb-2"
+            width="100%"
+          ></p-skeleton>
+          <p-skeleton height="10px" shape="rectangle" width="100%"></p-skeleton>
+        </div>
+      </div>
+    </div>
+    <span
+      (click)="showAllActivities.emit(true)"
+      *ngIf="list.length > 0 && !seeAllActivities"
+      class="d-flex align-items-center list-group-item list-group-item-action py-4 activity_footer"
+    >
+      <div class="ml-3">
+        <span class="d-block text-primary">{{
+          "activity.all_activities" | translate
+        }}</span>
+      </div>
+    </span>
+    <span
+      (click)="showAllActivities.emit(false)"
+      *ngIf="seeAllActivities"
+      class="d-flex align-items-center list-group-item list-group-item-action py-4 activity_footer border-left-0 border-right-0"
+    >
+      <div class="ml-3">
+        <span class="d-block text-primary">{{
+          "activity.all_content" | translate
+        }}</span>
+      </div>
+    </span>
+  </div>
+</div>

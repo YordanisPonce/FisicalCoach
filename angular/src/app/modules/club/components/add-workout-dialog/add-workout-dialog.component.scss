@@ -1,0 +1,136 @@
+:host ::ng-deep {
+  .p-dialog {
+    width: 95%;
+    max-width: 95% !important;
+    // .p-dialog-header{
+    //     border-bottom: 1px solid #050C4433;
+    // }
+
+    .p-dataview .p-dataview-content {
+      display: flex;
+      justify-content: center;
+
+      .p-grid {
+        justify-content: space-evenly;
+      }
+
+      .p-dataview-emptymessage {
+        font-weight: 600;
+      }
+    }
+
+    .p-dataview-emptymessage {
+      color: #050c4475;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .p-dialog-header {
+      padding: 2rem 4rem 0;
+      justify-content: flex-start;
+      .buscador {
+        margin: 0 1.5rem;
+        .pi-search {
+          color: #050c44;
+          font-weight: 600;
+        }
+        .p-inputtext {
+          font-size: 0.9rem;
+          font-family: "Montserrat", sans-serif;
+          font-weight: 500;
+          height: 45px;
+        }
+      }
+      .new_workout_btn {
+        border-radius: 9px;
+        color: white;
+        font-size: 0.9rem;
+        padding: 1rem 2rem;
+      }
+      .p-dialog-header-icons {
+        margin-left: auto;
+      }
+    }
+    .p-dialog-content {
+      padding: 2rem 3rem !important;
+    }
+    .p-dialog-footer {
+      .add_btn,
+      .back_btn {
+        flex: unset !important;
+        width: 200px;
+      }
+      .add_btn {
+        background-color: #024cac;
+        color: white;
+        font-size: 0.9rem;
+      }
+    }
+    .workouts_container {
+      padding: 1.5rem 2.5rem;
+      .p-dataview {
+        .p-dataview-content {
+          .p-grid {
+            display: flex;
+            flex-wrap: wrap;
+            margin-right: -15px;
+            margin-left: -15px;
+          }
+        }
+      }
+      .workout_skeleton {
+        border: 1px solid #050c4421;
+        border-radius: 17px;
+        overflow: hidden;
+        position: relative;
+        margin: 1rem 0;
+      }
+    }
+    .p-selectbutton {
+      display: flex;
+      flex-wrap: wrap;
+      .p-button {
+        flex: 0 23%;
+        margin: 1%;
+        border-radius: 17px !important;
+        border: 1px solid #050c44;
+        display: flex;
+        padding: 0;
+        flex-direction: column;
+        justify-content: center;
+      }
+    }
+  }
+
+  @media (max-width: 600px) {
+    .buscador {
+      margin: 0 !important;
+
+      .p-inputtext {
+        width: 250px;
+      }
+    }
+
+    .new_workout_btn {
+      padding: 16px 20px;
+      width: 250px;
+    }
+
+    .p-dialog {
+      .p-dialog-footer {
+        .footer_btns {
+          display: flex;
+          align-items: center;
+          flex-direction: column;
+        }
+        .add_btn,
+        .back_btn {
+          width: 250px;
+        }
+        button {
+          margin: 5px 0;
+        }
+      }
+    }
+  }
+}

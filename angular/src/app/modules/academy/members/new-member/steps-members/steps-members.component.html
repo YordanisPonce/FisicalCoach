@@ -1,0 +1,58 @@
+<div class="row justify-content-md-center h-100">
+  <div class="col-sm-4 mb-4 mb-sm-0 col-lg-3">
+    <app-steps [steps]="steps" (nextstep)="selectItem($event)" [step]="step" [validateDisable]="true"></app-steps>
+  </div>
+  <div class="col-sm-12 col-md-8">
+    <div class="row">
+      <div class="col-12 mb-3 mb-sm-5">
+        <div class="mb-2">Paso {{step}}/{{steps.length}}</div>
+        <h5 class="font-weight-600 text-dark mb-2">{{steps[step - 1].contentTitle}}</h5>
+        <h6 class="font-weight-normal text-secondary">{{'MEMBERS.LBL_FIELDS' | translate}}</h6>
+      </div>
+    </div>
+    <app-datos-personales 
+    *ngIf="step === 1" 
+    [view]="view" 
+    (nextstep)="nextStep($event)"  
+    [data]="data" 
+    [listCountries]="listCountries"
+    [listGender]="listGender" 
+    [listJobArea]="listJobArea" 
+    [idCountry]="idCountry"
+    [member]="member"
+    >
+    </app-datos-personales>
+    
+    <app-datos-contacto 
+    *ngIf="step === 2" 
+    [view]="view"
+    (nextstep)="nextStep($event)" 
+    (goBack)="goBack()" 
+    [data]="data"
+    [listCountry]="listCountries" 
+    [listAllCountries]="listAllCountries" 
+    [idCountry]="idCountry"
+    >
+    </app-datos-contacto>
+    
+    <app-datos-laborales 
+    [view]="view" 
+    (nextstep)="nextStep($event)" 
+    (goBack)="goBack()" 
+    *ngIf="step === 3" 
+    [data]="data" 
+    [listLevel]="listLevel"
+    >
+    </app-datos-laborales>
+    
+    <app-info-adiccional 
+    *ngIf="step===4" 
+    [view]="view" 
+    (nextstep)="onSubmit($event)" 
+    (goBack)="goBack()" 
+    [data]="data" 
+    [saving]="saving"
+    >
+    </app-info-adiccional>
+  </div>
+</div>

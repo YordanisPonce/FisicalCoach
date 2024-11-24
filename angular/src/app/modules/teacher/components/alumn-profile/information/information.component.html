@@ -1,0 +1,156 @@
+<div class="row">
+  <div class="col-lg-4" id="player_information_menu">
+    <div class="card soft-shadow">
+      <div class="card-header">
+        {{ "PLAYERS.LBL_INFO" | translate }}
+      </div>
+      <div class="card-body p-0">
+        <div
+          aria-orientation="vertical"
+          class="nav flex-column nav-pills"
+          id="v-pills-tab"
+          role="tablist"
+        >
+          <a
+            aria-controls="v-pills-personal-data"
+            aria-selected="true"
+            class="nav-link active"
+            data-toggle="pill"
+            href="#v-pills-personal-data"
+            id="v-pills-personal-data-tab"
+            role="tab"
+            >{{ "PLAYERS.LBL_PERSONAL_DATA" | translate }}</a
+          >
+          <a
+            *ngIf="role === 'teacher'"
+            aria-controls="v-pills-academical-data"
+            aria-selected="true"
+            class="nav-link"
+            data-toggle="pill"
+            href="#v-pills-academical-data"
+            id="v-pills-academical-data-tab"
+            role="tab"
+            >{{ "new_alumn.academical_data" | translate }}</a
+          >
+          <a
+            aria-controls="v-pills-sporting-data"
+            aria-selected="false"
+            class="nav-link"
+            data-toggle="pill"
+            href="#v-pills-sporting-data"
+            id="v-pills-sporting-data-tab"
+            role="tab"
+            >{{ "PLAYERS.LBL_SPORTS_DATA" | translate }}</a
+          >
+          <a
+            aria-controls="v-pills-contact-data"
+            aria-selected="false"
+            class="nav-link"
+            data-toggle="pill"
+            href="#v-pills-contact-data"
+            id="v-pills-contact-data-tab"
+            role="tab"
+            >{{ "PLAYERS.LBL_CONTACT_INFORMATION" | translate }}</a
+          >
+          <a
+            aria-controls="v-pills-family-data"
+            aria-selected="false"
+            class="nav-link"
+            data-toggle="pill"
+            href="#v-pills-family-data"
+            id="v-pills-family-data-tab"
+            role="tab"
+            >{{ "PLAYERS.LBL_FAMILY_DATA" | translate }}</a
+          >
+          <a
+            *ngIf="role === 'sport'"
+            aria-controls="v-pills-working-data"
+            aria-selected="false"
+            class="nav-link"
+            data-toggle="pill"
+            href="#v-pills-working-data"
+            id="v-pills-working-data-tab"
+            role="tab"
+            >{{ "PLAYERS.LBL_WORK_DATA" | translate }}</a
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-8">
+    <div class="card soft-shadow">
+      <div class="card-header">
+        {{ "PLAYERS.LBL_INFOPRINCIPAL" | translate }}
+      </div>
+      <div class="card-body">
+        <div class="tab-content" id="v-pills-tabContent">
+          <div
+            aria-labelledby="v-pills-personal-data-tab"
+            class="tab-pane fade show active"
+            id="v-pills-personal-data"
+            role="tabpanel"
+          >
+            <app-player-personal-data
+              [listCountriesAll]="listCountries"
+              [listGenderIdentity]="listGenderIdentity"
+              [listGenders]="listGenders"
+              [playerData]="player"
+            ></app-player-personal-data>
+          </div>
+          <div
+            *ngIf="role === 'teacher'"
+            aria-labelledby="v-pills-academical-data-tab"
+            class="tab-pane fade"
+            id="v-pills-academical-data"
+            role="tabpanel"
+          >
+            <app-alumn-academic-data
+              [acneaeTypes]="acneaeTypes"
+              [alumnData]="player"
+              [listCourses]="listCourses"
+            >
+            </app-alumn-academic-data>
+          </div>
+          <div
+            aria-labelledby="v-pills-sporting-data-tab"
+            class="tab-pane fade"
+            id="v-pills-sporting-data"
+            role="tabpanel"
+          >
+            <app-alumn-sporting-data
+              *ngIf="role === 'teacher'"
+              [alumnData]="player"
+              [listLateralityAll]="listLaterality"
+              [sportsList]="listSports"
+            >
+            </app-alumn-sporting-data>
+          </div>
+          <div
+            aria-labelledby="v-pills-contact-data-tab"
+            class="tab-pane fade"
+            id="v-pills-contact-data"
+            role="tabpanel"
+          >
+            <app-player-contact-data
+              [listCountriesAll]="listCountries"
+              [playerData]="player"
+            ></app-player-contact-data>
+          </div>
+          <div
+            aria-labelledby="v-pills-family-data-tab"
+            class="tab-pane fade"
+            id="v-pills-family-data"
+            role="tabpanel"
+          >
+            <app-player-family-data
+              *ngIf="player.id"
+              [listCivilStatusAll]="listKinships"
+              [listCountriesAll]="listCountries"
+              [playerData]="player"
+            ></app-player-family-data>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

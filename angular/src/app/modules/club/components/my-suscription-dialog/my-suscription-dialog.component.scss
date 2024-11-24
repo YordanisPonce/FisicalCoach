@@ -1,0 +1,114 @@
+:host ::ng-deep{
+    .p-dialog{
+        .subtitle{
+            color: #050C44;
+            opacity: .66;
+            font-weight: 600;
+        }
+        .p-dialog-content{
+            padding-top: 2rem;
+            #my_suscription_dialog_container{
+                max-width: 700px;
+                &.wide{
+                    max-width: 1000px !important;
+                }
+                margin: 0 auto;
+                .current_suscription{
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    .icon{
+                        width: 125px;
+                        height: 125px;
+                        border: 1px solid #050C44;
+                        border-radius: 50%;
+                        background-repeat: no-repeat;
+                        background-size: 50%;
+                        background-position: center;
+                        padding: 1rem;
+                        margin-right: 3rem;
+                    }
+                    .pack{
+                        max-width: 450px;
+                        h3{
+                            color: black;
+                        }
+                        p{
+                            color: rgba($color: #050717, $alpha: .84);
+                            line-height: 2;
+                            font-weight: 600;
+                            max-width: 350px;
+                        }
+                    }
+                }
+                .separator{
+                    .line{
+                        align-self: center;
+                        flex: 1;
+                        border-bottom: 1px solid rgba($color: #050C44, $alpha: .45);
+                    }
+                    .text{
+                        padding: 0 .75rem;
+                        font-weight: 600;
+                        color: #000000;
+                        font-size: .9rem;
+                    }
+                }
+                .p-selectbutton{
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: flex-start;
+                    .p-button {
+                        &.p-highlight{
+                            background: #024CAC !important;
+                            border-radius: 10px;
+                            border: 2px solid #050C443D;
+                            .selected_tag{
+                                display: block;
+                                font-size: .9rem;
+                            }
+                        }
+                        &:not(.p-disabled):not(.p-highlight):hover {
+                            background: #050C44;
+                            // border-color: #ced4da;
+                            // color: #495057;
+                            .selected_tag{
+                                display: block;
+                                font-size: .9rem;
+                                color: white;
+                            }
+                        }
+                        border: 1px solid #050C443D;
+                        border-radius: 10px 10px 0px 0px;
+                        flex: 0 30%;
+                        flex-direction: column;
+                        padding: 0px;
+                        .pack_icon{
+                            padding: 2rem 1.5rem 1rem;
+                            background-color: rgba($color: #050C44, $alpha: .01);
+                        }
+                        .pack_content{
+                            padding: 1rem 1.5rem;
+                        }
+                        .selected_tag{
+                            display: none;
+                            span{
+                                font-size: .8rem;
+                            }
+                        }
+                    }
+                }
+                .btn_ver_planes{
+                    font-size: .9rem;
+                    display: block;
+                    padding: .5rem 1rem;
+                    border-radius: 11px;
+                    border-radius: 23px;
+                }
+            }
+        }
+    }
+}
+.p-selectbutton .p-button.p-highlight {
+  color: #485156 !important;
+}

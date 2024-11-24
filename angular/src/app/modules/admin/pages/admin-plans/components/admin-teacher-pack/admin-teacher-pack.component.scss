@@ -1,0 +1,156 @@
+.container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 200px;
+  }
+  
+  .rectangle {
+    width: 300px;
+    height: 300px;
+    border: 1px solid #ccc;
+    padding: 20px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    border-radius: 15px;
+    box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.15);
+    margin: 3em 1em 1em 1em;
+  }
+  .pagination-controls {
+    text-align: right;
+  
+  }
+  .items-per-page-selector label {
+    color: #808080; /* Cambia esto al color gris que prefieras */
+  }
+  
+  .items-per-page-selector select {
+    margin-left: 10px; /* Cambia esto al espacio que prefieras */
+    color: #808080; /* Cambia el color del texto dentro del selector */
+    border-color: #808080; /* Cambia el color del borde del selector */
+  
+  }
+  
+  .items-per-page-selector {
+    margin-left: 20px; /* Ajusta este valor a tus necesidades */
+  }
+  .icon-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .icono {
+    margin-top: 30px;
+    width: 66px;
+    height: 66px;
+  }
+  
+  .info-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+  }
+  
+  .button-container {
+    position: absolute;
+    bottom: 10px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .edit-button {
+    background-color: #0246a0;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+  
+    &:hover {
+      background-color: #0069D9;
+      border-color: #0069D9;
+    }
+  
+    &:active, &:focus {
+      border: none;
+      box-shadow: none;
+      outline: none; // Añade esta línea
+    }
+  }
+  
+  .rectangle-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  
+  .small-text {
+    font-size: 1.3em;
+  }
+  
+  .linea-horizontal {
+    border: none;
+    border-top: 1px solid #eceaea;
+    color: #eceaea;
+    background-color: #ebe8e8;
+    height: 1px;
+    width: 100%;
+  }
+  
+  .title-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    margin-bottom: 20px;
+    margin-top: 50px;
+  }
+  
+  .title {
+    padding: 0 20px;
+    color: #050c44;
+  }
+  
+  .line {
+    flex-grow: 1;
+    border: none;
+    border-top: 1px solid rgb(221, 220, 220);
+  }
+  
+  .container:last-of-type {
+    margin-bottom: 50px;
+    padding-bottom: 10%;
+  }
+  
+  .button {
+    width: 120px;
+    margin-right: 10px;
+    background-color: #0246a0;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-size: 12px;
+  
+    &:hover {
+      background-color: #0069D9;
+      border-color: #0069D9;
+    }
+  
+    &:active, &:focus {
+      border: none;
+      box-shadow: none;
+      outline: none; // Añade esta línea
+    }
+  }
+  
+  .button:last-child {
+    margin-right: 0;
+  }
+  

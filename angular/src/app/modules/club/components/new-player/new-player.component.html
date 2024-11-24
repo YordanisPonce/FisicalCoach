@@ -1,0 +1,167 @@
+<form
+  (ngSubmit)="onSubmit()"
+  [formGroup]="formNewPlayer"
+  id="idFormNewPlayer"
+  name="nomForm"
+>
+  <div class="row">
+    <!-- nombre y apellido -->
+    <div class="mb-4 col-12">
+      <label for="names">
+        {{ "PLAYERS.LBL_NOMBREAPELLIDO" | translate }} *</label
+      >
+      <input
+        [ngClass]="{
+          'ng-invalid ng-dirty is-invalid':
+            (f.full_name.invalid &&
+              (f.full_name.dirty || f.full_name.touched)) ||
+            (f.full_name.invalid && submitted)
+        }"
+        aria-describedby="inputGroup-sizing-default"
+        aria-label="Default"
+        class="form-control"
+        formControlName="full_name"
+        id="names"
+        placeholder="{{ 'LBL_ESCRIBEAQI' | translate }}"
+      />
+      <div *ngIf="f.full_name?.errors" class="invalid-feedback">
+        {{ "PLAYERS.LBL_NOMBREAPELLIDO" | translate }}
+        {{ "requerido" | translate }}
+      </div>
+    </div>
+    <!-- alias -->
+    <div *ngIf="role === 'sport'" class="mb-4 col-12">
+      <label for="sports_name"> {{ "PLAYERS.LBL_ALIAS" | translate }} *</label>
+      <input
+        [ngClass]="{
+          'ng-invalid ng-dirty is-invalid':
+            (f.alias.invalid && (f.alias.dirty || f.alias.touched)) ||
+            (f.alias.invalid && submitted)
+        }"
+        aria-describedby="inputGroup-sizing-default"
+        aria-label="Default"
+        class="form-control"
+        formControlName="alias"
+        id="sports_name"
+        placeholder="{{ 'LBL_ESCRIBEAQI' | translate }}"
+      />
+      <div *ngIf="f.alias?.errors" class="invalid-feedback">
+        {{ "PLAYERS.LBL_ALIAS" | translate }} {{ "requerido" | translate }}
+      </div>
+      <!-- <div *ngIf="submitted && f.alias.invalid" class="form-text text-danger">
+        {{ "PLAYERS.LBL_ALIAS" | translate }} {{ "LBL_REQUERIDO" | translate }}
+      </div> -->
+    </div>
+    <!-- demarcacion -->
+    <div
+      *ngIf="role === 'sport' && listPositions.length > 0"
+      class="mb-4 col-12"
+    >
+      <label for="demarcation">
+        {{ "PLAYERS.LBL_DEMARCACION" | translate }} *</label
+      >
+      <p-dropdown
+        [ngClass]="{
+          'ng-invalid ng-dirty is-invalid':
+            (f.position_id.invalid &&
+              (f.position_id.dirty || f.position_id.touched)) ||
+            (f.position_id.invalid && submitted)
+        }"
+        [options]="listPositions"
+        [styleClass]="'w-100 form-control'"
+        aria-describedby="inputGroup-sizing-default"
+        formControlName="position_id"
+        id="demarcation"
+        placeholder="{{ 'LBL_SELECCIONE' | translate }}"
+      ></p-dropdown>
+      <div *ngIf="f.position_id?.errors" class="invalid-feedback">
+        {{ "PLAYERS.LBL_DEMARCACION" | translate }}
+        {{ "requerido" | translate }}
+      </div>
+    </div>
+    <!-- dorsal -->
+    <div *ngIf="role === 'sport'" class="mb-4 col-12">
+      <label *ngIf="sportName === 'swimming'">
+        {{ "PLAYERS.LBL_STYLE" | translate }} *</label
+      >
+      <label *ngIf="sportName !== 'swimming'">
+        {{ "PLAYERS.LBL_DORSAL" | translate }} *</label
+      >
+      <input
+        [min]="0"
+        [ngClass]="{
+          'ng-invalid ng-dirty is-invalid':
+            (f.shirt_number.invalid &&
+              (f.shirt_number.dirty || f.shirt_number.touched)) ||
+            (f.shirt_number.invalid && submitted)
+        }"
+        class="form-control"
+        formControlName="shirt_number"
+        id="shirt_number"
+        inputId="withoutgrouping"
+        placeholder="{{ 'LBL_ESCRIBEAQI' | translate }}"
+        type="number"
+      />
+      <div *ngIf="f.shirt_number?.errors" class="invalid-feedback">
+        {{ "PLAYERS.LBL_DORSAL" | translate }} {{ "requerido" | translate }}
+      </div>
+    </div>
+
+    <!-- sexo -->
+    <div class="mb-4 col-12">
+      <label class="d-block">{{ "PLAYERS.LBL_SEXO" | translate }} *</label>
+      <p-radioButton
+        *ngFor="let item of listGenders"
+        [label]="item.code"
+        [ngClass]="{
+          'ng-invalid ng-dirty is-invalid':
+            (f.gender_id.invalid &&
+              (f.gender_id.dirty || f.gender_id.touched)) ||
+            (f.gender_id.invalid && submitted)
+        }"
+        [value]="item.id"
+        class="mr-4"
+        formControlName="gender_id"
+        name="gender_id"
+      ></p-radioButton>
+      <div *ngIf="f.gender_id?.errors" class="invalid-feedback">
+        {{ "PLAYERS.LBL_SEXO" | translate }} {{ "requerido" | translate }}
+      </div>
+    </div>
+
+    <!-- numero de lista -->
+    <div *ngIf="role === 'teacher'" class="mb-4 col-12">
+      <label> {{ "new_alumn.list_number" | translate }} *</label>
+      <input
+        [min]="0"
+        [ngClass]="{
+          'ng-invalid ng-dirty is-invalid':
+            (f.list_number.invalid &&
+              (f.list_number.dirty || f.list_number.touched)) ||
+            (f.list_number.invalid && submitted)
+        }"
+        class="form-control"
+        formControlName="list_number"
+        id="list_number"
+        inputId="withoutgrouping"
+        placeholder="{{ 'LBL_ESCRIBEAQI' | translate }}"
+        type="number"
+        pKeyFilter="num"
+      />
+      <div *ngIf="f.list_number?.errors" class="invalid-feedback">
+        {{ "new_alumn.list_number" | translate }}
+        {{ "requerido" | translate }}
+      </div>
+    </div>
+  </div>
+  <div>
+    <ul class="step_markers full_markers">
+      <li>
+        <span class="step_marker active"></span>
+      </li>
+      <li>
+        <span (click)="onSubmit()" class="step_marker"></span>
+      </li>
+    </ul>
+  </div>
+</form>

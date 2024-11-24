@@ -1,0 +1,97 @@
+<div class="soft-shadow bg-white">
+  <div
+    [style]="
+      data.cover?.full_url
+        ? 'background-image: url(' +
+          data.cover?.full_url +
+          '); background-repeat: no-repeat; background-size: cover;'
+        : 'background-color:' + '#0f2a78'
+    "
+    id="cover_image"
+  >
+    <edit-portada [data]="data" class="button-portada"></edit-portada>
+    <div
+      [style]="
+        data.image?.full_url
+          ? 'background-image: url(' + data.image?.full_url + ');'
+          : 'background-color:' + '#ffc0cc'
+      "
+      id="user_avatar"
+    >
+      <app-edit-avatar
+        [data]="data"
+        class="button-avatar rounded-circle"
+      ></app-edit-avatar>
+    </div>
+  </div>
+
+  <div class="details">
+    <div class="row">
+      <div class="col-12">
+        <div id="user_name">
+          <span class="name">{{ data.full_name }}</span>
+          <small class="suscription_name">
+            {{
+              sportSubscription &&
+                teacherSubscription &&
+                sportSubscription + " / " + teacherSubscription
+            }}
+          </small>
+          <small
+            *ngIf="sportSubscription && !teacherSubscription"
+            class="suscription_name"
+            >{{ sportSubscription }}</small
+          >
+          <small
+            *ngIf="teacherSubscription && !sportSubscription"
+            class="suscription_name"
+            >{{ teacherSubscription }}</small
+          >
+        </div>
+      </div>
+    </div>
+    <div class="my-4 mx-auto border-top border-bottom profile-width">
+      <div id="profile_nav">
+        <p-tabMenu [model]="items" [activeItem]="handleTab(activeItem)">
+          <ng-template let-i="index" let-item pTemplate="item">
+            <img
+              [src]="getIcon(item)"
+              class="d-none d-sm-block"
+              width="20"
+              style="margin-right: 5px"
+            />
+            {{ item.label | translate }}
+          </ng-template>
+        </p-tabMenu>
+        <div>
+          <edit-profile
+            (close)="showEditDialog = $event"
+            (refreshProvinceList)="callProvinces($event)"
+            *ngIf="showEditDialog"
+            [country]="country"
+            [data]="data"
+            [genderIdentity]="genderIdentity"
+            [gender]="gender"
+            [perfilDialog]="showEditDialog"
+            [provinces]="provinces"
+          ></edit-profile>
+        </div>
+      </div>
+    </div>
+    <div class="btn_nav">
+      <button
+        (click)="openEditProfileDialog()"
+        class="btn"
+        id="editar_perfil_btn"
+        pTooltip=" {{ 'profile.editar' | translate }}"
+        *ngIf="!hideProfileButton"
+      >
+        {{ "profile.editar" | translate }}
+      </button>
+    </div>
+
+    <div class="profile-width mx-auto mt-1">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>

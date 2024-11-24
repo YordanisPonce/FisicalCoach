@@ -1,0 +1,224 @@
+<div
+  class="row"
+  appUserPermission
+  [method]="['team_test_delete', 'team_test_read']"
+  (showItem)="handlePermission($event)"
+>
+  <div class="col-12">
+    <div class="card box-shadow">
+      <div class="card-body p-0">
+        <div
+          class="test_header d-flex align-items-center flex-column flex-sm-row"
+        >
+          <div class="d-flex align-items-center">
+            <span class="icon_left mr-2" (click)="back()"
+              ><i class="fas fa-chevron-left"></i>
+            </span>
+            <div
+              class="cont_h ml-0 ml-sm-2 mr-0 mr-sm-2 text-center"
+              *ngIf="!loadingTests"
+            >
+              <h6 class="font-weight-600 mb-0 mr-2">
+                {{ "test.testMadeByPlayer" | translate }}
+              </h6>
+              <span style="color: #00e9c5"> {{ player?.full_name }}</span>
+            </div>
+          </div>
+
+          <div class="filters mb-2 mb-sm-0">
+            <div class="search-filter">
+              <div class="d-flex align-items-center">
+                <h6 class="font-weight-600 mb-0 mr-2" *ngIf="loadingTests">
+                  <p-skeleton class="" width="8rem"></p-skeleton>
+                </h6>
+                <div class="p-input-icon-left d-none d-md-inline mr-2 buscador">
+                  <i class="pi pi-search"></i>
+                  <input
+                    (keyup)="setValue($event)"
+                    [(ngModel)]="searchTest"
+                    pInputText
+                    placeholder="{{ 'test.search_test' | translate }}"
+                    type="text"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="sort-input d-flex">
+            <p-treeSelect
+              [(ngModel)]="selectedFilter"
+              (ngModelChange)="handleSelectFilter()"
+              [options]="filterOptions"
+              class="no-table-view"
+              placeholder="{{ 'LBL_FILTRAR' | translate }}"
+            ></p-treeSelect>
+
+            <div
+              *ngIf="this.selectedFilter?.code || this.selectedFilter?.subItem"
+            >
+              <button
+                class="btn see_all_btn"
+                (click)="handleSelectFilter(true)"
+                pTooltip="{{ 'seeAll' | translate }}"
+              >
+                <i class="pi pi-times"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <p-table [value]="[1, 2]" *ngIf="loadingTests" selectionMode="single">
+          <ng-template pTemplate="header">
+            <tr class="text-center">
+              <th class="text-center" style="padding-left: 22px !important">
+                Test
+              </th>
+              <th class="text-center">{{ "test.category" | translate }}</th>
+              <th class="text-center">{{ "test.subCategory" | translate }}</th>
+              <th class="text-center">
+                {{ "test.applicationDate" | translate }}
+              </th>
+              <th class="text-center">{{ "test.instructor" | translate }}</th>
+              <th class="text-center">{{ "test.acciones" | translate }}</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-product>
+            <tr *ngFor="let i of [1, 2, 3]">
+              <td>
+                <p-skeleton width="10rem"></p-skeleton>
+              </td>
+              <td>
+                <p-skeleton
+                  class="d-flex justify-content-center"
+                  width="10rem"
+                ></p-skeleton>
+              </td>
+              <td>
+                <p-skeleton
+                  class="d-flex justify-content-center"
+                  width="10rem"
+                ></p-skeleton>
+              </td>
+              <td>
+                <p-skeleton
+                  class="d-flex justify-content-center"
+                  width="10rem"
+                ></p-skeleton>
+              </td>
+              <td>
+                <p-skeleton
+                  class="d-flex justify-content-center"
+                  width="10rem"
+                ></p-skeleton>
+              </td>
+
+              <td class="d-flex justify-content-center">
+                <p-skeleton width="4rem"></p-skeleton>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+        <p-table
+          *ngIf="!loadingTests"
+          [paginator]="true"
+          [rowsPerPageOptions]="[5, 10, 20]"
+          [rows]="5"
+          [value]="detailList"
+          class="p-datatable-responsive"
+        >
+          <ng-template pTemplate="header">
+            <tr class="text-center">
+              <th class="text-center" style="padding-left: 22px !important">
+                Test
+              </th>
+              <th class="text-center">{{ "test.category" | translate }}</th>
+              <th class="text-center">{{ "test.subCategory" | translate }}</th>
+              <th class="text-center">
+                {{ "test.applicationDate" | translate }}
+              </th>
+              <th class="text-center">{{ "test.instructor" | translate }}</th>
+              <th class="text-center">{{ "test.acciones" | translate }}</th>
+            </tr>
+          </ng-template>
+          <ng-template let-testItem pTemplate="body">
+            <tr>
+              <td>
+                <div>
+                  <span class="p-column-title" style="margin-bottom: 0.5rem"
+                    >Test</span
+                  >
+                </div>
+                <strong class="ml-2">{{ testItem.test?.name }}</strong>
+              </td>
+              <td class="text-center">
+                <div>
+                  <span class="p-column-title" style="margin-bottom: 0.5rem">{{
+                    "test.category" | translate
+                  }}</span>
+                </div>
+                <span>
+                  <span *ngIf="testItem?.test?.test_type">
+                    {{ testItem?.test?.test_type?.name }}</span
+                  >
+                  <span *ngIf="!testItem?.test?.test_type">N/A</span>
+                </span>
+              </td>
+              <td class="text-center">
+                <div>
+                  <span class="p-column-title" style="margin-bottom: 0.5rem">{{
+                    "test.subCategory" | translate
+                  }}</span>
+                </div>
+                <span>
+                  <span *ngIf="testItem?.test?.test_sub_type">
+                    {{ testItem.test.test_sub_type.name }}</span
+                  >
+                  <span *ngIf="!testItem?.test?.test_sub_type">N/A</span>
+                </span>
+              </td>
+              <td class="text-center">
+                <div>
+                  <span class="p-column-title" style="margin-bottom: 0.5rem">{{
+                    "test.applicationDate" | translate
+                  }}</span>
+                </div>
+                {{ convertApplicationDate(testItem.date_application) }}
+              </td>
+              <td class="text-center">
+                <div>
+                  <span class="p-column-title" style="margin-bottom: 0.5rem">{{
+                    "test.instructor" | translate
+                  }}</span>
+                </div>
+                {{ testItem?.staff_name }}
+              </td>
+              <td class="text-center">
+                <button
+                  [routerLink]="['/club/test-player-results/' + testItem?.code]"
+                  class="btn"
+                  *ngIf="showPermission.read"
+                >
+                  <img alt="" src="/assets/img/icons/ver.svg" />
+                </button>
+                <button
+                  class="btn"
+                  (click)="deleteTest(testItem?.test?.code)"
+                  *ngIf="showPermission.delete"
+                >
+                  <img src="/assets/img/icons/eliminar.svg" alt="" />
+                </button>
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="6" style="text-align: center">
+                {{ "nodata.sintest" | translate }}
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
+  </div>
+</div>

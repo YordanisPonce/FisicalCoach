@@ -1,0 +1,420 @@
+<div class="row">
+  <!-- informacion del jugador -->
+  <div class="col-lg-6 col-xl-4 mb-3 mb-xl-0" id="info">
+    <div class="info_content">
+      <div class="player_info">
+        <div class="player_name">
+          <h5 *ngIf="alumn" class="mb-4">{{ alumn?.alumn?.full_name }}</h5>
+          <div class="mb-3">
+            <span class="player_shirt">
+              <img
+                alt="Camisa"
+                src="{{ imgUrl + 'images/icons/t_shirt_white.svg' }}"
+              />
+            </span>
+            <span class="ml-2 font-weight-500">{{
+              alumn?.alumn?.list_number
+            }}</span>
+          </div>
+          <div class="d-flex">
+            <span class="player_icon">
+              <img
+                alt=""
+                src="{{ imgUrl + 'images/icons/laterality_white.svg' }}"
+              />
+            </span>
+            <div class="ml-2">
+              <small class="d-block" style="margin-bottom: 16px"> </small>
+              <span class="font-weight-500">
+                {{ alumn?.alumn?.laterality?.code | translate }}</span
+              >
+            </div>
+          </div>
+        </div>
+        <div
+          *ngIf="alumn?.alumn?.image !== null; else elseBlock"
+          class="player_image"
+        >
+          <div
+            class="image"
+            style="background-image: url({{ alumn?.alumn?.image.full_url }});"
+          ></div>
+        </div>
+        <ng-template #elseBlock class="player_image">
+          <img
+            class="img-fluid"
+            src="{{
+              alumn?.alumn?.gender?.code === 'female'
+                ? girlAlumnImage
+                : boyAlumnImage
+            }}"
+            width="115px"
+          />
+        </ng-template>
+      </div>
+      <div class="info_stats">
+        <div class="row">
+          <!-- asistencias -->
+          <div class="col-6 col-xl-3 stat my-2">
+            <div class="stat_content">
+              <div class="stat_value">{{ alumn?.absences }}</div>
+              <p-skeleton
+                *ngIf="!alumn"
+                height="15px"
+                shape="rectangle"
+                styleClass="mb-2"
+                width="20px"
+              ></p-skeleton>
+              <div class="stat_name">{{ "alumns.assistance" | translate }}</div>
+            </div>
+          </div>
+          <!-- total de evaluacions -->
+          <div class="col-6 col-xl-3 stat my-2">
+            <div class="stat_content">
+              <div class="stat_value">{{ alumn?.total_tutorships }}</div>
+              <p-skeleton
+                *ngIf="!alumn"
+                height="15px"
+                shape="rectangle"
+                styleClass="mb-2"
+                width="20px"
+              ></p-skeleton>
+              <div class="stat_name">{{ "alumns.tutors" | translate }}</div>
+            </div>
+          </div>
+          <!-- total de tutorias -->
+          <div class="col-6 col-xl-3 stat my-2">
+            <div class="stat_content">
+              <div class="stat_value">{{ alumn?.total_evaluations }}</div>
+              <p-skeleton
+                *ngIf="!alumn"
+                height="15px"
+                shape="rectangle"
+                styleClass="mb-2"
+                width="20px"
+              ></p-skeleton>
+              <div class="stat_name">
+                {{ "alumns.evaluations" | translate }}
+              </div>
+            </div>
+          </div>
+          <!-- promedio de evaluaciones -->
+          <div class="col-6 col-xl-3 stat my-2">
+            <div class="stat_content">
+              <div class="stat_value">{{ alumn?.evaluations_average }}</div>
+              <p-skeleton
+                *ngIf="!alumn"
+                height="15px"
+                shape="rectangle"
+                styleClass="mb-2"
+                width="20px"
+              ></p-skeleton>
+              <div class="stat_name">{{ "alumns.average" | translate }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="info_attr">
+        <div class="row">
+          <div class="col-6 col-xl-4 my-2 attr">
+            <div class="attr_content">
+              <span *ngIf="!alumn?.alumn?.weight" class="attr_value">N/A</span>
+              <span *ngIf="alumn?.alumn?.weight" class="attr_value"
+                >{{ alumn?.alumn?.weight | number : "1.0-0" }} kg</span
+              >
+              <p-skeleton
+                *ngIf="!alumn"
+                height="15px"
+                shape="rectangle"
+                styleClass="mb-2"
+                width="20px"
+              ></p-skeleton>
+              <small class="attr_name"
+                >{{ "PLAYERS.LBL_PESO" | translate }}
+              </small>
+            </div>
+          </div>
+          <div class="col-6 col-xl-4 my-2 attr">
+            <div class="attr_content">
+              <span *ngIf="!alumn?.alumn?.height" class="attr_value">N/A</span>
+              <span *ngIf="alumn?.alumn?.height" class="attr_value"
+                >{{ alumn?.alumn?.height | number : "1.0-0" }} cm</span
+              >
+              <p-skeleton
+                *ngIf="!alumn"
+                height="15px"
+                shape="rectangle"
+                styleClass="mb-2"
+                width="20px"
+              ></p-skeleton>
+              <small class="attr_name"
+                >{{ "PLAYERS.LBL_ALTURA" | translate }}
+              </small>
+            </div>
+          </div>
+          <div class="col-6 col-xl-4 my-2 attr">
+            <div class="attr_content">
+              <span
+                *ngIf="alumn?.alumn?.age === 0 || !alumn?.alumn?.age"
+                class="attr_value"
+                >N/A</span
+              >
+              <span *ngIf="alumn?.alumn?.age > 0" class="attr_value">{{
+                alumn?.alumn?.age
+              }}</span>
+              <p-skeleton
+                *ngIf="!alumn"
+                height="15px"
+                shape="rectangle"
+                styleClass="mb-2"
+                width="20px"
+              ></p-skeleton>
+              <small class="attr_name">{{
+                "PSYCHOLOGY.LBL_AGE" | translate
+              }}</small>
+            </div>
+          </div>
+          <div class="col-6 col-xl-4 my-2 attr">
+            <div class="attr_content">
+              <span *ngIf="!alumn?.alumn?.heart_rate" class="attr_value"
+                >N/A</span
+              >
+              <span *ngIf="alumn?.alumn?.heart_rate" class="attr_value"
+                >{{ alumn?.alumn?.heart_rate | number : "1.0-0" }} {{ "LBL_PPM" | translate }}</span
+              >
+              <p-skeleton
+                *ngIf="!alumn"
+                height="15px"
+                shape="rectangle"
+                styleClass="mb-2"
+                width="20px"
+              ></p-skeleton>
+              <small class="attr_name">FCR</small>
+            </div>
+          </div>
+          <div class="col-6 col-xl-4 my-2 attr">
+            <div class="attr_content">
+              <span *ngIf="!alumn?.alumn?.max_heart_rate" class="attr_value"
+                >N/A</span
+              >
+              <span *ngIf="alumn?.alumn?.max_heart_rate" class="attr_value"
+                >{{ alumn?.alumn?.max_heart_rate | number : "1.0-0" }} {{ "LBL_PPM" | translate }}</span
+              >
+              <p-skeleton
+                *ngIf="!alumn"
+                height="15px"
+                shape="rectangle"
+                styleClass="mb-2"
+                width="20px"
+              ></p-skeleton>
+              <small class="attr_name">FCM</small>
+            </div>
+          </div>
+          <div class="col-6 col-xl-4 my-2 attr">
+            <div class="attr_content">
+              <span *ngIf="!alumn?.alumn?.bmi" class="attr_value"> N/A</span>
+              <span *ngIf="alumn?.alumn?.bmi" class="attr_value">{{
+                alumn?.alumn?.bmi | number : "1.0-0"
+              }}</span>
+              <p-skeleton
+                *ngIf="!alumn"
+                height="15px"
+                shape="rectangle"
+                styleClass="mb-2"
+                width="20px"
+              ></p-skeleton>
+              <small class="attr_name">{{
+                "PLAYERS.LBL_IMC" | translate
+              }}</small>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="info_actions">
+        <button class="btn" routerLink="{{ paths[4].path }}">
+          {{ "PLAYERS.LBL_VIEW_TEST" | translate }}
+        </button>
+        <button class="btn btn-primary" routerLink="/club/test">
+          {{ "PLAYERS.LBL_DO_TEST" | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ultima evaluacion -->
+  <div class="col-lg-6 col-xl-4 mb-3 mb-xl-0" id="last_game">
+    <div class="match">
+      <div class="match_result border-bottom-0">
+        <h6 class="mb-4 font-weight-600">
+          {{ "alumns.last_evaluation" | translate }}
+        </h6>
+        <div
+          *ngIf="alumn.latest_evaluation !== null; else noEvaluation"
+          class="text-center"
+        >
+          <h3>{{ alumn?.latest_evaluation?.evaluation_grade }}</h3>
+          <p>{{ alumn?.latest_evaluation?.rubric.name }}</p>
+        </div>
+        <ng-template #noEvaluation>
+          {{ "alumns.no_evaluations" | translate }}
+        </ng-template>
+
+        <button
+          *ngIf="alumn?.latest_evaluation !== null; else newEvaluation"
+          [disabled]="alumn?.latest_evaluation == null"
+          [queryParams]="{ rubric: alumn?.latest_evaluation?.rubric.id }"
+          [routerLink]="
+            '/teacher/evaluation/rubrics-by-alumn/' + alumn?.alumn?.id
+          "
+          [state]="alumn?.latest_evaluation?.rubric"
+          class="btn btn-outline"
+        >
+          {{ "alumns.see_last_evaluation" | translate }}
+        </button>
+        <ng-template #newEvaluation>
+          <button class="btn btn-outline mt-3" routerLink="/teacher/evaluation">
+            {{ "alumns.new_evaluation" | translate }}
+          </button>
+        </ng-template>
+      </div>
+      <div class="match_data">
+        <div class="row mb-4">
+          <div
+            *ngFor="let competence of alumn?.competences_result"
+            class="col-6 my-2"
+          >
+            <div class="stat">
+              <div class="competence d-flex flex-column align-items-center">
+                <span class="competence_abbr">{{
+                  competence.competence.acronym
+                }}</span>
+                <img
+                  alt=""
+                  class="mx-1"
+                  src="{{ competence.competence.image.full_url }}"
+                  width="40px"
+                />
+                <span class="competence_grade font-weight-bold">{{
+                  getCompetenceKey(competence.competence_key, true)
+                }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- acceso directo y estado de salud -->
+  <div class="col-12 col-lg-4">
+    <div class="row">
+      <div class="col-12 mb-3">
+        <div class="acceso_directo">
+          <h6 class="mb-3 font-weight-600">
+            {{ "PLAYERS.LBL_DIRECT_ASSETS" | translate }}
+          </h6>
+          <ul>
+            <li *ngFor="let module of paths; index as i" class="my-3">
+              <span>{{ "alumns." + module.name | translate }}</span>
+              <a href="{{ module.path }}"
+                >Ver todo
+                <img
+                  alt=""
+                  class="ml-2"
+                  src="assets/img/icons/shortcut_arrow.svg"
+              /></a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-12">
+        <div class="estado_de_salud">
+          <div class="header">
+            <h6 class="font-weight-600 mb-0">
+              {{ "PLAYERHEALTH.LBL_ESTADOSALUD" | translate }}
+            </h6>
+            <span *ngIf="alumn && alumn?.health_status; else healthBlock">
+              <img
+                alt=""
+                src="../../../../../assets/img/icons/metro-cancel.png"
+              />
+              <small>{{ "PLAYERS.LBL_CHECK" | translate }}</small>
+            </span>
+            <ng-template #healthBlock>
+              <span>
+                <img
+                  alt=""
+                  src="../../../../../assets/img/icons/awesome-check.png"
+                />
+                <small>{{ "PLAYERS.LBL_OPTIMUN" | translate }}</small>
+              </span>
+            </ng-template>
+          </div>
+          <div class="ultima_lesion">
+            <h6 class="font-weight-600 mb-3 wrapper" style="display: flex">
+              {{ "PLAYERHEALTH.LBL_HISLESIONES" | translate }}
+              <label class="activity_icon">!</label>
+              <div class="tooltip">
+                <ul style="list-style: none; padding: 0; margin: 0">
+                  <li
+                    style="
+                      color: black;
+                      padding: 5px;
+                      width: 100%;
+                      background-color: #00ff00;
+                    "
+                  >
+                    {{ "PLAYERHEALTH.LBL_MINIMUN" | translate }}
+                  </li>
+                  <li
+                    style="
+                      color: black;
+                      padding: 5px;
+                      width: 100%;
+                      background-color: #feff00;
+                    "
+                  >
+                    {{ "PLAYERHEALTH.LBL_MILD" | translate }}
+                  </li>
+                  <li
+                    style="padding: 5px; width: 100%; background-color: #fe6d01"
+                  >
+                    {{ "PLAYERHEALTH.LBL_MODERATE" | translate }}
+                  </li>
+                  <li
+                    style="padding: 5px; width: 100%; background-color: #ff3f3e"
+                  >
+                    {{ "PLAYERHEALTH.LBL_SERIOUS" | translate }}
+                  </li>
+                </ul>
+              </div>
+            </h6>
+            <div
+              *ngIf="
+                alumn.injuries_history && alumn.injuries_history.length > 0;
+                else noInjury
+              "
+            >
+              <injury-body [injuryImage]="injuriesImagesUrl"></injury-body>
+              <div class="lesion">
+                <small>{{ "PLAYERHEALTH.LBL_LAST_LESSION" | translate }}</small>
+                <h5>{{ alumn?.lastet_injury?.location.name }}</h5>
+                <button
+                  [routerLink]="
+                    '/teacher/alumns/profile/' + alumn.alumn.id + '/health'
+                  "
+                  class="btn btn-outline"
+                >
+                  {{ "PLAYERHEALTH.LBL_VIEW_LAST_LESSION" | translate }}
+                </button>
+              </div>
+            </div>
+            <ng-template #noInjury>
+              <injury-body></injury-body>
+              {{ "PLAYERHEALTH.LBL_NO_INJURIES" | translate }}
+            </ng-template>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

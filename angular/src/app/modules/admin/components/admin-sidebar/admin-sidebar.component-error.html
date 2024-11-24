@@ -1,0 +1,68 @@
+<mat-drawer-container class="sidebar-container" *ngIf="!(isHandset$ | async)">
+    <mat-drawer mode="side" opened class="sidebar-drawer">
+      <img src="../../../assets/img/icons/logo_dark.svg" alt="Logo">
+      <ul class="custom-margin">
+        <li style="margin-bottom: 20px; margin-top: 0px;">
+          <a routerLink="/admin/dashboard/users" routerLinkActive="active" style="display: flex; align-items: center;">
+            <img src="../../../assets/img/icons/user_greens.svg" alt="User Icon" style="width: 30px; margin-right:20px; margin-top:1px;">
+            <span style="margin-top: 0px;">{{ 'NAV.USUARIOS' | translate }}</span>
+            <img class="shortcut-arrow" src="../../../assets/img/icons/shortcut_arrows.svg" alt="Arrow Icon" style="width: 30px; margin-left: 105px; position: relative; top: -15px;">
+          </a>
+        </li>
+        <li style="margin-bottom: 20px;">
+          <a routerLink="/admin/dashboard/plans" routerLinkActive="active" style="display: flex; align-items: center;">
+            <img src="../../../assets/img/icons/icons8-caja-32.png" alt="Plan Icon" style="width: 30px; margin-right:20px; margin-top:1px;">
+            <span style="margin-top: 0px;">{{ 'NAV.PLANES' | translate }}</span>
+            <img class="shortcut-arrow" src="../../../assets/img/icons/shortcut_arrows.svg" alt="Arrow Icon" style="width: 30px; margin-left: 118px; position: relative; top: -15px;">
+          </a>
+        </li>
+        <li style="margin-bottom: 20px;">
+          <a routerLink="/admin/dashboard/bills" routerLinkActive="active" style="display: flex; align-items: center;">
+            <img src="../../../assets/img/icons/noun-invoice-954360.svg" alt="Bill Icon" style="width: 30px; margin-right:20px; margin-top:1px;">
+            <span style="margin-top: 0px;">{{ 'NAV.FACTURAS' | translate }}</span>
+            <img class="shortcut-arrow" src="../../../assets/img/icons/shortcut_arrows.svg" alt="Arrow Icon" style="width: 30px; margin-left: 105px; position: relative; top: -15px;">
+          </a>
+        </li>
+      </ul>
+    </mat-drawer>
+    <mat-drawer-content>
+      <!-- Aquí va el contenido principal de la página -->
+      <router-outlet></router-outlet>
+    </mat-drawer-content>
+  </mat-drawer-container>
+  
+  <mat-toolbar color="primary" *ngIf="isHandset$ | async">
+    <!-- Barra de navegación móvil -->
+    <button mat-icon-button (click)="drawer.toggle()">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <img src="../../../assets/img/icons/logo_dark.svg" alt="Logo" style="margin-left: 50px;">
+  </mat-toolbar>
+  
+  <mat-sidenav-container *ngIf="isHandset$ | async">
+    <mat-sidenav #drawer mode="over" class="auto-height sidenav-blue">
+      <!-- Contenido de la barra lateral movido a la barra de navegación móvil -->
+  
+      <ul class="custom-margin">
+        <li style="margin-bottom: 20px; margin-top: -20px;">
+          <a routerLink="/admin/dashboard/users" routerLinkActive="active" style="display: flex; align-items: center;" (click)="drawer.close()">
+            <img src="../../../assets/img/icons/user_greens.svg" alt="User Icon" style="width: 30px; margin-right:20px; margin-top:0px;">
+            <span style="margin-top: 0px; color: white;">Usuarios</span>
+          </a>
+          <a routerLink="/admin/dashboard/plans" routerLinkActive="active" style="display: flex; align-items: center;" (click)="drawer.close()">
+            <img src="../../../assets/img/icons/icons8-caja-32.png" alt="Plan Icon" style="width: 30px; margin-right:20px; margin-top:80px;">
+            <span style="margin-top: 80px; color: white;">Planes</span>
+          </a>
+          <a routerLink="/admin/dashboard/bills" routerLinkActive="active" style="display: flex; align-items: center;" (click)="drawer.close()">
+            <img src="../../../assets/img/icons/noun-invoice-954360.svg" alt="Bill Icon" style="width: 30px; margin-right:20px; margin-top:80px;">
+            <span class="menu-item"style="margin-top: 80px; color: white;">Facturas</span>
+          </a>
+        </li>
+      </ul>
+    </mat-sidenav>
+    <mat-sidenav-content>
+      <!-- Aquí va el contenido principal de la página -->
+      <router-outlet></router-outlet>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+  

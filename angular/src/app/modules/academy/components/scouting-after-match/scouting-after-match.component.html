@@ -1,0 +1,347 @@
+<div class="row">
+  <div class="col-12">
+    <div class="card box-shadow">
+      <div class="card-body p-0">
+        <div class="scouting_header view_header">
+          <h6 class="font-weight-600 mb-0 mr-4 header_title">
+            {{ "scouting.doScoutingAfterMatch" | translate }}
+          </h6>
+        </div>
+
+        <div class="match_live my-3" *ngIf="!loading">
+          <div
+            class="row flex-column flex-sm-row justify-content-around align-items-center score-card"
+          >
+            <div class="col-3">
+              <div class="team">
+                <div class="team_image" *ngIf="match.competition_rival_team">
+                  <img
+                    src="{{
+                      match.match_situation === 'L'
+                        ? team.image?.full_url
+                        : (match.competition_rival_team.url_image
+                          | rivalAvatarPipe)
+                    }}"
+                    alt="team-image"
+                  />
+
+                  <div
+                    [style]="{
+                      width: '60px',
+                      height: '60px',
+                      borderRadius: '50%',
+                      backgroundColor: team?.color
+                    }"
+                    *ngIf="
+                      match.match_situation === 'L' &&
+                      team?.color &&
+                      !team?.image
+                    "
+                  ></div>
+                </div>
+                <div class="team_name" *ngIf="match.competition_rival_team">
+                  {{
+                    match.match_situation === "L"
+                      ? team.name
+                      : match.competition_rival_team.rival_team
+                  }}
+                </div>
+              </div>
+            </div>
+            <div
+              class="col-4 my-4 my-lg-0"
+              *ngIf="scoreSports.includes(team.sport.code)"
+            >
+              <div class="match_score text-center">
+                <div class="score">
+                  <span
+                    pTooltip="{{ 'scouting.editScore' | translate }}"
+                    (click)="showEditScore = true"
+                    *ngIf="!showEditScore"
+                    >{{
+                      match.match_situation === "L" ? score.own : score.rival
+                    }}</span
+                  >
+
+                  <input
+                    class="form-control"
+                    placeholder="0"
+                    aria-label="Default"
+                    aria-describedby="inputGroup-sizing-default"
+                    *ngIf="showEditScore"
+                    (change)="
+                      handleNoSetScore(
+                        match.match_situation === 'L' ? 'own' : 'rival',
+                        $event
+                      )
+                    "
+                    [value]="
+                      score[match.match_situation === 'L' ? 'own' : 'rival']
+                    "
+                    type="number"
+                    maxlength="4"
+                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength); 
+                      if (this.value < 0) this.value = 0; "
+                  />
+
+                  <span>:</span>
+                  <span
+                    pTooltip="{{ 'scouting.editScore' | translate }}"
+                    (click)="showEditScore = true"
+                    *ngIf="!showEditScore"
+                    >{{
+                      match.match_situation === "V" ? score.own : score.rival
+                    }}</span
+                  >
+
+                  <input
+                    class="form-control"
+                    placeholder="0"
+                    aria-label="Default"
+                    aria-describedby="inputGroup-sizing-default"
+                    *ngIf="showEditScore"
+                    (change)="
+                      handleNoSetScore(
+                        match.match_situation === 'V' ? 'own' : 'rival',
+                        $event
+                      )
+                    "
+                    [value]="
+                      score[match.match_situation === 'V' ? 'own' : 'rival']
+                    "
+                    type="number"
+                    maxlength="4"
+                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength); 
+                      if (this.value < 0) this.value = 0; "
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="col-3">
+              <div class="team">
+                <div class="team_image" *ngIf="match.competition_rival_team">
+                  <img
+                    src="{{
+                      match.match_situation === 'V'
+                        ? team.image.full_url
+                        : (match.competition_rival_team.url_image
+                          | rivalAvatarPipe)
+                    }}"
+                    alt=""
+                    *ngIf="team.image"
+                  />
+
+                  <div
+                    [style]="{
+                      width: '60px',
+                      height: '60px',
+                      borderRadius: '50%',
+                      backgroundColor: team?.color
+                    }"
+                    *ngIf="
+                      match.match_situation === 'V' &&
+                      team?.color &&
+                      !team?.image
+                    "
+                  ></div>
+                </div>
+
+                <div
+                  class="team_name"
+                  *ngIf="match.competition_rival_team?.rival_team"
+                >
+                  {{
+                    match.match_situation === "V"
+                      ? team.name
+                      : match.competition_rival_team.rival_team
+                  }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 mt-4" *ngIf="setSports.includes(team.sport.code)">
+            <div class="score volley">
+              <div
+                *ngFor="
+                  let set of matchSetList(
+                    score.own,
+                    score.rival,
+                    match.match_situation
+                  );
+                  index as i
+                "
+                class="mx-3"
+              >
+                <div class="text-center">
+                  <span> Set {{ i + 1 }} </span>
+                </div>
+                <div class="text-center">
+                  <span
+                    role="button"
+                    (click)="showEditScore = true"
+                    *ngIf="!showEditScore"
+                  >
+                    {{ set.own }}:{{ set.rival }}
+                  </span>
+
+                  <div *ngIf="showEditScore" class="d-flex align-items-center">
+                    <input
+                      class="form-control"
+                      placeholder="0"
+                      aria-label="Default"
+                      aria-describedby="inputGroup-sizing-default"
+                      (change)="
+                        handleSetScore(
+                          getMatchSituation(match.match_situation, 'left'),
+                          $event,
+                          i,
+                          'left'
+                        )
+                      "
+                      [value]="
+                        score[
+                          !match.match_situation
+                            ? 'own'
+                            : match.match_situation === 'L'
+                            ? 'own'
+                            : 'rival'
+                        ][i]
+                      "
+                      maxlength="3"
+                      type="number"
+                      oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength); 
+                      
+                      "
+                    />:
+
+                    <input
+                      class="form-control"
+                      placeholder="0"
+                      aria-label="Default"
+                      aria-describedby="inputGroup-sizing-default"
+                      (change)="
+                        handleSetScore(
+                          getMatchSituation(match.match_situation, 'right'),
+                          $event,
+                          i,
+                          'right'
+                        )
+                      "
+                      [value]="
+                        score[
+                          !match.match_situation
+                            ? 'rival'
+                            : match.match_situation === 'V'
+                            ? 'own'
+                            : 'rival'
+                        ][i]
+                      "
+                      type="number"
+                      maxlength="4"
+                      oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength); 
+                      
+                      "
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="col-12 mt-4 d-flex justify-content-center flex-column align-items-center"
+          >
+            <div>
+              <h6>{{ "scouting.match_time" | translate }}</h6>
+            </div>
+
+            <p-inputMask
+              mask="99:99"
+              [(ngModel)]="inGameTimeValue"
+              placeholder="00:00"
+              class="form-control in-game-time-input"
+            ></p-inputMask>
+          </div>
+        </div>
+
+        <div class="view_header">
+          <div class="p-1 p-sm-4">
+            <div class="row" *ngIf="loading">
+              <div
+                class="col-sm-6 col-md-4 mb-4"
+                *ngFor="let action of [1, 2, 3, 4, 5, 6, 7, 8, 9]"
+              >
+                <p-skeleton
+                  shape="rectangle"
+                  width="60px"
+                  styleClass="mb-2"
+                ></p-skeleton>
+
+                <p-skeleton
+                  shape="rectangle"
+                  width="311px"
+                  height="45px"
+                ></p-skeleton>
+              </div>
+
+              <div class="col-12 mt-5">
+                <button class="btn btn-block btn-primary py-3">
+                  {{ "scouting.saveScouting" | translate }}
+                </button>
+              </div>
+            </div>
+
+            <form
+              [formGroup]="historyForm"
+              *ngIf="sportActions.length > 0 && !loading"
+              (ngSubmit)="submit()"
+            >
+              <div class="row">
+                <div
+                  class="col-sm-6 col-md-4 mb-4"
+                  *ngFor="let action of sportActions"
+                >
+                  <div class="d-flex align-items-center mb-2">
+                    <img
+                      [src]="action.image"
+                      [alt]="action.name"
+                      *ngIf="action.image"
+                      width="20px"
+                      height="20px"
+                      class="mr-2"
+                    />
+                    <label class="my-0" for=""> {{ action.name }}</label>
+                  </div>
+                  <input
+                    [disabled]="true"
+                    type="number"
+                    class="form-control"
+                    placeholder="Escribir aquí..."
+                    [formControlName]="action.slug"
+                    (ngModelChange)="handleCalculableInput(action, $event)"
+                  />
+                  <small
+                    *ngIf="f[action.slug].errors?.min"
+                    class="text-danger"
+                    >{{ "matchResults.incorrectValue" | translate }}</small
+                  >
+                </div>
+
+                <div class="col-12 mt-5">
+                  <button
+                    class="btn btn-block btn-primary py-3"
+                    type="submit"
+                    [disabled]="!historyForm.valid || submitLoading"
+                  >
+                    {{ "matchResults.saveScouting" | translate }}
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

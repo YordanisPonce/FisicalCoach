@@ -1,0 +1,278 @@
+<div class="row" style="margin: 2px">
+  <div class="col-12">
+    <div class="row">
+      <div class="col-md-6 col-sm-12 col-lg-6">
+        <label class="custom-label-1">{{
+          "PLAYERS.LBL_CONTRATO" | translate
+        }}</label>
+      </div>
+      <div
+        class="col-md-6 col-sm-12 col-lg-6"
+        style="text-align: right; cursor: pointer"
+      >
+        <a
+          (click)="handleInit()"
+          class="custom-label-1"
+          pTooltip="{{ 'PLAYERS.LBL_NUEVOCONTRATO' | translate }}"
+          >{{ "PLAYERS.LBL_NUEVOCONTRATO" | translate }}
+          <i class="fa fa-angle-down"> </i
+        ></a>
+      </div>
+    </div>
+    <div
+      *ngFor="
+        let contrat of listContracts
+          | filterArray : 'remaining_days' : 0 : 'greater_than'
+      "
+      class="historial_contratos mt-3"
+    >
+      <div class="contrato contrato_actual">
+        <div class="logo-current mb-4 mb-sm-0" style="background-color: white">
+          <img
+            *ngIf="contrat.image"
+            [src]="contrat.image.full_url"
+            width="75px"
+            height="75px"
+          />
+          <img
+            *ngIf="!contrat.image"
+            alt=""
+            src="../../../../../../assets/img/logo_contrato.png"
+            width="75px"
+            height="75px"
+          />
+        </div>
+        <div class="contrato_resume mb-3 mb-sm-0">
+          <span class="d-block name"
+            >{{ contrat.title }} (<strong
+              >{{ contrat.remaining_days }}
+              {{ "PLAYERS.LBL_DIAS" | translate }}</strong
+            >)</span
+          >
+          <span class="date"
+            >{{ contrat.date_start }} - {{ contrat.date_end }}</span
+          >
+        </div>
+        <div (click)="viewContract(contrat)" class="contrato_action">
+          <button
+            class="btn btn-outline px-4"
+            pTooltip="{{ 'PLAYERS.LBL_VERCONTRATO' | translate }}"
+            tooltipPosition="top"
+          >
+            {{ "PLAYERS.LBL_VERCONTRATO" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+    <hr class="" />
+  </div>
+  <div *ngIf="!loading" class="col-12">
+    <label class="custom-label-1">{{
+      "PLAYERS.LBL_HISTORIAL" | translate
+    }}</label>
+    <div
+      *ngFor="
+        let contrat of listContracts
+          | filterArray : 'remaining_days' : 0 : 'less_than'
+      "
+      class="historial_contratos mt-3"
+    >
+      <div class="contrato">
+        <div class="logo mb-4 mb-sm-0">
+          <img
+            *ngIf="contrat.image"
+            [src]="contrat.image.full_url"
+            width="75px"
+            height="75px"
+          />
+          <img
+            *ngIf="!contrat.image"
+            alt=""
+            src="../../../../../../assets/img/logo_contrato.png"
+            width="75px"
+            height="75px"
+          />
+        </div>
+        <div class="contrato_resume mb-3 mb-sm-0">
+          <span class="d-block name">{{ contrat.title }}</span>
+          <span class="date"
+            >{{ contrat.date_start }} - {{ contrat.date_end }}</span
+          >
+        </div>
+        <div (click)="viewContract(contrat)" class="contrato_action">
+          <button
+            class="btn btn-outline px-4"
+            pTooltip="{{ 'PLAYERS.LBL_VERCONTRATO' | translate }}"
+            tooltipPosition="top"
+          >
+            {{ "PLAYERS.LBL_VERCONTRATO" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+    <div style="width: 100%; display: flex; justify-content: center">
+      <h5
+        *ngIf="listContracts.length <= 0"
+        style="font-size: 0.9rem; color: #050c4475; font-weight: 600"
+      >
+        {{ "PLAYERS.NOCONTRATO" | translate }}
+      </h5>
+    </div>
+  </div>
+
+  <div *ngIf="loading" class="col-12 text-center mt-3">
+    <i class="fa fa-spinner fa-spin fa-5x fa-fw"></i> <br />
+    <span class="mt-2">Loading...</span>
+  </div>
+</div>
+<p-dialog
+  *ngIf="showModal"
+  [(visible)]="showModal"
+  [modal]="true"
+  [style]="{ 'max-width': '30vw' }"
+  header="{{
+    detail
+      ? ('PLAYERS.LBL_DETALECONTRATO' | translate)
+      : ('PLAYERS.LBL_NUEVOCONTRATO' | translate)
+  }}"
+  styleClass="rounded"
+>
+  <form
+    (ngSubmit)="onSubmit()"
+    *ngIf="formAddContract"
+    [formGroup]="formAddContract"
+    name="nomFormWorkingData"
+  >
+    <div class="row">
+      <div
+        class="mb-3 col-12 col-md-12"
+        style="display: flex; flex-direction: column; align-items: center"
+      >
+        <div class="text-center step_content">
+          <input
+            #file
+            (change)="fileUpload($event, 'image_1')"
+            accept="image/*"
+            hidden
+            id="filedatag1"
+            type="file"
+          />
+          <img
+            (click)="file.click()"
+            *ngIf="imagePreview && imagePreview.full_url"
+            [src]="imagePreview.full_url"
+            alt="preview"
+            style="
+              height: 200px;
+              width: 200px;
+              cursor: pointer;
+              border-radius: 50%;
+            "
+          />
+          <img
+            *ngIf="viewDataContract?.image"
+            alt="club"
+            src="{{ viewDataContract?.image?.full_url }}"
+            style="
+              height: 200px;
+              width: 200px;
+              cursor: pointer;
+              border-radius: 50%;
+            "
+          /><br />
+          <button
+            (click)="file.click()"
+            class="btn upload_btn mt-4 p-button-outlined"
+            pTooltip="{{ 'CLUB.BTN_UPLOADIMAGE' | translate }}"
+            *ngIf="!viewDataContract?.id"
+            tooltipPosition="top"
+            type="button"
+          >
+            {{ "CLUB.BTN_UPLOADIMAGE" | translate }}
+          </button>
+          <p *ngIf="!viewDataContract?.id" class="fototypes">
+            {{ "PLAYERS.FOTOTYPES" | translate }}
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="mb-3 col-12 col-md-12">
+        <label class="" for="street">{{ "PLAYERS.CLUB" | translate }}</label>
+        <input
+          aria-label="Default"
+          class="form-control input-rounded"
+          formControlName="title"
+          id="street"
+          placeholder="{{ 'LBL_ESCRIBEAQI' | translate }}"
+          type="text"
+        />
+        <div *ngIf="submitted && f.title.invalid" class="form-text text-danger">
+          {{ "PLAYERS.CLUB" | translate }} {{ "LBL_REQUERIDO" | translate }}
+        </div>
+      </div>
+      <div class="mb-3 col-12 col-md-12">
+        <label class="custom-label-1" for="contract_date">{{
+          "PLAYERS.LBL_FECHAFIRMACONTRATO" | translate
+        }}</label>
+        <p-calendar
+          [firstDayOfWeek]="1"
+          [maxDate]="maxDate"
+          [monthNavigator]="true"
+          [readonlyInput]="true"
+          [style]="{ overflow: 'visible' }"
+          [yearNavigator]="true"
+          [yearRange]="yearRange"
+          class="p-calendar form-control"
+          dateFormat="dd/mm/yy"
+          formControlName="contract_creation"
+          id="contract_date"
+          inputId="range"
+          placeholder="{{ 'PLAYERS.LBL_FECHAFIRMACONTRATO' | translate }}"
+        ></p-calendar>
+        <div
+          *ngIf="submitted && f.contract_creation.invalid"
+          class="form-text text-danger"
+        >
+          {{ "PLAYERS.LBL_FECHAFIRMACONTRATO" | translate }}
+          {{ "LBL_REQUERIDO" | translate }}
+        </div>
+      </div>
+      <div class="mb-3 col-12 col-md-12">
+        <label class="custom-label-1" for="duration">{{
+          "PLAYERS.LBL_ANOSCONTRATO" | translate
+        }}</label>
+        <p-inputNumber
+          [min]="0"
+          [style]="{ width: '100%' }"
+          formControlName="duration"
+          id="duration"
+          inputId="duration"
+          placeholder="{{ 'LBL_ESCRIBEAQI' | translate }}"
+        >
+        </p-inputNumber>
+        <div
+          *ngIf="submitted && f.duration.invalid"
+          class="form-text text-danger"
+        >
+          {{ "PLAYERS.LBL_ANOSCONTRATO" | translate }}
+          {{ "LBL_REQUERIDO" | translate }}
+        </div>
+      </div>
+      <hr *ngIf="!view" class="w-100" />
+    </div>
+    <div *ngIf="!view" class="row">
+      <div class="col-md-12 col-m-12 col-lg-12 mt-3">
+        <button
+          [loading]="saving"
+          class="btn btn-primary btn-block py-3"
+          label="{{ 'LBL_GUARDAR' | translate }}"
+          pButton
+          pTooltip="{{ 'LBL_GUARDAR' | translate }}"
+          tooltipPosition="top"
+          type="submit"
+        ></button>
+      </div>
+    </div>
+  </form>
+</p-dialog>

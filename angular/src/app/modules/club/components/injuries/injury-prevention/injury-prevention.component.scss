@@ -1,0 +1,84 @@
+:host ::ng-deep {
+  .injury_prevention_header {
+    display: flex;
+    align-items: center;
+    // margin-bottom: 2rem;
+    width: 100%;
+  }
+
+  .p-datatable {
+    border: 0;
+    .p-checkbox .p-checkbox-box.p-highlight {
+      border-color: #024cac;
+      background: #024cac;
+    }
+    .injury_check_icon {
+      font-size: 24px;
+      // color: #00e9c5;
+    }
+  }
+
+  #dialog_config_member {
+    .p-dialog {
+      border-radius: 25px !important;
+    }
+    .p-dialog-header {
+      border-top-left-radius: 25px !important;
+      border-top-right-radius: 25px !important;
+    }
+    .p-dialog-content {
+      border-bottom-right-radius: 11px;
+      border-bottom-left-radius: 11px;
+    }
+  }
+
+  .fullscreen_dialog {
+    width: 100vw;
+    height: 100vh;
+    max-height: 100%;
+    top: 0;
+    #new_team_dialog_container {
+      img {
+        flex: 0;
+        align-self: start;
+      }
+      .dialog_title {
+        color: #050c44;
+        font-weight: bold;
+      }
+      label {
+        color: #050c44;
+      }
+      input {
+        border-radius: 29px;
+        height: 57px;
+        padding: 0 2rem;
+      }
+      .next_btn {
+        background-color: #0065e9;
+        color: white;
+        height: 40px;
+        font-weight: 600;
+        border-radius: 32px;
+      }
+    }
+    .p-dialog-content {
+      flex: 1;
+    }
+  }
+}
+.h_btn {
+  display: flex;
+  @media (max-width: 575px) {
+    flex-direction: column-reverse;
+  }
+}
+.new_p {
+  margin-bottom: 0.5rem;
+}
+
+@media (max-width: 1440px) {
+  th {
+    min-width: 180px !important;
+  }
+}

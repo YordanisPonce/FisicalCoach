@@ -1,0 +1,254 @@
+:host ::ng-deep #effort_questions_dialog {
+  .image {
+    @media (max-width: 500px) {
+      margin-top: 20rem;
+    }
+  }
+  .selected-questions {
+    width: 100%;
+    max-width: 400px;
+  }
+  .p-dialog {
+    max-width: 400px;
+
+    .p-dialog-header {
+      @media (max-width: 500px) {
+        padding-top: 5rem;
+      }
+    }
+    .p-dialog-content {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 300px;
+      #effort_questions_dialog_container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 600px;
+        .split_content {
+          display: flex;
+          align-items: center;
+          flex-direction: column;
+          .test_image {
+            img {
+              max-height: 500px;
+              min-width: 200px;
+            }
+
+            @media (max-width: 500px) {
+              margin-top: 4rem;
+            }
+          }
+          .nav_btns {
+            display: flex;
+            justify-content: space-between;
+            button {
+              max-width: unset !important;
+              min-width: auto !important;
+              height: 45px;
+              border-radius: 23px;
+              flex: 0 48%;
+            }
+
+            @media (max-width: 500px) {
+              flex-direction: column;
+              button {
+                width: 315px;
+                height: 45px !important;
+                margin-bottom: 1rem;
+                padding: 0.75rem;
+              }
+            }
+          }
+        }
+        .questions {
+          .question {
+            .title {
+              text-transform: uppercase;
+              color: #050c44;
+              font-weight: 400;
+              font-size: 1.35rem;
+              text-align: center;
+            }
+            .subtitle {
+              color: #050c44;
+              text-transform: uppercase;
+              opacity: 0.36;
+              text-align: center;
+              font-weight: 600;
+            }
+          }
+        }
+        .player-item {
+          display: flex;
+          align-items: center;
+          font-size: 0.9rem;
+          color: #050c44;
+          .player-img {
+            max-width: 25px;
+            margin-right: 1rem;
+            border-radius: 50%;
+          }
+        }
+        .p-selectbutton {
+          display: flex;
+          justify-content: center;
+          align-items: flex-start;
+          flex-wrap: wrap;
+          .p-button {
+            border: 0;
+            border-radius: 0;
+            flex: 0 50%;
+            &:not(.p-disabled):not(.p-highlight):hover {
+              background: transparent;
+              // border-color: #ced4da;
+              // color: #495057;
+            }
+            &.p-highlight {
+              background: transparent;
+              .item {
+                .icon {
+                  filter: unset;
+                  opacity: 1;
+                }
+              }
+            }
+            .item {
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              .icon {
+                width: 85px;
+                margin-bottom: 1.5rem;
+                filter: brightness(0);
+                opacity: 0.3;
+              }
+              .value {
+                color: #050c44;
+                text-transform: uppercase;
+                font-size: 0.7rem;
+                font-weight: 600;
+                width: 120px;
+              }
+            }
+          }
+        }
+        .p-progressbar {
+          height: 0.5rem;
+          border-radius: 0;
+        }
+        .p-progressbar .p-progressbar-value {
+          background: #0065e9;
+        }
+        .questions_nav {
+          box-shadow: 0px 0px 17px #00000014;
+          border-radius: 15px;
+          padding: 1rem;
+          display: flex;
+          align-items: center;
+          margin-top: 6rem;
+          .back_btn {
+            background-color: rgba($color: #0065e9, $alpha: 0.06);
+            border-radius: 11px;
+            i {
+              color: rgba($color: #0065e9, $alpha: 0.48);
+              font-size: 10px;
+            }
+          }
+          .questions_bar {
+            margin-left: 2.5rem;
+            margin-right: 1.5rem;
+            flex: 1;
+          }
+          .next_question_btn {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            padding: 1rem 1.5rem;
+            letter-spacing: 1.5px;
+            border-radius: 11px;
+            i {
+              margin-left: 1rem;
+              font-size: 10px;
+            }
+          }
+        }
+      }
+    }
+  }
+  label {
+    font-size: 0.9rem;
+  }
+}
+
+@media (min-width: 576px) {
+  :host ::ng-deep {
+    #effort_questions_dialog {
+      .p-dialog {
+        .p-dialog-content {
+          #effort_questions_dialog_container {
+            .p-selectbutton {
+              .p-button {
+                flex: 0 33%;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (min-width: 1024px) {
+  :host ::ng-deep {
+    #effort_questions_dialog {
+      .p-dialog {
+        .p-dialog-content {
+          #effort_questions_dialog_container {
+            .split_content {
+              flex-direction: row;
+              & > div {
+                flex: 0 50%;
+              }
+              // .nav_btns{
+              //     display: flex;
+              //     justify-content: space-between;
+              //     button{
+              //         max-width: unset !important;
+              //         min-width: auto !important;
+              //         flex: 0 48%;
+              //     }
+              // }
+            }
+            width: 800px;
+            .p-selectbutton {
+              .p-button {
+                flex: 1;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (min-width: 1200px) {
+  :host ::ng-deep {
+    #effort_questions_dialog {
+      .p-dialog {
+        .p-dialog-header {
+          padding: 1.5rem 1.75rem;
+        }
+        .p-dialog-content {
+          padding: 0 1.75rem;
+        }
+        .p-dialog-footer {
+          padding: 1.75rem;
+        }
+      }
+    }
+  }
+}
+@media (min-width: 1200px) {
+}

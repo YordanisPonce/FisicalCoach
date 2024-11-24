@@ -1,0 +1,59 @@
+:host ::ng-deep .p-tabview {
+  & .p-tabview-panels {
+    @media screen and (max-width: 1024px) {
+      overflow-x: scroll !important;
+    }
+  }
+
+  .p-tabview-nav {
+    // height: 100px;
+    flex-wrap: unset !important;
+    width: 100%;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    border-width: 0 0 1px 0;
+    .p-tabview-nav-link {
+      font-weight: 600;
+      font-family: "Montserrat", sans-serif;
+      color: #050c44;
+      opacity: 0.5;
+      text-decoration: none;
+    }
+    .p-tabview-nav-link[aria-selected="true"] {
+      border-color: #024cac;
+      color: #050c44;
+      opacity: 1;
+      }
+    @media screen and (max-width:821px ){
+      display: flex !important;
+      flex-direction: column;
+      overflow-x: hidden !important;
+    }
+
+    .text-elipsis {
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+  }
+
+  .p-tabview-panels {
+    padding: 0;
+    .p-datatable-thead {
+      tr th {
+        background-color: red;
+      }
+    }
+  }
+
+
+.sidebar-item-img {
+  flex: 0 0 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+
+  img {
+    width: 20px !important;
+  }
+}
+}

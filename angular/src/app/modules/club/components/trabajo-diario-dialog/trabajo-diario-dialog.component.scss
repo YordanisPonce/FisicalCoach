@@ -1,0 +1,51 @@
+:host ::ng-deep #trabajo_diario_dialog{
+    .p-dialog{
+      width: 800px;
+    }
+    label{
+        font-size: .9rem;
+    }
+    .tooltip_info{
+        padding: 0.1rem 0.55rem;
+        background: black;
+        border-radius: 50%;
+        color: white;
+        font-size: .9rem;
+        font-weight: 600;
+        margin-left: .5rem;
+    }
+
+    .inputmask-dark {
+        input {
+            width: 100%;
+        }
+    }
+}
+  
+@media (min-width: 1200px){
+    :host ::ng-deep{
+        #trabajo_diario_dialog{
+            .p-dialog{
+                .p-dialog-header{
+                    padding: 2.5rem 4.5rem
+                }
+                .p-dialog-content{
+                    padding: 0 4.5rem 2rem 4.5rem;
+                }
+                .p-dialog-footer{
+                    padding: 1.5rem 4.5rem;
+                }
+            }
+        }
+    }
+}
+@media (min-width:1200px){
+    :host ::ng-deep{
+        #new_rfd_dialog{
+            .p-dialog{
+
+            }
+        }
+    }
+}
+  

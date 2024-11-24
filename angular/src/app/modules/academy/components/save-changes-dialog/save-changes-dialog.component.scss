@@ -1,0 +1,65 @@
+:host ::ng-deep #save_changes_dialog {
+  .p-dialog {
+    width: 400px;
+    .p-dialog-header {
+      border-top-right-radius: 11px !important;
+      border-top-left-radius: 11px !important;
+      // padding-bottom: 0;
+      background-color: #122a37;
+      .p-dialog-title {
+        color: white;
+      }
+    }
+    .p-dialog-content {
+      background-color: #122a37;
+      padding: 0;
+      .dialog_container {
+        padding-left: 2rem !important;
+        padding-right: 2rem !important;
+        background-color: #122a37;
+      }
+    }
+    .p-dialog-footer {
+      border-bottom-right-radius: 11px !important;
+      border-bottom-left-radius: 11px !important;
+      background-color: #122a37;
+      border-top: 1px solid #ffffff24;
+      .footer_btns {
+        .back_btn {
+          background-color: #122a37;
+          border: 1px solid #ffffff38;
+          color: rgba($color: #fff, $alpha: 0.51);
+        }
+        .next_btn {
+          border: 1px solid #70707066;
+          background-color: transparent !important;
+          color: rgba($color: #fff, $alpha: 0.51);
+        }
+      }
+    }
+    label {
+      color: rgba($color: white, $alpha: 0.77) !important;
+      font-weight: 500;
+    }
+    .p-radiobutton-label {
+      font-size: 0.9rem;
+      color: white !important;
+    }
+  }
+}
+label {
+  font-size: 0.9rem;
+}
+@media (min-width: 1200px) {
+  :host ::ng-deep {
+  }
+}
+@media (min-width: 1200px) {
+  :host ::ng-deep {
+    #create_workout_dialog {
+      .p-dialog {
+        width: 1100px;
+      }
+    }
+  }
+}

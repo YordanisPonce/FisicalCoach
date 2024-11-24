@@ -1,0 +1,202 @@
+:host ::ng-deep #create_match_dialog {
+  .form-control:not(textarea) {
+    line-height: unset;
+  }
+
+  .p-dialog {
+    min-width: 950px;
+    @media screen and (max-width: 970px) {
+      min-width: auto;
+    }
+  }
+  .p-dialog-content {
+    overflow-y: unset;
+  }
+
+  .p-calendar .p-inputtext,
+  .p-calendar .p-inputtext::placeholder {
+    height: 45px !important;
+    border: 1px solid #00000024 !important;
+  }
+
+  .p-dropdown {
+    width: 100% !important;
+
+    .type-dropdown {
+      div {
+        width: 100% !important;
+      }
+    }
+    .p-dropdown-panel .p-dropdown-items .p-dropdown-item {
+      display: flex !important;
+      align-items: center !important;
+    }
+  }
+
+  .p-radiobutton-label {
+    font-weight: 400;
+  }
+}
+label {
+  font-size: 0.9rem;
+}
+:host ::ng-deep .custom_chip {
+  border: 1px solid #050c4426;
+  width: 100%;
+  margin-bottom: 1rem;
+  background-color: transparent;
+  padding: 0.25rem;
+  font-size: 0.875rem;
+  color: #050c44;
+  font-weight: 600;
+
+  &.player-headline {
+    background-color: #00e9c5 !important;
+  }
+  &.player-captain {
+    background-color: #050c44 !important;
+    color: #fff !important;
+  }
+  &.player-alternate {
+    background-color: #bababa !important;
+    color: #fff !important;
+  }
+
+  .chip_image {
+    margin-left: 0.75rem;
+  }
+}
+
+:host ::ng-deep .p-chip {
+  &.player-headline {
+    background-color: #00e9c5 !important;
+  }
+  &.player-captain {
+    background-color: #050c44 !important;
+  }
+  &.player-alternate {
+    background-color: #bababa !important;
+  }
+}
+
+.game_system {
+  display: flex;
+  justify-content: space-between;
+  // align-items: center;
+
+  .last-button {
+    height: 45px;
+  }
+}
+
+.team-type {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+
+  .dropdown {
+    width: 100% !important;
+    .dot {
+      width: 8px !important;
+      height: 7px;
+      margin: -8px 10px 0 4px;
+      border-radius: 50%;
+    }
+  }
+
+  .type-dropdown {
+    height: 45px !important;
+    width: 100%;
+
+    div {
+      width: 100% !important;
+    }
+  }
+}
+.wrap_rivals {
+  display: flex;
+  flex-wrap: wrap;
+  border: 1px solid #050c4410;
+  border-radius: 6px;
+  padding: 10px;
+}
+
+.rival {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  width: max-content;
+  height: 45px;
+  border: 1px solid #050c4426;
+  border-radius: 27px;
+  padding: 0 16px;
+  margin: 0 14px 15px 0;
+}
+.rival_image {
+  width: 27px;
+  height: 27px;
+  margin: 0 15px 0 21px;
+}
+.delete_rival {
+  width: 25px;
+  height: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  margin-left: 10px;
+  background: #f0f1f4;
+  margin-left: 12px;
+  cursor: pointer;
+}
+.delete_rival_text {
+  color: #e0e2e8;
+}
+
+.dot-green {
+  width: 8px;
+  height: 7px;
+  margin: -8px 10px 0 4px;
+  border-radius: 50%;
+}
+.dot-black {
+  width: 8px;
+  height: 7px;
+  margin: -8px 10px 0 4px;
+  border-radius: 50%;
+  background-color: #050c44;
+}
+.dot-gray {
+  width: 8px;
+  height: 7px;
+  margin: -8px 10px 0 4px;
+  border-radius: 50%;
+  background-color: #bababa;
+}
+
+.type-selected {
+  font-weight: 700;
+}
+.label-referee {
+  cursor: pointer;
+}
+.player_margin_bottom {
+  @media (max-width: 1024px) {
+    margin-bottom: 1rem;
+  }
+}
+
+@media (min-width: 1200px) {
+  :host ::ng-deep #create_match_dialog {
+    .p-dialog {
+      .p-dialog-header {
+        padding-left: 4rem;
+        padding-top: 3rem;
+      }
+      .p-dialog-content {
+        padding-left: 4rem;
+        padding-right: 4rem;
+      }
+    }
+  }
+}

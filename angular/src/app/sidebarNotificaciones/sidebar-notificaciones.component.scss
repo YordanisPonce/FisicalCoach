@@ -1,0 +1,493 @@
+.header{
+  background-color: white;
+}
+#wrapper {
+  overflow-x: hidden;
+  background-color: #F9F9F9;
+}
+#top_navbar{
+  box-shadow: 0px 0px 2px #0000004F;
+  .page_title{
+    color: #050C44;
+    font-weight: 600;
+    font-size: .975rem;
+  }
+  #user_navbar{
+    border-right: 2px solid #050C4406;
+    border-left: 2px solid #050C4406;
+  }
+}
+:host ::ng-deep #secondary-sidebar{
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  // width: 250px;
+  width: calc(100% - 100px);
+  max-width: 575px;
+  height: 100%;
+  position: fixed;
+  left: -100%;
+  z-index: 2;
+  transition: left .15s ease-in;
+  box-shadow: 4px 3px 6px #00000008;
+  .sidebar-header{
+    border-bottom: 2px solid #050C4407;
+    height: 95px;
+  }
+  .sidebar-item{
+    border: 0 !important;
+    font-size: .9rem;
+    color: #050C44;
+    font-weight: 600;
+    padding-left: 10px;
+    padding-right: 30px;
+  }
+  #academy_options{
+    .suscription_item{
+      color: black;
+      text-decoration: none;
+      .ver_planes{
+        color: #024CAC;
+      }
+    }
+    .suscription_item:hover{
+      background-color: black;
+      color: white;
+      .ver_planes{
+        color: white;
+      }
+      .suscription_img_container{
+        border-color: #00E9C5 !important;
+      }
+      .suscription_item_title{
+        color: #00E9C5 !important;
+      }
+    }
+    .secondary-sidebar-item{
+      padding-top: 1.5rem;
+      padding-bottom: 1.5rem;
+      font-weight: 600;
+      border-top: 1px solid #050C4440;
+      list-style-type: none;
+    }
+    .secondary-sidebar-item:hover{
+      background-color: #024CAC;
+      color: white;
+      cursor: pointer;
+    }
+  }
+
+  .p-overlaypanel{
+    left: 15px !important;
+    width: 100%;
+    top: 40px!important;
+    border: 1px solid #050C4440;
+    box-shadow: unset !important;
+    .p-overlaypanel-content{
+      padding: 0;
+    }
+  }
+  .p-overlaypanel::before,.p-overlaypanel::after{
+    content: unset !important;
+  }
+}
+:host ::ng-deep .new_team_btn{
+  background-color: #024CAC;
+  color: white;
+  padding: .75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  img{
+    padding: 7px;
+  }
+}
+.secondary_sidebar_active{
+  left: 70px !important;
+}
+:host ::ng-deep #sidebar-wrapper {
+  background-color: white;
+  min-height: 100vh;
+  // margin-left: -15rem;
+  width: 70px;
+  position: fixed;
+  left: 0;
+  z-index: 10;
+  -webkit-transition: margin .25s ease-out;
+  -moz-transition: margin .25s ease-out;
+  -o-transition: margin .25s ease-out;
+  transition: margin .25s ease-out;
+  overflow: hidden;
+  .sidebar-heading {
+    padding: 1.5rem 1.25rem;
+    font-size: 1.2rem;
+    height: 95px;
+  }
+  .list-group {
+    width: 15rem;
+    .list-group-item{
+      background-color: transparent !important;
+      width: 300px;
+    }
+  }
+  .sidebar-item{
+    padding: 10px 15px;
+    cursor: pointer;
+    .sidebar-item-img{
+      background-color: white;
+      width: 40px;
+      height: 40px;
+    }
+    .sidebar-item-text{
+      color: #050C44;
+      display: none;
+      font-weight: 600;
+      font-size: .95;
+    }
+    .p-avatar {
+      height: 20px;
+      width: 20px;
+    }
+  }
+  .simple-items{
+    .sidebar-item-img{
+      padding: .5rem;
+      background-color: transparent !important;
+      width: 40px;
+      height: 40px;
+    }
+  }
+}
+.mini-sidebar{
+  background-color: black !important;
+  width: 70px!important;
+}
+#page-content-wrapper {
+  min-width: 0;
+  width: 100%;
+  padding-left: 70px;
+}
+#wrapper.toggled #sidebar-wrapper {
+  margin-left: 0;
+}
+.item_config{
+  display: flex;
+  align-items: start;
+  padding: .5rem;
+  justify-content: space-around;
+  .config_content{
+    max-width: 500px;
+    padding: 0 1rem;
+    .config_text{
+      line-height: 2;
+    }
+  }
+}
+:host{
+  display: block;
+  height: 100%;
+}
+.notification{
+  height: 75px;
+  text-decoration: none;
+  margin: 1rem 0;
+}
+.notification_icon{
+  width: 50px;
+  height: 50px;
+}
+
+.notification_text{
+  font-size: 13px;
+  color: #696B81;
+}
+.notification_time{
+  color: #020733;
+  opacity: 0.4;
+}
+.notificaciones_btn{
+  background-color: #0065E9 !important;
+  font-weight: 600;
+}
+:host ::ng-deep .notifications_sidebar.p-sidebar{
+  box-shadow: -4px 3px 6px #00000008;
+  .p-sidebar-content{
+    height: 100%;
+    .p-sidebar-close{
+      z-index: 5;
+    }
+  }
+}
+:host ::ng-deep #dialog_config{
+  .p-dialog-header-icons{
+    margin-left: auto;
+    margin-right: 35px;
+  }
+  .p-dialog{
+    border-radius: 38px !important;
+  }
+  .p-dialog-header{
+    border-top-left-radius: 38px !important;
+    border-top-right-radius: 38px !important;
+  }
+  .p-dialog-content{
+    border-bottom-left-radius: 38px !important;
+    border-bottom-right-radius: 38px !important;
+  }
+}
+
+:host ::ng-deep #add_space_dialog,
+:host ::ng-deep #crear_competicion_dialog,
+:host ::ng-deep #create_player_dialog{
+  .purple_mask{
+    background-color: #050c44d1;
+  }
+  .p-dialog{
+    min-width: 360px;
+    max-width: 800px;
+  }
+  .form-control{
+    height: 45px;
+    border-radius: 9px;
+    font-size: .9rem;
+    font-weight: 500;
+  }
+  h6,label{
+    color: #050C44;
+    font-weight: 600;
+  }
+  p{
+    line-height: 1.75;
+    color: #707070;
+    font-size: .9rem;
+  }
+  .p-dialog-title{
+    font-size: .9rem;
+    font-family: "Montserrat", sans-serif;
+    color: #050C44;
+    opacity: 0.27;
+  }
+  .step_content{
+    margin-bottom: 2rem;
+  }
+  .upload_btn{
+    border: 1px solid #050C4463;
+    color: #050C44;
+    width: 250px;
+    padding: 0.75rem 1rem;
+  }
+  .step_markers{
+    display: flex;
+    justify-content: center;
+    padding: 0;
+    list-style: none;
+    li{
+      flex: 0 0 150px;
+      height: 6px;
+      padding: 0 0.5rem;
+      // cursor: pointer;
+      .step_marker{
+        background: #050C44;
+        display: block;
+        height: 100%;
+        border-radius: 4px;
+        opacity: 0.1;
+        &.active{
+          background: #024CAC;
+          opacity: 1;
+        }
+      }
+    }
+  }
+  .p-dialog-footer{
+    padding: 1.5rem 2rem;
+    border-top: 1px solid #050C4433;
+    .footer_btns{
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      button{
+        padding: 0.75rem 1rem;
+        font-size: .9rem;
+      }
+      .next_btn{
+        background: #024CAC;
+        color: white;
+        flex: 1;
+      }
+      .back_btn{
+        border: 1px solid #050C4433;
+        flex: 1;
+      }
+      .advance_btn{
+        flex: 1 1 100%;
+        background-color: #26262610;
+        color: #050C4455;
+        font-weight: 600;
+      }
+    }
+  }
+}
+
+:host ::ng-deep .fullscreen_dialog{
+  width: 100vw;
+  height: 100vh;
+  max-height: 100%;
+  top: 0;
+  #new_team_dialog_container{
+    img{
+      flex: 0;
+      align-self: start;
+    }
+    .dialog_title{
+      color: #050C44;
+      font-weight: bold;
+    }
+    label{
+      color: #050C44;
+    }
+    input{
+      border-radius: 29px;
+      height: 57px;
+      padding: 0 2rem;
+    }
+    .next_btn{
+      background-color: #0065E9;
+      color: white;
+      height: 40px;
+      font-weight: 600;
+      border-radius: 32px;
+    }
+
+  }
+  .p-dialog-content{
+    flex: 1;
+  }
+}
+
+:host ::ng-deep .team_sidebar{
+  ul{
+    .team_sidebar_item{
+      font-size: .9rem;
+      font-family: 'Montserrat', sans-serif !important;
+    }
+  }
+}
+
+@media (min-width: 576px) {
+  #secondary-sidebar{
+    max-width: 250px;
+  }
+  :host ::ng-deep .notifications_sidebar.p-sidebar{
+    width: 420px !important;
+  }
+}
+@media (min-width: 1024px) {
+  #secondary-sidebar{
+    left: -230px;
+    width: 280px;
+    max-width: 280px;
+  }
+
+  :host ::ng-deep .team_sidebar{
+    // background-color: blue;
+    left: 360px !important;
+    top: 15px !important;
+    margin: 0;
+    // height: calc(100% - 30px);
+    height: auto;
+    max-height: calc(100% - 30px);
+    box-shadow: unset !important;
+    border: 1px solid #050C4429;
+    width: 300px;
+    border-radius: 0;
+    &::before,&::after{
+      content: unset !important;
+    }
+    .p-overlaypanel-content{
+      padding: 0;
+    }
+    ul{
+      hr{
+        margin-top: 0 !important;
+        margin-bottom: 0 !important;
+      }
+      .team_sidebar_header{
+        display: flex;
+        align-items: center;
+        padding: 1.5rem;
+        text-decoration: none;
+        color: black !important;
+      }
+      padding: 0;
+      list-style-type: none;
+      .team_sidebar_item{
+        padding: 1rem 1.5rem;
+        font-weight: 600;
+      }
+      .team_sidebar_header:hover,.team_sidebar_item:hover{
+        background-color: #024CAC;
+        color: white !important;
+        cursor: pointer;
+      }
+    }
+  }
+
+  :host ::ng-deep #secondary-sidebar{
+    left: -230px;
+    width: 280px;
+
+    .p-overlaypanel{
+      width: 400px !important;
+    }
+  }
+
+  :host ::ng-deep #sidebar-wrapper {
+    margin-left: 0;
+    width: 300px;
+    .sidebar-item{
+      //    .sidebar-item-img{
+
+      //    }
+      .sidebar-item-text{
+        display: block;
+      }
+      //  .p-avatar {
+
+      // }
+    }
+  }
+
+  #page-content-wrapper {
+    padding-left: 300px;
+    &.mini-sidebar-active{
+      padding-left: 350px;
+    }
+  }
+
+  #wrapper.toggled #sidebar-wrapper {
+    margin-left: -15rem;
+  }
+
+  :host ::ng-deep #add_space_dialog {
+
+    .p-dialog-footer{
+      .footer_btns{
+        .shrink_btn{
+          flex: 0 0 200px !important;
+        }
+      }
+    }
+  }
+
+}
+
+.control-custom {
+  background-color: #ECECEC !important;
+  height: 45px !important;
+  border-radius: 9px !important;
+  width: 100%;
+}
+.p-inputtext {
+  margin: 4px !important;
+}

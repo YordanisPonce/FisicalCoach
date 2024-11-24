@@ -1,0 +1,9 @@
+<span
+  class="stop_btn"
+  (click)="handleAction('period')"
+  class="buttons ml-3"
+  pTooltip="{{ 'scouting.customActions.changePeriod' | translate }}"
+  *ngIf="showChangePeriod.includes(sportCode)"
+>
+  <img src="assets/img/icons/halftime-green.svg" width="29px" height="29px" />
+</span>

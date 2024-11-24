@@ -1,0 +1,613 @@
+<p-dialog
+  id="scouting_dialog"
+  [blockScroll]="true"
+  [(visible)]="show"
+  contentStyleClass="p-dialog-maximized"
+  maskStyleClass="purple_mask"
+  [closable]="false"
+>
+  <ng-template pTemplate="header">
+    <div class="header_content">
+      <div class="d-none d-xl-block d-xxl-none">
+        <img src="assets/img/logo_dark.svg" alt="" width="150px" />
+      </div>
+      <div
+        class="controls"
+        [ngClass]="{
+          isLoading: loadingStatus,
+          'align-center': scoutingStatus?.status !== 'FINISHED'
+        }"
+      >
+        <span
+          style="text-align: center; width: 100%; min-height: 2rem"
+          class="p-3"
+          *ngIf="loadingStatus"
+        >
+          <i class="pi pi-spin pi-spinner fa-1x text-white"></i>
+        </span>
+        <div
+          class="d-flex"
+          *ngIf="!matchResults?.score?.winner; else showResults"
+        >
+          <span
+            (click)="pauseScouting()"
+            class="buttons mx-2"
+            *ngIf="
+              scoutingStatus?.status !== 'PAUSED' &&
+              scoutingStatus?.status !== 'NOT_STARTED' &&
+              !loadingStatus
+            "
+            pTooltip="{{ 'scouting.pause' | translate }}"
+          >
+            <i
+              class="pi pi-pause text-bold"
+              style="font-size: 2rem; color: #b6b6b6"
+            ></i>
+          </span>
+
+          <span
+            (click)="startScouting()"
+            class="buttons mx-2"
+            *ngIf="
+              (scoutingStatus?.status === 'PAUSED' ||
+                scoutingStatus?.status === 'NOT_STARTED') &&
+              !loadingStatus
+            "
+            pTooltip="{{ 'scouting.play' | translate }}"
+          >
+            <img src="assets/img/icons/play.svg" alt="" />
+          </span>
+
+          <span
+            class="stop_btn"
+            (click)="
+              sportCode === 'swimming'
+                ? pauseScouting(false, false, true)
+                : (showFinishScoutingDialog = true)
+            "
+            class="buttons mx-2"
+            *ngIf="!loadingStatus"
+            pTooltip="{{ 'scouting.finish' | translate }}"
+          >
+            <img src="assets/img/icons/stop.svg" alt="" />
+          </span>
+        </div>
+
+        <ng-template #showResults>
+          <button
+            class="btn btn-primary btn-show-results"
+            (click)="seeMatchResults()"
+          >
+            {{ "scouting.seeResults" | translate }}
+          </button>
+        </ng-template>
+
+        <span
+          class="clock"
+          *ngIf="!isScoutingPaused && getElapsedTime(time) as elapsed"
+          >{{ elapsed.hours < 10 ? "0" + elapsed.hours : elapsed.hours }}:{{
+            elapsed.minutes < 10 ? "0" + elapsed.minutes : elapsed.minutes
+          }}:{{
+            elapsed.seconds < 10 ? "0" + elapsed.seconds : elapsed.seconds
+          }}</span
+        >
+
+        <span class="clock" *ngIf="isScoutingPaused"
+          >{{
+            pausedTime.hours < 10 ? "0" + pausedTime.hours : pausedTime.hours
+          }}:{{
+            pausedTime.minutes < 10
+              ? "0" + pausedTime.minutes
+              : pausedTime.minutes
+          }}:{{
+            pausedTime.seconds < 10
+              ? "0" + pausedTime.seconds
+              : pausedTime.seconds
+          }}</span
+        >
+
+        <app-header-actions
+          *ngIf="!loadingStatus"
+          [sportCode]="matchInfo.team.sport.code"
+          [actions]="actions"
+          [time]="time"
+          (storeActivity)="storeActivity($event)"
+        >
+        </app-header-actions>
+      </div>
+      <div class="d-flex">
+        <div class="p-dialog-header-icons ng-tns-c54-5">
+          <button
+            type="button"
+            tabindex="-1"
+            pripple=""
+            class="ng-tns-c54-5 p-dialog-header-icon p-dialog-header-close p-link p-ripple ng-star-inserted"
+            ng-reflect-ng-class="[object Object]"
+            (click)="closeDialog()"
+            pTooltip="{{ 'scouting.closeStouting' | translate }}"
+          >
+            <span
+              class="p-dialog-header-close-icon ng-tns-c54-5 pi pi-times"
+              ng-reflect-ng-class="pi pi-times"
+            ></span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+  <div id="scouting_dialog_container" class="dialog_container over_x">
+    <div class="actions d-xl-block d-xxl-none overflow-auto">
+      <div class="actions_header">
+        <span>{{ "scouting.matchActions" | translate }}</span>
+
+        <div class="mx-2">
+          <i
+            class="{{
+              loadingUndo
+                ? 'pi pi-spin pi-spinner fa-2x text-white'
+                : 'pi pi-undo icon'
+            }}"
+            [ngClass]="{ loading: loadingRedo }"
+            (click)="
+              loadingRedo || activityList.length === 0 ? null : undoActivity()
+            "
+            pTooltip="{{ 'scouting.redo' | translate }}"
+          ></i>
+        </div>
+        <div class="mx-2">
+          <i
+            class="{{
+              loadingRedo
+                ? 'pi pi-spin pi-spinner fa-2x text-white'
+                : 'pi pi-refresh icon'
+            }}"
+            [ngClass]="{ loading: loadingUndo }"
+            (click)="loadingUndo ? null : redoActivity()"
+            pTooltip="{{ 'scouting.undo' | translate }}"
+          ></i>
+        </div>
+      </div>
+      <div class="actions_content">
+        <ng-container *ngIf="loadingActions">
+          <div
+            style="text-align: center; width: 100%; min-height: 2rem"
+            class="p-3"
+          >
+            <i class="pi pi-spin pi-spinner fa-2x text-white"></i>
+          </div>
+        </ng-container>
+
+        <p-scrollPanel
+          [style]="{ width: '100%', height: '100%' }"
+          *ngIf="!loadingActions && actions.length > 0"
+        >
+          <p-selectButton
+            [options]="filteredActions"
+            [(ngModel)]="selectedAction"
+            optionValue="id"
+            optionLabel="name"
+            [disabled]="loadingAction"
+            (onOptionClick)="selectAction(selectedAction)"
+          >
+            <ng-template let-item pTemplate>
+              <div
+                class="action_content"
+                [ngClass]="{ active: selectedAction == item.id }"
+              >
+                <img src="{{ item.image.full_url }}" alt="" />
+                <span class="action_name">{{ item.name }}</span>
+              </div>
+            </ng-template>
+          </p-selectButton>
+        </p-scrollPanel>
+      </div>
+    </div>
+    <div
+      class="field"
+      [style]="{
+        backgroundImage: 'url(' + matchInfo.team.sport.court.full_url + ')'
+      }"
+    >
+      <div class="players">
+        <ng-container *ngIf="loadingPlayers">
+          <div
+            style="text-align: center; width: 100%; min-height: 2rem"
+            class="p-3"
+          >
+            <i class="pi pi-spin pi-spinner fa-2x text-white"></i>
+          </div>
+        </ng-container>
+        <div
+          class="players_content"
+          *ngIf="!loadingPlayers && headlinePlayers.length > 0"
+        >
+          <div *ngFor="let player of headlinePlayers">
+            <div
+              class="player"
+              [ngClass]="{
+                action_selected:
+                  player?.player_id === selectedPlayer?.player_id,
+                db_selected:
+                  holdPlayerSelected &&
+                  player?.player_id === selectedPlayer?.player_id
+              }"
+              (click)="selectPlayer(player, 'headline', $event)"
+              (dblclick)="selectPlayer(player, 'headline', $event)"
+            >
+              <p-avatar
+                class="avatar"
+                image="{{ player.player | avatarPipe }}"
+                shape="circle"
+                [style]="{ width: '30px', height: '30px' }"
+              ></p-avatar>
+              <span class="name">{{ player.player.full_name }}</span>
+              <div class="shirt">
+                <img src="assets/img/icons/shirt.svg" alt="" />
+                <span class="number">{{ player.player.shirt_number }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div></div>
+      <div class="substitution" *ngIf="alternatePlayers.length > 0">
+        <button
+          class="btn"
+          (click)="openAlternateList()"
+          pTooltip="{{ 'scouting.makeChange' | translate }}"
+        >
+          <img src="assets/img/icons/exchange.svg" alt="" class="img-fluid" />
+        </button>
+      </div>
+      <!-- <div class="">
+        <button
+          class="btn btn-actions d-xl-none d-xxl-block"
+          (click)="showAction()"
+        >
+          <span>{{ "scouting.matchActions" | translate }}</span>
+        </button>
+      </div> -->
+      <div
+        class="substitution_players"
+        [ngClass]="{ active: substitution == true }"
+      >
+        <div class="header">
+          <span>{{ "scouting.alternatePlayers" | translate }}</span>
+          <i class="pi pi-times" (click)="substitution = false"></i>
+        </div>
+        <div class="content">
+          <p-scrollPanel [style]="{ width: '100%', height: '100%' }">
+            <div
+              class="player"
+              *ngFor="let player of alternatePlayers"
+              [ngClass]="{
+                action_selected:
+                  player?.player_id === selectedAlternatePlayer?.player_id &&
+                  (!selectedAlternatePlayer.isSubstituted ||
+                    !this.allowSubstitution.includes(this.sportCode))
+              }"
+            >
+              <div
+                (click)="selectPlayer(player, 'alternate')"
+                class="d-flex align-items-center"
+              >
+                <p-avatar
+                  class="avatar"
+                  *ngIf="!player.player.image"
+                  image="{{ player.player | avatarPipe }}"
+                  shape="circle"
+                ></p-avatar>
+                <span class="name">{{ player.player.full_name }}</span>
+                <span class="number">{{ player.player.shirt_number }}</span>
+              </div>
+            </div>
+          </p-scrollPanel>
+
+          <div class="mt-4 my-3">
+            <button
+              class="btn btn-primary btn-substitution"
+              (click)="actionWithSubstitution(substitutionActionId)"
+              pTooltip="{{ 'scouting.makeChange' | translate }}"
+            >
+              {{ "scouting.substitution" | translate }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  
+    <div class="resume">
+      <app-default-board
+        [matchInfo]="matchInfo"
+        [actions]="actions"
+        [pausedTime]="pausedPeriodTime"
+        [selectType]="selectType"
+        [time]="periodTime"
+        [selectedPlayer]="selectedPlayer"
+        [matchResults]="matchResults"
+        [scoutingStatus]="scoutingStatus"
+        [isScoutingPaused]="isScoutingPaused"
+        [loadingStatus]="loadingStatus"
+        [sportCode]="sportCode"
+        [isDisabled]="loadingAction"
+        (storeActivity)="storeActivity($event)"
+        *ngIf="defaultSports.includes(sportCode)"
+      ></app-default-board>
+
+      <app-tennis-board
+        [matchInfo]="matchInfo"
+        [actions]="actions"
+        [matchResults]="matchResults"
+        [sportCode]="sportCode"
+        [isDisabled]="loadingAction"
+        [start_match]="scoutingStatus.start_match"
+        *ngIf="tennisBoard.includes(sportCode)"
+        (storeActivity)="storeActivity($event)"
+        [time]="periodTime"
+      >
+      </app-tennis-board>
+
+      <app-baseball-board
+        [matchInfo]="matchInfo"
+        [actions]="actions"
+        [pausedTime]="pausedPeriodTime"
+        [selectType]="selectType"
+        [time]="periodTime"
+        [selectedPlayer]="selectedPlayer"
+        [matchResults]="matchResults"
+        [isScoutingPaused]="isScoutingPaused"
+        [scoutingStatus]="scoutingStatus"
+        [loadingStatus]="loadingStatus"
+        [isDisabled]="loadingAction"
+        (storeActivity)="storeActivity($event)"
+        (selectedTeam)="selectedTeam = $event"
+        (setSelectType)="selectType = $event"
+        *ngIf="baseballBoard.includes(sportCode)"
+      ></app-baseball-board>
+
+      <div
+        class="text-center text-white mt-5 mb-4"
+        *ngIf="sportCode === 'swimming'"
+      >
+        <h3 class="mb-3">
+          {{ "scouting.customActions.position" | translate }}
+        </h3>
+        <h2>{{ matchResults.score.position }}</h2>
+      </div>
+
+      <div class="match_log">
+        <div class="header">
+          {{ "scouting.matchActivity" | translate }}
+        </div>
+        <div class="content">
+          <ng-container *ngIf="loadingActivityList">
+            <div
+              style="text-align: center; width: 100%; min-height: 2rem"
+              class="p-3"
+            >
+              <i class="pi pi-spin pi-spinner fa-2x text-white"></i>
+            </div>
+          </ng-container>
+          <p-scrollPanel
+            [style]="{ width: '100%' }"
+            styleClass="scroll-activity"
+            *ngIf="!loadingActivityList"
+          >
+            <table>
+              <tbody>
+                <tr
+                  *ngFor="let activity of activityList"
+                  [ngClass]="{
+                    'period-border': activity.action?.code === 'period'
+                  }"
+                >
+                  <td *ngIf="!activity.action.rival_team_action">
+                    <p-avatar
+                      *ngIf="activity.player_id !== null"
+                      class="avatar"
+                      image="{{ activity.player | avatarPipe }}"
+                      shape="circle"
+                    ></p-avatar>
+
+                    <div class="d-flex justify-content-md-center">
+                      <div
+                        [style]="{
+                          width: '30px',
+                          height: '30px',
+                          backgroundColor: matchInfo.team.color,
+                          borderRadius: '50%',
+                          marginBottom: '7px',
+                        
+                        }"
+                        *ngIf="
+                          !matchInfo.team.image &&
+                          matchInfo.team.color &&
+                          !activity.action.rival_team_action &&
+                          !activity.player_id
+                        "
+                      ></div>
+                    </div>
+
+                    <p-avatar
+                      *ngIf="activity.player_id === null && this.team.image"
+                      class="avatar"
+                      image="{{ this.team.image?.full_url }}"
+                      shape="circle"
+                    ></p-avatar>
+                  </td>
+
+                  <td *ngIf="activity.action.rival_team_action">
+                    <p-avatar
+                      class="avatar"
+                      image="{{
+                        matchInfo.competition_rival_team?.url_image
+                          | rivalAvatarPipe
+                      }}"
+                      shape="circle"
+                    ></p-avatar>
+                  </td>
+                  <td>
+                    <div *ngIf="activity.player_id !== null">
+                      <span
+                        >{{
+                          activity.player.full_name +
+                            " (" +
+                            activity.player.shirt_number +
+                            ")"
+                        }}
+                      </span>
+                    </div>
+                    <div
+                      *ngIf="
+                        activity.player_id === null &&
+                        !activity.action.rival_team_action
+                      "
+                    >
+                      <span>{{ this.team.name }}</span>
+                    </div>
+                    <div
+                      *ngIf="
+                        activity.player_id === null &&
+                        activity.action.rival_team_action
+                      "
+                    >
+                      <span>{{
+                        matchInfo?.competition_rival_team?.rival_team || "Rival"
+                      }}</span>
+                    </div>
+                  </td>
+                  <td>
+                    {{
+                      activity.in_game_time.hours < 10
+                        ? "0" + activity.in_game_time.hours
+                        : activity.in_game_time.hours
+                    }}:{{
+                      activity.in_game_time.minutes < 10
+                        ? "0" + activity.in_game_time.minutes
+                        : activity.in_game_time.minutes
+                    }}:{{
+                      activity.in_game_time.seconds < 10
+                        ? "0" + activity.in_game_time.seconds
+                        : activity.in_game_time.seconds
+                    }}
+                  </td>
+                  <td>{{ activity.action.name }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </p-scrollPanel>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+
+  <p-dialog
+    class="dialog"
+    [modal]="true"
+    id="scouting-confirm-dialog"
+    styleClass=""
+    maskStyleClass="purple_mask"
+    [(visible)]="displayAction"
+  >
+    <div class="actions_header actions_header_styles mb-3">
+      <span>{{ "scouting.matchActions" | translate }}</span>
+
+      <div class="mx-2">
+        <i
+          class="{{
+            loadingUndo
+              ? 'pi pi-spin pi-spinner fa-2x text-white'
+              : 'pi pi-undo icon'
+          }}"
+          [ngClass]="{ loading: loadingRedo }"
+          (click)="
+            loadingRedo || activityList.length === 0 ? null : undoActivity()
+          "
+          pTooltip="{{ 'scouting.redo' | translate }}"
+        ></i>
+      </div>
+      <div class="mx-2">
+        <i
+          class="{{
+            loadingRedo
+              ? 'pi pi-spin pi-spinner fa-2x text-white'
+              : 'pi pi-refresh icon'
+          }}"
+          [ngClass]="{ loading: loadingUndo }"
+          (click)="loadingUndo ? null : redoActivity()"
+          pTooltip="{{ 'scouting.undo' | translate }}"
+        ></i>
+      </div>
+    </div>
+    <div class="actions_content">
+      <ng-container *ngIf="loadingActions">
+        <div
+          style="text-align: center; width: 100%; min-height: 2rem"
+          class="p-3"
+        >
+          <i class="pi pi-spin pi-spinner fa-2x text-white"></i>
+        </div>
+      </ng-container>
+
+      <p-scrollPanel
+        [style]="{ width: '100%', height: '560px' }"
+        *ngIf="!loadingActions && actions.length > 0"
+      >
+        <p-selectButton
+          [options]="filteredActions"
+          [(ngModel)]="selectedAction"
+          optionValue="id"
+          [disabled]="loadingAction"
+          (onChange)="selectAction(selectedAction)"
+        >
+          <ng-template let-item pTemplate>
+            <div
+              class="action_content"
+              [ngClass]="{ active: selectedAction == item.id }"
+            >
+              <img src="{{ item.image.full_url }}" alt="" />
+              <span class="action_name">{{ item.name }}</span>
+            </div>
+          </ng-template>
+        </p-selectButton>
+      </p-scrollPanel>
+      <div class="mt-4 my-3 text-center">
+        <button
+          class="btn btn-primary btn-action mt-5"
+          *ngIf="!loadingAction"
+          (click)="displayAction = false"
+        >
+          Cerrar
+        </button>
+
+        <button class="btn btn-primary btn-action mt-5" *ngIf="loadingAction">
+          Cargando
+        </button>
+      </div>
+    </div>
+  </p-dialog>
+
+  <app-scouting-players
+    [sportCode]="matchInfo.team.sport.code"
+    [matchPlayers]="matchPlayers"
+    [headlineIds]="getPlayersTypeId('headline')"
+    [alternateIds]="getPlayersTypeId('alternate')"
+    [substitutionPlayers]="sportList()"
+    (setHeadlinePlayers)="headlinePlayers = $event"
+    (setAlternatePlayers)="alternatePlayers = $event"
+    (setMatchPlayers)="matchPlayers = $event"
+  ></app-scouting-players>
+</p-dialog>
+
+<app-close-scouting-dialog
+  *ngIf="showFinishScoutingDialog"
+  [visible]="showFinishScoutingDialog"
+  [sportCode]="sportCode"
+  [loading]="loadingFinishScouting"
+  [time]="time"
+  (close)="restartScoutingStatus()"
+  (finishScouting)="finishScouting(true, $event)"
+>
+</app-close-scouting-dialog>

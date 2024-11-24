@@ -1,0 +1,55 @@
+:host ::ng-deep {
+  .p-calendar {
+    border-radius: 6px !important;
+  }
+
+  label {
+    font-size: 0.9rem;
+  }
+
+  .p-dialog .p-dialog-content {
+    overflow: visible;
+  }
+  .p-dropdown {
+    border-radius: 6px !important;
+    height: 45px !important;
+    width: 100%;
+    padding-top: 3px;
+  }
+
+  .footer_btns {
+    display: flex;
+    justify-content: center;
+
+    button {
+      padding: 0.75rem 1rem;
+    }
+
+    .next_btn {
+      background: #024cac;
+      color: white;
+      flex: 1;
+    }
+
+    .back_btn {
+      border: 1px solid #050c4433;
+      flex: 1;
+    }
+  }
+}
+
+@media (min-width: 1200px) {
+  :host ::ng-deep {
+    .p-dialog {
+      .p-dialog-header {
+        padding: 3rem 3rem 1.5rem 3rem;
+      }
+      .p-dialog-content {
+        padding: 0 3rem;
+      }
+      .p-dialog-footer {
+        padding: 1.5rem 3rem;
+      }
+    }
+  }
+}

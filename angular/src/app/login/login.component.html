@@ -1,0 +1,229 @@
+<div class="container-fluid h-100 px-0 px-md-1">
+  <div class="ml-auto d-flex justify-content-end header">
+    <p-dropdown
+      (onChange)="handleLanguage($event)"
+      [(ngModel)]="idioma"
+      [options]="languages"
+      optionLabel="name"
+      optionValue="value"
+      styleClass="header_btn botone"
+    >
+      <ng-template pTemplate="selectedItem">
+        <div
+          *ngIf="idioma"
+          class="country-item country-item-value d-flex align-items-center"
+        >
+          <i class="pi pi-globe mr-2 text-main" style="font-size: 1.25rem"></i>
+          <img [src]="idioma === 'es' ? spanishFlag : englishFlag" width="15" />
+          <div>{{ getLanguageLabel(idioma) }}</div>
+        </div>
+      </ng-template>
+      <ng-template let-language pTemplate="item">
+        <div class="language-item" style="display: flex">
+          <img
+            [src]="language.value === 'es' ? spanishFlag : englishFlag"
+            width="15"
+          />
+          <div style="margin-left: 3px">{{ language.name }}</div>
+        </div>
+      </ng-template>
+    </p-dropdown>
+  </div>
+  <div class="row" id="login_row">
+    <div class="col-lg-10" id="login_content">
+      <div class="row h-100 justify-content-center m-none">
+        <div class="col-12 col-xl-5 align-self-md-center login-bg">
+          <div class="p-3" id="login_container">
+            <div class="logo">
+              <img
+                [src]="rutaImagen + 'images/logos/logo_inicio.svg'"
+                alt="capa"
+                class="mb-4"
+                style="width: 100%"
+              />
+            </div>
+            <h6 class="my-4">
+              <strong>{{ "login.init_session" | translate }}</strong>
+            </h6>
+            <form
+              [formGroup]="loginForm"
+              id="login_form"
+              (ngSubmit)="sendData()"
+            >
+              <div class="mb-4">
+                <label class="d-md-none">{{ "login.email" | translate }}</label>
+                <span class="p-input-icon-left d-block">
+                  <i class="d-flex"
+                    ><img alt="" src="/assets/img/icons/message2.svg"
+                  /></i>
+                  <input
+                    class="form-control"
+                    formControlName="email"
+                    id="username"
+                    pInputText
+                    placeholder="{{ 'login.email' | translate }}"
+                    autofocus
+                  />
+                </span>
+              </div>
+              <div class="">
+                <label class="d-md-none">{{
+                  "login.password" | translate
+                }}</label>
+                <span class="p-input-icon-left p-input-icon-right d-block">
+                  <i class="d-flex"
+                    ><img
+                      alt="lock"
+                      src="/assets/img/icons/padlock.svg"
+                      width="18px"
+                  /></i>
+                  <input
+                    [ngClass]="{ 'ng-invalid ng-dirty': f.password.errors }"
+                    [type]="showPass ? 'text' : 'password'"
+                    class="form-control"
+                    formControlName="password"
+                    pInputText
+                    placeholder="{{ 'login.password' | translate }}"
+                    [required]="true"
+                  />
+                  <i
+                    (click)="showPass = false"
+                    *ngIf="showPass"
+                    class="pi pi-eye"
+                    role="button"
+                  ></i>
+                  <i
+                    (click)="showPass = true"
+                    *ngIf="!showPass"
+                    class="pi pi-eye-slash"
+                    role="button"
+                  ></i>
+                </span>
+              </div>
+              <div
+                class="d-flex justify-content-center justify-content-md-between align-items-center my-4"
+              >
+                <small
+                  ><a
+                    (click)="recoverPasswordDialog = true"
+                    class="text-secondary font-weight-500"
+                  >
+                    {{ "login.recover password" | translate }}</a
+                  ></small
+                >
+                <div class="custom-control custom-checkbox d-none d-md-block">
+                  <input
+                    class="custom-control-input"
+                    id="defaultCheck1"
+                    type="checkbox"
+                  />
+                  <label class="custom-control-label mb-0" for="defaultCheck1"
+                    ><small class="text-secondary font-weight-500">{{
+                      "login.remember_me" | translate
+                    }}</small></label
+                  >
+                </div>
+              </div>
+              <div class="row mt-3 my-2">
+                <div class="col-12 col-sm-6">
+                  <button
+                    *ngIf="loading"
+                    class="btn login-btn mb-3 mb-sm-0"
+                    disabled
+                    type="button"
+                  >
+                    <span
+                      aria-hidden="true"
+                      class="spinner-grow spinner-grow-sm"
+                      role="status"
+                    ></span>
+                    {{ "LBL_LOADING" | translate }}
+                  </button>
+                  <button
+                    *ngIf="!loading"
+                    class="btn login-btn mb-4 mb-md-3"
+                    type="submit"
+                  >
+                    {{ "login.login" | translate }}
+                  </button>
+                </div>
+                <div class="col-12 col-sm-6">
+                  <a
+                    class="btn register-btn"
+                    routerLink="/register"
+                    type="button"
+                  >
+                    <span> {{ "login.register" | translate }}</span>
+                  </a>
+                </div>
+              </div>
+              <div class="row my-1 my-md-3">
+                <div class="col text-center">o</div>
+              </div>
+            </form>
+            <app-auth-button></app-auth-button>
+            <p
+              class="d-none d-md-block pie text-center mt-2 mb-0 text-white font-weight-600"
+            >
+              {{ "login.all_rights_reserved" | translate }}
+            </p>
+          </div>
+        </div>
+        <div
+          class="d-none d-xl-flex flex-column col-xl-7 m-0 px-0 login-image-bg"
+          style="background-color: #ebf4ff; justify-content: space-between"
+        >
+          <p-galleria
+            [autoPlay]="true"
+            [changeItemOnIndicatorHover]="true"
+            [circular]="true"
+            [containerStyle]="{ 'max-width': '640px' }"
+            [numVisible]="5"
+            [showIndicatorsOnItem]="true"
+            [showIndicators]="true"
+            [showThumbnails]="false"
+            [value]="splash"
+          >
+            <ng-template let-item pTemplate="item">
+              <img
+                [src]="item.image.full_url"
+                style="width: 100%; display: block"
+              />
+            </ng-template>
+            <ng-template let-item pTemplate="thumbnail">
+              <div class="p-grid p-nogutter p-justify-center">
+                <img [src]="item.image.full_url" style="display: block" />
+              </div>
+            </ng-template>
+          </p-galleria>
+          <!--          <div class="carousel slide dibujosconten imgback h-75" data-ride="carousel" id="carouselExampleIndicators">-->
+          <!--            <div class="carousel-inner" *ngIf="splash.length>0">-->
+          <!--              <div *ngFor="let item of splash" class="carousel-item text-center pt-2">-->
+          <!--                <img [alt]="item.image_id" [src]="item.image.full_url" class="block-img"/>-->
+          <!--              </div>-->
+          <!--            </div>-->
+          <!--          </div>-->
+          <p class="text-center mx-2 mt-3 pie-text" style="padding-top: 25px">
+            <span [innerHTML]="'login.pie' | translate"></span>
+          </p>
+          <!--          <div class="carousel slide mt-5" data-ride="carousel" id="carouselExampleIndicators1">-->
+          <!--            <ol class="carousel-indicators">-->
+          <!--              <li class="rounded-circle active" data-slide-to="0" data-target="#carouselExampleIndicators"></li>-->
+          <!--              <li class="rounded-circle" data-slide-to="1" data-target="#carouselExampleIndicators"></li>-->
+          <!--            </ol>-->
+          <!--          </div>-->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<recover-password-dialog
+  (close)="recoverPasswordDialog = false"
+  [visible]="recoverPasswordDialog"
+></recover-password-dialog>
+<active-user-dialog
+  (close)="activeUserDialog = false"
+  [email]="email"
+  [msg]="messageActiveUser"
+  [visible]="activeUserDialog"
+></active-user-dialog>

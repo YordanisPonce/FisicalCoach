@@ -1,0 +1,191 @@
+<div class="row">
+  <div *ngIf="!showAllActivities" class="col-xl-8">
+    <div class="card box-shadow">
+      <div class="card-body p-2 p-md-5">
+        <h6 class="font-weight-600 text-main mb-4">
+          {{
+            "academy." + (role === "teacher" ? "my_classes" : "my_teams")
+              | translate
+          }}
+        </h6>
+        <div class="row">
+          <p-carousel
+            *ngIf="teams.length > 0"
+            [numScroll]="1"
+            [numVisible]="2"
+            [responsiveOptions]="responsiveOptions"
+            [value]="teams"
+            class="custom_carousel"
+          >
+            <ng-template let-team pTemplate="item">
+              <div class="carousel-card">
+                <div class="my_team">
+                  <div class="d-flex mb-3 align-items-center">
+                    <div
+                      *ngIf="!team.image || !team.image.full_url"
+                      [ngStyle]="{ 'background-color': team.color }"
+                      class="rounded-circle"
+                      style="width: 100px; height: 100px"
+                    ></div>
+                    <img
+                      *ngIf="team.image && team.image.full_url"
+                      alt="team"
+                      src="{{ team.image?.full_url }}"
+                      style="width: 100px; height: 100px; border-radius: 50%"
+                    />
+                    <div class="d-flex flex-column ml-1 ml-sm-4 ml-xl-3">
+                      <span class="team_name">{{ team.name }}</span>
+                      <span *ngIf="team.sport">{{ team?.sport?.name }}</span>
+                      <span *ngIf="role === 'sport'" class="coach_title my-2">{{
+                        "academy.coach" | translate
+                      }}</span>
+                      <div *ngIf="role === 'teacher'">
+                        <div class="d-flex flex-column active-year my-1">
+                          <span
+                            *ngIf="
+                              checkActiveAcademicYear(
+                                team?.active_academic_years
+                              );
+                              else noActive
+                            "
+                            class="title"
+                          >
+                            {{
+                              "school.academic_year.academic_year_active"
+                                | translate
+                            }}
+                          </span>
+                          <ng-template #noActive>
+                            <span class="title">
+                              {{
+                                "school.academic_year.no_year_actvie"
+                                  | translate
+                              }}
+                            </span>
+                          </ng-template>
+                          <span
+                            *ngIf="
+                              checkActiveAcademicYear(
+                                team?.active_academic_years
+                              )
+                            "
+                          >
+                            {{
+                              checkActiveAcademicYear(
+                                team?.active_academic_years
+                              )
+                            }}
+                          </span>
+                        </div>
+                        <div class="d-flex flex-column active-year my-1">
+                          <span
+                            *ngIf="
+                              checkActiveAcademicPeriod(
+                                team?.active_academic_years.academic_periods
+                              );
+                              else noPeriod
+                            "
+                            class="title"
+                          >
+                            {{
+                              "school.academic_year.period_active" | translate
+                            }}
+                          </span>
+                          <ng-template #noPeriod>
+                            <span class="title">
+                              {{
+                                "school.academic_year.no_period_active"
+                                  | translate
+                              }}
+                            </span>
+                          </ng-template>
+                          <span
+                            *ngIf="
+                              checkActiveAcademicPeriod(
+                                team?.active_academic_years.academic_periods
+                              )
+                            "
+                          >
+                            {{
+                              checkActiveAcademicPeriod(
+                                team?.active_academic_years.academic_periods
+                              )
+                            }}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <p class="team_description">
+                    {{
+                      "academy." +
+                        (role === "teacher"
+                          ? "teacher_description"
+                          : "team_description")
+                        | translate : { item: team.name }
+                    }}
+                  </p>
+                  <div
+                    (click)="updateClub(team)"
+                    class="view_team_link text-primary text-decoration-none"
+                    routerLink="/club/home"
+                    style="cursor: pointer"
+                  >
+                    {{
+                      "academy." +
+                        (role === "teacher" ? "see_class" : "see_team")
+                        | translate
+                    }}
+                  </div>
+                </div>
+              </div>
+            </ng-template>
+          </p-carousel>
+          <div *ngIf="teams.length === 0" class="col-md-6">
+            <div
+              (click)="crearEquipo()"
+              class="my_team border p-3 font-weight-600"
+              style="cursor: pointer"
+            >
+              <div class="d-flex mb-3 align-items-center text-center">
+                <div class="row">
+                  <div class="col-12 mt-3">
+                    <i class="fa fa-plus fa-3x color-fa-plus"></i>
+                  </div>
+                  <div class="col-12 mt-3">
+                    {{
+                      "academy." +
+                        (role === "teacher" ? "new_class" : "new_team")
+                        | translate
+                    }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-12 col-xl-4">
+    <app-activity-component
+      (showAllActivities)="showActivityList($event)"
+      [list]="activities"
+      [loading]="loading"
+      [loadingScroll]="loadingScroll"
+      [seeAllActivities]="showAllActivities"
+      (seeMoreActivities)="refreshActivities()"
+    ></app-activity-component>
+  </div>
+
+  <app-nuevo-equipo
+    (close)="newTeamDialog = false"
+    *ngIf="role === 'sport' && newTeamDialog === true"
+    [visible]="newTeamDialog"
+  ></app-nuevo-equipo>
+  <app-add-classroom
+    (close)="newTeamDialog = false"
+    *ngIf="role === 'teacher' && newTeamDialog === true"
+    [visible]="newTeamDialog"
+  ></app-add-classroom>
+</div>

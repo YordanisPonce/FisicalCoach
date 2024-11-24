@@ -1,0 +1,126 @@
+<p-dialog
+  class="dialog"
+  [modal]="true"
+  id="scouting-confirm-dialog"
+  [(visible)]="visible"
+  styleClass=""
+  maskStyleClass="purple_mask"
+  (onHide)="close.emit(true)"
+  header="{{ 'matchResults.calculate_rfp' | translate }}{{
+    playerName && ': ' + playerName
+  }}"
+>
+  <div class="col-12 mb-4 text-center mt-3">
+    <label>{{ "RFD_daily_work.rpe" | translate }}</label>
+
+    <div class="current_player" *ngIf="selectedPlayers.length > 0">
+      <button class="btn" (click)="handlePreviousCarousel(currentPlayerNumber)">
+        <i class="pi pi-angle-left"></i>
+      </button>
+      <div class="player d-flex justify-content-center align-items-center">
+        <p-avatar
+          [image]="
+            selectedPlayers[currentPlayerNumber]?.image
+              ? selectedPlayers[currentPlayerNumber]?.image.url
+              : '../../../../../assets//img/chico.png'
+          "
+          class="player_image mr-3"
+          shape="circle"
+        ></p-avatar>
+        <span class="player_name"
+          >{{ selectedPlayers[currentPlayerNumber]?.full_name }}
+        </span>
+      </div>
+      <button class="btn" (click)="handleNextCarousel(currentPlayerNumber)">
+        <i class="pi pi-angle-right"></i>
+      </button>
+    </div>
+
+    <div class="row w-100 d-flex justify-content-center auto-height">
+      <div class="col-4 mt-3" *ngFor="let value of rpeList; index as i">
+        <span [style]="{ 'margin-left': '-15px' }">{{ i }}</span>
+        <button
+          class="btn rpe-btn"
+          type="button"
+          (click)="setRpeValue(value.id)"
+          [ngClass]="{ selected: value.id === rpeValue }"
+          pTooltip="{{ i + ' - ' + value.name }}"
+        >
+          <img src="{{ value.image.full_url }}" alt="" width="35px" />
+        </button>
+
+        <div>
+          <span>{{ value.name }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p-footer>
+    <div class="footer_btns">
+      <button
+        class="btn back_btn shrink_btn"
+        type="button"
+        (click)="close.emit(true)"
+      >
+        {{ "LBL_ATRAS" | translate }}
+      </button>
+
+      <button
+        class="btn next_btn shrink_btn"
+        (click)="updatePlayer()"
+        *ngIf="
+          !loading &&
+          !isSessionPage &&
+          (selectedPlayers.length === 1 || isOnePlayer) &&
+          !loadingRpeAssistance
+        "
+      >
+        {{ "LBL_GUARDAR" | translate }}
+      </button>
+
+      <button
+        class="btn next_btn shrink_btn"
+        (click)="updateAssistPlayer(rpeValue)"
+        *ngIf="
+          isSessionPage &&
+          (selectedPlayers.length === 1 || isOnePlayer) &&
+          !loadingRpeAssistance
+        "
+        [disabled]="!rpeValue"
+      >
+        {{ "LBL_GUARDAR" | translate }}
+      </button>
+
+      <button
+        class="btn next_btn shrink_btn"
+        (click)="updateAssistPlayer(rpeValue)"
+        *ngIf="
+          isSessionPage && selectedPlayers.length > 1 && !loadingRpeAssistance
+        "
+        [disabled]="!rpeValue"
+      >
+        {{ "NEXT_PLAYER" | translate }}
+      </button>
+
+      <button
+        class="btn next_btn shrink_btn"
+        (click)="updatePlayer()"
+        *ngIf="
+          !isSessionPage && selectedPlayers.length > 1 && !loading
+        "
+        [disabled]="!rpeValue"
+      >
+        {{ "NEXT_PLAYER" | translate }}
+      </button>
+
+      <button
+        class="btn next_btn shrink_btn"
+        disabled
+        *ngIf="loading || loadingRpeAssistance"
+      >
+        {{ "LBL_GUARDANDO" | translate }}
+      </button>
+    </div>
+  </p-footer>
+</p-dialog>

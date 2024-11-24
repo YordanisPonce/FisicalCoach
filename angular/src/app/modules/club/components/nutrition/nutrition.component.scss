@@ -1,0 +1,75 @@
+:host ::ng-deep {
+  .nutrition_header {
+    display: flex;
+    align-items: center;
+    // margin-bottom: 2rem;
+    padding: 1.5rem 2.5rem;
+    width: 100%;
+    // padding: 1rem 0rem;
+  }
+
+  .p-datatable {
+    border: 0;
+
+    .p-datatable-thead > tr > th {
+      border-width: 1px 0 1px 0;
+      padding: 2rem 1rem;
+      font-weight: 600;
+      color: #050c44 !important;
+      // background-color: rgba($color: #050c44, $alpha: 0.03) !important;
+    }
+  }
+}
+.selectedPlayer {
+  background-color: #024cac;
+  color: #fff;
+  border: 1px solid #00000029;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 0.9rem;
+  height: 62px;
+  width: 203px;
+}
+input {
+  // margin:0;
+  height: 45px;
+  font-weight: 500;
+  border-radius: 9px;
+  border: 1px solid #050c4410;
+}
+.player_image {
+  width: 40px;
+}
+
+.check {
+  color: #00e9c5;
+  font-size: 24px;
+}
+.circle {
+  color: #ff4a4a;
+  font-size: 24px;
+}
+.btn_flex {
+  @media (max-width: 575px) {
+    flex-direction: column;
+  }
+}
+.primary_btn {
+  @media (max-width: 501px) {
+    font-size: 14px;
+  }
+}
+
+@media (min-width: 1024px) {
+  :host ::ng-deep .nutrition_header {
+    .new_game_btn {
+      width: 200px;
+    }
+  }
+}
+
+@media (max-width: 1440px) {
+  th {
+    min-width: 230px !important;
+  }
+}

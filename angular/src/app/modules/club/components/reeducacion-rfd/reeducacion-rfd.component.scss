@@ -1,0 +1,435 @@
+:host ::ng-deep {
+  .p-calendar {
+    border: 0 !important;
+    padding: 0 !important;
+  }
+  .p-calendar .p-inputtext {
+    width: 100%;
+    background: #ffffff;
+    border: 1px solid #ced4da;
+    height: 45px !important;
+    border-radius: 9px;
+  }
+
+  .daily-work-calendar {
+    .p-calendar .p-datepicker {
+      display: flex;
+      justify-content: center;
+    }
+  }
+
+  .player_resume {
+    .player_avatar_wrapper {
+      padding: 1rem 0.8em;
+      display: flex;
+      @media screen and (max-width: 575px) {
+        justify-content: center;
+        flex-direction: column;
+      }
+
+      .icon_left {
+        cursor: pointer;
+      }
+      .player_avatar {
+        padding: 1rem 0.8em;
+        display: flex;
+        align-items: center;
+        @media screen and (max-width: 575px) {
+          flex-direction: column;
+        }
+        .player_image {
+          width: 75px;
+          height: 75px;
+          background-position: center;
+          background-repeat: no-repeat;
+          background-size: cover;
+          border-radius: 50%;
+          margin-right: 1rem;
+          // border: 1px solid #050C4426;
+        }
+        .player_name {
+          display: flex;
+          color: #050c44;
+          display: flex;
+          flex-direction: column;
+          margin-left: 0.75rem;
+          @media (max-width: 575px) {
+            margin-left: 0;
+          }
+          .name {
+            font-size: 1.35rem;
+            font-weight: 600;
+          }
+          .age {
+            opacity: 0.66;
+            font-size: 1.2rem;
+            @media screen and (max-width: 575px) {
+              display: flex;
+              justify-content: center;
+            }
+          }
+        }
+      }
+    }
+    .player_info {
+      padding: 1rem 1.75rem;
+      display: flex;
+      justify-content: space-between;
+      border-top: 1px solid rgba($color: #050c44, $alpha: 0.1);
+      border-bottom: 1px solid rgba($color: #050c44, $alpha: 0.1);
+      .stat {
+        border: 1px solid rgba($color: #050c44, $alpha: 0.22);
+        border-radius: 13px;
+        flex: 0 30%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 0.5rem 1rem;
+        .value {
+          font-size: 1.35rem;
+          color: #050c44;
+          font-weight: 600;
+        }
+        .label {
+          font-size: 0.8rem;
+        }
+      }
+    }
+  }
+  .injury_resume {
+    padding: 1rem 1rem;
+    @media screen and (max-width: 575px) {
+      display: flex;
+      flex-direction: column;
+    }
+    .injury_description {
+      color: #050c44;
+      .title {
+        font-weight: 400;
+        @media screen and (max-width: 575px) {
+          display: flex;
+          justify-content: center;
+        }
+      }
+      .description {
+        color: black;
+        opacity: 0.62;
+        font-size: 0.9rem;
+      }
+      .injury_label {
+        background-color: #ff1e1e12;
+        color: #ff2020;
+        text-align: center;
+        padding: 0.6rem 1.5rem;
+        border-radius: 19px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        border: 1px solid #68000030;
+      }
+    }
+  }
+  .injurie_progress {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-weight: 600;
+    font-size: 0.9rem;
+    height: 100%;
+    @media (max-width: 1200px) {
+      margin-bottom: 1rem !important;
+    }
+    .title {
+      height: 40px;
+    }
+
+    span {
+      font-size: 1rem;
+    }
+
+    .subtitle {
+      color: #050c44;
+      opacity: 0.48;
+    }
+
+    .p-knob-pointer {
+      cursor: pointer;
+    }
+
+    .medical-date {
+      width: 310px;
+      text-align: left;
+
+      .date {
+        color: #00e9c5;
+        font-weight: 600;
+      }
+    }
+  }
+  .injurie_progress_h {
+    display: flex;
+    align-items: center;
+    @media screen and (max-width: 575px) {
+      flex-direction: column;
+    }
+    .title,
+    .text {
+      font-size: 0.85rem;
+
+      &.psychological {
+        font-size: 1rem;
+      }
+    }
+
+    .p-knob-pointer {
+      cursor: pointer;
+    }
+  }
+  .p-knob-text {
+    font-size: 0.9rem;
+  }
+  .btn {
+    border-radius: 10px;
+    font-size: 0.9rem;
+    padding: 0.75rem 1rem;
+    @media screen and (max-width: 1024px) {
+      margin-bottom: 1rem;
+    }
+  }
+  .p-calendar {
+    display: inline;
+    .p-datepicker {
+      border: 0;
+      .p-datepicker-header {
+        justify-content: unset;
+        border-bottom: 0;
+        .p-datepicker-title {
+          order: 0;
+          margin: 0;
+          margin-right: auto;
+        }
+        .p-datepicker-prev,
+        .p-datepicker-next {
+          order: 1;
+          border: 1px solid #050c4412;
+          border-radius: 5px;
+          margin: 0 0.33rem;
+          background-color: #024cac12;
+          span {
+            font-size: 10px;
+          }
+        }
+      }
+      th {
+        opacity: 0.61;
+      }
+      table td {
+        padding: 5px !important;
+        font-size: 0.9rem;
+        color: #050c44;
+        font-weight: 600;
+      }
+      table td.p-datepicker-today > span {
+        background: rgba($color: #050c44, $alpha: 0.07) !important;
+        color: #050c44 !important;
+        // border-color: transparent;
+      }
+
+      table td > span.p-highlight {
+        background: #ffcbcb !important;
+        color: #050c44 !important;
+        // border-color: transparent;
+      }
+    }
+  }
+  .stages {
+    position: relative;
+
+    .timeline_bar {
+      width: 5px;
+      height: 100%;
+      position: absolute;
+      background-color: #024cac;
+      left: 22.5px;
+    }
+    .timeline {
+      // &::before{
+      //     content: '';
+      //     width: 50px;
+      //     background-color: royalblue;
+      //     height: 25px;
+      // }
+      .stage {
+        display: flex;
+        align-items: center;
+        .stage_label {
+          box-shadow: 0px 0px 9px #00000029;
+          border-radius: 50%;
+          width: 50px;
+          height: 50px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin-right: 1.5rem;
+          .stage_icon {
+            border: 1px solid #050c4412;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #0065e9;
+          }
+        }
+        .stage_name {
+          color: #050c44;
+          font-size: 0.9rem;
+
+          &.evaluate {
+            font-weight: bold;
+          }
+        }
+        .stage_action {
+          margin-left: auto;
+          background-color: rgba($color: #000000, $alpha: 0.02);
+          width: 30px;
+          height: 30px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+      }
+    }
+  }
+  .stage {
+    display: flex;
+    align-items: center;
+    .stage_label {
+      box-shadow: 0px 0px 9px #00000029;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 0;
+      .stage_icon {
+        border: 1px solid #050c4412;
+        border-radius: 50%;
+        width: 35px;
+        height: 35px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #0065e9;
+      }
+    }
+    .stage_name {
+      color: #050c44;
+      font-size: 0.9rem;
+    }
+    .stage_action {
+      margin-left: auto;
+      background-color: rgba($color: #000000, $alpha: 0.02);
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+
+  .container {
+    // width: 25%;
+  }
+
+  .step {
+    padding: 10px 10px 10px 0;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    margin: 15px 0;
+
+    background-color: cream;
+  }
+
+  .v-stepper {
+    position: relative;
+    /*   visibility: visible; */
+  }
+
+  /* regular step */
+  .step .circle {
+    background-color: white;
+    border: 3px solid gray;
+    border-radius: 100%;
+    width: 20px; /* +6 for border */
+    height: 20px;
+    display: inline-block;
+  }
+
+  .step .line {
+    top: 51px;
+    left: 24px;
+    /*   height: 120px; */
+    height: 33px;
+
+    position: absolute;
+    border-left: 5px solid gray;
+  }
+
+  .step.completed .circle {
+    visibility: visible;
+    background-color: rgb(6, 150, 215);
+    border-color: rgb(6, 150, 215);
+  }
+
+  .step.completed .line {
+    border-left: 3px solid rgb(2, 76, 172);
+  }
+
+  //   .step.active .circle {
+  //     visibility: visible;
+  //     border-color: rgb(6, 150, 215);
+  //   }
+
+  //   .step.empty .circle {
+  //     visibility: hidden;
+  //   }
+
+  //   .step.empty .line {
+  //     /*     visibility: hidden; */
+  //     /*   height: 150%; */
+  //     top: 0;
+  //     height: 150%;
+  //   }
+
+  .step:last-child .line {
+    border-left: 3px solid white;
+    z-index: -1; /* behind the circle to completely hide */
+  }
+
+  .content {
+    margin-left: 20px;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    .timeline {
+      width: 100%;
+    }
+  }
+
+  /* codepen override */
+  html * {
+    font-size: 15px !important;
+    color: #000 !important;
+    font-family: Arial !important;
+  }
+}
+
+.evolution-title {
+  margin: 0 auto !important;
+}

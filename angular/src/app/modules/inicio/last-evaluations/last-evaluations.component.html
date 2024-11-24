@@ -1,0 +1,64 @@
+<p-table
+  [value]="evaluations"
+  [loading]="loading"
+  [showLoader]="false"
+  class="p-datatable-responsive"
+>
+  <ng-template pTemplate="header">
+    <tr>
+      <!-- <th style="width: 150px !important">Fecha</th> -->
+      <th class="text-center">Alumno</th>
+      <th class="text-center">Evaluación</th>
+      <th class="text-center">Nota</th>
+      <th style="width: 75px"></th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-evaluation>
+    <tr>
+      <!-- <td style="width: 150px !important">{{ evaluation?.fecha }}</td> -->
+      <td class="" style="height: 85px">
+        <div class="">
+          <div class="team-text">
+            <span class="p-column-title">Alumno</span>
+            <strong>{{ evaluation?.alumn.full_name }}</strong>
+          </div>
+        </div>
+      </td>
+      <td class="text-center">
+        <span class="p-column-title">Evaluación</span>
+        {{ evaluation?.rubric.name }}
+      </td>
+      <td class="text-center">
+        <span class="p-column-title">Nota</span>
+        {{ evaluation?.evaluation_grade }}
+      </td>
+      <td class="actions_column">
+        <button class="btn outline" (click)="('')">
+          <img src="assets/img/icons/ver.svg" alt="" />
+        </button>
+      </td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="emptymessage" let-columns>
+    <tr>
+      <td colspan="4" style="text-align: center">
+        {{ "LBL_SINREGISTROS" | translate }}
+      </td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="loadingbody" let-columns>
+    <tr *ngFor="let i of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]">
+      <td><p-skeleton width="100%" height="1rem"></p-skeleton></td>
+      <td><p-skeleton width="100%" height="1rem"></p-skeleton></td>
+      <td><p-skeleton width="100%" height="1rem"></p-skeleton></td>
+      <td><p-skeleton width="100%" height="1rem"></p-skeleton></td>
+      <!-- <td><p-skeleton width="100%" height="1rem"></p-skeleton></td>
+      <td><p-skeleton width="100%" height="1rem"></p-skeleton></td>
+      <td class="d-flex justify-content-around">
+        <p-skeleton width="20px" height="1rem"></p-skeleton>
+        <p-skeleton width="20px" height="1rem"></p-skeleton>
+        <p-skeleton width="20px" height="1rem"></p-skeleton>
+      </td> -->
+    </tr>
+  </ng-template>
+</p-table>

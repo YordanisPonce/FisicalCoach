@@ -1,0 +1,49 @@
+<p-dialog
+  class="custom_exersice_dialog"
+  id="test_sub_type_dialog"
+  [modal]="true"
+  header="{{ test?.name }}"
+  [(visible)]="visible"
+  styleClass=""
+  maskStyleClass="purple_mask"
+  (onHide)="closeDialog()"
+>
+  <div id="test_sub_type_dialog_container">
+    <div class="step_content">
+      <div class="row">
+        <div class="mb-4 col-12">
+          <div class="btn-group btn-group-toggle" id="test_btn_group">
+            <div
+              *ngFor="let type of subTypeList"
+              class="btn-group btn-group-toggle"
+              id="test_btn_group"
+            >
+              <div
+                style="text-align: center; width: 100%"
+                class="p-4 d-flex align-items-center justify-content-center"
+                *ngIf="loadingTests && type.id === selected.id"
+              >
+                <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+              </div>
+
+              <label
+                class="btn btn-secondary"
+                (click)="selectSubType(type)"
+                *ngIf="!loadingTests || type.id !== selected?.id"
+              >
+                <input type="radio" name="options" [id]="type.code" />
+                <img
+                  loading="lazy"
+                  src="{{ type.image?.full_url }}"
+                  alt=""
+                  class="test_icon"
+                />
+                <span class="test_name">{{ type.name }}</span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</p-dialog>

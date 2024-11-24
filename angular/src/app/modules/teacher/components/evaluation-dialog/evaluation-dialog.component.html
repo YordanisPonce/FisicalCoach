@@ -1,0 +1,325 @@
+<p-dialog
+  id="evaluation_dialog"
+  class="custom_dialog"
+  [modal]="true"
+  [(visible)]="visible"
+  styleClass="fullscreenDialog"
+  maskStyleClass=""
+  (onShow)="loadData()"
+  (onHide)="closeDialog()"
+>
+  <ng-template pTemplate="header">
+    <div class="header_actions">
+      <!-- accion del jugador -->
+      <div class="header_actions_player box">
+        <button
+          class="btn prev_btn"
+          [disabled]="
+            loading || this.students[0]?.id == this.selectedStudent?.id
+          "
+          (click)="
+            setSelectedStudent(
+              students[getStudentIndex(this.selectedStudent.id) - 1].id,
+              true
+            )
+          "
+        >
+          <i class="pi pi-angle-left"></i>
+        </button>
+        <div class="player">
+          <div
+            *ngIf="
+              selectedStudent &&
+              selectedStudent != null &&
+              loading == false &&
+              selectedStudent.image != null
+            "
+            class="player_image"
+            style="background-image: url({{ selectedStudent.image.full_url }});"
+          ></div>
+
+          <div
+            *ngIf="
+              selectedStudent &&
+              selectedStudent != null &&
+              loading == false &&
+              selectedStudent.image == null &&
+              selectedStudent.gender.code == 'male'
+            "
+            class="player_image"
+            style="background-image: url({{ boyAlumnImage }});"
+          ></div>
+
+          <div
+            *ngIf="
+              selectedStudent &&
+              selectedStudent != null &&
+              loading == false &&
+              selectedStudent.image == null &&
+              selectedStudent.gender.code != 'male'
+            "
+            class="player_image"
+            style="background-image: url({{ girlAlumnImage }});"
+          ></div>
+          <span
+            *ngIf="
+              selectedStudent && selectedStudent != null && loading == false
+            "
+            class="player_name text-main font-weight-600"
+            >{{ selectedStudent.full_name }}</span
+          >
+          <p-skeleton
+            size="30px"
+            shape="circle"
+            class=""
+            *ngIf="loading"
+          ></p-skeleton>
+          <p-skeleton width="100px" *ngIf="loading"></p-skeleton>
+        </div>
+        <button
+          class="btn next_btn"
+          [disabled]="
+            loading ||
+            this.students[this.students.length - 1]?.id ==
+              this.selectedStudent?.id
+          "
+          (click)="
+            setSelectedStudent(
+              students[getStudentIndex(this.selectedStudent.id) + 1].id,
+              true
+            )
+          "
+        >
+          <i class="pi pi-angle-right"></i>
+        </button>
+      </div>
+      <!-- botones de acciones -->
+      <p-scrollPanel [style]="{ width: '100%', height: '66px' }">
+        <div
+          class="header_actions_performance"
+          *ngIf="
+            studentDailyControl &&
+            studentDailyControl != null &&
+            loading == false
+          "
+        >
+          <div
+            class="header_actions_perfomance_item"
+            *ngFor="let item of studentDailyControl.control_items; index as i"
+          >
+            <button class="btn item">
+              <small>{{ item.count }}</small>
+              <span class="icon">
+                <img src="{{ urlImages + item.image_url }}" alt="" />
+                <!-- <i class="pi pi-clock"></i>              -->
+              </span>
+            </button>
+          </div>
+        </div>
+        <div class="header_actions_performance" *ngIf="loading">
+          <div
+            class="header_actions_perfomance_item"
+            *ngFor="let i of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]"
+          >
+            <button class="btn item">
+              <p-skeleton width="40px"></p-skeleton>
+            </button>
+          </div>
+        </div>
+      </p-scrollPanel>
+    </div>
+  </ng-template>
+  <div id="evaluation_dialog_container" class="dialog_container">
+    <div class="dialog_container_header box">
+      <h6 *ngIf="rubric != null">{{ rubric.name }}</h6>
+      <span
+        class="border-right mr-3 d-none d-lg-inline"
+        style="height: 35px"
+      ></span>
+      <div class="date">
+        <div class="title">{{ "evaluation.date" | translate }}</div>
+        <div class="val" *ngIf="rubric && rubric != null">17 / 09 / 2021</div>
+        <div class="val" *ngIf="loading">
+          <p-skeleton width="75px"></p-skeleton>
+        </div>
+      </div>
+      <span
+        class="border-right mr-3 d-none d-lg-inline"
+        style="height: 35px"
+      ></span>
+      <div class="name">
+        <div class="title">{{ "evaluation.class_name" | translate }}</div>
+        <div class="val" *ngIf="rubric && rubric != null">
+          {{ classroomName }}
+        </div>
+      </div>
+      <span
+        class="border-right mr-3 d-none d-lg-inline"
+        style="height: 35px"
+      ></span>
+      <div class="legend">
+        <!-- <div class="title">Leyenda</div> -->
+        <p *ngIf="competencesResult === null"></p>
+        <div
+          class="values"
+          *ngIf="competencesResult != null && competencesResult.length > 0"
+        >
+          <div class="d-flex w-100">
+            <span
+              class="legend_item"
+              *ngFor="let competence of competencesResult"
+            >
+              {{ competence.competence.acronym }}
+              <img
+                [src]="competence.competence.image.full_url"
+                width="30px"
+                alt=""
+                class="mr-1"
+                pTooltip="{{ competence.competence.name }}"
+              />
+              <strong
+                class="ml-1"
+                pTooltip="{{ getCompetenceKey(competence.competence_key) }}"
+                *ngIf="competence.competence_key"
+              >
+                {{ getCompetenceKey(competence.competence_key, true) }}
+              </strong>
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="evaluation_result">
+        <div class="calification">
+          <div class="title">{{ "evaluation.score" | translate }}</div>
+          <div class="val">{{ scoreValue }} / 10</div>
+        </div>
+        <button
+          class="btn btn-primary"
+          [disabled]="loadingEvaluation || loading"
+          (click)="onSubmit()"
+        >
+          <div *ngIf="!loadingEvaluation && !loading">
+            <span *ngIf="evaluateStatus === 'evaluated'">
+              {{ "evaluation.assessEdit" | translate }}
+            </span>
+
+            <span *ngIf="evaluateStatus === 'not_evaluated'">
+              {{ "evaluation.assess" | translate }}
+            </span>
+          </div>
+
+          <span *ngIf="loadingEvaluation || loading">
+            {{ "LBL_LOADING" | translate }}
+          </span>
+        </button>
+      </div>
+    </div>
+    <!-- performance -->
+    <div
+      class="indicators"
+      *ngIf="indicators && indicators.length > 0 && !loading"
+    >
+      <div class="player_performance box" *ngFor="let indicator of indicators">
+        <!-- resume -->
+        <div class="player_performance_resume">
+          <div class="title">
+            <span class="percentage">{{ indicator.percentage }}%</span>
+            <h6>{{ indicator.name }}</h6>
+            <span
+              class="indicator_tooltip"
+              pTooltip="{{ indicator.evaluation_criteria }}"
+              >!</span
+            >
+          </div>
+          <div class="d-flex">
+            <img
+              [src]="competence.image.full_url"
+              width="30px"
+              alt=""
+              *ngFor="let competence of indicator.competences"
+              class="mr-1"
+            />
+          </div>
+          <!-- <p class="resume">Resumen de rúbrica escrita iría aquí importante para saber de que se trata en profundidad</p> -->
+        </div>
+        <!-- evaluations -->
+        <div class="player_performance_evaluation">
+          <p-carousel
+            [value]="indicator.evaluation_performance"
+            [numVisible]="4"
+            [numScroll]="1"
+            [responsiveOptions]="responsiveOptions"
+          >
+            <ng-template let-option pTemplate="item">
+              <div class="evaluation">
+                <div class="evaluation_header">
+                  <h6>{{ option.title }}</h6>
+                  <span
+                    class="evaluation_header_tooltip"
+                    pTooltip="{{ getOptionTooltip(indicator, option.title) }}"
+                    >!</span
+                  >
+                </div>
+                <div class="evaluation_body">
+                  <div class="evaluation_values">
+                    <button
+                      *ngFor="let value of option.values; index as i"
+                      class="btn"
+                      (click)="
+                        selectGrade(
+                          value,
+                          indicator.pivot.id,
+                          indicator.evaluation_performance
+                        )
+                      "
+                      [ngClass]="{ selected: value.selected == true }"
+                    >
+                      <img src="{{ option.icon }}" alt="" width="18px" />
+                      <!-- <img src="https://testing-cdn.fisicalcoach.com/resources/images/face/4_Blue_face.svg" alt="" width="18px"> -->
+                      {{ value.grade }}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </ng-template>
+          </p-carousel>
+        </div>
+      </div>
+    </div>
+
+    <div class="indicators_loaders" *ngIf="loading">
+      <div class="player_performance box" *ngFor="let i of [1, 2, 3, 4]">
+        <!-- resume -->
+        <div class="player_performance_resume">
+          <div class="title">
+            <span>{{ loading ? "-" : "10%" }}</span>
+            <p-skeleton width="100%" class="flex-grow-1"></p-skeleton>
+          </div>
+        </div>
+        <!-- evaluations -->
+        <div class="player_performance_evaluation">
+          <p-carousel
+            [value]="evaluation_performance"
+            [numVisible]="4"
+            [numScroll]="1"
+            [responsiveOptions]="responsiveOptions"
+          >
+            <ng-template let-option pTemplate="item">
+              <div class="evaluation">
+                <div class="evaluation_header bg-light">
+                  <h6>{{ option.title }}</h6>
+                  <span class="evaluation_header_tooltip">!</span>
+                </div>
+                <div class="evaluation_body">
+                  <div class="evaluation_values">
+                    <p-skeleton width="100%" class="flex-grow-1"></p-skeleton>
+                  </div>
+                </div>
+              </div>
+            </ng-template>
+          </p-carousel>
+        </div>
+      </div>
+    </div>
+  </div>
+</p-dialog>

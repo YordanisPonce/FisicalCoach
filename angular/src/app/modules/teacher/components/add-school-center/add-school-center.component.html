@@ -1,0 +1,617 @@
+<div class="" id="add_school_dialog">
+  <div *ngIf="step == 0" class="text-center">
+    <img
+      alt="equipo"
+      class="py-5"
+      src="../../../../assets/img/centro_escolar.svg"
+      width="200px"
+    />
+    <h6 class="mb-4">
+      {{
+        editing
+          ? ("school.LBL_EDIT" | translate)
+          : ("school.LBL_NEW" | translate)
+      }}
+    </h6>
+    <p>
+      {{ "school.new_school_description" | translate }}
+    </p>
+  </div>
+  <div *ngIf="step == 1" class="text-center step_content">
+    <div style="width: 70%; margin-left: auto; margin-right: auto">
+      <p>{{ "school.P4" | translate }}</p>
+    </div>
+
+    <input
+      #file
+      (change)="fileUpload($event, 'image_1')"
+      accept="image/jpeg, image/png, image/jpg, image/svg, image/JPEG, image/PNG, image/JPG, image/SVG"
+      hidden
+      id="filedatag1"
+      type="file"
+    />
+    <img
+      (click)="file.click()"
+      *ngIf="imagenPreview && imagenPreview.url"
+      [src]="imagenPreview.url"
+      style="height: 200px; width: 200px; cursor: pointer"
+    />
+    <img
+      *ngIf="school && school.image && !imageEdit"
+      src="{{ school.image.full_url }}"
+      style="height: 200px; width: 200px; cursor: pointer"
+    /><br />
+    <button (click)="file.click()" class="btn upload_btn mt-4">
+      {{ "school.BTN_UPLOADIMAGE" | translate }}
+    </button>
+    <p class="fototypes">{{ "PLAYERS.FOTOTYPES" | translate }}</p>
+  </div>
+
+  <form
+    *ngIf="formSchool"
+    [formGroup]="formSchool"
+    id="idFormRP"
+    name="nomForm"
+  >
+    <div *ngIf="step == 2" class="step_content">
+      <div [ngClass]="{ '': getScreenWidth() >= 768 }" class="row">
+        <!-- nombre del centro educativo -->
+        <div class="mb-3 col-12">
+          <label for="name">{{ "school.LBL_NAME" | translate }} *</label>
+          <input
+            [ngClass]="{
+              'ng-invalid ng-dirty is-invalid':
+                f.name.invalid && (f.name.dirty || f.name.touched)
+            }"
+            [placeholder]="('school.LBL_DESCRIPTIONNAME' | translate) + '...'"
+            aria-describedby="inputGroup-sizing-default"
+            aria-label="Default"
+            autocomplete="off"
+            class="form-control"
+            formControlName="name"
+            id="name"
+          />
+          <div *ngIf="f.name?.errors" class="invalid-feedback">
+            {{ "validations.required_field" | translate }}
+          </div>
+        </div>
+        <!-- tipo de centro educativo -->
+        <div class="mb-3 col-md-6">
+          <label>{{ "school.center_type" | translate }} *</label>
+          <p-dropdown
+            [ngClass]="{
+              'ng-invalid ng-dirty is-invalid':
+                f.school_center_type_id.invalid &&
+                (f.school_center_type_id.dirty ||
+                  f.school_center_type_id.touched)
+            }"
+            [options]="schoolCenterTypeList"
+            [styleClass]="'w-100 form-control'"
+            aria-describedby="inputGroup-sizing-default"
+            formControlName="school_center_type_id"
+            id="school_center_type_id"
+            placeholder="{{ 'LBL_SELECCIONE' | translate }}"
+          ></p-dropdown>
+          <div *ngIf="f.school_center_type_id?.errors" class="invalid-feedback">
+            {{ "validations.required_field" | translate }}
+          </div>
+        </div>
+
+        <!-- email -->
+        <div class="mb-3 col-12 col-md-6">
+          <label for="email"> {{ "school.email" | translate }}</label>
+          <input
+            [placeholder]="'school.LBL_EMAIL' | translate"
+            aria-describedby="inputGroup-sizing-default"
+            aria-label="Default"
+            autocomplete="off"
+            class="form-control"
+            formControlName="email"
+            id="email"
+          />
+        </div>
+
+        <!-- pais -->
+        <div class="mb-3 col-12 col-md-6">
+          <label for="country">{{ "school.LBL_COUNTRY" | translate }}</label>
+          <p-dropdown
+            (onChange)="getProvince($event.value)"
+            [filter]="true"
+            [options]="listCountries"
+            [styleClass]="'w-100 form-control'"
+            aria-describedby="inputGroup-sizing-default"
+            formControlName="country_id"
+            id="country"
+            placeholder="{{ 'school.LBL_DESCRIPTIONNAME' | translate }}"
+          >
+          </p-dropdown>
+        </div>
+
+        <!-- provincia -->
+        <div class="mb-3 col-12 col-md-6">
+          <label for="province_id">{{ "school.LBL_STATE" | translate }}</label>
+          <p-dropdown
+            [filter]="true"
+            [options]="listProvincies"
+            [styleClass]="'w-100 form-control'"
+            aria-describedby="inputGroup-sizing-default"
+            formControlName="province_id"
+            id="province_id"
+            placeholder="{{ 'school.LBL_DESCRIPTIONNAME' | translate }}"
+          ></p-dropdown>
+        </div>
+
+        <!-- calle -->
+        <div class="mb-3 col-12 col-md-6">
+          <label for="street">{{ "school.LBL_ADDRESS" | translate }}</label>
+          <input
+            [placeholder]="'school.LBL_DESCRPTIONSTREET' | translate"
+            aria-describedby="inputGroup-sizing-default"
+            aria-label="Default"
+            autocomplete="off"
+            class="form-control"
+            formControlName="street"
+            id="street"
+          />
+        </div>
+
+        <!-- codigo postal -->
+        <div class="mb-3 col-12 col-md-6">
+          <label for="postal_code">{{
+            "school.LBL_POSTALCODE" | translate
+          }}</label>
+          <input
+            [placeholder]="'school.LBL_DESCRIPTIONPOSTALCODE' | translate"
+            aria-describedby="inputGroup-sizing-default"
+            aria-label="Default"
+            autocomplete="off"
+            class="form-control"
+            formControlName="postal_code"
+            id="postal_code"
+          />
+        </div>
+
+        <!-- ciudad -->
+        <div class="mb-3 col-12 col-md-6">
+          <label for="city">{{ "school.LBL_CITY" | translate }}</label>
+          <input
+            [placeholder]="'school.LBL_DESCRIPTIONCITY' | translate"
+            aria-describedby="inputGroup-sizing-default"
+            aria-label="Default"
+            autocomplete="off"
+            class="form-control"
+            formControlName="city"
+            id="city"
+          />
+        </div>
+
+        <!-- pagina web -->
+        <div class="mb-3 col-12 col-md-6">
+          <label for="webpage"> {{ "school.webpage" | translate }}</label>
+          <input
+            [placeholder]="'school.LBL_WEBPAGE' | translate"
+            aria-describedby="inputGroup-sizing-default"
+            aria-label="Default"
+            autocomplete="off"
+            class="form-control"
+            formControlName="webpage"
+            id="webpage"
+          />
+        </div>
+
+        <!-- mobil -->
+        <div class="mb-3 col-12" style="display: flex; flex-direction: column">
+          <label for="mobile_phone">Móvil</label>
+          <p-chips
+            (keyup)="validateMobile($event)"
+            [addOnBlur]="true"
+            formControlName="mobile_phone"
+            id="mobile_phone"
+            placeholder="+12345678"
+            separator=","
+          ></p-chips>
+        </div>
+
+        <!-- telefono fijo -->
+        <div class="mb-3 col-12" style="display: flex; flex-direction: column">
+          <label>Teléfono fijo</label>
+          <p-chips
+            (keyup)="validatePhone($event)"
+            [addOnBlur]="true"
+            formControlName="phone"
+            id="phone"
+            placeholder="+12345678"
+            separator=","
+          ></p-chips>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="step == 3" class="step_content">
+      <div class="row">
+        <!-- nombre a#o academico -->
+        <div class="mb-3 col-12">
+          <label for="academic_year_name">{{
+            "school.academic_year.name" | translate
+          }}</label>
+          <input
+            [ngClass]="{
+              'ng-invalid ng-dirty is-invalid':
+                f.academic_year_name.invalid &&
+                (f.academic_year_name.dirty || f.academic_year_name.touched)
+            }"
+            [placeholder]="'school.academic_year.name' | translate"
+            aria-describedby="inputGroup-sizing-default"
+            aria-label="Default"
+            autocomplete="off"
+            class="form-control"
+            formControlName="academic_year_name"
+            id="academic_year_name"
+          />
+          <div *ngIf="f.academic_year_name?.errors" class="invalid-feedback">
+            {{ "validations.required_field" | translate }}
+          </div>
+        </div>
+        <!-- fecha de inicio academic year -->
+        <div class="mb-3 col-12 col-md-6">
+          <label>{{ "school.academic_year.start_date" | translate }}</label>
+          <p-calendar
+            (onSelect)="setDates($event, 'yearStart')"
+            [firstDayOfWeek]="1"
+            [monthNavigator]="true"
+            [ngClass]="{
+              'ng-invalid ng-dirty is-invalid':
+                f.academic_year_start_date.invalid &&
+                (f.academic_year_start_date.dirty ||
+                  f.academic_year_start_date.touched)
+            }"
+            [readonlyInput]="true"
+            [style]="{ overflow: 'visible' }"
+            [yearNavigator]="true"
+            class="p-calendar form-control"
+            dateFormat="dd/mm/yy"
+            formControlName="academic_year_start_date"
+            inputId="start_date"
+            placeholder="{{ 'school.academic_year.start_date' | translate }}"
+          ></p-calendar>
+          <div
+            *ngIf="f.academic_year_start_date?.errors"
+            class="invalid-feedback"
+          >
+            {{ "validations.required_field" | translate }}
+          </div>
+        </div>
+
+        <!-- fecha de fin academic year -->
+        <div class="mb-3 col-12 col-md-6">
+          <label>{{ "school.academic_year.end_date" | translate }}</label>
+          <p-calendar
+            (onSelect)="setDates($event, 'yearEnd')"
+            [disabled]="!dates.yearStart || dates.yearStart == null"
+            [firstDayOfWeek]="1"
+            [minDate]="dates.yearStart"
+            [monthNavigator]="true"
+            [ngClass]="{
+              'ng-invalid ng-dirty is-invalid':
+                f.academic_year_end_date.invalid &&
+                (f.academic_year_end_date.dirty ||
+                  f.academic_year_end_date.touched)
+            }"
+            [readonlyInput]="true"
+            [style]="{ overflow: 'visible' }"
+            [yearNavigator]="true"
+            class="p-calendar form-control"
+            dateFormat="dd/mm/yy"
+            formControlName="academic_year_end_date"
+            inputId="end_date"
+            placeholder="{{ 'school.academic_year.end_date' | translate }}"
+             
+          ></p-calendar>
+          <div
+            *ngIf="f.academic_year_end_date?.errors"
+            class="invalid-feedback"
+          >
+            {{ "validations.required_field" | translate }}
+          </div>
+        </div>
+        <div class="mb-3 col-12 col-md-6">
+          <p-checkbox
+            [binary]="true"
+            formControlName="academic_year_is_active"
+            label="{{ 'ACTIVO' | translate }}"
+            name="groupname"
+          ></p-checkbox>
+        </div>
+        <!-- lista de periodos academic year -->
+        <div class="col-12">
+          <div class="d-flex justify-content-between">
+            <div>
+              <label for="academic_year_name" style="margin-right: 10px"
+                >{{ "school.academic_year.periods" | translate }}
+              </label>
+              <i
+                class="pi pi-info-circle"
+                pTooltip="{{ 'school.academic_year.tooltip' | translate }}"
+                style="color: #04e9c5; font-size: 20px"
+              ></i>
+            </div>
+            <button
+              (click)="periodDialog = true"
+              [disabled]="
+                f.academic_year_start_date?.errors ||
+                f.academic_year_end_date?.errors
+              "
+              class="btn btn_add_period btn-sm"
+            >
+              <span
+                style="
+                  font-size: 16px;
+                  color: #034cac;
+                  cursor: pointer;
+                  opacity: 1;
+                "
+                >{{ "school.academic_year.add_period" | translate }} +</span
+              >
+            </button>
+          </div>
+          <div
+            [ngClass]="{
+              'ng-invalid ng-dirty is-invalid':
+                f.academic_year_periods.invalid &&
+                (f.academic_year_periods.dirty ||
+                  f.academic_year_periods.touched)
+            }"
+            class="periods_table"
+          >
+            <p-table [value]="academicPeriodList" selectionMode="single">
+              <ng-template pTemplate="header">
+                <tr class="text-center">
+                  <th class="text-center">
+                    {{
+                      "school.academic_year.nametable" | translate | translate
+                    }}
+                  </th>
+                  <th class="text-center">
+                    {{ "school.academic_year.start_date_period" | translate }}
+                  </th>
+                  <th class="text-center">
+                    {{ "school.academic_year.end_date_period" | translate }}
+                  </th>
+                  <th class="text-center">
+                    {{ "academicyear.active" | translate }}
+                  </th>
+                  <th class="text-center" style="width: 9%"></th>
+                </tr>
+              </ng-template>
+              <ng-template let-rowIndex="rowIndex" let-year pTemplate="body">
+                <tr>
+                  <td class="text-center">{{ year.title }}</td>
+                  <td class="text-center">{{ year.start_date | date: 'dd/MM/YYYY' }}</td>
+                  <td class="text-center">{{ year.end_date | date: 'dd/MM/YYYY' }}</td>
+                  <td class="text-center">
+                    <p-inputSwitch
+                      (onChange)="onChangeStatus($event, rowIndex)"
+                      [(ngModel)]="year.is_active"
+                      [ngModelOptions]="{ standalone: true }"
+                      pTooltip="{{
+                        year.is_active
+                          ? ('academicyear.disable' | translate)
+                          : ('academicyear.enable' | translate)
+                      }}"
+                      tooltipPosition="top"
+                    >
+                    </p-inputSwitch>
+                  </td>
+                  <td class="text-center">
+                    <button (click)="removePeriod(rowIndex)" class="btn">
+                      <i class="fa fa-close"></i>
+                    </button>
+                  </td>
+                </tr>
+              </ng-template>
+              <ng-template let-columns pTemplate="emptymessage">
+                <tr>
+                  <td colspan="4" style="text-align: center">
+                    {{ "LBL_SINREGISTROS" | translate }}
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
+          <div>
+            <input
+              [ngClass]="{
+                'ng-invalid ng-dirty is-invalid':
+                  f.academic_year_periods.invalid &&
+                  (f.academic_year_periods.dirty ||
+                    f.academic_year_periods.touched)
+              }"
+              class="form-control"
+              formControlName="name"
+              id="name"
+              type="hidden"
+            />
+            <div
+              *ngIf="f.academic_year_periods?.errors"
+              class="invalid-feedback"
+            >
+              {{ "validations.required_field" | translate }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <div *ngIf="step != 0">
+    <div>
+      <ul class="step_markers full_markers">
+        <li>
+          <span
+            (click)="step = 1"
+            [ngClass]="{ active: step == 1 }"
+            class="step_marker"
+          ></span>
+        </li>
+        <li>
+          <span [ngClass]="{ active: step == 2 }" class="step_marker"></span>
+        </li>
+        <li>
+          <span [ngClass]="{ active: step == 3 }" class="step_marker"></span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div class="footer_btns">
+  <button
+    (click)="step > 0 ? (step = step - 1) : closeModal()"
+    [ngClass]="{ shrink_btn: step > 0 }"
+    class="btn back_btn"
+  >
+    {{ "LBL_ATRAS" | translate }}
+  </button>
+  <button
+    (click)="validateStep()"
+    [disabled]="loadingSubmit"
+    [ngClass]="{ shrink_btn: step == 1 }"
+    class="btn next_btn"
+  >
+    <span>
+      {{
+        step < 3
+          ? ("LBL_SIGUIENTE" | translate)
+          : editing
+          ? ("LBL_EDIT" | translate)
+          : ("academySidebar.create" | translate)
+      }}
+    </span>
+  </button>
+</div>
+
+<!-- dialog a#adir periodo academico -->
+<p-dialog
+  [(visible)]="periodDialog"
+  [draggable]="false"
+  [modal]="true"
+  class="custom_dialog_period"
+  header="{{ 'school.academic_year.periods' | translate }}"
+  id="dialog_config_member"
+  [style]="{ 'border-radius': '0' }"
+  maskStyleClass="purple_mask"
+>
+  <form [formGroup]="periodForm" id="idForm" name="nomForm">
+    <div class="dialog_container">
+      <!-- esto aqui va para el modal -->
+      <div [ngClass]="{ '': getScreenWidth() >= 768 }" class="row">
+        <div class="mb-3 col-12">
+          <label for="academic_year_name">{{
+            "school.academic_year.period_name" | translate
+          }}</label>
+          <input
+            [ngClass]="{
+              'ng-invalid ng-dirty is-invalid':
+                addPeriodControls.academic_year_period_title.invalid &&
+                (addPeriodControls.academic_year_period_title.dirty ||
+                  addPeriodControls.academic_year_period_title.touched)
+            }"
+            [placeholder]="'school.academic_year.period_name' | translate"
+            aria-describedby="inputGroup-sizing-default"
+            aria-label="Default"
+            autocomplete="off"
+            class="form-control"
+            formControlName="academic_year_period_title"
+            id="academic_year_period_title"
+          />
+          <div
+            *ngIf="addPeriodControls.academic_year_period_title?.errors"
+            class="invalid-feedback"
+          >
+            {{ "validations.required_field" | translate }}
+          </div>
+        </div>
+
+        <div class="mb-3 col-12 col-md-6">
+          <label>
+            {{ "school.academic_year.start_date_period" | translate }}</label
+          >
+          <p-calendar
+            (onSelect)="setDates($event, 'periodStart')"
+            [disabledDates]="disabledDates"
+            [firstDayOfWeek]="1"
+            [maxDate]="dates.yearEnd"
+            [minDate]="dates.yearStart"
+            [monthNavigator]="true"
+            [ngClass]="{
+              'ng-invalid ng-dirty is-invalid':
+                addPeriodControls.academic_year_period_start_date.invalid &&
+                (addPeriodControls.academic_year_period_start_date.dirty ||
+                  addPeriodControls.academic_year_period_start_date.touched)
+            }"
+            [readonlyInput]="true"
+            [style]="{ overflow: 'visible' }"
+            [yearNavigator]="true"
+            class="p-calendar form-control"
+            dateFormat="dd/mm/yy"
+            formControlName="academic_year_period_start_date"
+            inputId="start_date"
+            placeholder="{{
+              'school.academic_year.start_date_period' | translate
+            }}"
+          ></p-calendar>
+          <div
+            *ngIf="addPeriodControls.academic_year_period_start_date?.errors"
+            class="invalid-feedback"
+          >
+            {{ "validations.required_field" | translate }}
+          </div>
+        </div>
+
+        <div class="mb-3 col-12 col-md-6">
+          <label>{{
+            "school.academic_year.end_date_period" | translate
+          }}</label>
+          <p-calendar
+            (onSelect)="setDates($event, 'periodEnd')"
+            [disabledDates]="disabledDates"
+            [firstDayOfWeek]="1"
+            [maxDate]="dates.yearEnd"
+            [minDate]="dates.yearStart"
+            [monthNavigator]="true"
+            [ngClass]="{
+              'ng-invalid ng-dirty is-invalid':
+                addPeriodControls.academic_year_period_end_date.invalid &&
+                (addPeriodControls.academic_year_period_end_date.dirty ||
+                  addPeriodControls.academic_year_period_end_date.touched)
+            }"
+            [readonlyInput]="true"
+            [style]="{ overflow: 'visible' }"
+            [yearNavigator]="true"
+            class="p-calendar form-control"
+            dateFormat="dd/mm/yy"
+            formControlName="academic_year_period_end_date"
+            inputId="end_date"
+            placeholder="{{
+              'school.academic_year.end_date_period' | translate
+            }}"
+          ></p-calendar>
+
+          <div
+            *ngIf="addPeriodControls.academic_year_period_end_date?.errors"
+            class="invalid-feedback"
+          >
+            {{ "validations.required_field" | translate }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+  <ng-template pTemplate="footer">
+    <div class="footer_btns">
+      <button class="back_btn btn">{{ "LBL_ATRAS" | translate }}</button>
+      <button (click)="addPeriod()" class="btn next_btn">
+        <span>{{ "school.academic_year.add_period" | translate }}</span>
+      </button>
+    </div>
+  </ng-template>
+</p-dialog>

@@ -1,0 +1,48 @@
+<p-dialog id="export_rubric_dialog" class="custom_dialog" [modal]="true" [(visible)]="visible" maskStyleClass="purple_mask" (onHide)="closeDialog()">
+    <ng-template pTemplate="header">
+      <div>
+        <h6>{{"export_rubric.export_rubric" | translate}}</h6>
+        <p>{{"export_rubric.select_class" | translate}}.</p>
+      </div>
+    </ng-template>
+    <div id="export_rubric_dialog_container" class="dialog_container">
+        <div class="selected_rubric mb-5" *ngIf="rubric && rubric!=null">
+            <div class="rubric_name">
+                <span class="icon">
+                    <img src="/assets/img/icons/ver_blue.svg" alt="">
+                </span>
+                {{rubric.name}}
+            </div>
+            <!-- <span class="icon">
+                <img src="/assets/img/icons/ver_blue.svg" alt="">
+            </span> -->
+        </div>
+        <div class="class_list">
+            <p-selectButton [options]="classes" [(ngModel)]="selectedClass" optionLabel="name" optionValue="">
+                <ng-template let-item pTemplate>
+                    <div class="class_option">
+                        <div class="class_info">
+                            <span class="class_image" style="background-image: url(https://cdn.vuetifyjs.com/images/john.jpg);">
+
+                            </span>
+                            <div class="text-left">
+                                <h6 class="mb-0">
+                                    {{item.name}}
+                                </h6>
+                                <small>27 Miembros</small>
+                            </div>
+                        </div>
+                        <span class="radio_btn">
+                        </span>
+                    </div>
+                </ng-template>
+            </p-selectButton>
+        </div>    
+    </div>
+    <ng-template pTemplate="footer">
+      <div class="footer_btns">
+        <button class="back_btn btn">{{"LBL_ATRAS" | translate}}</button>
+        <button class="next_btn btn" (click)="onSubmit()" [disabled]="(selectedClass==null || loading == true)">{{"export_rubric.export" | translate}}</button>
+      </div>
+    </ng-template>
+</p-dialog>

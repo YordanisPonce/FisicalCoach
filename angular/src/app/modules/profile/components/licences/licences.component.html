@@ -1,0 +1,287 @@
+<div class="wrapper">
+  <div class="w-100 text-right mb-4">
+    <button
+      class="btn btn-primary delete-licence-button mr-2"
+      [disabled]="selectedLicenses.length === 0 || loadingCount"
+      (click)="submit('decrement')"
+    >
+      <div *ngIf="!loadingCount">
+        <span>{{ "profile.delete" | translate }} </span>
+        <span>({{ selectedLicenses.length }})</span>
+        <span>
+          {{ "profile.license" | translate
+          }}{{
+            selectedLicenses.length > 1 || selectedLicenses.length === 0
+              ? "s"
+              : ""
+          }}</span
+        >
+      </div>
+
+      <div *ngIf="loadingCount">
+        <span> {{ "LBL_GUARDANDO" | translate }}</span>
+      </div>
+    </button>
+
+    <button
+      class="btn btn-primary delete-licence-button mx-2"
+      (click)="showAddLicenses = true"
+    >
+      {{ "profile.addLicenses" | translate }}
+    </button>
+  </div>
+
+  <p-table
+    *ngIf="!loading"
+    [value]="licences"
+    [(selection)]="selectedLicenses"
+    selectionMode="single"
+    class="p-datatable-responsive"
+  >
+    <ng-template pTemplate="header">
+      <tr class="text-center">
+        <th style="width: 4rem">
+          <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+        </th>
+        <th [width]="'15%'" class="text-center"></th>
+        <th [width]="'50%'" class="text-center">
+          <strong>{{ "profile.invitado" | translate }}</strong>
+        </th>
+        <th [width]="'30%'" class="text-center">
+          <strong>{{ "profile.estado" | translate }}</strong>
+        </th>
+        <th [width]="'35%'" class="text-center">
+          <strong>
+            {{ "LBL_ACTIONS" | translate }}
+          </strong>
+        </th>
+      </tr>
+    </ng-template>
+    <ng-template let-i="rowIndex" let-licence pTemplate="body">
+      <tr>
+        <td>
+          <p-tableCheckbox [value]="licence"></p-tableCheckbox>
+        </td>
+        <td [width]="'15%'">
+          <strong> {{ i + 1 }}</strong>
+        </td>
+        <td [width]="'50%'">
+          <span class="p-column-title">{{
+            "profile.invitado" | translate
+          }}</span>
+          <input
+            (change)="inputChange(i)"
+            (ngModelChange)="inputChange(i)"
+            [(ngModel)]="licenceList[i].user.email"
+            [disabled]="licenceStatus.includes(licence.status)"
+            autocomplete="none"
+            class="form-control"
+            pInputText
+            placeholder="{{ 'invite_members.email' | translate }}"
+            type="email"
+          />
+        </td>
+        <td [width]="'35%'" class="text-center">
+          <div>
+            <span class="p-column-title">{{
+              "profile.estado" | translate
+            }}</span>
+          </div>
+          <strong>{{ "invite_members." + licence.status | translate }}</strong>
+        </td>
+        <td [width]="'35%'">
+          <div
+            class="text-center w-100 d-flex justify-content-center align-items-center"
+            *ngIf="!licenceList[i].hideAction"
+          >
+            <button
+              (click)="submitInvitation(i)"
+              *ngIf="licence.status === 'available'"
+              [disabled]="
+                loadingInvitation[i] ||
+                loadingRevoking[i] ||
+                !licenceList[i].isValid
+              "
+              [pTooltip]="
+                loadingInvitation[i]
+                  ? ('LBL_SENDING' | translate)
+                  : ('invite_members.sendLicence' | translate)
+              "
+              class="btn btn-primary submit-button mr-2"
+            >
+              <span *ngIf="!loadingInvitation[i]">
+                {{ "invite_members.sendLicence" | translate }}
+              </span>
+              <span *ngIf="loadingInvitation[i]">
+                {{ "LBL_SENDING" | translate }}
+              </span>
+            </button>
+            <button
+              (click)="revokeInvitation(i)"
+              *ngIf="licenceStatus.includes(licence.status)"
+              [disabled]="loadingRevoking[i]"
+              [pTooltip]="
+                loadingRevoking[i]
+                  ? ('LBL_SENDING' | translate)
+                  : ('invite_members.revoke' | translate)
+              "
+              class="btn btn-primary submit-button mr-2"
+            >
+              <span *ngIf="!loadingRevoking[i]">
+                {{ "invite_members.revoke" | translate }}
+              </span>
+              <span *ngIf="loadingRevoking[i]">
+                {{ "LBL_SENDING" | translate }}
+              </span>
+            </button>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+
+  <p-table *ngIf="loading" [value]="[2]" selectionMode="single">
+    <ng-template pTemplate="header">
+      <tr class="text-center">
+        <th [width]="'15%'" class="text-center"></th>
+        <th [width]="'50%'" class="text-center">
+          {{ "profile.invitado" | translate }}
+        </th>
+        <th [width]="'30%'" class="text-center">
+          <strong>{{ "profile.estado" | translate }}</strong>
+        </th>
+        <th [width]="'35%'" class="text-center">
+          {{ "LBL_ACTIONS" | translate }}
+        </th>
+      </tr>
+    </ng-template>
+    <ng-template let-i="rowIndex" let-licence pTemplate="body">
+      <tr>
+        <td [width]="'15%'">
+          <p-skeleton width="4rem"></p-skeleton>
+        </td>
+        <td [width]="'50%'">
+          <p-skeleton width="18rem"></p-skeleton>
+        </td>
+        <td [width]="'20%'">
+          <p-skeleton width="10rem"></p-skeleton>
+        </td>
+        <td [width]="'35%'" class="text-center">
+          <p-skeleton width="12rem"></p-skeleton>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+
+<p-dialog
+  id="add_space_dialog_club"
+  [modal]="true"
+  class="custom_dialog"
+  [style]="{ 'max-width': '600px', width: '100%' }"
+  maskStyleClass="purple_mask"
+  header="{{ 'profile.addLicenses' | translate }}"
+  [(visible)]="showAddLicenses"
+  (onHide)="showAddLicenses = false"
+>
+  <div class="d-flex align-items-center justify-content-center">
+    <div>
+      <p-button
+        [disabled]="this.numberOfLicenses <= 0"
+        icon="pi pi-minus"
+        styleClass="p-button-rounded btn-primary"
+        (onClick)="handleLicensesNumber('rest')"
+      ></p-button>
+    </div>
+    <div class="mx-3">
+      <input
+        class="form-control licence-input"
+        type="number"
+        disabled
+        [(ngModel)]="numberOfLicenses"
+        (ngModelChange)="handleInputChange($event)"
+      />
+    </div>
+    <div>
+      <p-button
+        icon="pi pi-plus"
+        styleClass="p-button-rounded btn-primary"
+        (onClick)="handleLicensesNumber('add')"
+      ></p-button>
+    </div>
+  </div>
+  <div class="mt-5 text-center">
+    <p class="text-center text-danger">
+      <strong>{{ "profile.licenceCharge" | translate }}</strong>
+    </p>
+  </div>
+
+  <p-footer>
+    <div class="footer_btns">
+      <button
+        (click)="showAddLicenses = false"
+        class="btn back_btn"
+        style="text-align: center"
+      >
+        {{ "LBL_CERRAR" | translate }}
+      </button>
+
+      <button
+        class="btn next_btn"
+        (click)="showConfirmDialog = true"
+        [disabled]="numberOfLicenses === 0 || loadingCount"
+      >
+        <span *ngIf="loadingCount"> {{ "LBL_GUARDANDO" | translate }}</span>
+        <span *ngIf="!loadingCount"> {{ "LBL_ANADIR" | translate }}</span>
+      </button>
+    </div>
+  </p-footer>
+</p-dialog>
+
+<p-dialog
+  id="add_space_dialog_club"
+  [modal]="true"
+  class="custom_dialog"
+  [style]="{ 'max-width': '600px', width: '100%' }"
+  maskStyleClass="purple_mask"
+  header="{{ 'profile.addLicenses' | translate }}"
+  [(visible)]="showConfirmDialog"
+  (onHide)="showConfirmDialog = false"
+>
+  <div class="mt-2 text-center">
+    <p class="text-center">
+      {{
+        "profile.youAreUpgradindLicenses"
+          | translate
+            : {
+                currentLicenses: licences.length,
+                newLicences: licences.length + numberOfLicenses,
+                newAmount: this.packageNewAmount
+              }
+      }}
+    </p>
+
+    <p class="text-center mt-3">{{ "profile.areYouSure" | translate }}</p>
+  </div>
+
+  <p-footer>
+    <div class="footer_btns">
+      <button
+        (click)="showConfirmDialog = false"
+        class="btn back_btn"
+        style="text-align: center"
+      >
+        {{ "LBL_CERRAR" | translate }}
+      </button>
+
+      <button
+        class="btn next_btn"
+        (click)="submit('increment')"
+        [disabled]="numberOfLicenses === 0 || loadingCount"
+      >
+        <span *ngIf="loadingCount"> {{ "LBL_GUARDANDO" | translate }}</span>
+        <span *ngIf="!loadingCount"> {{ "BTN_CONFIRMAR" | translate }}</span>
+      </button>
+    </div>
+  </p-footer>
+</p-dialog>

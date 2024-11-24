@@ -1,0 +1,118 @@
+<div
+  class=""
+  id="sidebar-wrapper"
+  class="mini-sidebar"
+>
+  <!-- cabecera con el logo -->
+  <div
+    class="sidebar-heading d-none d-xl-flex align-items-center"
+  >
+    <img
+      alt="logo"
+      class="principalImg"
+      loading="lazy"
+      [src]="rutaImagen + 'images/logos/logo_panel.svg'"
+    />
+  </div>
+
+  <div class="list-group list-group-flush w-100 academias">
+    <p-scrollPanel [style]="{ width: '100%', height: 'inherit' }">
+      <div *ngIf="loadingMenu" style="padding: 10px; text-align: center">
+        <div *ngFor="let i of [1, 2, 3]" class="d-flex py-3 mb-3">
+          <p-skeleton shape="circle" size="35px" styleClass="mr-2"></p-skeleton>
+          <div class="flex-grow-1">
+            <p-skeleton
+              height="15px"
+              shape="rectangle"
+              styleClass="mb-2"
+              width="100%"
+            ></p-skeleton>
+            <p-skeleton
+              height="10px"
+              shape="rectangle"
+              width="50%"
+            ></p-skeleton>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="!loadingMenu">
+        <a          
+          *ngIf="
+            !loadingMenu
+          "
+          class="d-flex align-items-center list-group-item list-group-item-action sidebar-item border-0"
+        >
+          <span
+            class="sidebar-item-img rounded-circle d-flex align-items-center justify-content-center bg-transparent"
+          >
+            <img
+              loading="add_space"
+              alt="house"
+              src="{{ resources + '/images/menu/user_green.svg' }}"
+              width="30px"
+              class="group-image-hover"
+            />
+            <img
+              loading="add_space"
+              src="{{ resources + '/images/menu/user_white.svg' }}"
+              width="30px"
+              class="group-image"
+            />
+          </span>
+        </a>
+
+        <a          
+          *ngIf="
+            !loadingMenu
+          "
+          class="d-flex align-items-center list-group-item list-group-item-action sidebar-item border-0"
+        >
+          <span
+            class="sidebar-item-img rounded-circle d-flex align-items-center justify-content-center bg-transparent"
+          >
+            <img
+              loading="add_space"
+              alt="house"
+              src="{{ resources + '/images/menu/subcription_green.svg' }}"
+              width="30px"
+              class="group-image-hover"
+            />
+            <img
+              loading="add_space"
+              src="{{ resources + '/images/menu/subcription_green.svg' }}"
+              width="30px"
+              class="group-image"
+            />
+          </span>
+        </a>
+
+        <a          
+          *ngIf="
+            !loadingMenu
+          "
+          class="d-flex align-items-center list-group-item list-group-item-action sidebar-item border-0"
+        >
+          <span
+            class="sidebar-item-img rounded-circle d-flex align-items-center justify-content-center bg-transparent"
+          >
+            <img
+              loading="add_space"
+              alt="house"
+              src="{{ resources + '/images/menu/invoice_green.svg' }}"
+              width="30px"
+              class="group-image-hover"
+            />
+            <img
+              loading="add_space"
+              src="{{ resources + '/images/menu/invoice_green.svg' }}"
+              width="30px"
+              class="group-image"
+            />
+          </span>
+        </a>
+      </div>
+    </p-scrollPanel>
+  </div>
+
+</div>

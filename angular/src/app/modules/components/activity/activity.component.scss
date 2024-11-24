@@ -1,0 +1,96 @@
+:host ::ng-deep {
+  .p-scrollpanel-content {
+    padding: 0;
+  }
+
+  .card {
+    @media screen and (max-width: 650px) {
+      margin-bottom: 120px !important;
+    }
+  }
+
+  .p-scrollpanel-wrapper {
+    @media screen and (max-width: 500px) {
+      height: 250px !important;
+    }
+  }
+}
+
+.open {
+  width: 650px;
+  max-height: 300px;
+
+  @media screen and (max-width: 500px) {
+    max-height: 800px;
+  }
+}
+
+.open-text {
+  font-size: 0.95rem;
+}
+
+.list {
+  // max-height: 660px;
+  // overflow-x: hidden;
+}
+
+.list-wrapper {
+  width: "100%";
+  padding: 0;
+  height: 550px;
+  overflow: scroll;
+  overflow-x: unset !important;
+}
+
+.activity_header {
+  display: flex;
+  justify-content: space-between;
+  padding: 2rem;
+  border-bottom: 1px solid #70707012;
+  span:not(.title) {
+    color: #050c44;
+    opacity: 0.33;
+    font-size: 0.9rem;
+    font-weight: 700;
+  }
+}
+.activity {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #70707012 !important;
+
+  .activity_avatar {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f8f8f864 0% 0% no-repeat padding-box;
+  }
+  .activity_content {
+    .title {
+      font-size: 0.875rem;
+      font-weight: 600;
+    }
+    small {
+      color: #050c44;
+      opacity: 0.5;
+      font-weight: 600;
+    }
+  }
+}
+.activity_footer {
+  cursor: pointer;
+  span {
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+
+  @media (max-width: 1200px) {
+    padding-bottom: 4rem !important;
+  }
+}
+.icon-float {
+  color: #01e9c2;
+  font-size: 22px;
+}

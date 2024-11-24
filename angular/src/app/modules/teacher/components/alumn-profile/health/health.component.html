@@ -1,0 +1,95 @@
+<div class="row">
+  <div id="player_information_menu" class="col-lg-4">
+    <div class="card soft-shadow">
+      <div class="card-header">
+        {{ "PLAYERHEALTH.LBL_ESTADOSALUD" | translate }}
+      </div>
+      <div class="card-body p-0">
+        <div
+          class="nav flex-column nav-pills"
+          id="v-pills-tab"
+          role="tablist"
+          aria-orientation="vertical"
+        >
+          <a
+            class="nav-link active"
+            id="v-pills-general-information-data-tab"
+            data-toggle="pill"
+            href="#v-pills-general-information-data"
+            role="tab"
+            aria-controls="v-pills-general-information-data"
+            aria-selected="true"
+            >{{ "PLAYERHEALTH.LBL_INFOGENERAL" | translate }}</a
+          >
+          <a
+            class="nav-link"
+            id="v-pills-sporting-data-tab"
+            data-toggle="pill"
+            href="#v-pills-sporting-data"
+            role="tab"
+            aria-controls="v-pills-sporting-data"
+            aria-selected="false"
+            >{{ "PLAYERHEALTH.LBL_HISLESIONES" | translate }}</a
+          >
+          <a
+            class="nav-link"
+            id="v-pills-injury-details-tab"
+            data-toggle="pill"
+            href="#v-pills-injury-details"
+            role="tab"
+            aria-controls="v-pills-injury-details"
+            aria-selected="false"
+            style="display: none"
+            >Detalles de lesion</a
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-8">
+    <div class="card soft-shadow">
+      <div class="card-header">
+        <span class="icon_left mr-3" *ngIf="nestedChildActive" (click)="closeNestedChildComponent()">
+          <i class="fas fa-chevron-left"></i>
+        </span>
+        {{ "PLAYERHEALTH.LBL_INFOGENERAL" | translate }}
+      </div>
+      <div class="card-body p-0">
+        <div class="tab-content" id="v-pills-tabContent">
+          <!-- panel uno -->
+          <div
+            class="tab-pane fade show active p-3"
+            id="v-pills-general-information-data"
+            role="tabpanel"
+            aria-labelledby="v-pills-general-information-data-tab"
+          >
+            <app-player-health-information-data></app-player-health-information-data>
+          </div>
+          <!-- panel dos -->
+          <div
+            class="tab-pane fade"
+            id="v-pills-sporting-data"
+            role="tabpanel"
+            aria-labelledby="v-pills-sporting-data-tab"
+          >
+            <app-player-health-injuries-history-data
+              (details)="setInjuryDetails($event)"
+              (totalInjuries)="nestedChildActive = $event"
+            ></app-player-health-injuries-history-data>
+          </div>
+          <!-- panel tres -->
+          <div
+            class="tab-pane fade"
+            id="v-pills-injury-details"
+            role="tabpanel"
+            aria-labelledby="v-pills-injury-details-tab"
+          >
+            <app-player-health-injuries-details
+              [injuryId]="injuryDetails"
+            ></app-player-health-injuries-details>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

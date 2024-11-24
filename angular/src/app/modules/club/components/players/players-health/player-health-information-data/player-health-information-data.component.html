@@ -1,0 +1,244 @@
+<div class="player_health_information_data_form_container">
+  <div *ngIf="!formHealth" class="row p-jc-center">
+    <div class="col text-center">
+      <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+    </div>
+  </div>
+  <form
+    (ngSubmit)="onSubmit()"
+    *ngIf="formHealth"
+    [formGroup]="formHealth"
+    id="player_health_information_data_form"
+    name="nomFormHealth"
+  >
+    <div class="row pb-2">
+      <div class="mb-3 col-12 col-md-6 my-3">
+        <div class="d-flex justify-content-between">
+          <label class="custom-label-1">{{
+            "PLAYERS.LBL_ENFERMEDADES" | translate
+          }}</label>
+          <p-inputSwitch
+            (onChange)="changeDiseases($event)"
+            formControlName="IsDiseases"
+          ></p-inputSwitch>
+        </div>
+        <p-multiSelect
+          *ngIf="f.IsDiseases.value"
+          [options]="enfermedades"
+          [styleClass]="'w-100 form-control'"
+          formControlName="diseases"
+          optionLabel="name"
+          optionValue="id"
+          placeholder="{{ 'LBL_SELECCIONE' | translate }}"
+        ></p-multiSelect>
+      </div>
+      <div class="mb-3 col-12 col-md-6 my-3">
+        <div class="d-flex justify-content-between">
+          <label class="custom-label-1">{{
+            "PLAYERS.LBL_ALERGIAS" | translate
+          }}</label>
+          <p-inputSwitch
+            (onChange)="changeAllegies($event)"
+            formControlName="IsAllergies"
+          ></p-inputSwitch>
+        </div>
+        <p-multiSelect
+          *ngIf="f.IsAllergies.value"
+          [options]="alergias"
+          [styleClass]="'w-100 form-control'"
+          formControlName="allergies"
+          optionLabel="name"
+          optionValue="id"
+          placeholder="{{ 'LBL_SELECCIONE' | translate }}"
+        ></p-multiSelect>
+      </div>
+      <div class="mb-3 col-12 col-md-6 my-3">
+        <div class="d-flex justify-content-between">
+          <label class="custom-label-1">{{
+            "PLAYERS.LBL_OPERACIONES" | translate
+          }}</label>
+          <label
+            (click)="aniadirOperacion()"
+            *ngIf="f.IsBody_areas.value"
+            class="custom-label-1 label-link ml-2"
+          >
+            {{ "PLAYERHEALTH.LBL_ADDOPERACION" | translate }}</label
+          >
+          <p-inputSwitch
+            class="ml-2"
+            formControlName="IsBody_areas"
+          ></p-inputSwitch>
+        </div>
+        <ul>
+          <li *ngFor="let item of surgeries">
+            {{ item.disease.name }}-{{ item.surgery_date }}
+          </li>
+        </ul>
+      </div>
+      <div class="mb-3 col-12 col-md-6 my-3">
+        <div class="d-flex justify-content-between">
+          <label class="custom-label-1">{{
+            "PLAYERS.LBL_ESFUERZOFISICO" | translate
+          }}</label>
+          <p-inputSwitch
+            (onChange)="changePhysicalProblems($event)"
+            formControlName="IsPhysical_problems"
+          ></p-inputSwitch>
+        </div>
+        <p-multiSelect
+          *ngIf="f.IsPhysical_problems.value"
+          [options]="problemasfisicos"
+          [styleClass]="'w-100 form-control'"
+          formControlName="physical_problems"
+          optionLabel="name"
+          optionValue="id"
+          placeholder="{{ 'LBL_SELECCIONE' | translate }}"
+        ></p-multiSelect>
+      </div>
+      <div class="mb-3 col-12 col-md-6 my-3">
+        <div class="d-flex justify-content-between">
+          <label class="custom-label-1">{{
+            "PLAYERS.LBL_MEDICAMENTOS" | translate
+          }}</label>
+          <p-inputSwitch
+            (onChange)="changeMedicineTypes($event)"
+            formControlName="IsMedicine_types"
+          ></p-inputSwitch>
+        </div>
+        <p-multiSelect
+          *ngIf="f.IsMedicine_types.value"
+          [options]="medicinas"
+          [styleClass]="'w-100 form-control'"
+          formControlName="medicine_types"
+          optionLabel="name"
+          optionValue="id"
+          placeholder="{{ 'LBL_SELECCIONE' | translate }}"
+        ></p-multiSelect>
+      </div>
+      <div class="col-12 col-md-12 my-3">
+        <label class="d-block custom-label-1">{{
+          "PLAYERS.LBL_TABACO" | translate
+        }}</label>
+        <div
+          class="p-d-flex p-jc-around flex-wrap"
+          style="display: flex; justify-content: space-around"
+        >
+          <p-radioButton
+            *ngFor="let item of tabaco"
+            [label]="item.name"
+            [value]="item.id"
+            class="mb-3 ml-2 radio-w"
+            formControlName="tobacco_consumptions"
+            name="tobacco_consumptions"
+          ></p-radioButton>
+        </div>
+      </div>
+      <div class="col-12 col-md-12 my-3">
+        <label class="d-block custom-label-1">{{
+          "PLAYERS.LBL_ALCOHOL" | translate
+        }}</label>
+        <div
+          class="p-d-flex p-jc-around flex-wrap"
+          style="display: flex; justify-content: space-around"
+        >
+          <p-radioButton
+            *ngFor="let item of alcohol"
+            [label]="item.name"
+            [value]="item.id"
+            class="mb-3 ml-2 radio-w"
+            formControlName="alcohol_consumptions"
+            name="alcohol_consumptions"
+          ></p-radioButton>
+        </div>
+      </div>
+      <div class="col-12">
+        <button
+          [loading]="saving"
+          class="btn btn-primary btn-block py-2 save_btn"
+          label="{{ 'PLAYERHEALTH.LBL_SAVEINFO' | translate }}"
+          pButton
+          pTooltip="{{ 'PLAYERHEALTH.LBL_SAVEINFO' | translate }}"
+          tooltipPosition="top"
+          type="submit"
+        ></button>
+      </div>
+    </div>
+  </form>
+</div>
+
+<p-dialog
+  (onHide)="closeModal()"
+  *ngIf="modalOperacion"
+  [(visible)]="modalOperacion"
+  [baseZIndex]="1000"
+  [contentStyle]="{ overflow: 'visible' }"
+  [modal]="true"
+  class="custom_dialog"
+  header="{{ 'PLAYERHEALTH.LBL_NUEVAOPERACION' | translate }}"
+  maskStyleClass="purple_mask"
+>
+  <form
+    *ngIf="formHealthSur"
+    [formGroup]="formHealthSur"
+    id="player_health"
+    name="nomFormHealth"
+  >
+    <div class="p-grid p-fluid">
+      <div class="p-col-12">
+        <label>{{ "PLAYERHEALTH.LBL_OPERACION" | translate }}</label>
+        <p-dropdown
+          [ngClass]="{
+            'ng-invalid ng-dirty': submittedSurg && fSug.disease.invalid
+          }"
+          [options]="enfermedades"
+          [styleClass]="'w-100 form-control'"
+          formControlName="disease"
+          optionLabel="name"
+          placeholder="{{ 'LBL_SELECCIONE' | translate }}"
+        ></p-dropdown>
+        <div
+          *ngIf="submittedSurg && fSug.disease.invalid"
+          class="form-text text-danger"
+        >
+          {{ "PLAYERHEALTH.LBL_OPERACIONREQ" | translate }}
+        </div>
+      </div>
+    </div>
+    <div class="p-grid">
+      <div class="p-col-12">
+        <label>{{ "PLAYERHEALTH.LBL_FECHA" | translate }}</label>
+        <p-calendar
+          [firstDayOfWeek]="1"
+          [maxDate]="maxDate"
+          dateFormat="dd/mm/yy"
+          [style]="{ height: '42px', 'border-radius': '10px' }"
+          [ngClass]="{
+            'ng-invalid ng-dirty': submittedSurg && fSug.surgery_date.invalid
+          }"
+          [readonlyInput]="true"
+          [styleClass]="'w-100'"
+          class="ng-invalid ng-dirty"
+          dataType="string"
+          formControlName="surgery_date"
+          inputId="icon"
+        ></p-calendar>
+        <div
+          *ngIf="submittedSurg && fSug.surgery_date.invalid"
+          class="form-text text-danger"
+        >
+          {{ "PLAYERHEALTH.LBL_FECHAREQ" | translate }}
+        </div>
+      </div>
+    </div>
+  </form>
+  <ng-template pTemplate="footer">
+    <div class="footer_btns">
+      <button (click)="closeModal()" class="back_btn btn">
+        {{ "LBL_ATRAS" | translate }}
+      </button>
+      <button (click)="addsurgeries()" class="next_btn btn">
+        {{ "PLAYERHEALTH.LBL_GUARDAR" | translate }}
+      </button>
+    </div>
+  </ng-template>
+</p-dialog>

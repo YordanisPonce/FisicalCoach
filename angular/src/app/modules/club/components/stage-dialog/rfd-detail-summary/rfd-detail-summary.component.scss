@@ -1,0 +1,111 @@
+@import '../../../../../../assets/colors';
+
+:host ::ng-deep {
+  .p-dialog {
+    .p-dialog-header {
+      .header_content {
+        flex: 1;
+      }
+    }
+    .p-dialog-content {
+      padding-top: 2rem;
+      padding-left: 3rem;
+
+      #rfd_summary_dialog_container {
+        .info {
+          width: 100%;
+          min-width: 1400px;
+        }
+
+        .wrap-content {
+          display: flex;
+          flex-wrap: wrap;
+
+          .text-bold {
+            font-weight: bold;
+            color: $gray !important;
+          }
+        }
+
+        .wrap {
+          display: flex;
+          flex-direction: column;
+          flex-wrap: wrap;
+
+          span {
+            width: 370px;
+            margin-bottom: 8px;
+          }
+
+          p {
+            width: 150px;
+          }
+        }
+        .column {
+          width: auto;
+          margin-right: 50px;
+          margin-bottom: 20px;
+        }
+
+        h3 {
+          font-size: 23px;
+        }
+        h4,
+        h5 {
+          font-size: 17px;
+          color: #050c44;
+          font-weight: 600;
+        }
+
+        .back_btn {
+          border-radius: 32px;
+          font-weight: 600;
+          font-size: 0.9rem;
+          padding: 0.65rem;
+          min-width: 330px;
+          max-width: 400px;
+          color: #050c44;
+          border: 1px solid #050c4473;
+        }
+        .edit_btn {
+          background-color: #0065e9;
+          border-radius: 32px;
+          color: white;
+          font-weight: 600;
+          font-size: 0.9rem;
+          padding: 0.65rem;
+          min-width: 330px;
+          max-width: 400px;
+          margin-left: 50px;
+        }
+
+        .check {
+          color: #00e9c5;
+          font-size: 18px;
+          margin-left: 8px;
+        }
+
+        .circle {
+          color: #ff4a4a;
+          font-size: 18px;
+          margin-left: 8px;
+        }
+      }
+    }
+  }
+}
+
+.title {
+  font-size: 23px;
+  color: #050c44;
+
+  span {
+    color: #00e9c5;
+  }
+}
+
+.summary-subtitle {
+  font-size: 15px;
+  color: #999999 !important;
+  opacity: 1 !important;
+}

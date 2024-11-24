@@ -1,0 +1,27 @@
+button{
+  padding: 0.75rem 1rem;
+  font-size: .9rem;
+}
+.next_btn{
+  background: #024CAC;
+  color: white;
+  flex: 1;
+}
+.back_btn{
+  border: 1px solid #050C4433;
+  flex: 1;
+}
+.advance_btn{
+  // flex: 1 1 100%;
+  background-color: #26262610;
+  color: #050C4455;
+  font-weight: 600;
+}
+label{
+  font-weight: bold;
+}
+.btn_margin_bottom{
+  @media (max-width: 1024px) {
+    margin-bottom: 1rem;
+  }
+}

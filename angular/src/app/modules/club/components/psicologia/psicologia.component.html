@@ -1,0 +1,231 @@
+<div
+  class="row"
+  appUserPermission
+  [method]="['team_psychology_store', 'team_psychology_read']"
+  (showItem)="handlePermission($event)"
+>
+  <div class="col-12">
+    <div class="card box-shadow">
+      <div class="card-body p-0">
+        <div class="psicologia_header view_header">
+          <h6 class="font-weight-600 mb-0 mr-4 text-main view_header_title">
+            {{ "LBL_PLAYERS" | translate }}
+          </h6>
+          <div class="p-input-icon-left d-md-inline buscador">
+            <i class="pi pi-search"></i>
+            <input
+              (keyup)="setValue($event)"
+              [(ngModel)]="searchPlayer"
+              pInputText
+              placeholder="{{ 'LBL_SEARCH' | translate }}"
+              type="text"
+            />
+          </div>
+
+          <p-treeSelect
+            [(ngModel)]="selectedFilter"
+            (ngModelChange)="handleSelectFilter()"
+            [options]="filterOptions"
+            placeholder="{{ 'LBL_FILTRAR' | translate }}"
+          ></p-treeSelect>
+
+          <div
+            *ngIf="this.selectedFilter?.code && this.selectedFilter.key !== '0'"
+          >
+            <button
+              class="btn see_all_btn"
+              (click)="
+                listPlayersSpecialists = allPlayers; selectedFilter = null
+              "
+              pTooltip="{{ 'seeAll' | translate }}"
+            >
+              <i class="pi pi-times"></i>
+            </button>
+          </div>
+
+          <div class="header_buttons" *ngIf="showPermission.store">
+            <button
+              (click)="newTest = true"
+              [disabled]="selectedPlayer.length === 0"
+              class="btn action"
+              pButton
+            >
+              <span class="d-md-inline mr-2">{{
+                "PSYCHOLOGY.LBL_NEW_REPORT" | translate
+              }}</span>
+              <i class="fa fa-plus text-white"></i>
+            </button>
+          </div>
+        </div>
+
+        <p-table
+          *ngIf="!loading"
+          [(selection)]="selectedPlayer"
+          [paginator]="true"
+          [rows]="10"
+          [value]="listPlayersSpecialists"
+          class="p-datatable-responsive"
+          selectionMode="single"
+        >
+          <ng-template pTemplate="header">
+            <tr class="text-center">
+              <th style="width: 3rem; min-width: 3rem !important"></th>
+              <th class="text-left" pSortableColumn="full_name">
+                {{ "PSYCHOLOGY.LBL_NAME" | translate }}
+                <p-sortIcon field="full_name"></p-sortIcon>
+              </th>
+              <th class="text-center" pSortableColumn="count_reports">
+                {{ "PSYCHOLOGY.LBL_REPORTS_MADE" | translate }}
+
+                <p-sortIcon field="count_reports"></p-sortIcon>
+              </th>
+              <th class="text-center" pSortableColumn="last_date_report">
+                {{ "PSYCHOLOGY.LBL_DATE" | translate }}
+                <p-sortIcon field="last_date_report"></p-sortIcon>
+              </th>
+              <th class="text-center mb-0">
+                {{ "PSYCHOLOGY.LBL_TEST_PSYCHOLOGY" | translate }}
+              </th>
+              <th class="text-center">{{ "LBL_ACTIONS" | translate }}</th>
+            </tr>
+          </ng-template>
+          <ng-template let-i="rowIndex" let-player pTemplate="body">
+            <tr class="colum-responsive">
+              <td class="checbox-w">
+                <p-tableCheckbox
+                  (click)="handleSelectPlayer(player, i)"
+                  [value]="player"
+                ></p-tableCheckbox>
+              </td>
+              <td class="phsicology">
+                <img
+                  class="rounded-circle imagen-player"
+                  src="{{ player | avatarPipe }}"
+                  width="25px"
+                  height="25px"
+                />
+                <strong class="m-2">{{ player.full_name }}</strong>
+              </td>
+              <td class="text-center phsicology">
+                <div>
+                  <span class="p-column-title">{{
+                    "PSYCHOLOGY.LBL_REPORTS_MADE" | translate
+                  }}</span>
+                </div>
+                <div>
+                  {{ player.count_reports }}
+                </div>
+              </td>
+              <td class="checbox-w d-sm-none"></td>
+              <td class="text-center phsicology">
+                <div>
+                  <span class="p-column-title">{{
+                    "PSYCHOLOGY.LBL_DATE" | translate
+                  }}</span>
+                </div>
+
+                <div>
+                  <span *ngIf="player.last_date_report">{{
+                    player.last_date_report | date : "dd/MM/YYYY"
+                  }}</span>
+                  <span *ngIf="!player.last_date_report">N/A</span>
+                </div>
+              </td>
+              <td class="text-center phsicology">
+                <span class="p-column-title">{{
+                  "PSYCHOLOGY.LBL_TEST_PSYCHOLOGY" | translate
+                }}</span>
+                <button
+                  [routerLink]="['/club/test-details/' + player.id]"
+                  [state]="{ isPsycologicalTest: true }"
+                  class="btn btn_ver_test p-0 p-sm-1"
+                >
+                  Ver
+                </button>
+              </td>
+              <td class="actions_column text-center w-column-full">
+                <div class="text-center">
+                  <button
+                    (click)="viewDetail(player)"
+                    [disabled]="player.count_reports === 0"
+                    class="btn"
+                    pTooltip="{{ 'table_icons.seeDetails' | translate }}"
+                    routerLink="/club/psychology/detail"
+                    *ngIf="showPermission.read"
+                  >
+                    <img class="" src="assets/img/icons/book-icon.svg" />
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td *ngIf="!errorMessage" class="nodata text-center" colspan="6">
+                {{ "nodata.sininforme" | translate }}
+              </td>
+              <td *ngIf="errorMessage" class="nodata text-center" colspan="6">
+                {{ errorMessage }}
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+
+        <p-table
+          *ngIf="loading"
+          [rows]="10"
+          [value]="[1, 2]"
+          class="p-datatable-responsive"
+        >
+          <ng-template pTemplate="header">
+            <tr class="text-center">
+              <th class="text-left">{{ "PSYCHOLOGY.LBL_NAME" | translate }}</th>
+              <th class="text-center">
+                {{ "PSYCHOLOGY.LBL_REPORTS_MADE" | translate }}
+              </th>
+              <th class="text-center">
+                {{ "PSYCHOLOGY.LBL_DATE" | translate }}
+              </th>
+              <th class="text-center">
+                {{ "PSYCHOLOGY.LBL_TEST_PSYCHOLOGY" | translate }}
+              </th>
+              <th class="text-center">{{ "LBL_ACTIONS" | translate }}</th>
+            </tr>
+          </ng-template>
+
+          <ng-template let-columns pTemplate="body">
+            <tr *ngFor="let i of [1, 2, 3]">
+              <td>
+                <p-skeleton height="1rem" width="100%"></p-skeleton>
+              </td>
+              <td>
+                <p-skeleton height="1rem" width="100%"></p-skeleton>
+              </td>
+              <td class="">
+                <p-skeleton height="1rem" width="100%"></p-skeleton>
+              </td>
+              <td class="">
+                <p-skeleton height="1rem" width="100%"></p-skeleton>
+              </td>
+              <td class="d-flex justify-content-around">
+                <p-skeleton height="1rem" width="20px"></p-skeleton>
+                <p-skeleton height="1rem" width="20px"></p-skeleton>
+                <p-skeleton height="1rem" width="20px"></p-skeleton>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
+  </div>
+</div>
+<app-new-test-psicologico-dialog
+  (close)="newTest = false"
+  (reload)="reload()"
+  *ngIf="newTest"
+  [listPlayers]="allPlayers"
+  [playerId]="selectedPlayer[0]?.id"
+  [staffs]="staffs"
+  [team]="team"
+  [visible]="newTest"
+></app-new-test-psicologico-dialog>

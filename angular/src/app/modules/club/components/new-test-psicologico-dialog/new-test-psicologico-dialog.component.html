@@ -1,0 +1,284 @@
+<p-dialog
+  (onHide)="closeDialog()"
+  [(visible)]="visible"
+  [header]="''"
+  [modal]="true"
+  class="custom_dialog"
+  id="new_rfd_dialog"
+  maskStyleClass="purple_mask"
+  styleClass=""
+>
+  <ng-template pTemplate="header">
+    <div class="d-flex header_content p-dialog-title">
+      <span *ngIf="step == 1" class="ml-2">{{
+        "PSYCHOLOGY.LBL_NEW_TEST" | translate
+      }}</span>
+      <span *ngIf="step == 2" class="ml-2">{{
+        "PSYCHOLOGY.LBL_REASON_CONSULTATION" | translate
+      }}</span>
+      <span *ngIf="step == 3" class="ml-2">{{
+        "PSYCHOLOGY.LBL_ANAMNESIS" | translate
+      }}</span>
+      <span *ngIf="step == 4" class="ml-2">{{
+        "PSYCHOLOGY.LBL_PRESUMPTIVE_DIAGNOSIS" | translate
+      }}</span>
+      <span *ngIf="step == 5" class="ml-2">{{
+        "PSYCHOLOGY.LBL_OBSERVATIONS" | translate
+      }}</span>
+    </div>
+  </ng-template>
+  <div id="new_rfd_dialog_container" class="dialog_container">
+    <form
+      (ngSubmit)="onSubmit()"
+      [formGroup]="formNewTestPsychology"
+      id="psychology_form"
+      name="nomFormDataPersonal"
+    >
+      <div>
+        <div class="step_content" *ngIf="step == 1">
+          <div class="row">
+            <div class="col-12 mb-4 m_top">
+              <label>{{ "PSYCHOLOGY.LBL_DATE" | translate }}</label>
+              <p-calendar
+                [firstDayOfWeek]="1"
+                [maxDate]="maxDate"
+                [monthNavigator]="true"
+                [readonlyInput]="true"
+                [yearNavigator]="true"
+                [yearRange]="yearRange"
+                class="p-calendar form-control"
+                dateFormat="dd/mm/yy"
+                formControlName="date"
+                id="date"
+                inputId="range"
+                placeholder="{{ 'PSYCHOLOGY.LBL_DATE' | translate }}"
+              ></p-calendar>
+              <div
+                *ngIf="submitted && f.date.invalid"
+                class="form-text text-danger"
+              >
+                {{ "PSYCHOLOGY.LBL_PLAYER" | translate }}
+                {{ "LBL_REQUERIDO" | translate }}
+              </div>
+            </div>
+            <div class="col-12 mb-4">
+              <div style="display: flex">
+                <label>{{ "PSYCHOLOGY.LBL_EVALUATOR" | translate }} *</label>
+                <label
+                  (click)="handleEvaluator()"
+                  class="label-link ml-2 label-evaluator"
+                >
+                  {{ "PSYCHOLOGY.ADDEVALUATOR" | translate }}</label
+                >
+              </div>
+              <p-dropdown
+                *ngIf="showstaffid()"
+                [filter]="true"
+                [options]="listStaffs"
+                [showClear]="true"
+                [styleClass]="'w-100 form-control'"
+                aria-describedby="inputGroup-sizing-default"
+                class="control-custom"
+                formControlName="staff_id"
+                id="staff_id1"
+                placeholder="{{ 'LBL_SELECCIONE' | translate }}"
+              ></p-dropdown>
+              <p-dropdown
+                *ngIf="!inputEvaluator && !isPlayerReport"
+                [filter]="true"
+                [options]="listStaffs"
+                [showClear]="true"
+                [styleClass]="'w-100 form-control'"
+                aria-describedby="inputGroup-sizing-default"
+                class="control-custom"
+                formControlName="staff_id"
+                id="staff_id"
+                placeholder="{{ 'LBL_SELECCIONE' | translate }}"
+              ></p-dropdown>
+              <input
+                *ngIf="staff_name()"
+                aria-describedby="inputGroup-sizing-default"
+                aria-label="Default"
+                class="form-control input-rounded"
+                formControlName="staff_name"
+                placeholder="{{ 'LBL_ESCRIBEAQI' | translate }}"
+                type="text"
+              />
+              <input
+                *ngIf="inputEvaluator && !isPlayerReport"
+                aria-describedby="inputGroup-sizing-default"
+                aria-label="Default"
+                class="form-control input-rounded"
+                formControlName="staff_name"
+                placeholder="{{ 'LBL_ESCRIBEAQI' | translate }}"
+                type="text"
+              />
+              <div
+                *ngIf="submitted && f.staff_id.invalid"
+                class="form-text text-danger"
+              >
+                {{ "PSYCHOLOGY.LBL_EVALUATOR" | translate }}
+                {{ "LBL_REQUERIDO" | translate }}
+              </div>
+            </div>
+            <div class="col-12 mb-4">
+              <label>{{
+                "PSYCHOLOGY.LBL_DERIVATIVE_SPECIALIST" | translate
+              }}</label>
+              <div class="d-flex align-items-center">
+                <p-radioButton
+                  (onClick)="handleSpecialist(selectedSpecialist)"
+                  *ngFor="let item of listSpecialists"
+                  [label]="item.name"
+                  [value]="item.id"
+                  class="mr-3"
+                  formControlName="psychology_specialist_id"
+                  name="psychology_specialist_id"
+                ></p-radioButton>
+              </div>
+              <div
+                *ngIf="submitted && f.psychology_specialist_id.invalid"
+                class="form-text text-danger"
+              >
+                {{ "PSYCHOLOGY.LBL_DERIVATIVE_SPECIALIST" | translate }}
+                {{ "LBL_REQUERIDO" | translate }}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="step_content" *ngIf="step == 2">
+          <div class="row">
+            <div class="col-12">
+              <textarea
+                [maxLength]="1000"
+                class="form-control"
+                cols="10"
+                formControlName="cause"
+                rows="15"
+                style="margin-top: 2rem"
+              >
+              </textarea>
+              <div
+                *ngIf="submitted && f.cause.invalid"
+                class="form-text text-danger"
+              >
+                {{ "PSYCHOLOGY.LBL_REASON_CONSULTATION" | translate }}
+                {{ "LBL_REQUERIDO" | translate }}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="step_content" *ngIf="step == 3">
+          <div class="row">
+            <div class="col-12">
+              <textarea
+                [maxLength]="1000"
+                class="form-control"
+                cols="10"
+                formControlName="anamnesis"
+                rows="15"
+              >
+              </textarea>
+            </div>
+          </div>
+        </div>
+        <div class="step_content" *ngIf="step == 4">
+          <div class="row">
+            <div class="col-12">
+              <textarea
+                [maxLength]="1000"
+                class="form-control"
+                cols="10"
+                formControlName="presumptive_diagnosis"
+                rows="15"
+              ></textarea>
+              <div
+                *ngIf="submitted && f.presumptive_diagnosis.invalid"
+                class="form-text text-danger"
+              >
+                {{ "PSYCHOLOGY.LBL_PRESUMPTIVE_DIAGNOSIS" | translate }}
+                {{ "LBL_REQUERIDO" | translate }}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="step_content" *ngIf="step == 5">
+          <div class="row">
+            <div class="col-12">
+              <textarea
+                [maxLength]="1000"
+                class="form-control"
+                cols="10"
+                formControlName="note"
+                rows="15"
+              >
+              </textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <ul class="step_markers full_markers">
+          <li>
+            <span
+              (click)="step = 1"
+              [ngClass]="{ active: step == 1 }"
+              class="step_marker"
+            ></span>
+          </li>
+          <li>
+            <span class="step_marker" [ngClass]="{ active: step == 2 }"></span>
+          </li>
+          <li>
+            <span class="step_marker" [ngClass]="{ active: step == 3 }"></span>
+          </li>
+          <li>
+            <span
+              (click)="step = 3"
+              [ngClass]="{ active: step == 4 }"
+              class="step_marker"
+            ></span>
+          </li>
+          <li>
+            <span
+              (click)="step = 4"
+              [ngClass]="{ active: step == 5 }"
+              class="step_marker"
+            ></span>
+          </li>
+        </ul>
+      </div>
+    </form>
+  </div>
+  <p-footer>
+    <div class="footer_btns">
+      <button
+        (click)="handleBack()"
+        [ngClass]="{ shrink_btn: step == 2 }"
+        class="btn back_btn"
+      >
+        {{ "LBL_ATRAS" | translate }}
+      </button>
+      <button
+        (click)="next()"
+        *ngIf="!saving"
+        [ngClass]="{ shrink_btn: step == 2 }"
+        class="btn next_btn"
+      >
+        {{
+          step == 5
+            ? ("BTN_FINALIZAR" | translate)
+            : ("LBL_SIGUIENTE" | translate)
+        }}
+      </button>
+      <button
+        *ngIf="saving"
+        [ngClass]="{ shrink_btn: step == 2 }"
+        class="btn next_btn"
+        disabled
+      >
+        {{ "LBL_GUARDANDO" | translate }} ...
+      </button>
+    </div>
+  </p-footer>
+</p-dialog>

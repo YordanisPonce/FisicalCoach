@@ -1,0 +1,548 @@
+<div
+  class="row"
+  appUserPermission
+  [method]="[
+    'team_competition_store',
+    'team_competition_delete',
+    'team_competition_update',
+    'team_competition_read'
+  ]"
+  (showItem)="handlePermission($event)"
+>
+  <div class="col-lg-8">
+    <div class="card soft-shadow">
+      <div class="card-body p-0">
+        <div class="row">
+          <div class="col-12">
+            <div class="competicion_header view_header r_he">
+              <div
+                class="d-flex align-items-center justify-content-between btn_flex"
+              >
+                <div class="filters">
+                  <div class="search-filter">
+                    <div class="d-flex align-items-center">
+                      <h6 class="font-weight-600 mb-0 view_header_title mr-2">
+                        {{
+                          (team.sport.code !== "swimming"
+                            ? "competition.competitions"
+                            : "competition.proofs"
+                          )
+                            | translate
+                            | translate
+                        }}
+                      </h6>
+                      <div class="p-input-icon-left d-md-inline buscador">
+                        <i class="pi pi-search"></i>
+                        <input
+                          [(ngModel)]="searchCompetition"
+                          (keyup)="setValue($event)"
+                          pInputText
+                          placeholder="{{ 'competition.search' | translate }}"
+                          type="text"
+                        />
+                      </div>
+                    </div>
+                    <div class="create-competition-button">
+                      <div class="btn_calendar">
+                        <button
+                          type="button"
+                          class="btn btn-main calendar_btn"
+                          routerLink="calendar"
+                          pTooltip="{{
+                            'competition.view_calendar' | translate
+                          }}"
+                        >
+                          <div class="d_flex">
+                            <span
+                              class="d-block d-sm-none"
+                              style="margin-right: 0.5rem"
+                              >{{
+                                "competition.view_calendar" | translate
+                              }}</span
+                            >
+                            <i class="pi pi-calendar"></i>
+                          </div>
+                        </button>
+                      </div>
+                      <div
+                        class="btn_createcompetition"
+                        *ngIf="showPermission.store"
+                      >
+                        <button
+                          (click)="createCompetitionDialog = true"
+                          class="btn action crear_competicion_btn d-flex justify-content-center align-items-center"
+                          pButton
+                        >
+                          <span class="d-sm-inline mr-2">{{
+                            (team.sport.code !== "swimming"
+                              ? "competition.create_competition"
+                              : "competition.create_proof"
+                            ) | translate
+                          }}</span>
+                          <i class="fa fa-plus text-white"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="sort-input">
+                    <p-treeSelect
+                      [(ngModel)]="selectedFilter"
+                      (ngModelChange)="handleSelectFilter()"
+                      [options]="filterOptions"
+                      class="no-table-view"
+                      placeholder="{{ 'LBL_FILTRAR' | translate }}"
+                    ></p-treeSelect>
+
+                    <div *ngIf="this.selectedFilter?.code">
+                      <button
+                        class="btn see_all_btn"
+                        (click)="
+                          competitions = allCompetitions; selectedFilter = null
+                        "
+                        pTooltip="{{ 'seeAll' | translate }}"
+                      >
+                        <i class="pi pi-times"></i>
+                      </button>
+                    </div>
+
+                    <app-order-button
+                      [list]="competitions"
+                      (convertedList)="handleOrderFilter($event)"
+                      class="d-flex"
+                    >
+                    </app-order-button>
+                  </div>
+                </div>
+                <div class="btn_cal_cre">
+                  <div class="btn_calendar">
+                    <button
+                      type="button"
+                      class="btn btn-main calendar_btn"
+                      routerLink="calendar"
+                      pTooltip="{{ 'competition.view_calendar' | translate }}"
+                    >
+                      <div class="d_flex">
+                        <span
+                          class="d-block d-sm-none"
+                          style="margin-right: 0.5rem"
+                          >{{ "competition.view_calendar" | translate }}</span
+                        >
+                        <i class="pi pi-calendar"></i>
+                      </div>
+                    </button>
+                  </div>
+                  <div
+                    class="btn_createcompetition"
+                    *ngIf="showPermission.store"
+                  >
+                    <button
+                      (click)="createCompetitionDialog = true"
+                      class="btn action crear_competicion_btn"
+                      pButton
+                    >
+                      <span class="d-sm-inline mr-2">{{
+                        (team.sport.code !== "swimming"
+                          ? "competition.create_competition"
+                          : "competition.create_proof"
+                        ) | translate
+                      }}</span>
+                      <i class="fa fa-plus text-white"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <crear-competicion-dialog
+                *ngIf="createCompetitionDialog"
+                (close)="closeDialog()"
+                (refreshCompetitions)="refreshCompetitions($event)"
+                [selectedCompetition]="selectedCompetition"
+                [visible]="createCompetitionDialog"
+              ></crear-competicion-dialog>
+            </div>
+          </div>
+          <div class="col-12">
+            <div class="row px-3 py-4 px-md-5" *ngIf="loading">
+              <div
+                style="width: 100%"
+                class="d-flex justify-content-around skeleton_flex"
+              >
+                <div
+                  style="text-align: center; width: 50%"
+                  class="p-4"
+                  *ngFor="let i of [1, 2]"
+                >
+                  <div class="custom-skeleton p-4">
+                    <div class="d-flex mb-3">
+                      <p-skeleton
+                        shape="circle"
+                        size="4rem"
+                        styleClass=" mr-2"
+                      ></p-skeleton>
+                      <div>
+                        <p-skeleton
+                          width="10rem"
+                          styleClass=" mb-2"
+                        ></p-skeleton>
+                        <p-skeleton
+                          width="5rem"
+                          styleClass=" mb-2"
+                        ></p-skeleton>
+                      </div>
+                    </div>
+                    <p-skeleton width="300px" height="150px"></p-skeleton>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row px-3 py-4 px-md-5" *ngIf="!loading">
+              <div *ngFor="let item of competitions" class="col-md-6">
+                <div class="competicion">
+                  <div class="competicion_content">
+                    <div class="competicion_info">
+                      <div class="d-flex">
+                        <p-avatar
+                          image="assets/img/equipo.png"
+                          size="xlarge"
+                          shape="circle"
+                          image="{{
+                            item.image
+                              ? item.image?.full_url
+                              : resources +
+                                '/images/competition/competition_empty.svg'
+                          }}"
+                        ></p-avatar>
+                        <div class="d-flex flex-column ml-3">
+                          <span class="font-weight-600">{{ item.name }}</span>
+                          <span>{{ item.type_competition_name }}</span>
+                        </div>
+                      </div>
+
+                      <div class="d-flex">
+                        <div
+                          role="button"
+                          class="mx-1"
+                          (click)="editCompetition(item)"
+                          *ngIf="showPermission.update"
+                        >
+                          <i
+                            class="pi pi-pencil"
+                            pTooltip="{{ 'competition.edit' | translate }}"
+                          ></i>
+                        </div>
+
+                        <div
+                          role="button"
+                          class="mx-1"
+                          (click)="delete(item.id)"
+                          *ngIf="showPermission.delete"
+                        >
+                          <i
+                            class="pi pi-trash"
+                            pTooltip="{{ 'competition.delete' | translate }}"
+                          ></i>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="last_game justify-content-around">
+                      <span>{{ item.date_start | date : "dd/MM/YYYY" }}</span> -
+                      <span>{{ item.date_end | date : "dd/MM/YYYY" }}</span>
+                    </div>
+                  </div>
+                  <div class="competicion_footer" *ngIf="showPermission.read">
+                    <a
+                      [routerLink]="['/club/competition/details/' + item.id]"
+                      >{{
+                        (team.sport.code !== "swimming"
+                          ? "competition.view_competition"
+                          : "competition.see_proof"
+                        ) | translate
+                      }}</a
+                    >
+                  </div>
+                </div>
+              </div>
+              <div
+                *ngIf="!loading && competitions.length <= 0"
+                class="competition_empty"
+              >
+                <p class="nodata">
+                  {{ "nodata.sincompeticiones" | translate }}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-4">
+    <p-tabView>
+      <p-tabPanel
+        *ngFor="let tab of games; let i = index"
+        [header]="tab.name"
+        [selected]="i == 0"
+      >
+        <div
+          style="text-align: center; width: 100%"
+          class="p-4 d-flex justify-content-around align-items-center"
+          *ngIf="loadingNextMatches"
+        >
+          <div>
+            <p-skeleton
+              shape="circle"
+              size="4rem"
+              styleClass="mr-2"
+            ></p-skeleton>
+          </div>
+          <div>
+            <p-skeleton width="3rem" styleClass="mx-2"></p-skeleton>
+          </div>
+          <div>
+            <p-skeleton
+              shape="circle"
+              size="4rem"
+              styleClass="ml-2"
+            ></p-skeleton>
+          </div>
+        </div>
+        <ul *ngIf="!loadingNextMatches && i === 0" class="matches">
+          <li *ngFor="let match of nextMatches" class="match">
+            <div class="team" *ngIf="match.match_situation">
+              <p-avatar
+                [image]="
+                  match.match_situation === 'L'
+                    ? team.image?.full_url
+                    : (match?.competition_rival_team?.url_image
+                      | rivalAvatarPipe)
+                "
+                size="large"
+                shape="circle"
+                *ngIf="
+                  (match.match_situation === 'L' && team.image?.full_url) ||
+                  (match.match_situation === 'V' &&
+                    (match?.competition_rival_team?.url_image
+                      | rivalAvatarPipe))
+                "
+                pTooltip="{{
+                  match.match_situation === 'L'
+                    ? team.name
+                    : match?.competition_rival_team?.rival_team
+                }}"
+              ></p-avatar>
+
+              <div
+                class="color"
+                [style]="{ backgroundColor: team.color }"
+                *ngIf="
+                  team.color &&
+                  !team.image?.full_url &&
+                  match.match_situation === 'L'
+                "
+                pTooltip="{{
+                  match.match_situation === 'L'
+                    ? team.name
+                    : match?.competition_rival_team?.rival_team
+                }}"
+              ></div>
+            </div>
+            <div class="match_info" *ngIf="match.match_situation">
+              <span class="time">{{
+                parseMatchDate(match.start_at) || "..."
+              }}</span>
+              <div class="separator"></div>
+              <small class="font-weight-600 text-secondary">{{
+                match.competition_type
+              }}</small>
+            </div>
+            <div class="team" *ngIf="match.match_situation">
+              <p-avatar
+                [image]="
+                  match.match_situation === 'V'
+                    ? team.image?.full_url
+                    : (match?.competition_rival_team?.url_image
+                      | rivalAvatarPipe)
+                "
+                size="large"
+                shape="circle"
+                *ngIf="
+                  (match.match_situation === 'V' && team.image?.full_url) ||
+                  (match.match_situation === 'L' &&
+                    (match?.competition_rival_team?.url_image
+                      | rivalAvatarPipe))
+                "
+                pTooltip="{{
+                  match.match_situation === 'V'
+                    ? team.name
+                    : match?.competition_rival_team?.rival_team
+                }}"
+              ></p-avatar>
+
+              <div
+                class="color"
+                [style]="{ backgroundColor: team.color }"
+                *ngIf="
+                  team.color &&
+                  !team.image?.full_url &&
+                  match.match_situation === 'V'
+                "
+                pTooltip="{{
+                  match.match_situation === 'V'
+                    ? team.name
+                    : match?.competition_rival_team?.rival_team
+                }}"
+              ></div>
+            </div>
+          </li>
+
+          <div
+            *ngIf="!loadingNextMatches && nextMatches.length === 0"
+            class="competition_empty"
+          >
+            <p class="nodata">{{ "nodata.sinpartidos" | translate }}</p>
+          </div>
+        </ul>
+
+        <ul *ngIf="!loadingRecentMatches && i === 1" class="matches">
+          <li *ngFor="let match of recentMatches" class="match">
+            <!-- have match situation -->
+            <div class="team" *ngIf="match.match_situation">
+              <p-avatar
+                [image]="
+                  match.match_situation === 'L'
+                    ? team.image.full_url
+                    : (match?.competition_rival_team?.url_image
+                      | rivalAvatarPipe)
+                "
+                size="large"
+                shape="circle"
+                *ngIf="team.image && match.match_situation === 'L'"
+                pTooltip="{{
+                  match.match_situation === 'L'
+                    ? team.name
+                    : match?.competition_rival_team?.rival_team
+                }}"
+              ></p-avatar>
+
+              <p-avatar
+                [image]="
+                  match?.competition_rival_team?.url_image | rivalAvatarPipe
+                "
+                size="large"
+                shape="circle"
+                *ngIf="match.match_situation === 'V'"
+                pTooltip="{{ match?.competition_rival_team?.rival_team }}"
+              ></p-avatar>
+              <div
+                class="color"
+                [style]="{ backgroundColor: team.color }"
+                *ngIf="
+                  team.color &&
+                  !team.image?.full_url &&
+                  match.match_situation === 'L'
+                "
+                pTooltip="{{
+                  match.match_situation === 'L'
+                    ? team.name
+                    : match?.competition_rival_team?.rival_team
+                }}"
+              ></div>
+            </div>
+            <div class="match_info" *ngIf="match.match_situation">
+              <span class="time">{{
+                parseMatchDate(match.start_at) || "..."
+              }}</span>
+              <div class="separator"></div>
+              <small class="font-weight-600 text-secondary">{{
+                match.competition_type
+              }}</small>
+            </div>
+            <div class="team" *ngIf="match.match_situation">
+              <p-avatar
+                [image]="
+                  match.match_situation === 'V'
+                    ? team.image.full_url
+                    : (match?.competition_rival_team?.url_image
+                      | rivalAvatarPipe)
+                "
+                size="large"
+                shape="circle"
+                *ngIf="team.image && match.match_situation === 'V'"
+                pTooltip="{{
+                  match.match_situation === 'V'
+                    ? team.name
+                    : match?.competition_rival_team?.rival_team
+                }}"
+              ></p-avatar>
+
+              <p-avatar
+                [image]="
+                  match?.competition_rival_team?.url_image | rivalAvatarPipe
+                "
+                size="large"
+                shape="circle"
+                *ngIf="match.match_situation === 'L'"
+                pTooltip="{{ match?.competition_rival_team?.rival_team }}"
+              ></p-avatar>
+
+              <div
+                class="color"
+                [style]="{ backgroundColor: team.color }"
+                *ngIf="
+                  team.color &&
+                  !team.image?.full_url &&
+                  match.match_situation === 'V'
+                "
+                pTooltip="{{
+                  match.match_situation === 'V'
+                    ? team.name
+                    : match?.competition_rival_team?.rival_team
+                }}"
+              ></div>
+            </div>
+          </li>
+
+          <div
+            *ngIf="
+              !loadingRecentMatches &&
+              !loadingRecentMatches &&
+              recentMatches.length === 0
+            "
+            class="competition_empty"
+          >
+            <p class="nodata">{{ "nodata.sinpartidos" | translate }}</p>
+          </div>
+        </ul>
+      </p-tabPanel>
+    </p-tabView>
+  </div>
+</div>
+
+<p-confirmDialog
+  #cd
+  [style]="{ width: '50vw' }"
+  class="custom_dialog"
+  maskStyleClass="purple_mask"
+>
+  <ng-template pTemplate="footer">
+    <div class="footer_btns">
+      <button
+        (click)="cd.reject()"
+        class="back_btn"
+        icon="pi pi-times"
+        label="{{ 'LBL_NO' | translate }}"
+        pButton
+        type="button"
+      ></button>
+      <button
+        (click)="cd.accept()"
+        class="next_btn"
+        icon="pi pi-check"
+        label="{{ 'LBL_YES' | translate }}"
+        pButton
+        type="button"
+      ></button>
+    </div>
+  </ng-template>
+</p-confirmDialog>

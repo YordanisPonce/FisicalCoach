@@ -1,0 +1,208 @@
+:host ::ng-deep {
+  .p-selectbutton .p-button {
+    flex: 0 31% !important;
+    margin: 1%;
+    border-radius: 4px !important;
+    border: 1px solid #050c4421 !important;
+    display: flex;
+    padding: 10px 15px !important;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .p-accordion {
+    a:hover {
+      text-decoration: unset;
+    }
+
+    li {
+      list-style: none;
+    }
+
+    li::before {
+      content: "\2022"; /* Add content: \2022 is the CSS Code/unicode for a bullet */
+      // color: #00e9c5; /* Change the color */
+      font-weight: bold; /* If you want it to be bold */
+      display: inline-block; /* Needed to add space between the bullet and the text */
+      width: 1em; /* Also needed for space (tweak if needed) */
+      margin-left: -1em; /* Also needed for space (tweak if needed) */
+    }
+    .p-accordion-content {
+      border: 1px solid #00e9c5;
+    }
+
+    .p-accordion-header .p-accordion-header-link {
+      background: transparent;
+      border: 1px solid #00e9c5;
+      padding: 1.4rem 1rem;
+    }
+
+    .p-accordion-header:not(.p-disabled).p-highlight .p-accordion-header-link {
+      background: transparent;
+      border: 1px solid #00e9c5;
+    }
+
+    .p-accordion-header:not(.p-disabled) .p-accordion-header-link:focus {
+      box-shadow: 0 0 0 0 #00e9c5 !important;
+    }
+
+    .p-accordion-header .p-accordion-header-link .p-accordion-toggle-icon {
+      color: #00e9c5;
+    }
+  }
+
+  .p-selectbutton .p-button.p-highlight {
+    background-color: #050c44 !important;
+    border-color: #050c44 !important;
+  }
+
+  .dialog-width {
+    .p-dialog {
+      width: 600px !important;
+
+      .p-dialog-content {
+        padding: 2rem 3rem;
+        overflow-y: auto;
+        max-height: 600px;
+      }
+    }
+  }
+
+  .p-dialog {
+    width: 1000px;
+    max-width: 1000px !important;
+
+    .p-dialog-header {
+      .btn-group,
+      .btn-see-group {
+        padding: 10px 15px;
+        margin-right: 30px;
+        .text-button {
+          color: #fff !important;
+          opacity: 1 !important;
+        }
+      }
+
+      .btn-see-group {
+        background-color: #050c44;
+      }
+
+      span {
+        color: #050c44;
+        opacity: 0.51;
+      }
+    }
+    .p-dialog-content {
+      padding: 2rem 4rem;
+    }
+    .p-dialog-footer {
+      border-top: 0 !important;
+      button {
+        flex: 0 150px !important;
+      }
+      .add_btn {
+        background-color: #024cac;
+        color: white;
+        font-size: 0.9rem;
+      }
+    }
+    .p-selectbutton {
+      display: flex;
+      flex-wrap: wrap;
+      .p-button {
+        flex: 0 18%;
+        margin: 1%;
+        border-radius: 4px !important;
+        border: 1px solid #050c44;
+        display: flex;
+        padding: 1rem 2rem;
+        flex-direction: column;
+        justify-content: center;
+      }
+    }
+
+    .colors {
+      width: 60%;
+      margin-top: 10px;
+      display: flex;
+      justify-content: space-between;
+      .color {
+        width: 25px;
+        height: 25px;
+        border-radius: 50%;
+      }
+    }
+    .selected_color {
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .workout-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      background: #ffffff 0% 0% no-repeat padding-box;
+      border-radius: 9px;
+      opacity: 1;
+      width: 100%;
+      max-width: 330px;
+
+      height: 130px;
+
+      span {
+        color: #050c44;
+        opacity: 0.36;
+      }
+    }
+  }
+
+  @media (max-width: 600px) {
+    .p-selectbutton .p-button {
+      flex: 0 100% !important;
+    }
+
+    .p-dialog {
+      padding: 0 20px;
+
+      .p-dialog-content {
+        padding: 2rem 2rem;
+      }
+
+      .p-dialog-header {
+        align-items: unset !important;
+
+        .btn-group {
+          padding: 10px 15px;
+          margin-top: 15px;
+          margin-right: 0;
+          margin-left: 20px;
+        }
+      }
+
+      .p-dialog-footer {
+        button {
+          flex: 0 250px !important;
+          margin: 5px 0;
+        }
+      }
+    }
+  }
+}
+
+:host ::ng-deep .custom_chip {
+  border: 1px solid #050c4426;
+  width: 100%;
+  cursor: pointer;
+  margin-bottom: 1rem;
+  background-color: transparent;
+  padding: 0.25rem;
+  font-size: 0.875rem;
+  color: #050c44;
+  font-weight: 600;
+
+  .chip_image {
+    margin-left: 0.75rem;
+  }
+}

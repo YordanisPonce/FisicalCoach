@@ -1,0 +1,145 @@
+<p-dialog
+  (onHide)="closeModal()"
+  [(visible)]="showModal"
+  [modal]="true"
+  class="custom_dialog"
+  header="{{ 'INJURY.LBL_ADD_INJURY' | translate }} - {{
+    stepTitles[step - 1]
+  }} "
+  id="dialog_config_member"
+  maskStyleClass="purple_mask"
+  styleClass="rounded"
+>
+  <div class="row justify-content-md-center">
+    <div class="col-12">
+      <app-injury-profile
+        #componenteInjuryProfile
+        (next)="setDataSetp($event, 1)"
+        *ngIf="step === 1"
+        [detalle]="detalle"
+        [formData]="formDataProfile"
+        id="componenteInjuryProfile"
+      ></app-injury-profile>
+
+      <app-moment-and-cause
+        #componenteInjuryCause
+        (next)="formDataCause = $event"
+        *ngIf="step === 2"
+        [detalle]="detalle"
+        [formData]="formDataCause"
+        [listInjuryExtrinsicFactors]="listInjuryExtrinsicFactors"
+        [listInjuryIntrinsicFactors]="listInjuryIntrinsicFactors"
+        [listInjurySituationTypes]="listInjurySituationTypes"
+        [listMechanismsInjury]="listMechanismsInjury"
+        id="componenteInjuryCause"
+      ></app-moment-and-cause>
+
+      <app-injury-prognosis
+        #componenteInjuryPrognosis
+        (next)="formDataPrognosis = $event"
+        *ngIf="step === 3"
+        [detalle]="detalle"
+        [formData]="formDataPrognosis"
+        [minDate]="minDate"
+        id="componenteInjuryPrognosis"
+      ></app-injury-prognosis>
+
+      <app-surgery
+        #componenteInjurySurgery
+        (next)="formDataSurgery = $event"
+        *ngIf="step === 4"
+        [detalle]="detalle"
+        [formData]="formDataSurgery"
+        [minDate]="minDate"
+        id="componenteInjurySurgery"
+      ></app-surgery>
+
+      <app-complementary-clinical-test
+        #componenteInjuryClinical
+        (next)="formDataClinical = $event"
+        *ngIf="step === 5"
+        [detalle]="detalle"
+        [formData]="formDataClinical"
+        id="componenteInjuryClinical"
+      ></app-complementary-clinical-test>
+
+      <div class="row mt-3">
+        <div class="col-12">
+          <ul class="step_markers">
+            <li>
+              <span
+                [ngClass]="{ active: step == 1 }"
+                class="step_marker"
+              ></span>
+            </li>
+            <li>
+              <span
+                [ngClass]="{ active: step == 2 }"
+                class="step_marker"
+              ></span>
+            </li>
+            <li>
+              <span
+                [ngClass]="{ active: step == 3 }"
+                class="step_marker"
+              ></span>
+            </li>
+            <li>
+              <span
+                [ngClass]="{ active: step == 4 }"
+                class="step_marker"
+              ></span>
+            </li>
+            <li>
+              <span
+                [ngClass]="{ active: step == 5 }"
+                class="step_marker"
+              ></span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p-footer>
+    <div class="footer_btns">
+      <button
+        (click)="getBack()"
+        class="btn back_btn"
+        pTooltip="{{ 'LBL_ATRAS' | translate }}"
+        style="text-align: center"
+        tooltipPosition="top"
+      >
+        {{ "LBL_ATRAS" | translate }}
+      </button>
+      <button
+        (click)="handleNext()"
+        *ngIf="!detalle"
+        [loading]="loading && step == 5"
+        class="next_btn"
+        label="{{
+          step == 5
+            ? ('LBL_GUARDAR' | translate)
+            : ('LBL_SIGUIENTE' | translate)
+        }}"
+        pButton
+        pTooltip="{{
+          step == 5
+            ? ('LBL_GUARDAR' | translate)
+            : ('LBL_SIGUIENTE' | translate)
+        }}"
+        tooltipPosition="top"
+      ></button>
+      <button
+        (click)="handleNext()"
+        *ngIf="detalle"
+        class="next_btn"
+        label="{{ 'LBL_SIGUIENTE' | translate }}"
+        pButton
+        pTooltip="{{ 'LBL_SIGUIENTE' | translate }}"
+        style="text-align: center"
+        tooltipPosition="top"
+      ></button>
+    </div>
+  </p-footer>
+</p-dialog>

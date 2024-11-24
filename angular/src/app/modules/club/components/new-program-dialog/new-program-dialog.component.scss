@@ -1,0 +1,63 @@
+:host ::ng-deep{
+    .p-dialog{
+        .p-dialog-content{
+            padding-top: 2rem;
+            #new_program_dialog_container{
+                max-width: 400px;
+                margin: 0 auto;
+                .back_btn{
+                    flex: 0 50px;
+                    cursor: pointer;
+                }
+                .next_btn{
+                    background-color: #0065E9;
+                    border-radius: 32px;
+                    color: white;
+                    font-weight: 600;
+                    font-size: .9rem;
+                    padding: .65rem;
+                }
+                .p-selectbutton{
+                    display: flex;
+                    justify-content: space-between;
+                    .p-button{
+                        border-radius: 50%;
+                        background-color: rgba(5, 12, 68, 0.05);
+                        color: rgba($color: #050C44, $alpha: .29);
+                        flex: 0 0 35px;
+                        height: 35px;
+                        border: 0;
+                        padding: 0;
+                        text-align: center;
+                        &.p-highlight{
+                            color: rgba($color: #00e9c5, $alpha: 1.0);
+                            background-color: rgba($color: #050C44, $alpha: 1.0);
+                        }
+                    }
+                }
+                .caption{
+                    color: rgba($color: #050C44, $alpha: .66);
+                    text-align: center;
+                    margin-bottom: 1rem;
+                    font-family: "Montserrat", sans-serif;
+                }
+                .success_content{
+                    .success_sphere{
+                        width: 200px;
+                        height: 200px;
+                        border: 1px solid #050C44;
+                        border-radius: 50%;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        margin: 0 auto 3rem;
+                        i{
+                            font-size: 4rem;
+                            color: #00e9c5;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

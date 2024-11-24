@@ -1,0 +1,158 @@
+<div class="row">
+  <div class="col-12">
+    <form
+      id="player_family_data_form"
+      (ngSubmit)="onSubmit()"
+      [formGroup]="formSportingData"
+      name="nomFormSportingData"
+    >
+      <div class="row pb-2">
+        <div class="mb-3 my-lg-3 col-md-6">
+          <label class="d-block">{{
+            "PLAYERS.LBL_LATERALIDAD" | translate
+          }}</label>
+          <div class="d-flex justify-content-between mt-3">
+            <p-radioButton
+              *ngFor="let item of listLaterality"
+              name="laterality_id"
+              [value]="item.value"
+              formControlName="laterality_id"
+              [label]="item.label"
+              class="mr-3"
+            ></p-radioButton>
+            <div
+              *ngIf="submitted && f.laterality_id.invalid"
+              class="form-text text-danger"
+            >
+              {{ "PLAYERS.LBL_LATERALIDAD" | translate }}
+              {{ "LBL_REQUERIDO" | translate }}
+            </div>
+          </div>
+        </div>
+        <!-- sdeportes -->
+        <div class="mb-3 my-lg-3 col-md-6">
+          <label> {{ "new_alumn.alumn_situation" | translate }}</label>
+          <div class="d-flex flex-wrap justify-content-between mt-3">
+            <p-checkbox
+              formControlName="has_sport"
+              label="{{ 'new_alumn.no_sports' | translate }}"
+              [binary]="true"
+              class="mb-2"
+            ></p-checkbox>
+            <p-checkbox
+              formControlName="has_extracurricular_sport"
+              label="{{ 'new_alumn.extracurricular_sport' | translate }}"
+              [binary]="true"
+            ></p-checkbox>
+            <p-checkbox
+              formControlName="has_federated_sport"
+              label="{{ 'new_alumn.federated_sport' | translate }}"
+              [binary]="true"
+            ></p-checkbox>
+          </div>
+        </div>
+        <!-- Deportes que practica -->
+        <div
+          class="mb-3 col-md-6"
+          *ngIf="
+            (f.has_extracurricular_sport.value === true ||
+              f.has_federated_sport.value === true) &&
+            f.has_sport.value !== true
+          "
+        >
+          <label> {{ "new_alumn.sports_you_practice" | translate }}</label>
+          <p-multiSelect
+            [filter]="true"
+            [options]="sportsList"
+            formControlName="sports_played"
+            optionLabel="name"
+            optionValue="id"
+            [maxSelectedLabels]="1"
+            [styleClass]="'w-100 form-control'"
+            placeholder="{{ 'LBL_SELECCIONE' | translate }}"
+          ></p-multiSelect>
+        </div>
+        <!-- deporte favorito -->
+        <div class="mb-3 col-md-6">
+          <label for="country_id" class="">{{
+            "new_alumn.favorite_sport" | translate
+          }}</label>
+          <p-dropdown
+            [filter]="true"
+            [options]="sportsList"
+            aria-describedby="inputGroup-sizing-default"
+            [styleClass]="'w-100 form-control'"
+            formControlName="favorite_sport_id"
+            id="favorite_sports"
+            optionLabel="name"
+            optionValue="id"
+            placeholder="{{ 'LBL_SELECCIONE' | translate }}"
+          ></p-dropdown>
+        </div>
+      </div>
+      <div class="row" *ngIf="alumnSportingData.id">
+        <div class="col-12">
+          <button
+            class="btn btn-primary btn-block py-2 save_btn"
+            type="submit"
+            [disabled]="saving"
+          >
+            {{ "PLAYERS.BTN_GUARDAR" | translate }}
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<hr />
+
+<!-- <div class="row" *ngIf="alumnSportingData.id">
+  <div class="col-12">
+    <label for="" class=""
+      >Valoración del jugador en función al rendimiento</label
+    >
+    <ng-container
+      *ngIf="!loadingAssessment && assessment.performance_assessment"
+    >
+      <div id="valoraciones">
+        <ul>
+          <li class="valoracion">
+            <span class="title font-weight-600">Valoración</span>
+            <span class="value">{{ assessment.performance_assessment }}</span>
+          </li>
+          <li class="valoracion" *ngFor="let item of assessment.skills">
+            <span class="title">{{ item.skills.name }}</span>
+            <span class="value">{{ item.punctuation.value }}</span>
+          </li>
+        </ul>
+        <div class="px-4 pb-3">
+          <button
+            class="btn btn-outline btn-block py-3"
+            (click)="true"
+          >
+            Analizar jugador
+          </button>
+        </div>
+      </div>
+    </ng-container>
+    <ng-container>
+      <div
+        class="text-center"
+        *ngIf="!loadingAssessment && !assessment.performance_assessment"
+      >
+        <h5 class="text-info">Sin Datos</h5>
+        <div class="px-4 pb-3">
+          <button
+            class="btn btn-outline btn-block py-3"
+            (click)="true"
+          >
+            Analizar jugador
+          </button>
+        </div>
+      </div>
+    </ng-container>
+    <div class="text-center" *ngIf="loadingAssessment">
+      <i class="fa fa-spin fa-spinner fa-2x"></i>
+    </div>
+  </div>
+</div> -->

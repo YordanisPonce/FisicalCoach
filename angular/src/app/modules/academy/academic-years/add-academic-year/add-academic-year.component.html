@@ -1,0 +1,313 @@
+<form
+  (ngSubmit)="saveAcademicYear()"
+  *ngIf="academicYearForm"
+  [formGroup]="academicYearForm"
+  id="idForm"
+  name="nomForm"
+>
+  <div class="row">
+    <div class="mb-3 col-12">
+      <label for="academic_year_name">{{
+        "school.academic_year.name" | translate
+      }}</label>
+      <input
+        [placeholder]="'school.academic_year.name' | translate"
+        aria-describedby="inputGroup-sizing-default"
+        aria-label="Default"
+        autocomplete="off"
+        class="form-control"
+        formControlName="title"
+        id="academic_year_name"
+      />
+      <div
+        *ngIf="invalidField(f.title) && submittedYear"
+        class="invalid-feedback"
+      >
+        {{ "validations.required_field" | translate }}
+      </div>
+    </div>
+    <div class="mb-3 col-12 col-md-6">
+      <label>{{ "school.academic_year.start_date" | translate }}</label>
+      <p-calendar
+        (onSelect)="onSelectDateInit()"
+        [firstDayOfWeek]="1"
+        [monthNavigator]="true"
+        [readonlyInput]="true"
+        [style]="{ overflow: 'visible', widht: '100%' }"
+        [yearNavigator]="true"
+        [yearRange]="range"
+        class="p-calendar form-control"
+        dateFormat="dd/mm/yy"
+        formControlName="start_date"
+        inputId="start_date"
+        placeholder="{{ 'school.academic_year.start_date' | translate }}"
+      ></p-calendar>
+      <div
+        *ngIf="invalidField(f.start_date) && submittedYear"
+        class="invalid-feedback"
+      >
+        {{ "validations.required_field" | translate }}
+      </div>
+    </div>
+    <div class="mb-3 col-12 col-md-6">
+      <label>{{ "school.academic_year.end_date" | translate }}</label>
+      <p-calendar
+        [firstDayOfWeek]="1"
+        [minDate]="minDate"
+        [monthNavigator]="true"
+        [readonlyInput]="true"
+        [style]="{ overflow: 'visible', widht: '100%' }"
+        [yearNavigator]="true"
+        [yearRange]="range"
+        class="p-calendar form-control"
+        dateFormat="dd/mm/yy"
+        formControlName="end_date"
+        inputId="end_date"
+        placeholder="{{ 'school.academic_year.end_date' | translate }}"
+      ></p-calendar>
+      <div
+        *ngIf="invalidField(f.end_date) && submittedYear"
+        class="invalid-feedback"
+      >
+        {{ "validations.required_field" | translate }}
+      </div>
+    </div>
+    <div class="mb-3 col-12 col-md-6">
+      <p-checkbox
+        [binary]="true"
+        formControlName="is_active"
+        label="{{ 'ACTIVO' | translate }}"
+        name="groupname"
+      ></p-checkbox>
+    </div>
+    <div class="col-12">
+      <p-divider [style]="{ width: '100%' }"></p-divider>
+    </div>
+    <div class="col-12">
+      <div class="d-flex justify-content-between">
+        <div>
+          <label for="academic_year_name" style="margin-right: 10px"
+            >{{ "school.academic_year.periods" | translate }}
+          </label>
+          <i
+            class="pi pi-info-circle"
+            style="color: #04e9c5; font-size: 20px"
+            pTooltip="{{ 'school.academic_year.tooltip' | translate }}"
+          ></i>
+        </div>
+        <button
+          (click)="newPeriod()"
+          [disabled]="f.start_date.invalid || f.end_date.invalid || viewDetail"
+          class="btn btn_add_period btn-sm"
+          type="button"
+        >
+          <span
+            pTooltip="{{ 'school.academic_year.add_period' | translate }}"
+            style="font-size: 16px; color: #034cac; cursor: pointer; opacity: 1"
+          >
+            {{ "school.academic_year.add_period" | translate }} +</span
+          >
+        </button>
+      </div>
+      <div class="periods_table">
+        <p-table [value]="academicPeriodListAsArray" selectionMode="single">
+          <ng-template pTemplate="header">
+            <tr class="text-center">
+              <th class="text-center">
+                {{ "school.academic_year.nametable" | translate | translate }}
+              </th>
+              <th class="text-center">
+                {{ "school.academic_year.start_date_period" | translate }}
+              </th>
+              <th class="text-center">
+                {{ "school.academic_year.end_date_period" | translate }}
+              </th>
+              <th class="text-center">
+                {{ "academicyear.active" | translate }}
+              </th>
+              <th class="text-center"></th>
+            </tr>
+          </ng-template>
+          <ng-template let-item let-rowIndex="rowIndex" pTemplate="body">
+            <tr>
+              <td class="text-center">{{ item.title }}</td>
+              <td class="text-center">
+                {{ item.start_date | date : "dd/MM/YYYY" }}
+              </td>
+              <td class="text-center">
+                {{ item.end_date | date : "dd/MM/YYYY" }}
+              </td>
+              <td class="text-center">
+                <p-inputSwitch
+                  (onChange)="onChangeStatusPeriod($event, rowIndex)"
+                  [(ngModel)]="item.is_active"
+                  [disabled]="viewDetail"
+                  [ngModelOptions]="{ standalone: true }"
+                >
+                </p-inputSwitch>
+              </td>
+              <td class="text-center">
+                <button
+                  (click)="deletePeriod(rowIndex)"
+                  [disabled]="viewDetail"
+                  class="btn"
+                  pTooltip="{{ 'LBL_DELETE' | translate }}"
+                >
+                  <i class="fa fa-close"></i>
+                </button>
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template let-columns pTemplate="emptymessage">
+            <tr>
+              <td colspan="5" style="text-align: center">
+                {{ "LBL_SINREGISTROS" | translate }}
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+        <div
+          *ngIf="f.periods?.errors?.atLeastOneActive && submittedYear"
+          class="invalid-feedback"
+        >
+          {{ "school.academic_year.atleast_one_period_active" | translate }}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="displayButtons" class="footer_btns">
+    <button
+      (click)="closeAcademicYear()"
+      class="back_btn btn"
+      pTooltip="{{ 'BTN_CANCELAR' | translate }}"
+      tooltipPosition="top"
+    >
+      {{ "BTN_CANCELAR" | translate }}
+    </button>
+    <button
+      [label]="
+        academicYear?.id
+          ? ('school.academic_year.edit' | translate)
+          : ('school.academic_year.add' | translate)
+      "
+      class="btn next_btn"
+      pButton
+      pTooltip="{{ 'school.academic_year.add_period' | translate }}"
+      type="submit"
+    ></button>
+  </div>
+</form>
+<p-dialog
+  *ngIf="periodDialog"
+  [(visible)]="periodDialog"
+  [draggable]="false"
+  [modal]="true"
+  [style]="{ overflow: 'visible' }"
+  class="custom_dialog"
+  header="{{ 'school.academic_year.periods' | translate }}"
+  id="dialog_config_member"
+  maskStyleClass="purple_mask"
+>
+  <form
+    (ngSubmit)="savePeriod()"
+    *ngIf="academicPeriodForm"
+    [formGroup]="academicPeriodForm"
+    id="idPeriodForm"
+    name="nomPedForm"
+  >
+    <div class="row">
+      <div class="mb-3 col-12">
+        <label for="academic_year_name">{{
+          "school.academic_year.nameperiod" | translate
+        }}</label>
+        <input
+          [placeholder]="'school.academic_year.nameperiod' | translate"
+          aria-describedby="inputGroup-sizing-default"
+          aria-label="Default"
+          autocomplete="off"
+          class="form-control"
+          formControlName="title"
+          id="period_name"
+        />
+        <div
+          *ngIf="invalidField(fp.title) && submittedPeriod"
+          class="invalid-feedback"
+        >
+          {{ "validations.required_field" | translate }}
+        </div>
+      </div>
+      <div class="mb-3 col-12 col-md-6">
+        <label>{{
+          "school.academic_year.start_date_period" | translate
+        }}</label>
+        <p-calendar
+          [disabledDates]="disabledDates"
+          [firstDayOfWeek]="1"
+          [maxDate]="maxDatePeriods"
+          [minDate]="minDatePeriods"
+          [monthNavigator]="true"
+          [readonlyInput]="true"
+          [style]="{ overflow: 'visible', widht: '100%' }"
+          [yearNavigator]="true"
+          [yearRange]="range"
+          class="p-calendar form-control"
+          dateFormat="dd/mm/yy"
+          formControlName="start_date"
+          inputId="start_date"
+          placeholder="{{
+            'school.academic_year.start_date_period' | translate
+          }}"
+        ></p-calendar>
+        <div
+          *ngIf="invalidField(fp.start_date) && submittedPeriod"
+          class="invalid-feedback"
+        >
+          {{ "validations.required_field" | translate }}
+        </div>
+      </div>
+      <div class="mb-3 col-12 col-md-6">
+        <label>{{ "school.academic_year.end_date_period" | translate }}</label>
+        <p-calendar
+          [disabledDates]="disabledDates"
+          [firstDayOfWeek]="1"
+          [maxDate]="maxDatePeriods"
+          [minDate]="minDatePeriods"
+          [monthNavigator]="true"
+          [readonlyInput]="true"
+          [style]="{ overflow: 'visible', widht: '100%' }"
+          [yearNavigator]="true"
+          [yearRange]="range"
+          class="p-calendar form-control"
+          dateFormat="dd/mm/yy"
+          formControlName="end_date"
+          inputId="end_date"
+          placeholder="{{ 'school.academic_year.end_date_period' | translate }}"
+        ></p-calendar>
+        <div
+          *ngIf="invalidField(fp.end_date) && submittedPeriod"
+          class="invalid-feedback"
+        >
+          {{ "validations.required_field" | translate }}
+        </div>
+      </div>
+    </div>
+    <div class="footer_btns">
+      <button
+        (click)="closeModal()"
+        class="back_btn btn mr-1"
+        pTooltip="{{ 'BTN_CANCELAR' | translate }}"
+        tooltipPosition="top"
+      >
+        {{ "BTN_CANCELAR" | translate }}
+      </button>
+      <button
+        class="btn next_btn"
+        label="{{ 'school.academic_year.add_period' | translate }}"
+        pButton
+        pTooltip="{{ 'school.academic_year.add_period' | translate }}"
+        tooltipPosition="top"
+        type="submit"
+      ></button>
+    </div>
+  </form>
+</p-dialog>

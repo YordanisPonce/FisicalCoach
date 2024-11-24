@@ -1,0 +1,61 @@
+:host ::ng-deep .p-tabview {
+    .p-tabview-nav{
+        li{
+            flex: 1;
+            text-align: center;
+            .p-tabview-nav-link{
+                justify-content: center;
+                padding: 1.5rem;
+                color: #050c4431;
+            }
+        }
+    }
+    .p-tabview-panels{
+      padding: 0;
+      .p-datatable-thead{
+        tr th{
+          background-color: transparent;
+        }
+      }
+    }
+}
+.matches{
+    padding: 0;
+    .match{
+        display: flex;
+        list-style: none;
+        text-align: center;
+        justify-content: space-between;
+        padding: 2rem;
+        border-bottom: 1px solid #050c441a;
+        .match_info{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            .time{
+                font-size: 1.35rem;
+                font-weight: 700;
+                display: block;
+                position: relative;
+                margin-bottom: .25rem;
+            }
+            .separator{
+                width: 40px;
+                border: 2px solid #024CAC;
+                margin: 0 auto 1rem;
+            }
+        }
+        .team{
+    
+        }
+    }
+    .matches_footer{
+        padding: 1.5rem;
+        .btn_ver_calendario{
+            background-color: #0065E9;
+            color: white;
+            font-weight: 500;
+            padding: .5rem 2rem;
+        }
+    }
+}

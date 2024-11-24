@@ -1,0 +1,175 @@
+:host ::ng-deep {
+
+  .p-accordion .p-accordion-header:not(.p-disabled) .p-accordion-header-link:focus {
+    box-shadow:  unset !important;
+  }
+  li {
+    padding: 0 !important;
+  }
+
+  table {
+    min-width: 360px;
+
+    @media (max-width: 500px) {
+      min-width: auto;
+    }
+  }
+
+  th,
+  td {
+    font-size: 12px;
+  }
+
+  .p-accordion {
+    width: 100% !important;
+  }
+  .p-accordion .p-accordion-header .p-accordion-header-link {
+    background-color: transparent !important;
+    border: unset !important;
+  }
+
+  .p-accordion .p-accordion-content {
+    border: unset !important;
+  }
+}
+
+.player {
+  border: 1px solid #050c4430;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .avatar {
+    .image {
+      width: 125px;
+      height: 125px;
+      border-radius: 50%;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+    .title {
+      color: #000000;
+      font-size: 1.5rem;
+    }
+  }
+  .last_injury {
+    text-align: center;
+    .date {
+      color: #050c44;
+      font-weight: 600;
+    }
+    .last_injury_btn {
+      height: 45px;
+      color: #024cac;
+      border-radius: 32px;
+      border: 1px solid #024cac;
+    }
+  }
+}
+.injuries {
+  .injury_severities {
+    .title {
+      display: block;
+      margin-bottom: 1rem;
+    }
+    .pills {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      .pill {
+        background-color: rgba($color: #707070, $alpha: 0.08);
+        border-radius: 32px;
+        padding: 0.5rem 1rem;
+        margin-bottom: 1rem;
+      }
+    }
+  }
+}
+
+.injuries_risk_header {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+.injuries_details {
+  .injury_types {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 0;
+    li {
+      padding: 1rem;
+      display: flex;
+      align-items: center;
+      color: rgba($color: #050c44, $alpha: 0.56);
+      border-bottom: 1px solid #050c4430;
+      cursor: pointer;
+      // justify-content: space-between;
+      img {
+        max-width: 25px;
+        margin-right: 1rem;
+      }
+      i {
+        margin-left: auto;
+      }
+      &:last-child {
+        border-bottom: 0;
+      }
+    }
+  }
+  .injuries_details_footer {
+    border-top: 1px solid #050c4430;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    text-align: center;
+    .save_btn {
+      max-width: 80%;
+      height: 45px;
+      border-radius: 32px;
+      margin: auto;
+    }
+  }
+}
+
+// Large devices (desktops, 992px and up)
+@media (min-width: 992px) {
+}
+
+// Extra large devices (large desktops, 1200px and up)
+@media (min-width: 1200px) {
+  .player {
+    flex-direction: row;
+    justify-content: space-between;
+    .avatar {
+      display: flex;
+      align-items: center;
+      .image {
+        margin-right: 1rem;
+      }
+    }
+    .last_injury_btn {
+      width: 100%;
+    }
+  }
+  .injuries {
+    .injury_severities {
+      .title {
+        // display: inline;
+      }
+    }
+  }
+  .injuries_risk_header {
+    border-top: 1px solid #050c4430;
+    border-bottom: 1px solid #050c4430;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    button {
+      height: 45px;
+      border-radius: 32px;
+      padding-left: 1rem;
+      padding-right: 1rem;
+      min-width: 150px;
+    }
+  }
+}

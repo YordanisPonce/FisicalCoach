@@ -1,0 +1,166 @@
+<div class="card box-shadow">
+  <div class="card-body p-0">
+    <div class="row">
+      <div class="col-12">
+        <div class="injury_prevention_header">
+          <span (click)="back()" class="icon_left"
+            ><i class="fas fa-chevron-left"></i>
+          </span>
+          <h6 class="font-weight-600 mb-0 mr-5 ml-4">
+            {{ "test.testResults" | translate }}
+          </h6>
+        </div>
+      </div>
+
+      <div class="col-12">
+        <div class="row injury_prevention_container">
+          <div class="col-12 my-3">
+            <div class="col-12 text-lg-right pr-0">
+              <i
+                (click)="downloadPdfById(testResult.code)"
+                *ngIf="!loadingSinglePDF"
+                class="fa fa-download fa-1x"
+                pTooltip="{{ 'psychologyDetails.download_report' | translate }}"
+                role="button"
+                tooltipPosition="top"
+              ></i>
+
+              <i
+                *ngIf="loadingSinglePDF"
+                class="fa fa-spinner fa-1x"
+                role="button"
+              ></i>
+            </div>
+            <div class="col-12">
+              <div class="player_profile">
+                <!-- imagen -->
+                <div class="player_profile_image">
+                  <p-skeleton
+                    *ngIf="!testResult"
+                    shape="circle"
+                    size="100px"
+                    styleClass="mb-2"
+                  ></p-skeleton>
+
+                  <img
+                    *ngIf="testResult && role === 'sport'"
+                    alt="player"
+                    class="player_profile_image"
+                    src="{{ testResult.applicant | avatarPipe }}"
+                  />
+                  <img
+                    *ngIf="testResult && role === 'teacher'"
+                    alt="player"
+                    class="player_profile_image"
+                    src="{{ testResult.applicant | alumnAvatarPipe }}"
+                  />
+                </div>
+
+                <div *ngIf="testResult" class="row mb-3 mb-lg-0">
+                  <div class="col-12 w-100">
+                    <div class="player_profile_title">
+                      <span>{{ testResult?.applicant?.full_name }}</span>
+                    </div>
+                    <div class="player_profile_academy">
+                      <span>{{ testResult?.applicant?.alias }}</span>
+                    </div>
+                    <div class="d-flex text-center">
+                      <div class="mr-4">
+                        <div class="player_profile_info_title text-left">
+                          <span>{{ "PLAYERS.LBL_ALTURA" | translate }}</span>
+                        </div>
+                        <div class="player_profile_info_desc">
+                          <span
+                            >{{
+                              testResult.applicant.height
+                                ? (testResult.applicant.height
+                                  | number : "1.0-0")
+                                : "-"
+                            }}
+                            cm</span
+                          >
+                        </div>
+                      </div>
+                      <div>
+                        <div class="player_profile_info_title">
+                          <span>{{ "PLAYERS.LBL_PESO" | translate }}</span>
+                        </div>
+                        <div class="player_profile_info_desc">
+                          <span
+                            >{{
+                              testResult.applicant.weight
+                                ? (testResult.applicant.weight
+                                  | number : "1.0-0")
+                                : "-"
+                            }}
+                            kg</span
+                          >
+                        </div>
+                      </div>
+                      <div class="ml-4">
+                        <div class="player_profile_info_title text-center">
+                          <span>{{ "PSYCHOLOGY.LBL_AGE" | translate }}</span>
+                        </div>
+                        <div class="player_profile_info_desc">
+                          <span
+                            >{{ testResult.applicant.age }}
+                            {{ "LBL_YEARS" | translate }}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12">
+        <div class="row injury_prevention_container">
+          <div class="col-12 my-3">
+            <div *ngIf="!loading" class="row">
+              <!-- program title -->
+              <div
+                *ngFor="let answer of testResult?.answers; index as i"
+                class="col-sm-6 col-lg-4 col-xl-3 mb-5"
+              >
+                <div class="player_info_title">
+                  <span>
+                    {{ answer?.question }}
+                  </span>
+                </div>
+                <p class="player_info_text">{{ answer?.response }}</p>
+              </div>
+            </div>
+
+            <div *ngIf="loading" class="row">
+              <!-- program title -->
+              <div
+                *ngFor="let answer of [1, 2, 3, 4, 5, 6, 7, 8]; index as i"
+                class="col-sm-6 col-lg-4 col-xl-3 mb-5"
+              >
+                <div class="player_info_title">
+                  <span>
+                    <p-skeleton
+                      height="15px"
+                      shape="rectangle"
+                      styleClass="mb-2"
+                      width="50%"
+                    ></p-skeleton>
+                  </span>
+                </div>
+                <p-skeleton
+                  height="15px"
+                  styleClass="mb-2"
+                  width="80%"
+                ></p-skeleton>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
